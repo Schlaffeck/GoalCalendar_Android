@@ -1,4 +1,4 @@
-package com.slamcode.goalcalendar.base;
+package com.slamcode.goalcalendar.view.base;
 
 import android.view.View;
 import android.widget.GridView;

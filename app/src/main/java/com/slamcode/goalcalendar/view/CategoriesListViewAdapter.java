@@ -1,20 +1,15 @@
-package com.slamcode.goalcalendar;
+package com.slamcode.goalcalendar.view;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 
-import com.slamcode.goalcalendar.base.ListViewDataAdapter;
-import com.slamcode.goalcalendar.base.ViewHolderBase;
+import com.slamcode.goalcalendar.R;
+import com.slamcode.goalcalendar.view.base.ListViewDataAdapter;
+import com.slamcode.goalcalendar.view.base.ViewHolderBase;
 import com.slamcode.goalcalendar.data.model.*;
-
-import org.json.JSONException;
-import org.w3c.dom.Text;
 
 import java.util.*;
 
@@ -25,20 +20,16 @@ import java.util.*;
 public class CategoriesListViewAdapter extends ListViewDataAdapter<CategoryModel, CategoriesListViewAdapter.CategoryViewHolder> {
 
         private List<CategoryModel> list;
-        private Context context;
-        private LayoutInflater layoutInflater;
 
         public CategoriesListViewAdapter(Context context, LayoutInflater layoutInflater)
         {
             super(context, layoutInflater);
             this.list = new ArrayList<CategoryModel>();
-            this.context = context;
-            this.layoutInflater = layoutInflater;
         }
 
     @Override
     protected CategoryViewHolder getNewViewHolder(View convertView) {
-        convertView = this.layoutInflater.inflate(R.layout.list_item_monthly_goals,null);
+        convertView = this.getLayoutInflater().inflate(R.layout.list_item_monthly_goals,null);
 
         return new CategoryViewHolder(
                 convertView,
@@ -55,7 +46,11 @@ public class CategoriesListViewAdapter extends ListViewDataAdapter<CategoryModel
 
         innerViewHolder[0].categoryNameTextView.setText(monthlyGoals.getName());
         innerViewHolder[0].frequencyTextView.setText(monthlyGoals.getFrequency().toString());
-        //innerViewHolder[0].daysListGridView.setAdapter();
+
+        PlanStatusListViewAdapter adapter = new PlanStatusListViewAdapter(this.getContext(),
+                this.getLayoutInflater(), monthlyGoals);
+        innerViewHolder[0].daysListGridView.setAdapter(adapter);
+        adapter.updateList(monthlyGoals.getDailyPlans());
     }
 
     public class CategoryViewHolder extends ViewHolderBase<CategoryModel>

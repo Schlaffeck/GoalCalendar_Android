@@ -1,4 +1,4 @@
-package com.slamcode.goalcalendar.base;
+package com.slamcode.goalcalendar.view.base;
 
 import android.content.Context;
 import android.util.Log;
@@ -6,14 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
-import android.widget.TextView;
-
-import com.slamcode.goalcalendar.CategoriesListViewAdapter;
-import com.slamcode.goalcalendar.R;
-import com.slamcode.goalcalendar.data.model.CategoryModel;
-
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,5 +102,13 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
 
     protected abstract TViewHolder getNewViewHolder(View convertView);
 
-    protected abstract void fillListElementView(TData monthlyGoals, final TViewHolder viewHolder);
+    protected abstract void fillListElementView(TData data, final TViewHolder viewHolder);
+
+    public LayoutInflater getLayoutInflater() {
+        return layoutInflater;
+    }
+
+    public Context getContext() {
+        return context;
+    }
 }

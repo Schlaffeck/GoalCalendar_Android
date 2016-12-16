@@ -13,6 +13,7 @@ import android.widget.ListView;
 import com.slamcode.goalcalendar.data.*;
 import com.slamcode.goalcalendar.data.stub.StubCategoriesRepository;
 import com.slamcode.goalcalendar.planning.Month;
+import com.slamcode.goalcalendar.view.CategoriesListViewAdapter;
 
 public class MonthlyGoalsActivity extends AppCompatActivity {
 
