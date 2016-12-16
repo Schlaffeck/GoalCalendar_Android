@@ -8,8 +8,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+
+import com.slamcode.goalcalendar.data.*;
+import com.slamcode.goalcalendar.data.stub.StubCategoriesRepository;
+import com.slamcode.goalcalendar.planning.Month;
 
 public class MonthlyGoalsActivity extends AppCompatActivity {
+
+    private CategoriesListViewAdapter monthListViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,14 +25,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(com.slamcode.goalcalendar.R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(com.slamcode.goalcalendar.R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        setupMonthlyPlanningCategoryList();
+        setupFloatingButtonAction();
     }
 
     @Override
@@ -48,5 +49,34 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setupFloatingButtonAction()
+    {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(com.slamcode.goalcalendar.R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+    }
+
+    private void setupMonthlyPlanningCategoryList() {
+
+        this.monthListViewAdapter = new CategoriesListViewAdapter(this, getLayoutInflater());
+        ListView listView = (ListView) this.findViewById(R.id.monthly_goals_listview);
+
+        listView.setAdapter(this.monthListViewAdapter);
+
+        this.setupCategoryListForMonth(Month.getCurrentMonth());
+    }
+
+    private void setupCategoryListForMonth(Month month)
+    {
+        // move repo to di container
+        CategoryRepository repository = StubCategoriesRepository.buildDefaultRepository();
+        this.monthListViewAdapter.updateList(repository.findForMonth(month));
     }
 }
