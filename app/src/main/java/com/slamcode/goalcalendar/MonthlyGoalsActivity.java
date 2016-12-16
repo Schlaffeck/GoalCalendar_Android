@@ -14,11 +14,11 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(slamcode.com.goalcalendar.R.layout.activity_monthly_goals);
-        Toolbar toolbar = (Toolbar) findViewById(slamcode.com.goalcalendar.R.id.toolbar);
+        setContentView(com.slamcode.goalcalendar.R.layout.activity_monthly_goals);
+        Toolbar toolbar = (Toolbar) findViewById(com.slamcode.goalcalendar.R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(slamcode.com.goalcalendar.R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(com.slamcode.goalcalendar.R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -31,7 +31,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(slamcode.com.goalcalendar.R.menu.menu_monthly_goals, menu);
+        getMenuInflater().inflate(com.slamcode.goalcalendar.R.menu.menu_monthly_goals, menu);
         return true;
     }
 
@@ -43,7 +43,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == slamcode.com.goalcalendar.R.id.action_settings) {
+        if (id == com.slamcode.goalcalendar.R.id.action_settings) {
             return true;
         }
 

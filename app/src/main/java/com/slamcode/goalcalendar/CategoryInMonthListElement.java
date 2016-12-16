@@ -8,14 +8,16 @@ public class CategoryInMonthListElement {
 
     private final boolean[] dailyPlans;
 
+    private String name;
+
+    private String frequency;
+
     public CategoryInMonthListElement(String name, String frequency){
 
         this.frequency = frequency;
         this.name = name;
         this.dailyPlans = new boolean[31];
     }
-
-    private String name;
 
     public String getName() {
         return name;
@@ -24,8 +26,6 @@ public class CategoryInMonthListElement {
     public void setName(String name) {
         this.name = name;
     }
-
-    private String frequency;
 
     public String getFrequency() {
         return frequency;
