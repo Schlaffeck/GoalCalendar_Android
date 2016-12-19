@@ -3,4 +3,20 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <!--  default values  -->
+    <dimen name="default_horizontal_spacing">10dp</dimen>
+    <dimen name="default_margin">5dp</dimen>
+    <dimen name="default_padding">5dp</dimen>
+    <dimen name="default_vertical_spacing">5dp</dimen>
+    <dimen name="list_item_text_size">16sp</dimen>
+    <dimen name="list_item_text_small_size">12sp</dimen>
+
+    <!-- monthly goals view -->
+    <dimen name="monthly_goals_table_day_plan_column_width">55dp</dimen>
+    <dimen name="monthly_goals_table_day_plan_height">55dp</dimen>
+
+    <dimen name="monthly_goals_table_category_column_width">60dp</dimen>
+    <dimen name="monthly_goals_table_category_name_height">30dp</dimen>
+    <dimen name="monthly_goals_table_category_frequency_height">25dp</dimen>
 </resources>

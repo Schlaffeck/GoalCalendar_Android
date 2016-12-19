@@ -1,4 +1,4 @@
-package com.slamcode.goalcalendar.data.model;
+package com.slamcode.goalcalendar.planning;
 
 /**
  * Created by moriasla on 16.12.2016.
