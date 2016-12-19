@@ -1,6 +1,8 @@
 package com.slamcode.goalcalendar.data.stub;
 
 import com.android.internal.util.Predicate;
+import com.slamcode.collections.CollectionUtils;
+import com.slamcode.collections.ElementCreator;
 import com.slamcode.goalcalendar.data.*;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
@@ -77,7 +79,12 @@ public class StubCategoriesRepository implements CategoryRepository {
         category1.setId(1);
         category1.setName("Family");
         category1.setFrequency(freq1);
-        category1.setDailyPlans(Arrays.asList(new DailyPlanModel(), new DailyPlanModel(), new DailyPlanModel()));
+        category1.setDailyPlans(CollectionUtils.CreateList(31, new ElementCreator<DailyPlanModel>() {
+            @Override
+            public DailyPlanModel Create(int index, List<DailyPlanModel> currentList) {
+                return new DailyPlanModel();
+            }
+        }));
 
         FrequencyModel freq2 =  new FrequencyModel();
         freq2.setId(2);
@@ -88,7 +95,12 @@ public class StubCategoriesRepository implements CategoryRepository {
         category2.setId(2);
         category2.setName("Project");
         category2.setFrequency(freq2);
-        category2.setDailyPlans(Arrays.asList(new DailyPlanModel(), new DailyPlanModel(), new DailyPlanModel()));
+        category2.setDailyPlans(CollectionUtils.CreateList(31, new ElementCreator<DailyPlanModel>() {
+            @Override
+            public DailyPlanModel Create(int index, List<DailyPlanModel> currentList) {
+                return new DailyPlanModel();
+            }
+        }));
 
         StubCategoriesRepository repository = new StubCategoriesRepository(
                 Arrays.asList(category1, category2)

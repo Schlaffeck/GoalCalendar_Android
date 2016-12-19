@@ -3,7 +3,10 @@ package com.slamcode.goalcalendar.view;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.GridView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.slamcode.goalcalendar.R;
@@ -35,7 +38,7 @@ public class CategoriesListViewAdapter extends ListViewDataAdapter<CategoryModel
                 convertView,
                 (TextView)convertView.findViewById(R.id.monthly_goals_list_item_category_name),
                 (TextView)convertView.findViewById(R.id.monthly_goals_list_item_frequency),
-                (GridView)convertView.findViewById(R.id.monthly_goals_list_item_days_list));
+                (LinearLayout)convertView.findViewById(R.id.monthly_goals_list_item_days_list));
     }
 
     @Override
@@ -47,10 +50,11 @@ public class CategoriesListViewAdapter extends ListViewDataAdapter<CategoryModel
         innerViewHolder[0].categoryNameTextView.setText(monthlyGoals.getName());
         innerViewHolder[0].frequencyTextView.setText(monthlyGoals.getFrequency().toString());
 
-        PlanStatusListViewAdapter adapter = new PlanStatusListViewAdapter(this.getContext(),
-                this.getLayoutInflater(), monthlyGoals);
-        innerViewHolder[0].daysListGridView.setAdapter(adapter);
-        adapter.updateList(monthlyGoals.getDailyPlans());
+        for (DailyPlanModel dailyPlan : monthlyGoals.getDailyPlans())
+        {
+            View elem = getDayPlanStatusView(dailyPlan);
+            innerViewHolder[0].daysListGridView.addView(elem);
+        }
     }
 
     public class CategoryViewHolder extends ViewHolderBase<CategoryModel>
@@ -58,13 +62,13 @@ public class CategoriesListViewAdapter extends ListViewDataAdapter<CategoryModel
         private CategoryModel baseObject;
         private TextView categoryNameTextView;
         private TextView frequencyTextView;
-        private GridView daysListGridView;
+        private LinearLayout daysListGridView;
 
         CategoryViewHolder(
                 View view,
                 TextView categoryNameTextView,
                    TextView frequencyTextView,
-                   GridView daysListGridView)
+                   LinearLayout daysListGridView)
         {
             super(view);
             this.categoryNameTextView = categoryNameTextView;
@@ -79,5 +83,23 @@ public class CategoriesListViewAdapter extends ListViewDataAdapter<CategoryModel
         public void setBaseObject(CategoryModel baseObject) {
             this.baseObject = baseObject;
         }
+    }
+
+    private View getDayPlanStatusView(final DailyPlanModel planStatus)
+    {
+        View layout = this.getLayoutInflater().inflate(R.layout.plan_status_list_item_view, null);
+        Button button = (Button)layout.findViewById(R.id.plan_status_list_item_view_button);
+        button.setText(planStatus.getStatus().toString());
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Button  btn = (Button) view;
+                planStatus.setStatus(planStatus.getStatus().nextStatus());
+                btn.setText(planStatus.getStatus().toString());
+            }
+        });
+
+        return layout;
     }
 }
