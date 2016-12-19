@@ -4,9 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.slamcode.goalcalendar.R;
@@ -32,7 +30,7 @@ public class CategoriesListViewAdapter extends ListViewDataAdapter<CategoryModel
 
     @Override
     protected CategoryViewHolder getNewViewHolder(View convertView) {
-        convertView = this.getLayoutInflater().inflate(R.layout.list_item_monthly_goals,null);
+        convertView = this.getLayoutInflater().inflate(R.layout.monthly_goals_category_list_item,null);
 
         return new CategoryViewHolder(
                 convertView,
@@ -87,7 +85,7 @@ public class CategoriesListViewAdapter extends ListViewDataAdapter<CategoryModel
 
     private View getDayPlanStatusView(final DailyPlanModel planStatus)
     {
-        View layout = this.getLayoutInflater().inflate(R.layout.plan_status_list_item_view, null);
+        View layout = this.getLayoutInflater().inflate(R.layout.monthly_goals_plan_status_cell, null);
         Button button = (Button)layout.findViewById(R.id.plan_status_list_item_view_button);
         button.setText(planStatus.getStatus().toString());
 

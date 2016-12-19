@@ -5,15 +5,26 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.slamcode.collections.CollectionUtils;
+import com.slamcode.collections.ElementCreator;
 import com.slamcode.goalcalendar.data.*;
 import com.slamcode.goalcalendar.data.stub.StubCategoriesRepository;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.view.CategoriesListViewAdapter;
+
+import org.apache.commons.collections4.Closure;
+import org.apache.commons.collections4.IteratorUtils;
+import org.w3c.dom.Text;
+
+import java.util.List;
 
 public class MonthlyGoalsActivity extends AppCompatActivity {
 
@@ -22,7 +33,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(com.slamcode.goalcalendar.R.layout.activity_monthly_goals);
+        setContentView(com.slamcode.goalcalendar.R.layout.monthly_goals_activity);
         Toolbar toolbar = (Toolbar) findViewById(com.slamcode.goalcalendar.R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -78,6 +89,37 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     {
         // move repo to di container
         CategoryRepository repository = StubCategoriesRepository.buildDefaultRepository();
+
+        this.setupHeaderForCategoryListForMonth(month);
         this.monthListViewAdapter.updateList(repository.findForMonth(month));
+    }
+
+    private void setupHeaderForCategoryListForMonth(Month month)
+    {
+        final LayoutInflater inflater = this.getLayoutInflater();
+        // month text view
+        final LinearLayout header = (LinearLayout) this.findViewById(R.id.monthly_goals_list_header);
+        TextView monthName = (TextView) header.findViewById(R.id.monthly_goals_list_header_month_text);
+        monthName.setText(month.name());
+
+        //month days list
+        List<Integer> listOfDays = CollectionUtils.createList(31, new ElementCreator<Integer>() {
+
+            @Override
+            public Integer Create(int index, List<Integer> currentList) {
+                return index+1;
+            }
+        });
+
+        IteratorUtils.forEach(listOfDays.iterator(), new Closure<Integer>() {
+            @Override
+            public void execute(Integer input) {
+
+                View dayNumberCell = inflater.inflate(R.layout.monthly_goals_header_day_number_cell, null);
+                TextView dayNumberText = (TextView) dayNumberCell.findViewById(R.id.monthly_goals_table_header_day_number_text);
+                dayNumberText.setText(input.toString());
+                header.addView(dayNumberCell);
+            }
+        });
     }
 }

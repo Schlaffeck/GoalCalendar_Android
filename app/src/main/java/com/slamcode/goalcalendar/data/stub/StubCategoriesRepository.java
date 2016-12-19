@@ -11,7 +11,6 @@ import com.slamcode.goalcalendar.data.model.FrequencyPeriod;
 import com.slamcode.goalcalendar.planning.Month;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -70,41 +69,56 @@ public class StubCategoriesRepository implements CategoryRepository {
 
     public static StubCategoriesRepository buildDefaultRepository()
     {
-        FrequencyModel freq1 =  new FrequencyModel();
-        freq1.setId(1);
-        freq1.setPeriod(FrequencyPeriod.Week);
-        freq1.setFrequencyValue(2);
+        final String[] categoriesNames = new String[]{
+                "Family",
+                "Friends",
+                "Project",
+                "Flat arrangement"
+        };
 
-        CategoryModel category1 = new CategoryModel();
-        category1.setId(1);
-        category1.setName("Family");
-        category1.setFrequency(freq1);
-        category1.setDailyPlans(CollectionUtils.CreateList(31, new ElementCreator<DailyPlanModel>() {
-            @Override
-            public DailyPlanModel Create(int index, List<DailyPlanModel> currentList) {
-                return new DailyPlanModel();
-            }
-        }));
+        final FrequencyPeriod[] categoriesFrequency = new FrequencyPeriod[]
+                {
+                        FrequencyPeriod.Month,
+                        FrequencyPeriod.Week,
+                        FrequencyPeriod.Month,
+                        FrequencyPeriod.Week
+                };
 
-        FrequencyModel freq2 =  new FrequencyModel();
-        freq2.setId(2);
-        freq2.setPeriod(FrequencyPeriod.Month);
-        freq2.setFrequencyValue(3);
+        final int[] categoriesFrequencyValues = new int[]
+                {
+                        2,
+                        2,
+                        3,
+                        1
+                };
 
-        CategoryModel category2 = new CategoryModel();
-        category2.setId(2);
-        category2.setName("Project");
-        category2.setFrequency(freq2);
-        category2.setDailyPlans(CollectionUtils.CreateList(31, new ElementCreator<DailyPlanModel>() {
-            @Override
-            public DailyPlanModel Create(int index, List<DailyPlanModel> currentList) {
-                return new DailyPlanModel();
-            }
-        }));
+        List<CategoryModel> categories = CollectionUtils.createList(categoriesNames.length, new ElementCreator<CategoryModel>() {
+                    @Override
+                    public CategoryModel Create(int index, List<CategoryModel> currentList) {
+                        CategoryModel result = new CategoryModel();
 
-        StubCategoriesRepository repository = new StubCategoriesRepository(
-                Arrays.asList(category1, category2)
+                        result.setId(index+1);
+                        result.setName(categoriesNames[index]);
+
+                        FrequencyModel frequencyModel = new FrequencyModel();
+                        frequencyModel.setId(index + 1);
+                        frequencyModel.setFrequencyValue(categoriesFrequencyValues[index]);
+                        frequencyModel.setPeriod(categoriesFrequency[index]);
+
+                        result.setFrequency(frequencyModel);
+
+                        result.setDailyPlans(CollectionUtils.createList(31, new ElementCreator<DailyPlanModel>() {
+                            @Override
+                            public DailyPlanModel Create(int index, List<DailyPlanModel> currentList) {
+                                return new DailyPlanModel();
+                            }
+                        }));
+                        return result;
+                    }
+                }
         );
+
+        StubCategoriesRepository repository = new StubCategoriesRepository(categories);
 
         return repository;
     }
