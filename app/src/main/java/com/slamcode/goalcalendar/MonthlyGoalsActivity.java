@@ -16,13 +16,12 @@ import android.widget.TextView;
 import com.slamcode.collections.CollectionUtils;
 import com.slamcode.collections.ElementCreator;
 import com.slamcode.goalcalendar.data.*;
-import com.slamcode.goalcalendar.data.stub.StubCategoriesRepository;
+import com.slamcode.goalcalendar.data.inmemory.InMemoryCategoriesRepository;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.view.CategoriesListViewAdapter;
 
 import org.apache.commons.collections4.Closure;
 import org.apache.commons.collections4.IteratorUtils;
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -87,8 +86,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
     private void setupCategoryListForMonth(Month month)
     {
-        // move repo to di container
-        CategoryRepository repository = StubCategoriesRepository.buildDefaultRepository();
+        // todo: move repo to di container
+        CategoryRepository repository = InMemoryCategoriesRepository.buildDefaultRepository();
 
         this.setupHeaderForCategoryListForMonth(month);
         this.monthListViewAdapter.updateList(repository.findForMonth(month));

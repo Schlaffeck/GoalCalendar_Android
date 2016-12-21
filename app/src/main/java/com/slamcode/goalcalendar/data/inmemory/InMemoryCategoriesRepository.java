@@ -1,4 +1,4 @@
-package com.slamcode.goalcalendar.data.stub;
+package com.slamcode.goalcalendar.data.inmemory;
 
 import com.android.internal.util.Predicate;
 import com.slamcode.collections.CollectionUtils;
@@ -17,18 +17,18 @@ import java.util.List;
  * Created by moriasla on 16.12.2016.
  */
 
-public class StubCategoriesRepository implements CategoryRepository {
+public class InMemoryCategoriesRepository implements CategoryRepository {
 
-    List<CategoryModel> stubList = new ArrayList<CategoryModel>();
+    List<CategoryModel> inMemoryEntityList = new ArrayList<CategoryModel>();
 
-    public StubCategoriesRepository(List<CategoryModel> list)
+    public InMemoryCategoriesRepository(List<CategoryModel> list)
     {
-        this.stubList = list;
+        this.inMemoryEntityList = list;
     }
 
     @Override
     public CategoryModel findById(Integer comparable) {
-        for (CategoryModel cm : this.stubList) {
+        for (CategoryModel cm : this.inMemoryEntityList) {
             if (cm.getId().equals(comparable))
             {
                 return cm;
@@ -39,7 +39,7 @@ public class StubCategoriesRepository implements CategoryRepository {
 
     @Override
     public CategoryModel findFirst(Predicate<CategoryModel> predicate) {
-        for (CategoryModel cm : this.stubList) {
+        for (CategoryModel cm : this.inMemoryEntityList) {
             if (predicate.apply(cm))
             {
                 return cm;
@@ -50,7 +50,19 @@ public class StubCategoriesRepository implements CategoryRepository {
 
     @Override
     public List<CategoryModel> findAll() {
-        return this.stubList;
+        return this.inMemoryEntityList;
+    }
+
+    @Override
+    public void remove(CategoryModel categoryModel)
+    {
+        this.inMemoryEntityList.remove(categoryModel);
+    }
+
+    @Override
+    public void add(CategoryModel categoryModel)
+    {
+        this.inMemoryEntityList.add(categoryModel);
     }
 
     @Override
@@ -58,7 +70,7 @@ public class StubCategoriesRepository implements CategoryRepository {
 
         List<CategoryModel> resultList = new ArrayList<CategoryModel>();
 
-        for (CategoryModel cm : this.stubList) {
+        for (CategoryModel cm : this.inMemoryEntityList) {
             if (predicate.apply(cm))
             {
                 resultList.add(cm);
@@ -67,7 +79,7 @@ public class StubCategoriesRepository implements CategoryRepository {
         return resultList;
     }
 
-    public static StubCategoriesRepository buildDefaultRepository()
+    public static InMemoryCategoriesRepository buildDefaultRepository()
     {
         final String[] categoriesNames = new String[]{
                 "Family",
@@ -118,13 +130,13 @@ public class StubCategoriesRepository implements CategoryRepository {
                 }
         );
 
-        StubCategoriesRepository repository = new StubCategoriesRepository(categories);
+        InMemoryCategoriesRepository repository = new InMemoryCategoriesRepository(categories);
 
         return repository;
     }
 
     @Override
     public List<CategoryModel> findForMonth(Month month) {
-        return this.stubList;
+        return this.inMemoryEntityList;
     }
 }
