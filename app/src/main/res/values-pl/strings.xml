@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kalendarz celów</string>
+    <string name="action_settings">Ustawienia</string>
+    <string name="add_category_dialog_header">Dodaj kategorię</string>
+    <string name="edit_category_dialog_header">Zmien kategorię</string>
+    <string name="monthly_goals_category_dialog_times_textview_text">raz(y) na</string>
+    <string name="monthly_goals_category_dialog_times_confirm_button_text">Potwierdź</string>
+    <string name="monthly_goals_category_dialog_times_cancel_button_text">Anuluj</string>
+    <string name="monthly_goals_category_dialog_name_label_text">Nazwa</string>
+</resources>

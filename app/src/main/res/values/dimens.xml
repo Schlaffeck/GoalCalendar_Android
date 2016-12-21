@@ -11,6 +11,7 @@
     <dimen name="default_vertical_spacing">5dp</dimen>
     <dimen name="list_item_text_size">16sp</dimen>
     <dimen name="list_item_text_small_size">12sp</dimen>
+    <dimen name="dialog_header_text_size">20sp</dimen>
 
     <!-- monthly goals view -->
     <dimen name="monthly_goals_table_day_plan_column_width">55dp</dimen>

@@ -18,6 +18,7 @@ import com.slamcode.collections.ElementCreator;
 import com.slamcode.goalcalendar.data.*;
 import com.slamcode.goalcalendar.data.inmemory.InMemoryCategoriesRepository;
 import com.slamcode.goalcalendar.planning.Month;
+import com.slamcode.goalcalendar.view.AddEditCategoryDialog;
 import com.slamcode.goalcalendar.view.CategoriesListViewAdapter;
 
 import org.apache.commons.collections4.Closure;
@@ -64,12 +65,12 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
     private void setupFloatingButtonAction()
     {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(com.slamcode.goalcalendar.R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(com.slamcode.goalcalendar.R.id.monthly_goals_add_category_floatingactionbutton);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                AddEditCategoryDialog dialog = new AddEditCategoryDialog();
+                dialog.show(getFragmentManager(), null);
             }
         });
     }

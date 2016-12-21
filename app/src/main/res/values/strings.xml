@@ -1,4 +1,28 @@
 <resources>
-    <string name="app_name">GoalCalendar</string>
+    <string name="app_name">Goal calendar</string>
     <string name="action_settings">Settings</string>
+    <string name="add_category_dialog_header">Add category</string>
+    <string name="edit_category_dialog_header">Edit category</string>
+    <string name="monthly_goals_category_dialog_times_textview_text">time(s) a</string>
+    <string name="monthly_goals_category_dialog_times_confirm_button_text">Confirm</string>
+    <string name="monthly_goals_category_dialog_times_cancel_button_text">Cancel</string>
+    <string name="monthly_goals_category_dialog_name_label_text">Name</string>
+
+    <!-- frequency period -->
+    <string name="frequency_period_month">Month</string>
+    <string name="frequency_period_week">Week</string>
+
+    <!--  months -->
+    <string name="month_january">January</string>
+    <string name="month_february">February</string>
+    <string name="month_march">March</string>
+    <string name="month_april">April</string>
+    <string name="month_may">May</string>
+    <string name="month_june">June</string>
+    <string name="month_july">July</string>
+    <string name="month_august">August</string>
+    <string name="month_september">September</string>
+    <string name="month_october">October</string>
+    <string name="month_november">November</string>
+    <string name="month_december">December</string>
 </resources>

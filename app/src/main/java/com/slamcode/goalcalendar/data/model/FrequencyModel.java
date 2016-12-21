@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.data.model;
 
 import com.slamcode.goalcalendar.data.Identifiable;
+import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 
 /**
  * Created by moriasla on 16.12.2016.

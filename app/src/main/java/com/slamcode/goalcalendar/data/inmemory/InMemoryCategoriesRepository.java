@@ -7,7 +7,7 @@ import com.slamcode.goalcalendar.data.*;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.data.model.FrequencyModel;
-import com.slamcode.goalcalendar.data.model.FrequencyPeriod;
+import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.planning.Month;
 
 import java.util.ArrayList;
