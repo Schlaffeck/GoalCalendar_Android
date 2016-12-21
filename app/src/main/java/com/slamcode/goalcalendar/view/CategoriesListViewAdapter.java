@@ -20,20 +20,21 @@ import java.util.*;
 
 public class CategoriesListViewAdapter extends ListViewDataAdapter<CategoryModel, CategoriesListViewAdapter.CategoryViewHolder> {
 
-        private List<CategoryModel> list;
+        private Set<CategoryModel> processedCategoriesSet;
 
         public CategoriesListViewAdapter(Context context, LayoutInflater layoutInflater)
         {
             super(context, layoutInflater);
-            this.list = new ArrayList<CategoryModel>();
+            this.processedCategoriesSet = new HashSet<>();
         }
 
     @Override
-    protected CategoryViewHolder getNewViewHolder(View convertView) {
+    protected CategoryViewHolder getNewViewHolder(View convertView, long id) {
         convertView = this.getLayoutInflater().inflate(R.layout.monthly_goals_category_list_item,null);
 
         return new CategoryViewHolder(
                 convertView,
+                id,
                 (TextView)convertView.findViewById(R.id.monthly_goals_list_item_category_name),
                 (TextView)convertView.findViewById(R.id.monthly_goals_list_item_frequency),
                 (LinearLayout)convertView.findViewById(R.id.monthly_goals_list_item_days_list));
@@ -42,44 +43,53 @@ public class CategoriesListViewAdapter extends ListViewDataAdapter<CategoryModel
     @Override
     protected void fillListElementView(CategoryModel monthlyGoals, final CategoryViewHolder viewHolder)
     {
+        if(this.processedCategoriesSet.contains(monthlyGoals))
+        {
+            return;
+        }
+
         // put view holder to array so it can be modified from inner class
         final CategoryViewHolder[] innerViewHolder = new CategoryViewHolder[] { viewHolder };
 
         innerViewHolder[0].categoryNameTextView.setText(monthlyGoals.getName());
         innerViewHolder[0].frequencyTextView.setText(monthlyGoals.getFrequency().toString());
 
+
         for (DailyPlanModel dailyPlan : monthlyGoals.getDailyPlans())
         {
             View elem = getDayPlanStatusView(dailyPlan);
             innerViewHolder[0].daysListGridView.addView(elem);
         }
+
+        if(innerViewHolder[0].isViewVisible()) {
+            this.processedCategoriesSet.add(monthlyGoals);
+        }
+    }
+
+    @Override
+    public void updateList(List<CategoryModel> list)
+    {
+        this.processedCategoriesSet.clear();
+        super.updateList(list);
     }
 
     public class CategoryViewHolder extends ViewHolderBase<CategoryModel>
     {
-        private CategoryModel baseObject;
         private TextView categoryNameTextView;
         private TextView frequencyTextView;
         private LinearLayout daysListGridView;
 
         CategoryViewHolder(
                 View view,
+                long id,
                 TextView categoryNameTextView,
                    TextView frequencyTextView,
                    LinearLayout daysListGridView)
         {
-            super(view);
+            super(view, id);
             this.categoryNameTextView = categoryNameTextView;
             this.frequencyTextView = frequencyTextView;
             this.daysListGridView = daysListGridView;
-        }
-
-        public CategoryModel getBaseObject() {
-            return baseObject;
-        }
-
-        public void setBaseObject(CategoryModel baseObject) {
-            this.baseObject = baseObject;
         }
     }
 

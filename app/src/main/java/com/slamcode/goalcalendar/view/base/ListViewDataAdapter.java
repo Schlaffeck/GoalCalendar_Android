@@ -59,10 +59,12 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
     public View getView(int position, View convertView, ViewGroup parent)
     {
         TViewHolder viewHolder;
-        if(convertView == null)
+        long id = this.getItemId(position);
+        if(convertView == null
+                || ((TViewHolder)convertView.getTag()).getId() != id)
         {
             // create new holder for view
-            viewHolder = this.getNewViewHolder(convertView);
+            viewHolder = this.getNewViewHolder(convertView, id);
             convertView = viewHolder.getView();
 
             // hook up the holder to the view for recyclage
@@ -81,7 +83,6 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
             viewHolder.setBaseObject(object);
             try
             {
-                // read card data to show on view
                 this.fillListElementView(object, viewHolder);
             }
             catch (Exception e)
@@ -100,7 +101,7 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
         this.notifyDataSetChanged();
     }
 
-    protected abstract TViewHolder getNewViewHolder(View convertView);
+    protected abstract TViewHolder getNewViewHolder(View convertView, long id);
 
     protected abstract void fillListElementView(TData data, final TViewHolder viewHolder);
 
