@@ -1,4 +1,4 @@
-package com.slamcode.goalcalendar.view.base;
+package com.slamcode.goalcalendar.view.lists;
 
 import android.content.Context;
 import android.util.Log;
@@ -98,6 +98,15 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
     public void updateList(List<TData> newList)
     {
         this.list = newList;
+        this.notifyDataSetChanged();
+    }
+
+    public void addOrUpdateItem(TData item)
+    {
+        if(!this.list.contains(item))
+        {
+            this.list.add(item);
+        }
         this.notifyDataSetChanged();
     }
 

@@ -8,8 +8,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.slamcode.goalcalendar.R;
-import com.slamcode.goalcalendar.view.base.ListViewDataAdapter;
-import com.slamcode.goalcalendar.view.base.ViewHolderBase;
+import com.slamcode.goalcalendar.view.lists.ListViewDataAdapter;
+import com.slamcode.goalcalendar.view.lists.ViewHolderBase;
 import com.slamcode.goalcalendar.data.model.*;
 
 import java.util.*;

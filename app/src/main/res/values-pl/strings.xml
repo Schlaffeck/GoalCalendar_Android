@@ -2,10 +2,34 @@
 <resources>
     <string name="app_name">Kalendarz celów</string>
     <string name="action_settings">Ustawienia</string>
+
+    <!-- monthly goals view -->
     <string name="add_category_dialog_header">Dodaj kategorię</string>
     <string name="edit_category_dialog_header">Zmien kategorię</string>
     <string name="monthly_goals_category_dialog_times_textview_text">raz(y) na</string>
     <string name="monthly_goals_category_dialog_times_confirm_button_text">Potwierdź</string>
     <string name="monthly_goals_category_dialog_times_cancel_button_text">Anuluj</string>
     <string name="monthly_goals_category_dialog_name_label_text">Nazwa</string>
+
+    <string name="monthly_goals_category_dialog_Validation_name_edittext_error_empty">
+        Nazwa kategorii nie może byc pusta
+    </string>
+
+    <!-- frequency period -->
+    <string name="frequency_period_month">Miesiąc</string>
+    <string name="frequency_period_week">Tydzień</string>
+
+    <!--  months -->
+    <string name="month_january">Styczeń</string>
+    <string name="month_february">Luty</string>
+    <string name="month_march">Marzec</string>
+    <string name="month_april">Kwiecień</string>
+    <string name="month_may">Maj</string>
+    <string name="month_june">Czerwiec</string>
+    <string name="month_july">Lipiec</string>
+    <string name="month_august">Sierpień</string>
+    <string name="month_september">Wrzesień</string>
+    <string name="month_october">Październik</string>
+    <string name="month_november">Listopad</string>
+    <string name="month_december">Grudzień</string>
 </resources>

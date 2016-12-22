@@ -1,12 +1,18 @@
 <resources>
     <string name="app_name">Goal calendar</string>
     <string name="action_settings">Settings</string>
+
+    <!-- monthly goals view -->
     <string name="add_category_dialog_header">Add category</string>
     <string name="edit_category_dialog_header">Edit category</string>
     <string name="monthly_goals_category_dialog_times_textview_text">time(s) a</string>
     <string name="monthly_goals_category_dialog_times_confirm_button_text">Confirm</string>
     <string name="monthly_goals_category_dialog_times_cancel_button_text">Cancel</string>
     <string name="monthly_goals_category_dialog_name_label_text">Name</string>
+
+    <string name="monthly_goals_category_dialog_Validation_name_edittext_error_empty">
+        Category name is required
+    </string>
 
     <!-- frequency period -->
     <string name="frequency_period_month">Month</string>

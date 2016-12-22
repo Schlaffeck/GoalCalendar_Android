@@ -1,9 +1,7 @@
-package com.slamcode.goalcalendar.view.base;
+package com.slamcode.goalcalendar.view.lists;
 
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.GridView;
-import android.widget.TextView;
 
 /**
  * Created by moriasla on 16.12.2016.

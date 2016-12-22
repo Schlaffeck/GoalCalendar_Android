@@ -17,6 +17,7 @@ import com.slamcode.collections.CollectionUtils;
 import com.slamcode.collections.ElementCreator;
 import com.slamcode.goalcalendar.data.*;
 import com.slamcode.goalcalendar.data.inmemory.InMemoryCategoriesRepository;
+import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.view.AddEditCategoryDialog;
 import com.slamcode.goalcalendar.view.CategoriesListViewAdapter;
@@ -69,7 +70,17 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddEditCategoryDialog dialog = new AddEditCategoryDialog();
+                final AddEditCategoryDialog dialog = new AddEditCategoryDialog();
+                dialog.setDialogStateChangedListener(new AddEditCategoryDialog.DialogStateChangedListener() {
+                    @Override
+                    public void onDialogClosed(boolean confirmed) {
+                        if(confirmed)
+                        {
+                            CategoryModel newCategory = dialog.getModel();
+                            monthListViewAdapter.addOrUpdateItem(newCategory);
+                        }
+                    }
+                });
                 dialog.show(getFragmentManager(), null);
             }
         });

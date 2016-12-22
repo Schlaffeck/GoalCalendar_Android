@@ -12,11 +12,8 @@
             android:textSize="@dimen/dialog_header_text_size"
             android:text="@string/add_category_dialog_header"/>
     <!-- edit/add category form -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/monthly_goals_category_dialog_name_label_text"/>
     <EditText
+        android:hint="@string/monthly_goals_category_dialog_name_label_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/monthly_goals_category_dialog_name_edittext"/>

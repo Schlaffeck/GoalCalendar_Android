@@ -13,6 +13,7 @@ import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.data.model.FrequencyModel;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
+import com.slamcode.goalcalendar.view.validation.TextValidator;
 
 import java.util.List;
 
@@ -23,9 +24,12 @@ import java.util.List;
 public class AddEditCategoryDialog extends DialogFragment {
 
     private View associatedView;
+
     private CategoryModel model;
 
     private boolean confirmed;
+
+    private DialogStateChangedListener dialogStateChangedListener;
 
     public CategoryModel getModel() {
         return model;
@@ -33,6 +37,14 @@ public class AddEditCategoryDialog extends DialogFragment {
 
     public void setModel(CategoryModel model) {
         this.model = model;
+    }
+
+    public boolean isConfirmed() {
+        return confirmed;
+    }
+
+    public void setDialogStateChangedListener(DialogStateChangedListener dialogStateChangedListener) {
+        this.dialogStateChangedListener = dialogStateChangedListener;
     }
 
     @Override
@@ -62,6 +74,12 @@ public class AddEditCategoryDialog extends DialogFragment {
                         R.string.add_category_dialog_header
                         : R.string.edit_category_dialog_header);
 
+        final EditText nameEditTextView
+                = (EditText)view.findViewById(R.id.monthly_goals_category_dialog_name_edittext);
+
+        final TextValidator nameValidator =new CategoryNameTextValidator(nameEditTextView);
+        nameEditTextView.addTextChangedListener(nameValidator);
+
         NumberPicker picker = (NumberPicker) view.findViewById(R.id.monthly_goals_category_dialog_frequency_numberpicker);
         picker.setMaxValue(31);
         picker.setValue(0);
@@ -87,8 +105,10 @@ public class AddEditCategoryDialog extends DialogFragment {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                commitChanges();
-                getDialog().dismiss();
+                if(nameValidator.validate(nameEditTextView)) {
+                    commitChanges();
+                    getDialog().dismiss();
+                }
             }
         });
 
@@ -99,6 +119,7 @@ public class AddEditCategoryDialog extends DialogFragment {
     {
         this.confirmed = false;
         this.getDialog().cancel();
+        this.onDialogClosed();
     }
 
     private void commitChanges()
@@ -136,5 +157,19 @@ public class AddEditCategoryDialog extends DialogFragment {
                     this.getActivity(),
                     periodObject.toString()));
         this.confirmed = true;
+        this.onDialogClosed();
+    }
+
+    protected void onDialogClosed()
+    {
+        if(this.dialogStateChangedListener != null)
+        {
+            this.dialogStateChangedListener.onDialogClosed(this.confirmed);
+        }
+    }
+
+    public interface DialogStateChangedListener
+    {
+        void onDialogClosed(boolean confirmed);
     }
 }
