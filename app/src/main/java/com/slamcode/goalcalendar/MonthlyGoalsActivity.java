@@ -5,10 +5,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -44,6 +46,34 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo)
+    {
+        if(view.getId() == R.id.monthly_goals_listview)
+        {
+            ListView listView = (ListView) view;
+            AdapterView.AdapterContextMenuInfo adapterContextMenuInfo
+                    = (AdapterView.AdapterContextMenuInfo) menuInfo;
+            CategoryModel item = (CategoryModel) listView.getItemAtPosition(adapterContextMenuInfo.position);
+            if(item == null)
+            {
+                return;
+            }
+
+            menu.setHeaderTitle(item.getName());
+            menu.add(R.string.context_menu_edit_item);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        int menuItemIndex = item.getItemId();
+        CategoryModel model = (CategoryModel)this.monthListViewAdapter.getItem(info.position);
+        this.showAddEditCategoryDialog(model);
+        return true;
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(com.slamcode.goalcalendar.R.menu.menu_monthly_goals, menu);
@@ -71,20 +101,26 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final AddEditCategoryDialog dialog = new AddEditCategoryDialog();
-                dialog.setDialogStateChangedListener(new AddEditCategoryDialog.DialogStateChangedListener() {
-                    @Override
-                    public void onDialogClosed(boolean confirmed) {
-                        if(confirmed)
-                        {
-                            CategoryModel newCategory = dialog.getModel();
-                            monthListViewAdapter.addOrUpdateItem(newCategory);
-                        }
-                    }
-                });
-                dialog.show(getFragmentManager(), null);
+            showAddEditCategoryDialog(null);
             }
         });
+    }
+
+    private void showAddEditCategoryDialog(CategoryModel model)
+    {
+        final AddEditCategoryDialog dialog = new AddEditCategoryDialog();
+        dialog.setModel(model);
+        dialog.setDialogStateChangedListener(new AddEditCategoryDialog.DialogStateChangedListener() {
+            @Override
+            public void onDialogClosed(boolean confirmed) {
+                if(confirmed)
+                {
+                    CategoryModel newCategory = dialog.getModel();
+                    monthListViewAdapter.addOrUpdateItem(newCategory);
+                }
+            }
+        });
+        dialog.show(getFragmentManager(), null);
     }
 
     private void setupMonthlyPlanningCategoryList() {
@@ -103,6 +139,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
             }
         });
         listView.setAdapter(this.monthListViewAdapter);
+
+        this.registerForContextMenu(listView);
 
         this.setupCategoryListForMonth(Month.getCurrentMonth());
     }

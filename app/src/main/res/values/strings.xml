@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Goal calendar</string>
     <string name="action_settings">Settings</string>
+    <string name="context_menu_edit_item">Edit</string>
+    <string name="context_menu_delete_item">Delete</string>
 
     <!-- monthly goals view -->
     <string name="add_category_dialog_header">Add category</string>

@@ -31,6 +31,7 @@ public class CategoriesListViewAdapter extends ListViewDataAdapter<CategoryModel
     @Override
     protected CategoryViewHolder getNewViewHolder(View convertView, long id) {
         convertView = this.getLayoutInflater().inflate(R.layout.monthly_goals_category_list_item,null);
+        convertView.setLongClickable(true);
 
         return new CategoryViewHolder(
                 convertView,

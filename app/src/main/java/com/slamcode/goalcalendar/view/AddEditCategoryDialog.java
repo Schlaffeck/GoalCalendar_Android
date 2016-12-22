@@ -19,6 +19,7 @@ import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.data.model.FrequencyModel;
+import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.view.validation.TextViewValidator;
 import com.slamcode.goalcalendar.view.validation.ViewValidator;
 
@@ -96,10 +97,10 @@ public class AddEditCategoryDialog extends DialogFragment {
         this.getViewValidatorList().add(nameValidator);
         nameEditTextView.addTextChangedListener(nameValidator);
 
-        NumberPicker picker = (NumberPicker) view.findViewById(R.id.monthly_goals_category_dialog_frequency_numberpicker);
-        picker.setMaxValue(31);
-        picker.setValue(0);
-        picker.setMinValue(0);
+        NumberPicker frequencyValuePicker = (NumberPicker) view.findViewById(R.id.monthly_goals_category_dialog_frequency_numberpicker);
+        frequencyValuePicker.setMaxValue(31);
+        frequencyValuePicker.setValue(0);
+        frequencyValuePicker.setMinValue(0);
 
         Spinner periodSpinner = (Spinner) view.findViewById(R.id.monthly_goals_category_dialog_period_spinner);
         ArrayAdapter<String> periodStringsAdapter = new ArrayAdapter<String>(
@@ -125,6 +126,20 @@ public class AddEditCategoryDialog extends DialogFragment {
                     getDialog().dismiss();
             }
         });
+
+        // set values
+        if(this.model != null)
+        {
+            nameEditTextView.setText(model.getName());
+
+            int position = periodStringsAdapter.getPosition(
+                    ResourcesHelper.toResourceString(
+                            this.getActivity(),
+                            model.getFrequency().getPeriod()));
+            periodSpinner.setSelection(position);
+
+            frequencyValuePicker.setValue(this.model.getFrequency().getFrequencyValue());
+        }
 
         return view;
     }

@@ -2,6 +2,8 @@
 <resources>
     <string name="app_name">Kalendarz celów</string>
     <string name="action_settings">Ustawienia</string>
+    <string name="context_menu_edit_item">Zmień</string>
+    <string name="context_menu_delete_item">Usuń</string>
 
     <!-- monthly goals view -->
     <string name="add_category_dialog_header">Dodaj kategorię</string>

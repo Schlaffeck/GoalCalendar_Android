@@ -53,6 +53,17 @@ public class ResourcesHelper {
         return -1;
     }
 
+    public static String toResourceString(Context context, FrequencyPeriod period)
+    {
+        switch (period)
+        {
+            case Week: return context.getResources().getString(R.string.frequency_period_week);
+            case Month: return context.getResources().getString(R.string.frequency_period_month);
+        }
+
+        return null;
+    }
+
     public static int toResourceStringId(Month month)
     {
         switch(month)
