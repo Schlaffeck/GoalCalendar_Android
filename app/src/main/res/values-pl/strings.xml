@@ -4,14 +4,18 @@
     <string name="action_settings">Ustawienia</string>
     <string name="context_menu_edit_item">Zmień</string>
     <string name="context_menu_delete_item">Usuń</string>
+    <string name="button_yes">Tak</string>
+    <string name="button_no">Nie</string>
 
     <!-- monthly goals view -->
     <string name="add_category_dialog_header">Dodaj kategorię</string>
     <string name="edit_category_dialog_header">Zmien kategorię</string>
+    <string name="confirm_delete_category_dialog_header">Usunąć kategorię?</string>
     <string name="monthly_goals_category_dialog_times_textview_text">raz(y) na</string>
     <string name="monthly_goals_category_dialog_times_confirm_button_text">Potwierdź</string>
     <string name="monthly_goals_category_dialog_times_cancel_button_text">Anuluj</string>
     <string name="monthly_goals_category_dialog_name_label_text">Nazwa</string>
+    <string name="confirm_category_deleted_toast">Usunięto kategorię</string>
 
     <string name="monthly_goals_category_dialog_Validation_name_edittext_error_empty">
         Nazwa kategorii nie może byc pusta

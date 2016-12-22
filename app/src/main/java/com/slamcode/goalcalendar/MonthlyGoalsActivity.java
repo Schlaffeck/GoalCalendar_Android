@@ -1,5 +1,7 @@
 package com.slamcode.goalcalendar;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.slamcode.collections.CollectionUtils;
 import com.slamcode.collections.ElementCreator;
@@ -61,16 +64,47 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
             menu.setHeaderTitle(item.getName());
             menu.add(R.string.context_menu_edit_item);
+            menu.add(R.string.context_menu_delete_item);
         }
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-        int menuItemIndex = item.getItemId();
+        CharSequence menuItem = item.getTitle();
         CategoryModel model = (CategoryModel)this.monthListViewAdapter.getItem(info.position);
-        this.showAddEditCategoryDialog(model);
+        if(getResources().getString(R.string.context_menu_edit_item).equals(menuItem)) {
+            this.showAddEditCategoryDialog(model);
+        }
+        else if(getResources().getString(R.string.context_menu_delete_item).equals(menuItem))
+        {
+            this.showConfirmDeleteCategoryDialog(model);
+        }
         return true;
+    }
+
+    private void showConfirmDeleteCategoryDialog(final CategoryModel model) {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+
+        dialogBuilder
+                .setTitle(R.string.confirm_delete_category_dialog_header)
+                .setMessage(model.getName())
+                .setPositiveButton(R.string.button_yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        monthListViewAdapter.removeItem(model);
+                        dialogInterface.dismiss();
+                    }
+                })
+        .setNegativeButton(R.string.button_no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+                dialogInterface.dismiss();
+            }
+        });
+
+        dialogBuilder.create().show();
     }
 
     @Override
@@ -127,7 +161,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
         this.monthListViewAdapter = new CategoriesListViewAdapter(this, getLayoutInflater());
         final ListView listView = (ListView) this.findViewById(R.id.monthly_goals_listview);
-        this.monthListViewAdapter.addItemSourceChangedEventListener(new ListViewDataAdapter.ItemsSourceChangedEventListener() {
+        this.monthListViewAdapter.addItemSourceChangedEventListener(new ListViewDataAdapter.ItemsSourceChangedEventListener<CategoryModel>() {
             @Override
             public void onNewItemAdded(int itemPosition) {
                 listView.smoothScrollToPosition(itemPosition);
@@ -136,6 +170,15 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
             @Override
             public void onItemModified(int itemPosition) {
                 listView.smoothScrollToPosition(itemPosition);
+            }
+
+            @Override
+            public void onItemRemoved(CategoryModel item) {
+                Toast itemRemovedToast = Toast.makeText(
+                        getApplicationContext(),
+                        String.format("%s: %s", getResources().getString(R.string.confirm_category_deleted_toast), item.getName()),
+                        Toast.LENGTH_SHORT);
+                itemRemovedToast.show();
             }
         });
         listView.setAdapter(this.monthListViewAdapter);

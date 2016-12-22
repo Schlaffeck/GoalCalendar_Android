@@ -117,7 +117,18 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
         }
     }
 
-    public void addItemSourceChangedEventListener(ItemsSourceChangedEventListener listener)
+    public void removeItem(TData item)
+    {
+        if(!this.list.contains(item)) {
+            return;
+        }
+
+        this.list.remove(item);
+        this.notifyDataSetChanged();
+        this.notifyItemRemoved(item);
+    }
+
+    public void addItemSourceChangedEventListener(ItemsSourceChangedEventListener<TData> listener)
     {
         if(this.adapterSourceChangedEventListeners.contains(listener))
         {
@@ -152,6 +163,14 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
         }
     }
 
+    protected void notifyItemRemoved(TData item)
+    {
+        for (ItemsSourceChangedEventListener listener :
+                this.adapterSourceChangedEventListeners) {
+            listener.onItemRemoved(item);
+        }
+    }
+
     protected abstract TViewHolder getNewViewHolder(View convertView, long id);
 
     protected abstract void fillListElementView(TData data, final TViewHolder viewHolder);
@@ -164,10 +183,12 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
         return context;
     }
 
-    public interface ItemsSourceChangedEventListener
+    public interface ItemsSourceChangedEventListener<ItemType>
     {
         void onNewItemAdded(int itemPosition);
 
         void onItemModified(int itemPosition);
+
+        void onItemRemoved(ItemType item);
     }
 }
