@@ -1,10 +1,17 @@
 package com.slamcode.goalcalendar.view;
 
-import android.app.*;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.*;
-import android.widget.*;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.NumberPicker;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.slamcode.collections.CollectionUtils;
 import com.slamcode.collections.ElementCreator;
@@ -12,15 +19,17 @@ import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.data.model.FrequencyModel;
-import com.slamcode.goalcalendar.planning.FrequencyPeriod;
-import com.slamcode.goalcalendar.view.validation.TextValidator;
+import com.slamcode.goalcalendar.view.validation.TextViewValidator;
+import com.slamcode.goalcalendar.view.validation.ViewValidator;
 
+import org.apache.commons.collections4.Predicate;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by moriasla on 21.12.2016.
  */
-
 public class AddEditCategoryDialog extends DialogFragment {
 
     private View associatedView;
@@ -28,6 +37,8 @@ public class AddEditCategoryDialog extends DialogFragment {
     private CategoryModel model;
 
     private boolean confirmed;
+
+    private List<ViewValidator<?>> viewValidatorList =  new ArrayList<>();
 
     private DialogStateChangedListener dialogStateChangedListener;
 
@@ -41,6 +52,10 @@ public class AddEditCategoryDialog extends DialogFragment {
 
     public boolean isConfirmed() {
         return confirmed;
+    }
+
+    protected List<ViewValidator<?>> getViewValidatorList() {
+        return viewValidatorList;
     }
 
     public void setDialogStateChangedListener(DialogStateChangedListener dialogStateChangedListener) {
@@ -77,7 +92,8 @@ public class AddEditCategoryDialog extends DialogFragment {
         final EditText nameEditTextView
                 = (EditText)view.findViewById(R.id.monthly_goals_category_dialog_name_edittext);
 
-        final TextValidator nameValidator =new CategoryNameTextValidator(nameEditTextView);
+        final TextViewValidator nameValidator =new CategoryNameTextValidator(nameEditTextView);
+        this.getViewValidatorList().add(nameValidator);
         nameEditTextView.addTextChangedListener(nameValidator);
 
         NumberPicker picker = (NumberPicker) view.findViewById(R.id.monthly_goals_category_dialog_frequency_numberpicker);
@@ -105,10 +121,8 @@ public class AddEditCategoryDialog extends DialogFragment {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(nameValidator.validate(nameEditTextView)) {
                     commitChanges();
                     getDialog().dismiss();
-                }
             }
         });
 
@@ -124,6 +138,11 @@ public class AddEditCategoryDialog extends DialogFragment {
 
     private void commitChanges()
     {
+        if(!this.isAllValid())
+        {
+            return;
+        }
+
         if(this.getModel() == null)
         {
             CategoryModel newModel = new CategoryModel();
@@ -158,6 +177,18 @@ public class AddEditCategoryDialog extends DialogFragment {
                     periodObject.toString()));
         this.confirmed = true;
         this.onDialogClosed();
+    }
+
+    private boolean isAllValid()
+    {
+        for (ViewValidator<?> validator : this.getViewValidatorList()){
+            if(!validator.isValid())
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     protected void onDialogClosed()

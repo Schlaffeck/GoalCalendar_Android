@@ -85,7 +85,10 @@ public class InMemoryCategoriesRepository implements CategoryRepository {
                 "Family",
                 "Friends",
                 "Project",
-                "Flat arrangement"
+                "Flat arrangement",
+                "Create something",
+                "Go play some footbal",
+                "Exercise",
         };
 
         final FrequencyPeriod[] categoriesFrequency = new FrequencyPeriod[]
@@ -93,7 +96,10 @@ public class InMemoryCategoriesRepository implements CategoryRepository {
                         FrequencyPeriod.Month,
                         FrequencyPeriod.Week,
                         FrequencyPeriod.Month,
-                        FrequencyPeriod.Week
+                        FrequencyPeriod.Week,
+                        FrequencyPeriod.Week,
+                        FrequencyPeriod.Month,
+                        FrequencyPeriod.Week,
                 };
 
         final int[] categoriesFrequencyValues = new int[]
@@ -101,7 +107,10 @@ public class InMemoryCategoriesRepository implements CategoryRepository {
                         2,
                         2,
                         3,
-                        1
+                        1,
+                        2,
+                        3,
+                        2
                 };
 
         List<CategoryModel> categories = CollectionUtils.createList(categoriesNames.length, new ElementCreator<CategoryModel>() {

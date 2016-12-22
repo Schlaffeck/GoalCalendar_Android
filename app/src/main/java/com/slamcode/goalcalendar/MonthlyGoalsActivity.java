@@ -21,6 +21,7 @@ import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.view.AddEditCategoryDialog;
 import com.slamcode.goalcalendar.view.CategoriesListViewAdapter;
+import com.slamcode.goalcalendar.view.lists.ListViewDataAdapter;
 
 import org.apache.commons.collections4.Closure;
 import org.apache.commons.collections4.IteratorUtils;
@@ -89,8 +90,18 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     private void setupMonthlyPlanningCategoryList() {
 
         this.monthListViewAdapter = new CategoriesListViewAdapter(this, getLayoutInflater());
-        ListView listView = (ListView) this.findViewById(R.id.monthly_goals_listview);
+        final ListView listView = (ListView) this.findViewById(R.id.monthly_goals_listview);
+        this.monthListViewAdapter.addItemSourceChangedEventListener(new ListViewDataAdapter.ItemsSourceChangedEventListener() {
+            @Override
+            public void onNewItemAdded(int itemPosition) {
+                listView.smoothScrollToPosition(itemPosition);
+            }
 
+            @Override
+            public void onItemModified(int itemPosition) {
+                listView.smoothScrollToPosition(itemPosition);
+            }
+        });
         listView.setAdapter(this.monthListViewAdapter);
 
         this.setupCategoryListForMonth(Month.getCurrentMonth());

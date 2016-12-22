@@ -19,12 +19,14 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
     private List<TData> list;
     private Context context;
     private LayoutInflater layoutInflater;
+    private List<ItemsSourceChangedEventListener> adapterSourceChangedEventListeners;
 
     protected ListViewDataAdapter(Context context, LayoutInflater layoutInflater)
     {
-        this.list = new ArrayList<TData>();
+        this.list = new ArrayList<>();
         this.context = context;
         this.layoutInflater = layoutInflater;
+        this.adapterSourceChangedEventListeners = new ArrayList<>();
     }
 
     @Override
@@ -106,8 +108,48 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
         if(!this.list.contains(item))
         {
             this.list.add(item);
+            this.notifyDataSetChanged();
+            this.notifyItemAdded(this.list.indexOf(item));
         }
-        this.notifyDataSetChanged();
+        else {
+            this.notifyDataSetChanged();
+            this.notifyItemModified(this.list.indexOf(item));
+        }
+    }
+
+    public void addItemSourceChangedEventListener(ItemsSourceChangedEventListener listener)
+    {
+        if(this.adapterSourceChangedEventListeners.contains(listener))
+        {
+            return;
+        }
+        this.adapterSourceChangedEventListeners.add(listener);
+    }
+
+    public void removeItemSourceChangedEventListener(ItemsSourceChangedEventListener listener)
+    {
+        if(!this.adapterSourceChangedEventListeners.contains(listener))
+        {
+            return;
+        }
+
+        this.adapterSourceChangedEventListeners.remove(listener);
+    }
+
+    protected void notifyItemAdded(int position)
+    {
+        for (ItemsSourceChangedEventListener listener :
+                this.adapterSourceChangedEventListeners) {
+            listener.onNewItemAdded(position);
+        }
+    }
+
+    protected void notifyItemModified(int position)
+    {
+        for (ItemsSourceChangedEventListener listener :
+                this.adapterSourceChangedEventListeners) {
+            listener.onItemModified(position);
+        }
     }
 
     protected abstract TViewHolder getNewViewHolder(View convertView, long id);
@@ -120,5 +162,12 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
 
     public Context getContext() {
         return context;
+    }
+
+    public interface ItemsSourceChangedEventListener
+    {
+        void onNewItemAdded(int itemPosition);
+
+        void onItemModified(int itemPosition);
     }
 }

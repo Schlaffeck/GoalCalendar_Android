@@ -9,14 +9,21 @@ import android.widget.TextView;
  * Created by moriasla on 22.12.2016.
  */
 
-public abstract class TextValidator implements View.OnFocusChangeListener, TextWatcher {
+public abstract class TextViewValidator implements ViewValidator<TextView>, View.OnFocusChangeListener, TextWatcher {
 
     private final TextView textView;
 
-    protected TextValidator(TextView textView) {
+    protected TextViewValidator(TextView textView) {
         this.textView = textView;
     }
 
+    @Override
+    public boolean isValid()
+    {
+        return this.validate(this.textView);
+    }
+
+    @Override
     public boolean validate(TextView textView)
     {
         TextValidationResult result = validateInternal(textView);

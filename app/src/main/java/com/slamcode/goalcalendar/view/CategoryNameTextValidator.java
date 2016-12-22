@@ -1,11 +1,9 @@
 package com.slamcode.goalcalendar.view;
 
-import android.text.Editable;
-import android.view.View;
 import android.widget.TextView;
 
 import com.slamcode.goalcalendar.R;
-import com.slamcode.goalcalendar.view.validation.TextValidator;
+import com.slamcode.goalcalendar.view.validation.TextViewValidator;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -13,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
  * Created by moriasla on 22.12.2016.
  */
 
-public class CategoryNameTextValidator extends TextValidator {
+public class CategoryNameTextValidator extends TextViewValidator {
 
     public CategoryNameTextValidator(TextView textView)
     {
