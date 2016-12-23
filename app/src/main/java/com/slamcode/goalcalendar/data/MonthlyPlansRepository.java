@@ -9,7 +9,7 @@ import com.slamcode.goalcalendar.planning.Month;
 
 public interface MonthlyPlansRepository extends Repository<MonthlyPlansModel, Integer> {
 
-    MonthlyPlansModel findForMonth(Month month, int year);
+    MonthlyPlansModel findForMonth(Month month);
 
     MonthlyPlansModel findForThisMonth();
 

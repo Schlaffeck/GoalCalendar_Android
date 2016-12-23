@@ -22,10 +22,13 @@ import com.slamcode.collections.CollectionUtils;
 import com.slamcode.collections.ElementCreator;
 import com.slamcode.goalcalendar.data.*;
 import com.slamcode.goalcalendar.data.inmemory.InMemoryCategoriesRepository;
+import com.slamcode.goalcalendar.data.inmemory.InMemoryMonthlyPlansRepository;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
+import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.view.AddEditCategoryDialog;
 import com.slamcode.goalcalendar.view.CategoriesListViewAdapter;
+import com.slamcode.goalcalendar.view.ResourcesHelper;
 import com.slamcode.goalcalendar.view.lists.ListViewDataAdapter;
 
 import org.apache.commons.collections4.Closure;
@@ -185,25 +188,31 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
         this.registerForContextMenu(listView);
 
-        this.setupCategoryListForMonth(Month.getCurrentMonth());
+        this.setupView(Month.getCurrentMonth());
     }
 
-    private void setupCategoryListForMonth(Month month)
+    private void setupView(Month month)
     {
         // todo: move repo to di container
-        CategoryRepository repository = InMemoryCategoriesRepository.buildDefaultRepository();
+        MonthlyPlansRepository repository = InMemoryMonthlyPlansRepository.buildDefaultRepository();
+        MonthlyPlansModel model = repository.findForMonth(month);
 
-        this.setupHeaderForCategoryListForMonth(month);
-        this.monthListViewAdapter.updateList(repository.findForMonth(month));
+        this.setupCategoryListForMonth(model);
     }
 
-    private void setupHeaderForCategoryListForMonth(Month month)
+    private void setupCategoryListForMonth(MonthlyPlansModel month)
+    {
+        this.setupHeaderForCategoryListForMonth(month);
+        this.monthListViewAdapter.updateList(month.getCategories());
+    }
+
+    private void setupHeaderForCategoryListForMonth(MonthlyPlansModel monthlyPlans)
     {
         final LayoutInflater inflater = this.getLayoutInflater();
         // month text view
         final LinearLayout header = (LinearLayout) this.findViewById(R.id.monthly_goals_list_header);
         TextView monthName = (TextView) header.findViewById(R.id.monthly_goals_list_header_month_text);
-        monthName.setText(month.name());
+        monthName.setText(ResourcesHelper.toResourceStringId(monthlyPlans.getMonth()));
 
         //month days list
         List<Integer> listOfDays = CollectionUtils.createList(31, new ElementCreator<Integer>() {

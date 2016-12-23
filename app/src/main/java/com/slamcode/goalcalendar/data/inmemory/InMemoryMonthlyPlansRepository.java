@@ -22,7 +22,7 @@ public class InMemoryMonthlyPlansRepository extends InMemoryRepositoryBase<Month
     }
 
     @Override
-    public MonthlyPlansModel findForMonth(Month month, int year) {
+    public MonthlyPlansModel findForMonth(Month month) {
         for(MonthlyPlansModel m : this.getInMemoryEntityList())
         {
             if(month.equals(m.getMonth()))
@@ -36,17 +36,17 @@ public class InMemoryMonthlyPlansRepository extends InMemoryRepositoryBase<Month
 
     @Override
     public MonthlyPlansModel findForThisMonth() {
-        return this.findForMonth(Month.getCurrentMonth(), 0);
+        return this.findForMonth(Month.getCurrentMonth());
     }
 
     @Override
     public MonthlyPlansModel findForNextMonth() {
-        return this.findForMonth(Month.getNextMonth(), 0);
+        return this.findForMonth(Month.getNextMonth());
     }
 
     @Override
     public MonthlyPlansModel findForPreviousMonth() {
-        return this.findForMonth(Month.getPreviousMonth(), 0);
+        return this.findForMonth(Month.getPreviousMonth());
     }
 
     public static InMemoryMonthlyPlansRepository buildDefaultRepository()
