@@ -20,6 +20,7 @@ import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.data.model.FrequencyModel;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
+import com.slamcode.goalcalendar.view.utils.SpinnerHelper;
 import com.slamcode.goalcalendar.view.validation.TextViewValidator;
 import com.slamcode.goalcalendar.view.validation.ViewValidator;
 
@@ -132,12 +133,9 @@ public class AddEditCategoryDialog extends DialogFragment {
         {
             nameEditTextView.setText(model.getName());
 
-            int position = periodStringsAdapter.getPosition(
-                    ResourcesHelper.toResourceString(
-                            this.getActivity(),
-                            model.getFrequency().getPeriod()));
-            periodSpinner.setSelection(position);
-
+            SpinnerHelper.setSelectedValue(periodSpinner, ResourcesHelper.toResourceString(
+                    this.getActivity(),
+                    model.getFrequency().getPeriod()));
             frequencyValuePicker.setValue(this.model.getFrequency().getFrequencyValue());
         }
 

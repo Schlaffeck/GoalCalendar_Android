@@ -13,8 +13,10 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +32,7 @@ import com.slamcode.goalcalendar.view.AddEditCategoryDialog;
 import com.slamcode.goalcalendar.view.CategoriesListViewAdapter;
 import com.slamcode.goalcalendar.view.ResourcesHelper;
 import com.slamcode.goalcalendar.view.lists.ListViewDataAdapter;
+import com.slamcode.goalcalendar.view.utils.SpinnerHelper;
 
 import org.apache.commons.collections4.Closure;
 import org.apache.commons.collections4.IteratorUtils;
@@ -162,6 +165,16 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
     private void setupMonthlyPlanningCategoryList() {
 
+        // month spinner
+        final LinearLayout header = (LinearLayout) this.findViewById(R.id.monthly_goals_list_header);
+        Spinner monthSpinner = (Spinner) header.findViewById(R.id.monthly_goals_list_header_month_spinner);
+        ArrayAdapter<String> monthsStringsAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                ResourcesHelper.monthsResourceStrings(this));
+        monthSpinner.setAdapter(monthsStringsAdapter);
+
+        /// categories list adapter
         this.monthListViewAdapter = new CategoriesListViewAdapter(this, getLayoutInflater());
         final ListView listView = (ListView) this.findViewById(R.id.monthly_goals_listview);
         this.monthListViewAdapter.addItemSourceChangedEventListener(new ListViewDataAdapter.ItemsSourceChangedEventListener<CategoryModel>() {
@@ -188,14 +201,9 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
         this.registerForContextMenu(listView);
 
-        this.setupView(Month.getCurrentMonth());
-    }
-
-    private void setupView(Month month)
-    {
         // todo: move repo to di container
         MonthlyPlansRepository repository = InMemoryMonthlyPlansRepository.buildDefaultRepository();
-        MonthlyPlansModel model = repository.findForMonth(month);
+        MonthlyPlansModel model = repository.findForMonth(Month.getCurrentMonth());
 
         this.setupCategoryListForMonth(model);
     }
@@ -211,8 +219,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         final LayoutInflater inflater = this.getLayoutInflater();
         // month text view
         final LinearLayout header = (LinearLayout) this.findViewById(R.id.monthly_goals_list_header);
-        TextView monthName = (TextView) header.findViewById(R.id.monthly_goals_list_header_month_text);
-        monthName.setText(ResourcesHelper.toResourceStringId(monthlyPlans.getMonth()));
+        Spinner monthSpinner = (Spinner) header.findViewById(R.id.monthly_goals_list_header_month_spinner);
+        SpinnerHelper.setSelectedValue(monthSpinner, ResourcesHelper.toResourceStringId(monthlyPlans.getMonth()));
 
         //month days list
         List<Integer> listOfDays = CollectionUtils.createList(31, new ElementCreator<Integer>() {

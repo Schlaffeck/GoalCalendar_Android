@@ -1,5 +1,6 @@
 package com.slamcode.goalcalendar.view;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.slamcode.goalcalendar.R;
@@ -83,5 +84,16 @@ public class ResourcesHelper {
         }
 
         return 0;
+    }
+
+    public static String[] monthsResourceStrings(Context context) {
+        final int size = Month.values().length;
+        String[] result = new String[size];
+
+        for (int i = 0; i< size; i++) {
+            result[i] = context.getString(toResourceStringId(Month.values()[i]));
+        }
+
+        return result;
     }
 }
