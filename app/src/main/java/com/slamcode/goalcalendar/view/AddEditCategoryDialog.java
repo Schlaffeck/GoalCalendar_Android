@@ -140,7 +140,7 @@ public class AddEditCategoryDialog extends AddEditDialog<CategoryModel> {
                     this.getActivity(),
                     periodObject.toString()));
         this.setConfirmed(true);
-        getDialog().dismiss();
         this.onDialogClosed();
+        getDialog().dismiss();
     }
 }

@@ -21,9 +21,12 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
     private LayoutInflater layoutInflater;
     private List<ItemsSourceChangedEventListener> adapterSourceChangedEventListeners;
 
+    private List<TData> modifiedItems;
+
     protected ListViewDataAdapter(Context context, LayoutInflater layoutInflater)
     {
         this.list = new ArrayList<>();
+        this.modifiedItems = new ArrayList<>();
         this.context = context;
         this.layoutInflater = layoutInflater;
         this.adapterSourceChangedEventListeners = new ArrayList<>();
@@ -80,11 +83,14 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
         }
 
         TData object = this.getItem(position);
-        if(object != null && object != viewHolder.getBaseObject())
+        if(object != null
+                && (object != viewHolder.getBaseObject()
+                    || this.modifiedItems.contains(object)))
         {
             viewHolder.setBaseObject(object);
             try
             {
+                this.modifiedItems.remove(object);
                 this.fillListElementView(object, viewHolder);
             }
             catch (Exception e)
@@ -112,6 +118,7 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
             this.notifyItemAdded(this.list.indexOf(item));
         }
         else {
+            this.modifiedItems.add(item);
             this.notifyDataSetChanged();
             this.notifyItemModified(this.list.indexOf(item));
         }
@@ -124,6 +131,7 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
         }
 
         this.list.remove(item);
+        this.modifiedItems.remove(item);
         this.notifyDataSetChanged();
         this.notifyItemRemoved(item);
     }
