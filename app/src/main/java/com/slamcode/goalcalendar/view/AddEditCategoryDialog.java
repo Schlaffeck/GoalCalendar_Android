@@ -20,6 +20,7 @@ import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.data.model.FrequencyModel;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
+import com.slamcode.goalcalendar.view.dialogs.AddEditDialog;
 import com.slamcode.goalcalendar.view.validation.TextViewValidator;
 import com.slamcode.goalcalendar.view.validation.ViewValidator;
 
@@ -31,55 +32,10 @@ import java.util.List;
 /**
  * Created by moriasla on 21.12.2016.
  */
-public class AddEditCategoryDialog extends DialogFragment {
-
-    private View associatedView;
-
-    private CategoryModel model;
-
-    private boolean confirmed;
-
-    private List<ViewValidator<?>> viewValidatorList =  new ArrayList<>();
-
-    private DialogStateChangedListener dialogStateChangedListener;
-
-    public CategoryModel getModel() {
-        return model;
-    }
-
-    public void setModel(CategoryModel model) {
-        this.model = model;
-    }
-
-    public boolean isConfirmed() {
-        return confirmed;
-    }
-
-    protected List<ViewValidator<?>> getViewValidatorList() {
-        return viewValidatorList;
-    }
-
-    public void setDialogStateChangedListener(DialogStateChangedListener dialogStateChangedListener) {
-        this.dialogStateChangedListener = dialogStateChangedListener;
-    }
+public class AddEditCategoryDialog extends AddEditDialog<CategoryModel> {
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstance)
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
-
-        LayoutInflater inflater = this.getActivity().getLayoutInflater();
-
-        if(this.associatedView == null)
-        {
-            this.associatedView = this.initializeView(inflater);
-        }
-
-        builder.setView(this.associatedView);
-        return builder.create();
-    }
-
-    private View initializeView(LayoutInflater inflater)
+    protected View initializeView(LayoutInflater inflater)
     {
         View view = inflater.inflate(R.layout.monthly_goals_add_edit_category_dialog_layout, null);
 
@@ -98,7 +54,7 @@ public class AddEditCategoryDialog extends DialogFragment {
         nameEditTextView.addTextChangedListener(nameValidator);
 
         NumberPicker frequencyValuePicker = (NumberPicker) view.findViewById(R.id.monthly_goals_category_dialog_frequency_numberpicker);
-        frequencyValuePicker.setMaxValue(31);
+        frequencyValuePicker.setMaxValue(100);
         frequencyValuePicker.setValue(0);
         frequencyValuePicker.setMinValue(0);
 
@@ -128,30 +84,24 @@ public class AddEditCategoryDialog extends DialogFragment {
         });
 
         // set values
-        if(this.model != null)
+        if(this.getModel() != null)
         {
-            nameEditTextView.setText(model.getName());
+            nameEditTextView.setText(this.getModel().getName());
 
             int position = periodStringsAdapter.getPosition(
                     ResourcesHelper.toResourceString(
                             this.getActivity(),
-                            model.getFrequency().getPeriod()));
+                            this.getModel().getFrequency().getPeriod()));
             periodSpinner.setSelection(position);
 
-            frequencyValuePicker.setValue(this.model.getFrequency().getFrequencyValue());
+            frequencyValuePicker.setValue(this.getModel().getFrequency().getFrequencyValue());
         }
 
         return view;
     }
 
-    private void cancelChanges()
-    {
-        this.confirmed = false;
-        this.getDialog().cancel();
-        this.onDialogClosed();
-    }
-
-    private void commitChanges()
+    @Override
+    protected void commitChanges()
     {
         if(!this.isAllValid())
         {
@@ -177,45 +127,20 @@ public class AddEditCategoryDialog extends DialogFragment {
 
         CategoryModel m = this.getModel();
         m.setName(
-                ((EditText)this.associatedView.findViewById(R.id.monthly_goals_category_dialog_name_edittext))
+                ((EditText)this.getAssociatedView().findViewById(R.id.monthly_goals_category_dialog_name_edittext))
                         .getText().toString());
 
         m.getFrequency().setFrequencyValue(
-                ((NumberPicker)this.associatedView.findViewById(R.id.monthly_goals_category_dialog_frequency_numberpicker))
+                ((NumberPicker)this.getAssociatedView().findViewById(R.id.monthly_goals_category_dialog_frequency_numberpicker))
                         .getValue());
 
-        Object periodObject = ((Spinner)this.associatedView.findViewById(R.id.monthly_goals_category_dialog_period_spinner))
+        Object periodObject = ((Spinner)this.getAssociatedView().findViewById(R.id.monthly_goals_category_dialog_period_spinner))
                 .getSelectedItem();
         m.getFrequency()
                 .setPeriod(ResourcesHelper.frequencyPeriodFromResourceString(
                     this.getActivity(),
                     periodObject.toString()));
-        this.confirmed = true;
+        this.setConfirmed(true);
         this.onDialogClosed();
-    }
-
-    private boolean isAllValid()
-    {
-        for (ViewValidator<?> validator : this.getViewValidatorList()){
-            if(!validator.isValid())
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    protected void onDialogClosed()
-    {
-        if(this.dialogStateChangedListener != null)
-        {
-            this.dialogStateChangedListener.onDialogClosed(this.confirmed);
-        }
-    }
-
-    public interface DialogStateChangedListener
-    {
-        void onDialogClosed(boolean confirmed);
     }
 }
