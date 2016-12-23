@@ -17,69 +17,19 @@ import java.util.List;
  * Created by moriasla on 16.12.2016.
  */
 
-public class InMemoryCategoriesRepository implements CategoryRepository {
+public class InMemoryCategoriesRepository extends InMemoryRepositoryBase<CategoryModel, Integer> implements CategoryRepository {
 
-    List<CategoryModel> inMemoryEntityList = new ArrayList<CategoryModel>();
 
-    public InMemoryCategoriesRepository(List<CategoryModel> list)
-    {
-        this.inMemoryEntityList = list;
+    public InMemoryCategoriesRepository(List<CategoryModel> categories) {
+        super(categories);
     }
 
     @Override
-    public CategoryModel findById(Integer comparable) {
-        for (CategoryModel cm : this.inMemoryEntityList) {
-            if (cm.getId().equals(comparable))
-            {
-                return cm;
-            }
-        }
-        return null;
+    public List<CategoryModel> findForMonth(Month month) {
+        return this.getInMemoryEntityList();
     }
 
-    @Override
-    public CategoryModel findFirst(Predicate<CategoryModel> predicate) {
-        for (CategoryModel cm : this.inMemoryEntityList) {
-            if (predicate.apply(cm))
-            {
-                return cm;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public List<CategoryModel> findAll() {
-        return this.inMemoryEntityList;
-    }
-
-    @Override
-    public void remove(CategoryModel categoryModel)
-    {
-        this.inMemoryEntityList.remove(categoryModel);
-    }
-
-    @Override
-    public void add(CategoryModel categoryModel)
-    {
-        this.inMemoryEntityList.add(categoryModel);
-    }
-
-    @Override
-    public List<CategoryModel> findMany(Predicate<CategoryModel> predicate) {
-
-        List<CategoryModel> resultList = new ArrayList<CategoryModel>();
-
-        for (CategoryModel cm : this.inMemoryEntityList) {
-            if (predicate.apply(cm))
-            {
-                resultList.add(cm);
-            }
-        }
-        return resultList;
-    }
-
-    public static InMemoryCategoriesRepository buildDefaultRepository()
+    static List<CategoryModel> buildCategoriesList(final int startingIndex)
     {
         final String[] categoriesNames = new String[]{
                 "Family",
@@ -118,11 +68,11 @@ public class InMemoryCategoriesRepository implements CategoryRepository {
                     public CategoryModel Create(int index, List<CategoryModel> currentList) {
                         CategoryModel result = new CategoryModel();
 
-                        result.setId(index+1);
+                        result.setId(index+startingIndex);
                         result.setName(categoriesNames[index]);
 
                         FrequencyModel frequencyModel = new FrequencyModel();
-                        frequencyModel.setId(index + 1);
+                        frequencyModel.setId(index + startingIndex);
                         frequencyModel.setFrequencyValue(categoriesFrequencyValues[index]);
                         frequencyModel.setPeriod(categoriesFrequency[index]);
 
@@ -139,13 +89,15 @@ public class InMemoryCategoriesRepository implements CategoryRepository {
                 }
         );
 
+        return categories;
+    }
+
+    public static InMemoryCategoriesRepository buildDefaultRepository()
+    {
+        List<CategoryModel> categories = buildCategoriesList(1);
+
         InMemoryCategoriesRepository repository = new InMemoryCategoriesRepository(categories);
 
         return repository;
-    }
-
-    @Override
-    public List<CategoryModel> findForMonth(Month month) {
-        return this.inMemoryEntityList;
     }
 }

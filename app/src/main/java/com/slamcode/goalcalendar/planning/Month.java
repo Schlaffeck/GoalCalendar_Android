@@ -28,6 +28,23 @@ public enum Month {
         this.numValue = numValue;
     }
 
+    public static Month getMonthByNumber(int monthNumber) {
+        for(Month m : Month.values())
+        {
+            if(m.numValue == monthNumber)
+            {
+                return m;
+            }
+        }
+
+        return null;
+    }
+
+    public int getNumValue()
+    {
+        return this.numValue;
+    }
+
     public static Month getCurrentMonth()
     {
         Date dateNow = new Date();
@@ -44,5 +61,45 @@ public enum Month {
         }
 
         return null;
+    }
+
+    public static Month getNextMonth(Month monthToFindNextFor)
+    {
+        int month = monthToFindNextFor.numValue;
+
+        for(Month m : Month.values())
+        {
+            if(m.numValue == (month + 1) % 12)
+            {
+                return m;
+            }
+        }
+
+        return null;
+    }
+
+    public static Month getNextMonth()
+    {
+        return getNextMonth(getCurrentMonth());
+    }
+
+    public static Month getPreviousMonth(Month monthToFindPreviousFor)
+    {
+        int month = monthToFindPreviousFor.numValue;
+
+        for(Month m : Month.values())
+        {
+            if((m.numValue +1) % 12 == month)
+            {
+                return m;
+            }
+        }
+
+        return null;
+    }
+
+    public static Month getPreviousMonth()
+    {
+        return getPreviousMonth(getCurrentMonth());
     }
 }
