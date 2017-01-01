@@ -1,17 +1,20 @@
 package com.slamcode.goalcalendar;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -49,9 +52,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         setContentView(com.slamcode.goalcalendar.R.layout.monthly_goals_activity);
         Toolbar toolbar = (Toolbar) findViewById(com.slamcode.goalcalendar.R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        setupMonthlyPlanningCategoryList();
         setupFloatingButtonAction();
+        this.setupMonthlyPlanningCategoryList();
     }
 
     @Override
@@ -166,7 +168,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     private void setupMonthlyPlanningCategoryList() {
 
         // month spinner
-        final LinearLayout header = (LinearLayout) this.findViewById(R.id.monthly_goals_list_header);
+        LinearLayout header = (LinearLayout) this.findViewById(R.id.monthly_goals_header_list_item_month_panel);
         Spinner monthSpinner = (Spinner) header.findViewById(R.id.monthly_goals_list_header_month_spinner);
         ArrayAdapter<String> monthsStringsAdapter = new ArrayAdapter<String>(
                 this,
@@ -218,9 +220,11 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     {
         final LayoutInflater inflater = this.getLayoutInflater();
         // month text view
-        final LinearLayout header = (LinearLayout) this.findViewById(R.id.monthly_goals_list_header);
-        Spinner monthSpinner = (Spinner) header.findViewById(R.id.monthly_goals_list_header_month_spinner);
+        final LinearLayout headerListItemMonth = (LinearLayout) this.findViewById(R.id.monthly_goals_header_list_item_month_panel);
+        Spinner monthSpinner = (Spinner) headerListItemMonth.findViewById(R.id.monthly_goals_list_header_month_spinner);
         SpinnerHelper.setSelectedValue(monthSpinner, ResourcesHelper.toResourceStringId(monthlyPlans.getMonth()));
+
+        final LinearLayout headerListItemDays = (LinearLayout) this.findViewById(R.id.monthly_goals_header_list_item_days_list);
 
         //month days list
         List<Integer> listOfDays = CollectionUtils.createList(31, new ElementCreator<Integer>() {
@@ -238,7 +242,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
                 View dayNumberCell = inflater.inflate(R.layout.monthly_goals_header_day_number_cell, null);
                 TextView dayNumberText = (TextView) dayNumberCell.findViewById(R.id.monthly_goals_table_header_day_number_text);
                 dayNumberText.setText(input.toString());
-                header.addView(dayNumberCell);
+                headerListItemDays.addView(dayNumberCell);
             }
         });
     }

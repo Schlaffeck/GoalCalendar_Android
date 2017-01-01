@@ -23,17 +23,8 @@
             android:orientation="vertical">
 
         <!-- header for list -->
-        <LinearLayout
-            android:id="@+id/monthly_goals_list_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/monthly_goals_list_header_month_text"
-                android:layout_width="@dimen/monthly_goals_table_category_column_width"
-                android:layout_height="@dimen/monthly_goals_table_category_name_height"
-                android:text="December"/>
-        </LinearLayout>
+
+            <include layout="@layout/monthly_goals_header_list_item" />
 
             <ListView
                 android:id="@+id/monthly_goals_listview"
