@@ -1,6 +1,9 @@
 package com.slamcode.goalcalendar.planning;
 
+import android.icu.util.*;
+
 import java.util.*;
+import java.util.Calendar;
 
 /**
  * Created by moriasla on 16.12.2016.
@@ -67,9 +70,10 @@ public enum Month {
     {
         int month = monthToFindNextFor.numValue;
 
+        int nextMonthValue = (month % 12) + 1;
         for(Month m : Month.values())
         {
-            if(m.numValue == (month + 1) % 12)
+            if(m.numValue == nextMonthValue)
             {
                 return m;
             }
@@ -89,7 +93,7 @@ public enum Month {
 
         for(Month m : Month.values())
         {
-            if((m.numValue +1) % 12 == month)
+            if((m.numValue % 12) + 1 == month)
             {
                 return m;
             }
@@ -101,5 +105,11 @@ public enum Month {
     public static Month getPreviousMonth()
     {
         return getPreviousMonth(getCurrentMonth());
+    }
+
+    public int getDaysCount(int year) {
+        java.util.Calendar calendar = java.util.Calendar.getInstance();
+        calendar.set(year, this.numValue -1, 1);
+        return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
 }
