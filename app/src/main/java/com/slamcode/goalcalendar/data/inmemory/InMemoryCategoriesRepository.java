@@ -1,17 +1,13 @@
 package com.slamcode.goalcalendar.data.inmemory;
 
-import com.android.internal.util.Predicate;
 import com.slamcode.collections.CollectionUtils;
 import com.slamcode.collections.ElementCreator;
 import com.slamcode.goalcalendar.data.*;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
-import com.slamcode.goalcalendar.data.model.FrequencyModel;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.planning.Month;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -74,13 +70,8 @@ public class InMemoryCategoriesRepository extends InMemoryRepositoryBase<Categor
                         CategoryModel result = new CategoryModel(index+startingIndex);
 
                         result.setName(categoriesNames[index]);
-
-                        FrequencyModel frequencyModel = new FrequencyModel();
-                        frequencyModel.setId(index + startingIndex);
-                        frequencyModel.setFrequencyValue(categoriesFrequencyValues[index]);
-                        frequencyModel.setPeriod(categoriesFrequency[index]);
-
-                        result.setFrequency(frequencyModel);
+                        result.setFrequencyValue(categoriesFrequencyValues[index]);
+                        result.setPeriod(categoriesFrequency[index]);
 
                         result.setDailyPlans(CollectionUtils.createList(month.getDaysCount(), new ElementCreator<DailyPlanModel>() {
                             @Override

@@ -18,13 +18,9 @@ import com.slamcode.collections.ElementCreator;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
-import com.slamcode.goalcalendar.data.model.FrequencyModel;
-import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.view.utils.SpinnerHelper;
 import com.slamcode.goalcalendar.view.validation.TextViewValidator;
 import com.slamcode.goalcalendar.view.validation.ViewValidator;
-
-import org.apache.commons.collections4.Predicate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -135,8 +131,8 @@ public class AddEditCategoryDialog extends DialogFragment {
 
             SpinnerHelper.setSelectedValue(periodSpinner, ResourcesHelper.toResourceString(
                     this.getActivity(),
-                    model.getFrequency().getPeriod()));
-            frequencyValuePicker.setValue(this.model.getFrequency().getFrequencyValue());
+                    model.getPeriod()));
+            frequencyValuePicker.setValue(this.model.getFrequencyValue());
         }
 
         return view;
@@ -167,10 +163,6 @@ public class AddEditCategoryDialog extends DialogFragment {
                     return new DailyPlanModel();
                 }
             }));
-
-            FrequencyModel frequencyModel = new FrequencyModel();
-            newModel.setFrequency(frequencyModel);
-            this.setModel(newModel);
         }
 
         CategoryModel m = this.getModel();
@@ -178,14 +170,13 @@ public class AddEditCategoryDialog extends DialogFragment {
                 ((EditText)this.associatedView.findViewById(R.id.monthly_goals_category_dialog_name_edittext))
                         .getText().toString());
 
-        m.getFrequency().setFrequencyValue(
+        m.setFrequencyValue(
                 ((NumberPicker)this.associatedView.findViewById(R.id.monthly_goals_category_dialog_frequency_numberpicker))
                         .getValue());
 
         Object periodObject = ((Spinner)this.associatedView.findViewById(R.id.monthly_goals_category_dialog_period_spinner))
                 .getSelectedItem();
-        m.getFrequency()
-                .setPeriod(ResourcesHelper.frequencyPeriodFromResourceString(
+        m.setPeriod(ResourcesHelper.frequencyPeriodFromResourceString(
                     this.getActivity(),
                     periodObject.toString()));
         this.confirmed = true;

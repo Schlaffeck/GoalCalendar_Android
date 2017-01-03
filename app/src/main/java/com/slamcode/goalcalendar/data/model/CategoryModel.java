@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.data.model;
 
 import com.slamcode.goalcalendar.data.Identifiable;
+import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,11 +16,12 @@ public class CategoryModel implements Identifiable<Integer> {
 
     private String name;
 
-    private FrequencyModel frequency;
-
     private List<DailyPlanModel> dailyPlans = new ArrayList<DailyPlanModel>();
 
-    private MonthlyPlansModel monthlyPlans;
+    private FrequencyPeriod period;
+
+    private int frequencyValue;
+
 
     public CategoryModel()
     {
@@ -47,14 +49,6 @@ public class CategoryModel implements Identifiable<Integer> {
         this.name = name;
     }
 
-    public FrequencyModel getFrequency() {
-        return frequency;
-    }
-
-    public void setFrequency(FrequencyModel frequency) {
-        this.frequency = frequency;
-    }
-
     public List<DailyPlanModel> getDailyPlans() {
         return dailyPlans;
     }
@@ -63,17 +57,19 @@ public class CategoryModel implements Identifiable<Integer> {
         this.dailyPlans = dailyPlans;
     }
 
-    public MonthlyPlansModel getMonthlyPlans() {
-        return monthlyPlans;
+    public FrequencyPeriod getPeriod() {
+        return period;
     }
 
-    public void setMonthlyPlans(MonthlyPlansModel monthlyPlans) {
-        if(monthlyPlans == null && this.monthlyPlans != null
-                || this.monthlyPlans != monthlyPlans)
-        {
-            this.monthlyPlans.removeCategory(this);
-        }
+    public void setPeriod(FrequencyPeriod period) {
+        this.period = period;
+    }
 
-        monthlyPlans.addCategory(this);
+    public int getFrequencyValue() {
+        return frequencyValue;
+    }
+
+    public void setFrequencyValue(int frequencyValue) {
+        this.frequencyValue = frequencyValue;
     }
 }

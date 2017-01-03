@@ -6,13 +6,10 @@ import com.slamcode.goalcalendar.data.model.CategoryModel;
 
 import com.slamcode.collections.*;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
-import com.slamcode.goalcalendar.data.model.FrequencyModel;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
-import com.slamcode.goalcalendar.planning.Month;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

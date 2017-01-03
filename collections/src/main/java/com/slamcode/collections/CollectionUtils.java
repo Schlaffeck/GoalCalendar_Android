@@ -31,4 +31,16 @@ public class CollectionUtils {
     {
         return new ArrayList<T>();
     }
+
+    public static <ParentType,CollectionElementType> List<CollectionElementType> merge(Collection<ParentType> baseCollection,
+                                                                                       ElementSelector<ParentType, Collection<CollectionElementType>> collectionSelector)
+    {
+        List<CollectionElementType> result = new ArrayList<>();
+
+        for (ParentType baseObject : baseCollection) {
+            result.addAll(collectionSelector.select(baseObject));
+        }
+
+        return result;
+    }
 }

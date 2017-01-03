@@ -6,23 +6,8 @@ import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.NumberPicker;
-import android.widget.Spinner;
-import android.widget.TextView;
 
-import com.slamcode.collections.CollectionUtils;
-import com.slamcode.collections.ElementCreator;
-import com.slamcode.goalcalendar.R;
-import com.slamcode.goalcalendar.data.model.CategoryModel;
-import com.slamcode.goalcalendar.data.model.DailyPlanModel;
-import com.slamcode.goalcalendar.data.model.FrequencyModel;
 import com.slamcode.goalcalendar.view.AddEditCategoryDialog;
-import com.slamcode.goalcalendar.view.CategoryNameTextValidator;
-import com.slamcode.goalcalendar.view.ResourcesHelper;
-import com.slamcode.goalcalendar.view.validation.TextViewValidator;
 import com.slamcode.goalcalendar.view.validation.ViewValidator;
 
 import java.util.ArrayList;

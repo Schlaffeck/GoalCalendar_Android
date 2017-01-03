@@ -53,8 +53,8 @@ public class CategoriesListViewAdapter extends ListViewDataAdapter<CategoryModel
         final CategoryViewHolder[] innerViewHolder = new CategoryViewHolder[] { viewHolder };
 
         innerViewHolder[0].categoryNameTextView.setText(monthlyGoals.getName());
-        innerViewHolder[0].frequencyTextView.setText(monthlyGoals.getFrequency().toString());
-
+        innerViewHolder[0].frequencyTextView
+                .setText(String.format("%s x %s", monthlyGoals.getFrequencyValue(), monthlyGoals.getPeriod()));
 
         for (DailyPlanModel dailyPlan : monthlyGoals.getDailyPlans())
         {
