@@ -107,6 +107,13 @@ public enum Month {
         return getPreviousMonth(getCurrentMonth());
     }
 
+    public int getDaysCount()
+    {
+        java.util.Calendar calendar = java.util.Calendar.getInstance();
+        calendar.setTime(new Date());
+        return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+    }
+
     public int getDaysCount(int year) {
         java.util.Calendar calendar = java.util.Calendar.getInstance();
         calendar.set(year, this.numValue -1, 1);

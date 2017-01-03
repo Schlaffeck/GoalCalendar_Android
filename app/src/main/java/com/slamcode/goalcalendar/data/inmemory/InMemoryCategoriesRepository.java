@@ -11,6 +11,7 @@ import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.planning.Month;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -24,12 +25,16 @@ public class InMemoryCategoriesRepository extends InMemoryRepositoryBase<Categor
         super(categories);
     }
 
+    public InMemoryCategoriesRepository(){
+        super();
+    }
+
     @Override
     public List<CategoryModel> findForMonth(Month month) {
         return this.getInMemoryEntityList();
     }
 
-    static List<CategoryModel> buildCategoriesList(final int startingIndex)
+    static List<CategoryModel> buildCategoriesList(final int startingIndex, final Month month)
     {
         final String[] categoriesNames = new String[]{
                 "Family",
@@ -66,9 +71,8 @@ public class InMemoryCategoriesRepository extends InMemoryRepositoryBase<Categor
         List<CategoryModel> categories = CollectionUtils.createList(categoriesNames.length, new ElementCreator<CategoryModel>() {
                     @Override
                     public CategoryModel Create(int index, List<CategoryModel> currentList) {
-                        CategoryModel result = new CategoryModel();
+                        CategoryModel result = new CategoryModel(index+startingIndex);
 
-                        result.setId(index+startingIndex);
                         result.setName(categoriesNames[index]);
 
                         FrequencyModel frequencyModel = new FrequencyModel();
@@ -78,7 +82,7 @@ public class InMemoryCategoriesRepository extends InMemoryRepositoryBase<Categor
 
                         result.setFrequency(frequencyModel);
 
-                        result.setDailyPlans(CollectionUtils.createList(31, new ElementCreator<DailyPlanModel>() {
+                        result.setDailyPlans(CollectionUtils.createList(month.getDaysCount(), new ElementCreator<DailyPlanModel>() {
                             @Override
                             public DailyPlanModel Create(int index, List<DailyPlanModel> currentList) {
                                 return new DailyPlanModel();
@@ -94,7 +98,7 @@ public class InMemoryCategoriesRepository extends InMemoryRepositoryBase<Categor
 
     public static InMemoryCategoriesRepository buildDefaultRepository()
     {
-        List<CategoryModel> categories = buildCategoriesList(1);
+        List<CategoryModel> categories = buildCategoriesList(1, Month.getCurrentMonth());
 
         InMemoryCategoriesRepository repository = new InMemoryCategoriesRepository(categories);
 

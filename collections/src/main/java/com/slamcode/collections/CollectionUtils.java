@@ -15,4 +15,20 @@ public class CollectionUtils {
 
         return result;
     }
+
+    public static <T> List<T> createList(T... elements)
+    {
+        List<T> result = new ArrayList<T>();
+        for(T element : elements)
+        {
+            result.add(element);
+        }
+
+        return result;
+    }
+
+    public static <T> List<T> emptyList()
+    {
+        return new ArrayList<T>();
+    }
 }

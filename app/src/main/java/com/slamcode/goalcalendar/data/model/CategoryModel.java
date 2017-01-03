@@ -19,6 +19,17 @@ public class CategoryModel implements Identifiable<Integer> {
 
     private List<DailyPlanModel> dailyPlans = new ArrayList<DailyPlanModel>();
 
+    private MonthlyPlansModel monthlyPlans;
+
+    public CategoryModel()
+    {
+    }
+
+    public CategoryModel(int id)
+    {
+        this.id = id;
+    }
+
     @Override
     public Integer getId() {
         return id;
@@ -50,5 +61,19 @@ public class CategoryModel implements Identifiable<Integer> {
 
     public void setDailyPlans(List<DailyPlanModel> dailyPlans) {
         this.dailyPlans = dailyPlans;
+    }
+
+    public MonthlyPlansModel getMonthlyPlans() {
+        return monthlyPlans;
+    }
+
+    public void setMonthlyPlans(MonthlyPlansModel monthlyPlans) {
+        if(monthlyPlans == null && this.monthlyPlans != null
+                || this.monthlyPlans != monthlyPlans)
+        {
+            this.monthlyPlans.removeCategory(this);
+        }
+
+        monthlyPlans.addCategory(this);
     }
 }

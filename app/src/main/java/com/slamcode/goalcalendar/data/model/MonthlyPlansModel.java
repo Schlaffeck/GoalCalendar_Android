@@ -37,7 +37,11 @@ public class MonthlyPlansModel implements Identifiable<Integer> {
     }
 
     public void setCategories(List<CategoryModel> categories) {
+
         this.categories = categories;
+        for (CategoryModel category : this.categories) {
+            category.setMonthlyPlans(this);
+        }
     }
 
     public Month getMonth() {
@@ -46,5 +50,17 @@ public class MonthlyPlansModel implements Identifiable<Integer> {
 
     public void setMonth(Month month) {
         this.month = month;
+    }
+
+    public void addCategory(CategoryModel category){
+        if(categories.add(category)) {
+            category.setMonthlyPlans(this);
+        }
+    }
+
+    public void removeCategory(CategoryModel category){
+        if(categories.remove(category)) {
+            category.setMonthlyPlans(null);
+        }
     }
 }

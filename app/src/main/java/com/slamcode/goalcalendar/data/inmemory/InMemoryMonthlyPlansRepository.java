@@ -57,7 +57,8 @@ public class InMemoryMonthlyPlansRepository extends InMemoryRepositoryBase<Month
                 MonthlyPlansModel plans = new MonthlyPlansModel();
                 plans.setId(index+1);
                 plans.setMonth(Month.getMonthByNumber(index + 1));
-                plans.setCategories(InMemoryCategoriesRepository.buildCategoriesList((index+1)*Month.values().length));
+                plans.setCategories(InMemoryCategoriesRepository.buildCategoriesList((
+                        index+1)*Month.values().length, plans.getMonth()));
                 return plans;
             }
         });

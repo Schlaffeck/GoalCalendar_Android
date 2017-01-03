@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
  * Created by moriasla on 02.01.2017.
  */
 
-public class MonthUnitTest {
+public class MonthTest {
 
     @Test
     public void month_GetNumValue_Test()
