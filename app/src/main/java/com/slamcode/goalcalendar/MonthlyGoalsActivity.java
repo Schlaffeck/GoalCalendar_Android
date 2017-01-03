@@ -28,6 +28,7 @@ import com.slamcode.collections.ElementCreator;
 import com.slamcode.goalcalendar.data.*;
 import com.slamcode.goalcalendar.data.inmemory.InMemoryCategoriesRepository;
 import com.slamcode.goalcalendar.data.inmemory.InMemoryMonthlyPlansRepository;
+import com.slamcode.goalcalendar.data.json.JsonFilePersistenceContext;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.Month;
@@ -45,6 +46,14 @@ import java.util.List;
 public class MonthlyGoalsActivity extends AppCompatActivity {
 
     private CategoriesListViewAdapter monthListViewAdapter;
+
+    private PersistenceContext persistenceContext;
+
+    public MonthlyGoalsActivity()
+    {
+        // todo: move persistence context creation to DI container
+        this.persistenceContext = new JsonFilePersistenceContext(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +146,15 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onStop() {
+        if(this.persistenceContext != null)
+        {
+            this.persistenceContext.persistData();
+        }
+        super.onStop();
+    }
+
     private void setupFloatingButtonAction()
     {
         FloatingActionButton fab = (FloatingActionButton) findViewById(com.slamcode.goalcalendar.R.id.monthly_goals_add_category_floatingactionbutton);
@@ -169,11 +187,24 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
         // month spinner
         LinearLayout header = (LinearLayout) this.findViewById(R.id.monthly_goals_header_list_item_month_panel);
-        Spinner monthSpinner = (Spinner) header.findViewById(R.id.monthly_goals_list_header_month_spinner);
-        ArrayAdapter<String> monthsStringsAdapter = new ArrayAdapter<String>(
+        final Spinner monthSpinner = (Spinner) header.findViewById(R.id.monthly_goals_list_header_month_spinner);
+        final ArrayAdapter<String> monthsStringsAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_spinner_dropdown_item,
                 ResourcesHelper.monthsResourceStrings(this));
+        monthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+
+                Month m = Month.getMonthByNumber(position+1);
+                setupCategoryListForMonth(m);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         monthSpinner.setAdapter(monthsStringsAdapter);
 
         /// categories list adapter
@@ -203,17 +234,27 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
         this.registerForContextMenu(listView);
 
-        // todo: move repo to di container
-        MonthlyPlansRepository repository = InMemoryMonthlyPlansRepository.buildDefaultRepository();
-        MonthlyPlansModel model = repository.findForMonth(Month.getCurrentMonth());
-
-        this.setupCategoryListForMonth(model);
+        setupCategoryListForMonth(Month.getCurrentMonth());
     }
 
-    private void setupCategoryListForMonth(MonthlyPlansModel month)
+    private void setupCategoryListForMonth(Month month)
     {
-        this.setupHeaderForCategoryListForMonth(month);
-        this.monthListViewAdapter.updateList(month.getCategories());
+        UnitOfWork uow = this.persistenceContext.createUnitOfWork();
+        MonthlyPlansModel model = uow.getMonthlyPlansRepository().findForMonth(month);
+
+        if(model == null)
+        {
+            model = new MonthlyPlansModel();
+            // todo: find good way to assign ids
+            model.setId(1);
+            model.setMonth(month);
+            uow.getMonthlyPlansRepository().add(model);
+        }
+
+        this.setupHeaderForCategoryListForMonth(model);
+        this.monthListViewAdapter.updateList(model.getCategories());
+
+        uow.complete();
     }
 
     private void setupHeaderForCategoryListForMonth(MonthlyPlansModel monthlyPlans)
@@ -225,9 +266,10 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         SpinnerHelper.setSelectedValue(monthSpinner, ResourcesHelper.toResourceStringId(monthlyPlans.getMonth()));
 
         final LinearLayout headerListItemDays = (LinearLayout) this.findViewById(R.id.monthly_goals_header_list_item_days_list);
+        headerListItemDays.removeAllViews();
 
         //month days list
-        List<Integer> listOfDays = CollectionUtils.createList(31, new ElementCreator<Integer>() {
+        List<Integer> listOfDays = CollectionUtils.createList(monthlyPlans.getMonth().getDaysCount(), new ElementCreator<Integer>() {
 
             @Override
             public Integer Create(int index, List<Integer> currentList) {

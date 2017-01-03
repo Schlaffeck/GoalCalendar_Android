@@ -10,7 +10,5 @@ public interface UnitOfWork  {
 
     MonthlyPlansRepository getMonthlyPlansRepository();
 
-    void start();
-
     void complete();
 }

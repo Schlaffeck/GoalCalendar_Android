@@ -131,11 +131,6 @@ public class JsonFilePersistenceContext implements PersistenceContext {
         }
 
         @Override
-        public void start() {
-                this.working = true;
-        }
-
-        @Override
         public void complete() {
             this.working = false;
         }

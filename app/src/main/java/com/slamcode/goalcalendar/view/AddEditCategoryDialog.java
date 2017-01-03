@@ -163,6 +163,7 @@ public class AddEditCategoryDialog extends DialogFragment {
                     return new DailyPlanModel();
                 }
             }));
+            this.setModel(newModel);
         }
 
         CategoryModel m = this.getModel();

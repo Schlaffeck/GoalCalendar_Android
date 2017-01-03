@@ -111,6 +111,7 @@ public enum Month {
     {
         java.util.Calendar calendar = java.util.Calendar.getInstance();
         calendar.setTime(new Date());
+        calendar.set(Calendar.MONTH, this.numValue -1 );
         return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
 
