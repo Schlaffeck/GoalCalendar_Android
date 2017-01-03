@@ -2,6 +2,7 @@ package com.slamcode.goalcalendar.data.json;
 
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,4 +12,9 @@ import java.util.List;
 public final class JsonDataBundle {
 
     List<MonthlyPlansModel> monthlyPlans;
+
+    JsonDataBundle()
+    {
+        this.monthlyPlans = new ArrayList<>();
+    }
 }

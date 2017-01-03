@@ -14,6 +14,7 @@ import com.slamcode.goalcalendar.data.inmemory.InMemoryMonthlyPlansRepository;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.util.Collection;
@@ -65,10 +66,18 @@ public class JsonFilePersistenceContext implements PersistenceContext {
     @Override
     public void initializePersistedData() {
         try {
-            FileReader fileReader = new FileReader(this.getFilePath());
+            File bundleFile = new File(this.getFilePath());
+            if(bundleFile.exists()) {
+                FileReader fileReader = new FileReader(this.getFilePath());
 
-            Gson gson = new Gson();
-            this.dataBundle = gson.fromJson(fileReader, JsonDataBundle.class);
+                Gson gson = new Gson();
+                this.dataBundle = gson.fromJson(fileReader, JsonDataBundle.class);
+            }
+
+            if(this.dataBundle == null)
+            {
+                this.dataBundle = new JsonDataBundle();
+            }
         }
         catch(Exception exception)
         {

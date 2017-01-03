@@ -20,6 +20,7 @@ import org.junit.runner.RunWith;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +60,38 @@ public class JsonFilePersistenceContextTest{
             bundleFile.delete();
         }
         this.bundle = null;
+    }
+
+    @Test
+    public void jsonFilePersistenceContext_initialize_nonExistingFile_test() throws IOException {
+
+        File bundleFile = new File(this.appContext.getFilesDir() + "/" + BUNDLE_FILE_NAME);
+        bundleFile.delete();
+        assertFalse(bundleFile.exists());
+
+        JsonFilePersistenceContext context = new JsonFilePersistenceContext(this.appContext, BUNDLE_FILE_NAME);
+        assertNull(context.getDataBundle());
+
+        context.initializePersistedData();
+        assertNotNull(context.getDataBundle());
+        assertNotNull(context.getDataBundle().monthlyPlans);
+        assertEquals(0, context.getDataBundle().monthlyPlans.size());
+    }
+
+    @Test
+    public void jsonFilePersistenceContext_initialize_emptyFile_test() throws IOException {
+        // clear file
+        FileWriter writer = new FileWriter(this.appContext.getFilesDir() + "/" + BUNDLE_FILE_NAME);
+        writer.write(new char[0]);
+        writer.close();
+
+        JsonFilePersistenceContext context = new JsonFilePersistenceContext(this.appContext, BUNDLE_FILE_NAME);
+        assertNull(context.getDataBundle());
+
+        context.initializePersistedData();
+        assertNotNull(context.getDataBundle());
+        assertNotNull(context.getDataBundle().monthlyPlans);
+        assertEquals(0, context.getDataBundle().monthlyPlans.size());
     }
 
     @Test
