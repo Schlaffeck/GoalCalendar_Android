@@ -43,4 +43,16 @@ public class CollectionUtils {
 
         return result;
     }
+
+    public static <ParentType, SelectedElementType> List<SelectedElementType> select(Collection<ParentType> baseCollection,
+                                                                                     ElementSelector<ParentType, SelectedElementType> elementSelector)
+    {
+        List<SelectedElementType> result = new ArrayList<>();
+
+        for (ParentType baseObject : baseCollection) {
+            result.add(elementSelector.select(baseObject));
+        }
+
+        return result;
+    }
 }
