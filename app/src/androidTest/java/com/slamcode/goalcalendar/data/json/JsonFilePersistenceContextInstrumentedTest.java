@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
  * Created by moriasla on 03.01.2017.
  */
 @RunWith(AndroidJUnit4.class)
-public class JsonFilePersistenceContextTest{
+public class JsonFilePersistenceContextInstrumentedTest {
 
     private static final String BUNDLE_FILE_NAME = "test_json.data";
     private Context appContext;

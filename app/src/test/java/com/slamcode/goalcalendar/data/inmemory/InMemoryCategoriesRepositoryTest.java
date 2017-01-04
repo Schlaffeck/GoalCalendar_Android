@@ -93,24 +93,18 @@ public class InMemoryCategoriesRepositoryTest {
     public void inMemoryCategoriesRepository_findMany_test()
     {
         CategoryModel cm1 = new CategoryModel(1);
-        FrequencyModel fm1 = new FrequencyModel();
-        fm1.setFrequencyValue(2);
-        fm1.setPeriod(FrequencyPeriod.Week);
-        cm1.setFrequency(fm1);
+        cm1.setFrequencyValue(2);
+        cm1.setPeriod(FrequencyPeriod.Week);
         cm1.setName("Category 1 - XYZ");
 
         CategoryModel cm2 = new CategoryModel(2);
-        FrequencyModel fm2 = new FrequencyModel();
-        fm2.setFrequencyValue(3);
-        fm2.setPeriod(FrequencyPeriod.Month);
-        cm2.setFrequency(fm2);
+        cm2.setFrequencyValue(3);
+        cm2.setPeriod(FrequencyPeriod.Month);
         cm2.setName("Category 2 - do stuff");
 
         CategoryModel cm3 = new CategoryModel(3);
-        FrequencyModel fm3 = new FrequencyModel();
-        fm3.setFrequencyValue(1);
-        fm3.setPeriod(FrequencyPeriod.Week);
-        cm3.setFrequency(fm3);
+        cm3.setFrequencyValue(1);
+        cm3.setPeriod(FrequencyPeriod.Week);
         cm3.setName("Cat 3 - Do more");
         cm3.setDailyPlans(CollectionUtils.createList(new DailyPlanModel()));
 
@@ -148,7 +142,7 @@ public class InMemoryCategoriesRepositoryTest {
         filtered = repo.findMany(new Predicate<CategoryModel>() {
             @Override
             public boolean apply(CategoryModel categoryModel) {
-                return categoryModel.getFrequency().getPeriod() == FrequencyPeriod.Week;
+                return categoryModel.getPeriod() == FrequencyPeriod.Week;
             }
         });
 
@@ -161,24 +155,18 @@ public class InMemoryCategoriesRepositoryTest {
     public void inMemoryCategoriesRepository_findFirst_test()
     {
         CategoryModel cm1 = new CategoryModel(1);
-        FrequencyModel fm1 = new FrequencyModel();
-        fm1.setFrequencyValue(2);
-        fm1.setPeriod(FrequencyPeriod.Week);
-        cm1.setFrequency(fm1);
+        cm1.setFrequencyValue(2);
+        cm1.setPeriod(FrequencyPeriod.Week);
         cm1.setName("Category 1 - XYZ");
 
         CategoryModel cm2 = new CategoryModel(2);
-        FrequencyModel fm2 = new FrequencyModel();
-        fm2.setFrequencyValue(3);
-        fm2.setPeriod(FrequencyPeriod.Month);
-        cm2.setFrequency(fm2);
+        cm2.setFrequencyValue(3);
+        cm2.setPeriod(FrequencyPeriod.Month);
         cm2.setName("Category 2 - do stuff");
 
         CategoryModel cm3 = new CategoryModel(3);
-        FrequencyModel fm3 = new FrequencyModel();
-        fm3.setFrequencyValue(1);
-        fm3.setPeriod(FrequencyPeriod.Week);
-        cm3.setFrequency(fm3);
+        cm3.setFrequencyValue(1);
+        cm3.setPeriod(FrequencyPeriod.Week);
         cm3.setName("Cat 3 - Do more");
         cm3.setDailyPlans(CollectionUtils.createList(new DailyPlanModel()));
 
@@ -213,7 +201,7 @@ public class InMemoryCategoriesRepositoryTest {
         filtered = repo.findFirst(new Predicate<CategoryModel>() {
             @Override
             public boolean apply(CategoryModel categoryModel) {
-                return categoryModel.getFrequency().getFrequencyValue() >= 2;
+                return categoryModel.getFrequencyValue() >= 2;
             }
         });
 
@@ -223,7 +211,7 @@ public class InMemoryCategoriesRepositoryTest {
         filtered = repo.findFirst(new Predicate<CategoryModel>() {
             @Override
             public boolean apply(CategoryModel categoryModel) {
-                return categoryModel.getFrequency().getPeriod() == FrequencyPeriod.Month;
+                return categoryModel.getPeriod() == FrequencyPeriod.Month;
             }
         });
 

@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.slamcode.collections.CollectionUtils;
 import com.slamcode.collections.ElementCreator;
+import com.slamcode.goalcalendar.dagger2.ComposableApplication;
 import com.slamcode.goalcalendar.data.*;
 import com.slamcode.goalcalendar.data.inmemory.InMemoryCategoriesRepository;
 import com.slamcode.goalcalendar.data.inmemory.InMemoryMonthlyPlansRepository;
@@ -43,21 +44,21 @@ import org.apache.commons.collections4.IteratorUtils;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class MonthlyGoalsActivity extends AppCompatActivity {
 
     private CategoriesListViewAdapter monthListViewAdapter;
 
-    private PersistenceContext persistenceContext;
-
-    public MonthlyGoalsActivity()
-    {
-        // todo: move persistence context creation to DI container
-        this.persistenceContext = new JsonFilePersistenceContext(this);
-    }
+    @Inject
+    PersistenceContext persistenceContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.injectDependencies();
+
         setContentView(com.slamcode.goalcalendar.R.layout.monthly_goals_activity);
         Toolbar toolbar = (Toolbar) findViewById(com.slamcode.goalcalendar.R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -98,6 +99,10 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
             this.showConfirmDeleteCategoryDialog(model);
         }
         return true;
+    }
+
+    private void injectDependencies() {
+        ((ComposableApplication)this.getApplication()).getDataComponent().inject(this);
     }
 
     private void showConfirmDeleteCategoryDialog(final CategoryModel model) {
