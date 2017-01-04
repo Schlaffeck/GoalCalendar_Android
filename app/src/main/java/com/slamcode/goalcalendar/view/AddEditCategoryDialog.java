@@ -25,13 +25,29 @@ import com.slamcode.goalcalendar.view.validation.ViewValidator;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * Created by moriasla on 21.12.2016.
  */
 public class AddEditCategoryDialog extends DialogFragment {
 
-    private View associatedView;
+    // views
+    @BindView(R.id.monthly_goals_category_dialog_header_textview)
+    TextView headerTextView;
 
+    @BindView(R.id.monthly_goals_category_dialog_name_edittext)
+    EditText categoryNameEditText;
+
+    @BindView(R.id.monthly_goals_category_dialog_period_spinner)
+    Spinner frequencyPeriodSpinner;
+
+    @BindView(R.id.monthly_goals_category_dialog_frequency_numberpicker)
+    NumberPicker frequencyValueNumberPicker;
+
+    // dependencies
     private CategoryModel model;
 
     private boolean confirmed;
@@ -66,13 +82,9 @@ public class AddEditCategoryDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
 
         LayoutInflater inflater = this.getActivity().getLayoutInflater();
+        View view = this.initializeView(inflater);
 
-        if(this.associatedView == null)
-        {
-            this.associatedView = this.initializeView(inflater);
-        }
-
-        builder.setView(this.associatedView);
+        builder.setView(view);
         return builder.create();
     }
 
@@ -80,72 +92,53 @@ public class AddEditCategoryDialog extends DialogFragment {
     {
         View view = inflater.inflate(R.layout.monthly_goals_add_edit_category_dialog_layout, null);
 
+        ButterKnife.bind(this, view);
+
         // set view data
-        TextView headerTextView = (TextView) view.findViewById(R.id.monthly_goals_category_dialog_header_textview);
-        headerTextView.setText(
+        this.headerTextView.setText(
                 this.getModel() == null ?
                         R.string.add_category_dialog_header
                         : R.string.edit_category_dialog_header);
 
-        final EditText nameEditTextView
-                = (EditText)view.findViewById(R.id.monthly_goals_category_dialog_name_edittext);
 
-        final TextViewValidator nameValidator =new CategoryNameTextValidator(nameEditTextView);
+        final TextViewValidator nameValidator =new CategoryNameTextValidator(this.categoryNameEditText);
         this.getViewValidatorList().add(nameValidator);
-        nameEditTextView.addTextChangedListener(nameValidator);
+        this.categoryNameEditText.addTextChangedListener(nameValidator);
 
-        NumberPicker frequencyValuePicker = (NumberPicker) view.findViewById(R.id.monthly_goals_category_dialog_frequency_numberpicker);
-        frequencyValuePicker.setMaxValue(31);
-        frequencyValuePicker.setValue(0);
-        frequencyValuePicker.setMinValue(0);
+        this.frequencyValueNumberPicker.setMaxValue(31);
+        this.frequencyValueNumberPicker.setValue(0);
+        this.frequencyValueNumberPicker.setMinValue(0);
 
-        Spinner periodSpinner = (Spinner) view.findViewById(R.id.monthly_goals_category_dialog_period_spinner);
         ArrayAdapter<String> periodStringsAdapter = new ArrayAdapter<String>(
                 this.getActivity(),
                 android.R.layout.simple_spinner_item,
                 ResourcesHelper.frequencyPeriodResourceStrings(this.getActivity()));
-        periodSpinner.setAdapter(periodStringsAdapter);
-
-        // assign buttons actions
-        final Button cancelButton = (Button) view.findViewById(R.id.monthly_goals_category_dialog_cancel_button);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cancelChanges();
-            }
-        });
-
-        final Button confirmButton = (Button) view.findViewById(R.id.monthly_goals_category_dialog_add_button);
-        confirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                    commitChanges();
-                    getDialog().dismiss();
-            }
-        });
+        this.frequencyPeriodSpinner.setAdapter(periodStringsAdapter);
 
         // set values
         if(this.model != null)
         {
-            nameEditTextView.setText(model.getName());
+            this.categoryNameEditText.setText(model.getName());
 
-            SpinnerHelper.setSelectedValue(periodSpinner, ResourcesHelper.toResourceString(
+            SpinnerHelper.setSelectedValue(this.frequencyPeriodSpinner, ResourcesHelper.toResourceString(
                     this.getActivity(),
                     model.getPeriod()));
-            frequencyValuePicker.setValue(this.model.getFrequencyValue());
+            this.frequencyValueNumberPicker.setValue(this.model.getFrequencyValue());
         }
 
         return view;
     }
 
-    private void cancelChanges()
+    @OnClick(R.id.monthly_goals_category_dialog_cancel_button)
+    void cancelChanges()
     {
         this.confirmed = false;
         this.getDialog().cancel();
         this.onDialogClosed();
     }
 
-    private void commitChanges()
+    @OnClick(R.id.monthly_goals_category_dialog_add_button)
+    void commitChanges()
     {
         if(!this.isAllValid())
         {
@@ -167,20 +160,16 @@ public class AddEditCategoryDialog extends DialogFragment {
         }
 
         CategoryModel m = this.getModel();
-        m.setName(
-                ((EditText)this.associatedView.findViewById(R.id.monthly_goals_category_dialog_name_edittext))
-                        .getText().toString());
+        m.setName(this.categoryNameEditText.getText().toString());
 
-        m.setFrequencyValue(
-                ((NumberPicker)this.associatedView.findViewById(R.id.monthly_goals_category_dialog_frequency_numberpicker))
-                        .getValue());
+        m.setFrequencyValue(this.frequencyValueNumberPicker.getValue());
 
-        Object periodObject = ((Spinner)this.associatedView.findViewById(R.id.monthly_goals_category_dialog_period_spinner))
-                .getSelectedItem();
+        Object periodObject = this.frequencyPeriodSpinner.getSelectedItem();
         m.setPeriod(ResourcesHelper.frequencyPeriodFromResourceString(
                     this.getActivity(),
                     periodObject.toString()));
         this.confirmed = true;
+        this.getDialog().dismiss();
         this.onDialogClosed();
     }
 

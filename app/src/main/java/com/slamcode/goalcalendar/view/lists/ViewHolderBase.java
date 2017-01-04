@@ -3,6 +3,8 @@ package com.slamcode.goalcalendar.view.lists;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
+import butterknife.ButterKnife;
+
 /**
  * Created by moriasla on 16.12.2016.
  */
@@ -18,6 +20,7 @@ public class ViewHolderBase<TData> {
     {
         this.id = id;
         this.view = view;
+        ButterKnife.bind(this, view);
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {

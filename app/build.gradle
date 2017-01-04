@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'com.jakewharton.butterknife'
 
 android {
     compileSdkVersion 25
@@ -38,7 +39,10 @@ dependencies {
     compile project(':collections')
     compile 'org.apache.commons:commons-lang3:3.5'
     compile 'javax.inject:javax.inject:1'
+    compile 'com.jakewharton:butterknife:8.4.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
     apt "com.google.dagger:dagger-compiler:2.4"
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
     provided 'javax.annotation:jsr250-api:1.0'
     testCompile "junit:junit:$JUNIT_VERSION"
     testApt "com.google.dagger:dagger-compiler:2.4"

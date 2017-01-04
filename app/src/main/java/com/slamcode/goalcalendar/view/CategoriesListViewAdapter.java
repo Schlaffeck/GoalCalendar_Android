@@ -14,6 +14,8 @@ import com.slamcode.goalcalendar.data.model.*;
 
 import java.util.*;
 
+import butterknife.BindView;
+
 /**
  * Created by moriasla on 15.12.2016.
  */
@@ -35,10 +37,7 @@ public class CategoriesListViewAdapter extends ListViewDataAdapter<CategoryModel
 
         return new CategoryViewHolder(
                 convertView,
-                id,
-                (TextView)convertView.findViewById(R.id.monthly_goals_list_item_category_name),
-                (TextView)convertView.findViewById(R.id.monthly_goals_list_item_frequency),
-                (LinearLayout)convertView.findViewById(R.id.monthly_goals_list_item_days_list));
+                id);
     }
 
     @Override
@@ -76,21 +75,20 @@ public class CategoriesListViewAdapter extends ListViewDataAdapter<CategoryModel
 
     public class CategoryViewHolder extends ViewHolderBase<CategoryModel>
     {
-        private TextView categoryNameTextView;
-        private TextView frequencyTextView;
-        private LinearLayout daysListGridView;
+        @BindView(R.id.monthly_goals_list_item_category_name)
+        TextView categoryNameTextView;
+
+        @BindView(R.id.monthly_goals_list_item_frequency)
+        TextView frequencyTextView;
+
+        @BindView(R.id.monthly_goals_list_item_days_list)
+        LinearLayout daysListGridView;
 
         CategoryViewHolder(
                 View view,
-                long id,
-                TextView categoryNameTextView,
-                   TextView frequencyTextView,
-                   LinearLayout daysListGridView)
+                long id)
         {
             super(view, id);
-            this.categoryNameTextView = categoryNameTextView;
-            this.frequencyTextView = frequencyTextView;
-            this.daysListGridView = daysListGridView;
         }
     }
 

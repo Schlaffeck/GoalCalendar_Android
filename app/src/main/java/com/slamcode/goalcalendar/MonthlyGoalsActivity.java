@@ -46,23 +46,39 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnItemSelected;
+
 public class MonthlyGoalsActivity extends AppCompatActivity {
 
+    // view elements
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+    @BindView((R.id.monthly_goals_add_category_floatingactionbutton))
+    FloatingActionButton floatingActionButton;
+
+    @BindView((R.id.monthly_goals_list_header_month_spinner))
+    Spinner monthListSpinner;
+
+    // constructed elements
     private CategoriesListViewAdapter monthListViewAdapter;
 
+    // dependencies
     @Inject
     PersistenceContext persistenceContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(com.slamcode.goalcalendar.R.layout.monthly_goals_activity);
 
         this.injectDependencies();
+        ButterKnife.bind(this);
 
-        setContentView(com.slamcode.goalcalendar.R.layout.monthly_goals_activity);
-        Toolbar toolbar = (Toolbar) findViewById(com.slamcode.goalcalendar.R.id.toolbar);
-        setSupportActionBar(toolbar);
-        setupFloatingButtonAction();
+        this.setSupportActionBar(this.toolbar);
         this.setupMonthlyPlanningCategoryList();
     }
 
@@ -160,15 +176,10 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    private void setupFloatingButtonAction()
+    @OnClick(R.id.monthly_goals_add_category_floatingactionbutton)
+    void showAddNewCategoryDialog()
     {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(com.slamcode.goalcalendar.R.id.monthly_goals_add_category_floatingactionbutton);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            showAddEditCategoryDialog(null);
-            }
-        });
+        this.showAddEditCategoryDialog(null);
     }
 
     private void showAddEditCategoryDialog(CategoryModel model)
@@ -188,29 +199,21 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         dialog.show(getFragmentManager(), null);
     }
 
+    @OnItemSelected(R.id.monthly_goals_list_header_month_spinner)
+    void onMonthSelected(AdapterView<?> adapterView, View view, int position, long id) {
+
+        Month m = Month.getMonthByNumber(position+1);
+        setupCategoryListForMonth(m);
+    }
+
     private void setupMonthlyPlanningCategoryList() {
 
         // month spinner
-        LinearLayout header = (LinearLayout) this.findViewById(R.id.monthly_goals_header_list_item_month_panel);
-        final Spinner monthSpinner = (Spinner) header.findViewById(R.id.monthly_goals_list_header_month_spinner);
         final ArrayAdapter<String> monthsStringsAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_spinner_dropdown_item,
                 ResourcesHelper.monthsResourceStrings(this));
-        monthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-
-                Month m = Month.getMonthByNumber(position+1);
-                setupCategoryListForMonth(m);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-        monthSpinner.setAdapter(monthsStringsAdapter);
+        this.monthListSpinner.setAdapter(monthsStringsAdapter);
 
         /// categories list adapter
         this.monthListViewAdapter = new CategoriesListViewAdapter(this, getLayoutInflater());
