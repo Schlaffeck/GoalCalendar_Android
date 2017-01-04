@@ -26,7 +26,7 @@ public class SpinnerHelper {
     public static <T> boolean setSelectedValue(Spinner spinner, T valueToSet)
     {
         int position = getValuePosition(spinner, valueToSet);
-        if(position >= 0)
+        if(position < 0)
         {
             return false;
         }

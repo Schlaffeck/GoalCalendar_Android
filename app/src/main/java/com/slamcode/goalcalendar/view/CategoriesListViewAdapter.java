@@ -53,7 +53,9 @@ public class CategoriesListViewAdapter extends ListViewDataAdapter<CategoryModel
 
         innerViewHolder[0].categoryNameTextView.setText(monthlyGoals.getName());
         innerViewHolder[0].frequencyTextView
-                .setText(String.format("%s x %s", monthlyGoals.getFrequencyValue(), monthlyGoals.getPeriod()));
+                .setText(String.format("%s x %s",
+                        monthlyGoals.getFrequencyValue(),
+                        ResourcesHelper.toResourceString(this.getContext(), monthlyGoals.getPeriod())));
 
         for (DailyPlanModel dailyPlan : monthlyGoals.getDailyPlans())
         {
@@ -61,7 +63,7 @@ public class CategoriesListViewAdapter extends ListViewDataAdapter<CategoryModel
             innerViewHolder[0].daysListGridView.addView(elem);
         }
 
-        if(innerViewHolder[0].isViewVisible()) {
+        if(innerViewHolder[0].isViewRendered()) {
             this.processedCategoriesSet.add(monthlyGoals);
         }
     }
@@ -71,6 +73,17 @@ public class CategoriesListViewAdapter extends ListViewDataAdapter<CategoryModel
     {
         this.processedCategoriesSet.clear();
         super.updateList(list);
+    }
+
+    @Override
+    public void notifyItemModified(int position)
+    {
+        CategoryModel item = this.getItem(position);
+        if(item != null)
+        {
+            this.processedCategoriesSet.remove(item);
+        }
+        super.notifyItemModified(position);
     }
 
     public class CategoryViewHolder extends ViewHolderBase<CategoryModel>

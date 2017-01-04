@@ -14,7 +14,7 @@ public class ViewHolderBase<TData> {
     private final View view;
     private TData baseObject;
     private long id;
-    private boolean viewVisible;
+    private boolean viewRendered;
 
     public ViewHolderBase(View view, long id)
     {
@@ -28,7 +28,7 @@ public class ViewHolderBase<TData> {
                 v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 if(v.getMeasuredHeight() >0 && v.getMeasuredWidth() > 0)
                 {
-                    setViewVisible();
+                    setViewRendered();
                 }
             }
         });
@@ -50,13 +50,13 @@ public class ViewHolderBase<TData> {
         return id;
     }
 
-    private void setViewVisible()
+    private void setViewRendered()
     {
-        this.viewVisible = true;
+        this.viewRendered = true;
     }
 
-    public boolean isViewVisible()
+    public boolean isViewRendered()
     {
-        return this.viewVisible;
+        return this.viewRendered;
     }
 }

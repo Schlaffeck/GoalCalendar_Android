@@ -90,8 +90,9 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
             viewHolder.setBaseObject(object);
             try
             {
-                this.modifiedItems.remove(object);
                 this.fillListElementView(object, viewHolder);
+                this.modifiedItems.remove(object);
+                convertView = viewHolder.getView();
             }
             catch (Exception e)
             {
@@ -119,8 +120,8 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
         }
         else {
             this.modifiedItems.add(item);
-            this.notifyDataSetChanged();
             this.notifyItemModified(this.list.indexOf(item));
+            this.notifyDataSetChanged();
         }
     }
 

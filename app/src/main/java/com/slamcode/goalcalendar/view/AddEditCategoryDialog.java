@@ -111,18 +111,18 @@ public class AddEditCategoryDialog extends DialogFragment {
 
         ArrayAdapter<String> periodStringsAdapter = new ArrayAdapter<String>(
                 this.getActivity(),
-                android.R.layout.simple_spinner_item,
+                android.R.layout.simple_spinner_dropdown_item,
                 ResourcesHelper.frequencyPeriodResourceStrings(this.getActivity()));
         this.frequencyPeriodSpinner.setAdapter(periodStringsAdapter);
 
         // set values
         if(this.model != null)
         {
-            this.categoryNameEditText.setText(model.getName());
+            this.categoryNameEditText.setText(this.model.getName());
 
             SpinnerHelper.setSelectedValue(this.frequencyPeriodSpinner, ResourcesHelper.toResourceString(
                     this.getActivity(),
-                    model.getPeriod()));
+                    this.model.getPeriod()));
             this.frequencyValueNumberPicker.setValue(this.model.getFrequencyValue());
         }
 
