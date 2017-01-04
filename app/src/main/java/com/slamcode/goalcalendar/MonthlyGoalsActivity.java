@@ -63,8 +63,13 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     @BindView((R.id.monthly_goals_list_header_month_spinner))
     Spinner monthListSpinner;
 
+    @BindView(R.id.monthly_goals_listview)
+    ListView monthlyGoalsListView;
+
     // constructed elements
     private CategoriesListViewAdapter monthListViewAdapter;
+
+    private MonthlyPlansModel selectedMonthlyPlansModel;
 
     // dependencies
     @Inject
@@ -216,17 +221,40 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         this.monthListSpinner.setAdapter(monthsStringsAdapter);
 
         /// categories list adapter
-        this.monthListViewAdapter = new CategoriesListViewAdapter(this, getLayoutInflater());
-        final ListView listView = (ListView) this.findViewById(R.id.monthly_goals_listview);
-        this.monthListViewAdapter.addItemSourceChangedEventListener(new ListViewDataAdapter.ItemsSourceChangedEventListener<CategoryModel>() {
+        this.monthListViewAdapter = this.provideMonthCategoriesListViewAdapter();
+
+        this.monthlyGoalsListView.setAdapter(this.monthListViewAdapter);
+
+        this.registerForContextMenu(this.monthlyGoalsListView);
+
+        setupCategoryListForMonth(Month.getCurrentMonth());
+    }
+
+    private void resetMonthCategoriesListView()
+    {
+        this.monthListViewAdapter = provideMonthCategoriesListViewAdapter();
+        this.monthListViewAdapter.updateList(this.selectedMonthlyPlansModel.getCategories());
+        this.monthlyGoalsListView.setAdapter(this.monthListViewAdapter);
+    }
+
+    private CategoriesListViewAdapter provideMonthCategoriesListViewAdapter()
+    {
+        CategoriesListViewAdapter adapter = new CategoriesListViewAdapter(this, getLayoutInflater());
+        adapter.addItemSourceChangedEventListener(new ListViewDataAdapter.ItemsSourceChangedEventListener<CategoryModel>() {
             @Override
             public void onNewItemAdded(int itemPosition) {
-                listView.smoothScrollToPosition(itemPosition);
+                monthlyGoalsListView.smoothScrollToPosition(itemPosition);
             }
 
             @Override
             public void onItemModified(int itemPosition) {
-                listView.smoothScrollToPosition(itemPosition);
+                if(monthListViewAdapter.getCount() == 1)
+                {
+                    // dirty hack for updating modified list with single-item
+                    resetMonthCategoriesListView();
+                }
+                else
+                    monthlyGoalsListView.smoothScrollToPosition(itemPosition);
             }
 
             @Override
@@ -238,11 +266,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
                 itemRemovedToast.show();
             }
         });
-        listView.setAdapter(this.monthListViewAdapter);
 
-        this.registerForContextMenu(listView);
-
-        setupCategoryListForMonth(Month.getCurrentMonth());
+        return adapter;
     }
 
     private void setupCategoryListForMonth(Month month)
@@ -261,6 +286,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
         this.setupHeaderForCategoryListForMonth(model);
         this.monthListViewAdapter.updateList(model.getCategories());
+
+        this.selectedMonthlyPlansModel = model;
 
         uow.complete();
     }

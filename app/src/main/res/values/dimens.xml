@@ -17,7 +17,7 @@
     <dimen name="monthly_goals_table_day_plan_column_width">55dp</dimen>
     <dimen name="monthly_goals_table_day_plan_height">55dp</dimen>
 
-    <dimen name="monthly_goals_table_category_column_width">80dp</dimen>
+    <dimen name="monthly_goals_table_category_column_width">100dp</dimen>
     <dimen name="monthly_goals_table_category_name_height">30dp</dimen>
     <dimen name="monthly_goals_table_category_frequency_height">25dp</dimen>
 </resources>
