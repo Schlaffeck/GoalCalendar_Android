@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import com.slamcode.goalcalendar.data.model.CategoryModel;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,12 +106,6 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
         return convertView;
     }
 
-    public void updateList(List<TData> newList)
-    {
-        this.list = newList;
-        this.notifyDataSetChanged();
-    }
-
     public void addOrUpdateItem(TData item)
     {
         if(!this.list.contains(item))
@@ -154,6 +150,16 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
         }
 
         this.adapterSourceChangedEventListeners.remove(listener);
+    }
+
+    protected List<TData> getList()
+    {
+        return this.list;
+    }
+
+    protected void setList(List<TData> newList)
+    {
+        this.list = newList;
     }
 
     protected void notifyItemAdded(int position)

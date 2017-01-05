@@ -233,7 +233,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     private void resetMonthCategoriesListView()
     {
         this.categoryListViewAdapter = provideMonthCategoriesListViewAdapter();
-        this.categoryListViewAdapter.updateList(this.selectedMonthlyPlansModel.getCategories());
+        this.categoryListViewAdapter.updateMonthlyPlans(this.selectedMonthlyPlansModel);
 
         this.monthlyGoalsListView.setAdapter(this.categoryListViewAdapter);
         this.dailyPlansListView.setAdapter(this.categoryListViewAdapter);
@@ -287,7 +287,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         }
 
         this.setupHeaderForCategoryListForMonth(model);
-        this.categoryListViewAdapter.updateList(model.getCategories());
+        this.categoryListViewAdapter.updateMonthlyPlans(model);
 
         this.selectedMonthlyPlansModel = model;
 

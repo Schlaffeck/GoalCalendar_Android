@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.view;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +26,9 @@ public class CategoryListViewAdapter extends ListViewDataAdapter<CategoryModel, 
 
         private Set<CategoryModel> processedCategoriesSet;
         private Map<View, View> associatedParentViews;
+        private MonthlyPlansModel monthlyPlans;
 
-        public CategoryListViewAdapter(Context context, LayoutInflater layoutInflater)
+    public CategoryListViewAdapter(Context context, LayoutInflater layoutInflater)
         {
             super(context, layoutInflater);
             this.associatedParentViews = new HashMap<>();
@@ -100,11 +102,12 @@ public class CategoryListViewAdapter extends ListViewDataAdapter<CategoryModel, 
         }
     }
 
-    @Override
-    public void updateList(List<CategoryModel> list)
+    public void updateMonthlyPlans(MonthlyPlansModel monthlyPlansModel)
     {
         this.processedCategoriesSet.clear();
-        super.updateList(list);
+        this.monthlyPlans = monthlyPlansModel;
+        this.setList(monthlyPlansModel.getCategories());
+        this.notifyDataSetChanged();
     }
 
     @Override
@@ -152,6 +155,34 @@ public class CategoryListViewAdapter extends ListViewDataAdapter<CategoryModel, 
             }
         });
 
+        if(this.isCurrentDate(planStatus.getDayNumber()))
+        {
+            layout.setBackgroundColor(this.getContext().getResources().getColor(R.color.colorAccent2));
+        }
+
         return layout;
+    }
+
+    private boolean isCurrentDate(int day)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+
+        if((cal.get(Calendar.YEAR)) != this.monthlyPlans.getYear())
+        {
+            return false;
+        }
+
+        if((cal.get(Calendar.MONTH)) != this.monthlyPlans.getMonth().getNumValue()-1)
+        {
+            return false;
+        }
+
+        if((cal.get(Calendar.DAY_OF_MONTH)) != day)
+        {
+            return false;
+        }
+
+        return true;
     }
 }

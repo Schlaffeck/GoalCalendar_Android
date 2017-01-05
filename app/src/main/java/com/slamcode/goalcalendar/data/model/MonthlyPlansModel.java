@@ -14,6 +14,8 @@ public class MonthlyPlansModel implements Identifiable<Integer> {
 
     private int id;
 
+    private int year;
+
     private Month month;
 
     private List<CategoryModel> categories;
@@ -47,5 +49,13 @@ public class MonthlyPlansModel implements Identifiable<Integer> {
 
     public void setMonth(Month month) {
         this.month = month;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
     }
 }

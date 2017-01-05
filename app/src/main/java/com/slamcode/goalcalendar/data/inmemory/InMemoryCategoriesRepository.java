@@ -7,6 +7,7 @@ import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.planning.Month;
+import com.slamcode.goalcalendar.planning.PlanStatus;
 
 import java.util.List;
 
@@ -76,7 +77,7 @@ public class InMemoryCategoriesRepository extends InMemoryRepositoryBase<Categor
                         result.setDailyPlans(CollectionUtils.createList(month.getDaysCount(), new ElementCreator<DailyPlanModel>() {
                             @Override
                             public DailyPlanModel Create(int index, List<DailyPlanModel> currentList) {
-                                return new DailyPlanModel();
+                                return new DailyPlanModel(PlanStatus.Empty, index+1);
                             }
                         }));
                         return result;

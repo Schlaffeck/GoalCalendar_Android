@@ -13,6 +13,19 @@ public class DailyPlanModel implements Identifiable<Integer> {
 
     private PlanStatus status = PlanStatus.Empty;
 
+    private int dayNumber;
+
+    public DailyPlanModel()
+    {
+
+    }
+
+    public DailyPlanModel(PlanStatus status, int dayNumber)
+    {
+        this.status = status;
+        this.dayNumber = dayNumber;
+    }
+
     @Override
     public Integer getId() {
         return this.id;
@@ -29,5 +42,13 @@ public class DailyPlanModel implements Identifiable<Integer> {
 
     public void setStatus(PlanStatus status) {
         this.status = status;
+    }
+
+    public int getDayNumber() {
+        return dayNumber;
+    }
+
+    public void setDayNumber(int dayNumber) {
+        this.dayNumber = dayNumber;
     }
 }
