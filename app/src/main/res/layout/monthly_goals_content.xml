@@ -32,7 +32,11 @@
                 android:layout_marginTop="@dimen/default_margin"
                 android:layout_marginBottom="@dimen/default_margin"
                 android:textSize="@dimen/list_item_text_size"
-                android:ellipsize="marquee">
+                android:ellipsize="marquee"
+                android:paddingLeft="0dp"
+                android:paddingRight="10dp"
+                android:layout_marginLeft="-5dp"
+                android:layout_marginRight="0dp">
             </Spinner>
 
             <!-- categories names -->

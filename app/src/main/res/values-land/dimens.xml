@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="monthly_goals_table_category_column_width">100dp</dimen>
+</resources>
