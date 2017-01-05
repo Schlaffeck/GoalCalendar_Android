@@ -1,20 +1,16 @@
 package com.slamcode.goalcalendar;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -27,14 +23,11 @@ import com.slamcode.collections.CollectionUtils;
 import com.slamcode.collections.ElementCreator;
 import com.slamcode.goalcalendar.dagger2.ComposableApplication;
 import com.slamcode.goalcalendar.data.*;
-import com.slamcode.goalcalendar.data.inmemory.InMemoryCategoriesRepository;
-import com.slamcode.goalcalendar.data.inmemory.InMemoryMonthlyPlansRepository;
-import com.slamcode.goalcalendar.data.json.JsonFilePersistenceContext;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.view.AddEditCategoryDialog;
-import com.slamcode.goalcalendar.view.CategoriesListViewAdapter;
+import com.slamcode.goalcalendar.view.CategoryListViewAdapter;
 import com.slamcode.goalcalendar.view.ResourcesHelper;
 import com.slamcode.goalcalendar.view.lists.ListViewDataAdapter;
 import com.slamcode.goalcalendar.view.utils.SpinnerHelper;
@@ -66,8 +59,14 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     @BindView(R.id.monthly_goals_listview)
     ListView monthlyGoalsListView;
 
+    @BindView(R.id.monthly_goals_dailyplans_listview)
+    ListView dailyPlansListView;
+
+    @BindView(R.id.monthly_goals_header_list_item_days_list)
+    LinearLayout daysNumbersHeaderView;
+
     // constructed elements
-    private CategoriesListViewAdapter monthListViewAdapter;
+    private CategoryListViewAdapter categoryListViewAdapter;
 
     private MonthlyPlansModel selectedMonthlyPlansModel;
 
@@ -111,7 +110,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
         CharSequence menuItem = item.getTitle();
-        CategoryModel model = (CategoryModel)this.monthListViewAdapter.getItem(info.position);
+        CategoryModel model = this.categoryListViewAdapter.getItem(info.position);
         if(getResources().getString(R.string.context_menu_edit_item).equals(menuItem)) {
             this.showAddEditCategoryDialog(model);
         }
@@ -135,7 +134,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.button_yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        monthListViewAdapter.removeItem(model);
+                        categoryListViewAdapter.removeItem(model);
                         dialogInterface.dismiss();
                     }
                 })
@@ -197,7 +196,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
                 if(confirmed)
                 {
                     CategoryModel newCategory = dialog.getModel();
-                    monthListViewAdapter.addOrUpdateItem(newCategory);
+                    categoryListViewAdapter.addOrUpdateItem(newCategory);
                 }
             }
         });
@@ -221,9 +220,10 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         this.monthListSpinner.setAdapter(monthsStringsAdapter);
 
         /// categories list adapter
-        this.monthListViewAdapter = this.provideMonthCategoriesListViewAdapter();
+        this.categoryListViewAdapter = this.provideMonthCategoriesListViewAdapter();
 
-        this.monthlyGoalsListView.setAdapter(this.monthListViewAdapter);
+        this.monthlyGoalsListView.setAdapter(this.categoryListViewAdapter);
+        this.dailyPlansListView.setAdapter(this.categoryListViewAdapter);
 
         this.registerForContextMenu(this.monthlyGoalsListView);
 
@@ -232,14 +232,16 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
     private void resetMonthCategoriesListView()
     {
-        this.monthListViewAdapter = provideMonthCategoriesListViewAdapter();
-        this.monthListViewAdapter.updateList(this.selectedMonthlyPlansModel.getCategories());
-        this.monthlyGoalsListView.setAdapter(this.monthListViewAdapter);
+        this.categoryListViewAdapter = provideMonthCategoriesListViewAdapter();
+        this.categoryListViewAdapter.updateList(this.selectedMonthlyPlansModel.getCategories());
+
+        this.monthlyGoalsListView.setAdapter(this.categoryListViewAdapter);
+        this.dailyPlansListView.setAdapter(this.categoryListViewAdapter);
     }
 
-    private CategoriesListViewAdapter provideMonthCategoriesListViewAdapter()
+    private CategoryListViewAdapter provideMonthCategoriesListViewAdapter()
     {
-        CategoriesListViewAdapter adapter = new CategoriesListViewAdapter(this, getLayoutInflater());
+        CategoryListViewAdapter adapter = new CategoryListViewAdapter(this, getLayoutInflater());
         adapter.addItemSourceChangedEventListener(new ListViewDataAdapter.ItemsSourceChangedEventListener<CategoryModel>() {
             @Override
             public void onNewItemAdded(int itemPosition) {
@@ -248,7 +250,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
             @Override
             public void onItemModified(int itemPosition) {
-                if(monthListViewAdapter.getCount() == 1)
+                if(categoryListViewAdapter.getCount() == 1)
                 {
                     // dirty hack for updating modified list with single-item
                     resetMonthCategoriesListView();
@@ -285,7 +287,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         }
 
         this.setupHeaderForCategoryListForMonth(model);
-        this.monthListViewAdapter.updateList(model.getCategories());
+        this.categoryListViewAdapter.updateList(model.getCategories());
 
         this.selectedMonthlyPlansModel = model;
 
@@ -295,13 +297,9 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     private void setupHeaderForCategoryListForMonth(MonthlyPlansModel monthlyPlans)
     {
         final LayoutInflater inflater = this.getLayoutInflater();
-        // month text view
-        final LinearLayout headerListItemMonth = (LinearLayout) this.findViewById(R.id.monthly_goals_header_list_item_month_panel);
-        Spinner monthSpinner = (Spinner) headerListItemMonth.findViewById(R.id.monthly_goals_list_header_month_spinner);
-        SpinnerHelper.setSelectedValue(monthSpinner, ResourcesHelper.toResourceStringId(monthlyPlans.getMonth()));
+        SpinnerHelper.setSelectedValue(this.monthListSpinner, ResourcesHelper.toResourceStringId(monthlyPlans.getMonth()));
 
-        final LinearLayout headerListItemDays = (LinearLayout) this.findViewById(R.id.monthly_goals_header_list_item_days_list);
-        headerListItemDays.removeAllViews();
+        this.daysNumbersHeaderView.removeAllViews();
 
         //month days list
         List<Integer> listOfDays = CollectionUtils.createList(monthlyPlans.getMonth().getDaysCount(), new ElementCreator<Integer>() {
@@ -319,7 +317,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
                 View dayNumberCell = inflater.inflate(R.layout.monthly_goals_header_day_number_cell, null);
                 TextView dayNumberText = (TextView) dayNumberCell.findViewById(R.id.monthly_goals_table_header_day_number_text);
                 dayNumberText.setText(input.toString());
-                headerListItemDays.addView(dayNumberCell);
+                daysNumbersHeaderView.addView(dayNumberCell);
             }
         });
     }

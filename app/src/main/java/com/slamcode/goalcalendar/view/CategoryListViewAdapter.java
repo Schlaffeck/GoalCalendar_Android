@@ -3,6 +3,7 @@ package com.slamcode.goalcalendar.view;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,15 +21,45 @@ import butterknife.BindView;
  * Created by moriasla on 15.12.2016.
  */
 
-public class CategoriesListViewAdapter extends ListViewDataAdapter<CategoryModel, CategoriesListViewAdapter.CategoryViewHolder> {
+public class CategoryListViewAdapter extends ListViewDataAdapter<CategoryModel, CategoryListViewAdapter.CategoryViewHolder> {
 
         private Set<CategoryModel> processedCategoriesSet;
+        private Map<View, View> associatedParentViews;
 
-        public CategoriesListViewAdapter(Context context, LayoutInflater layoutInflater)
+        public CategoryListViewAdapter(Context context, LayoutInflater layoutInflater)
         {
             super(context, layoutInflater);
+            this.associatedParentViews = new HashMap<>();
             this.processedCategoriesSet = new HashSet<>();
         }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
+        View baseView = super.getView(position, convertView, parent);
+
+        View resultView = null;
+        if(parent.getId() == R.id.monthly_goals_listview)
+        {
+            resultView = baseView.findViewById(R.id.monthly_goals_list_item_category_panel);
+        }
+        else if(parent.getId() == R.id.monthly_goals_dailyplans_listview)
+        {
+            resultView = baseView.findViewById(R.id.monthly_goals_list_item_days_list);
+        }
+
+        if(resultView != null)
+        {
+            resultView.setTag(baseView.getTag());
+            if(!this.associatedParentViews.containsKey(resultView))
+            {
+                this.associatedParentViews.put(resultView, baseView);
+            }
+            return resultView;
+        }
+
+        return baseView;
+    }
 
     @Override
     protected CategoryViewHolder getNewViewHolder(View convertView, long id) {
@@ -57,6 +88,7 @@ public class CategoriesListViewAdapter extends ListViewDataAdapter<CategoryModel
                         monthlyGoals.getFrequencyValue(),
                         ResourcesHelper.toResourceString(this.getContext(), monthlyGoals.getPeriod())));
 
+        innerViewHolder[0].daysListGridView.removeAllViews();
         for (DailyPlanModel dailyPlan : monthlyGoals.getDailyPlans())
         {
             View elem = getDayPlanStatusView(dailyPlan);
