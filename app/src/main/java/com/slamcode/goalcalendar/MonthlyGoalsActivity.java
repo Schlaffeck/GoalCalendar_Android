@@ -30,7 +30,7 @@ import com.slamcode.goalcalendar.view.CategoryListViewAdapter;
 import com.slamcode.goalcalendar.view.ResourcesHelper;
 import com.slamcode.goalcalendar.view.lists.ListViewDataAdapter;
 import com.slamcode.goalcalendar.view.utils.ColorsHelper;
-import com.slamcode.goalcalendar.view.utils.ListViewHelper;
+import com.slamcode.goalcalendar.view.lists.ListViewHelper;
 import com.slamcode.goalcalendar.view.utils.SpinnerHelper;
 
 import org.apache.commons.collections4.Closure;

@@ -1,4 +1,4 @@
-package com.slamcode.goalcalendar.view.utils;
+package com.slamcode.goalcalendar.view.lists;
 
 import android.view.MotionEvent;
 import android.view.View;
