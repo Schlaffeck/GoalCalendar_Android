@@ -22,7 +22,6 @@ public class CategoryModel implements Identifiable<Integer> {
 
     private int frequencyValue;
 
-
     public CategoryModel()
     {
     }
@@ -30,6 +29,14 @@ public class CategoryModel implements Identifiable<Integer> {
     public CategoryModel(int id)
     {
         this.id = id;
+    }
+
+    public CategoryModel(int id, String name, FrequencyPeriod period, int frequencyValue)
+    {
+        this.id = id;
+        this.name = name;
+        this.period = period;
+        this.frequencyValue = frequencyValue;
     }
 
     @Override

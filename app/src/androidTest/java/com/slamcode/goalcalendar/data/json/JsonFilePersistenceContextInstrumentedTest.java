@@ -168,11 +168,7 @@ public class JsonFilePersistenceContextInstrumentedTest {
 
     private CategoryModel createCategoryModel(int id, String name, FrequencyPeriod frequencyPeriod, int frequencyValue)
     {
-        CategoryModel model = new CategoryModel(id);
-        model.setFrequencyValue(frequencyValue);
-        model.setPeriod(frequencyPeriod);
-        model.setName(name);
-
+        CategoryModel model = new CategoryModel(id, name, frequencyPeriod, frequencyValue);
         return model;
     }
 }

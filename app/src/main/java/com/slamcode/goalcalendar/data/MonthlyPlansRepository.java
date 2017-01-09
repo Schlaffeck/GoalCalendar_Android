@@ -11,6 +11,8 @@ public interface MonthlyPlansRepository extends Repository<MonthlyPlansModel, In
 
     MonthlyPlansModel findForMonth(Month month);
 
+    MonthlyPlansModel findForMonth(int year, Month month);
+
     MonthlyPlansModel findForThisMonth();
 
     MonthlyPlansModel findForNextMonth();

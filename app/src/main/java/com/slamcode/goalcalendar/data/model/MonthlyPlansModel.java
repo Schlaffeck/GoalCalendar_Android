@@ -25,6 +25,14 @@ public class MonthlyPlansModel implements Identifiable<Integer> {
         this.categories = new ArrayList<>();
     }
 
+    public MonthlyPlansModel(int id, int year, Month month)
+    {
+        this();
+        this.id = id;
+        this.year = year;
+        this.month = month;
+    }
+
     @Override
     public Integer getId() {
         return this.id;

@@ -5,7 +5,9 @@ import com.slamcode.collections.CollectionUtils;
 import com.slamcode.collections.ElementCreator;
 import com.slamcode.goalcalendar.data.MonthlyPlansRepository;
 import com.slamcode.goalcalendar.data.Repository;
+import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
+import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.Month;
 
 import java.util.List;
@@ -23,9 +25,14 @@ public class InMemoryMonthlyPlansRepository extends InMemoryRepositoryBase<Month
 
     @Override
     public MonthlyPlansModel findForMonth(Month month) {
+        return this.findForMonth(DateTimeHelper.getCurrentYear(), month);
+    }
+
+    @Override
+    public MonthlyPlansModel findForMonth(int year, Month month) {
         for(MonthlyPlansModel m : this.getInMemoryEntityList())
         {
-            if(month.equals(m.getMonth()))
+            if(m.getYear() == year && month.equals(m.getMonth()))
             {
                 return m;
             }
@@ -54,9 +61,11 @@ public class InMemoryMonthlyPlansRepository extends InMemoryRepositoryBase<Month
         List<MonthlyPlansModel> entities = CollectionUtils.createList(Month.values().length, new ElementCreator<MonthlyPlansModel>() {
             @Override
             public MonthlyPlansModel Create(int index, List<MonthlyPlansModel> currentList) {
-                MonthlyPlansModel plans = new MonthlyPlansModel();
-                plans.setId(index+1);
-                plans.setMonth(Month.getMonthByNumber(index + 1));
+                MonthlyPlansModel plans = new MonthlyPlansModel(
+                        index +1,
+                        DateTimeHelper.getCurrentYear(),
+                        Month.getMonthByNumber(index + 1)
+                );
                 plans.setCategories(InMemoryCategoriesRepository.buildCategoriesList((
                         index+1)*Month.values().length, plans.getMonth()));
                 return plans;

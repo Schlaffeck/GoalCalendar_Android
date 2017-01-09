@@ -20,7 +20,7 @@ public class DailyPlanModel implements Identifiable<Integer> {
 
     }
 
-    public DailyPlanModel(PlanStatus status, int dayNumber)
+    public DailyPlanModel(int id, PlanStatus status, int dayNumber)
     {
         this.status = status;
         this.dayNumber = dayNumber;

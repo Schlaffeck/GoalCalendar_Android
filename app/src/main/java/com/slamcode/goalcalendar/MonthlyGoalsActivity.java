@@ -23,13 +23,13 @@ import com.slamcode.collections.CollectionUtils;
 import com.slamcode.collections.ElementCreator;
 import com.slamcode.goalcalendar.dagger2.ComposableApplication;
 import com.slamcode.goalcalendar.data.*;
-import com.slamcode.goalcalendar.data.model.CategoryModel;
-import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
-import com.slamcode.goalcalendar.planning.Month;
+import com.slamcode.goalcalendar.data.model.*;
+import com.slamcode.goalcalendar.planning.*;
 import com.slamcode.goalcalendar.view.AddEditCategoryDialog;
 import com.slamcode.goalcalendar.view.CategoryListViewAdapter;
 import com.slamcode.goalcalendar.view.ResourcesHelper;
 import com.slamcode.goalcalendar.view.lists.ListViewDataAdapter;
+import com.slamcode.goalcalendar.view.utils.ColorsHelper;
 import com.slamcode.goalcalendar.view.utils.SpinnerHelper;
 
 import org.apache.commons.collections4.Closure;
@@ -207,7 +207,11 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     void onMonthSelected(AdapterView<?> adapterView, View view, int position, long id) {
 
         Month m = Month.getMonthByNumber(position+1);
-        setupCategoryListForMonth(m);
+        setupCategoryListForMonth(
+                this.selectedMonthlyPlansModel != null
+                    ? this.selectedMonthlyPlansModel.getYear()
+                        : DateTimeHelper.getCurrentYear(),
+                m);
     }
 
     private void setupMonthlyPlanningCategoryList() {
@@ -227,7 +231,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
         this.registerForContextMenu(this.monthlyGoalsListView);
 
-        setupCategoryListForMonth(Month.getCurrentMonth());
+        setupCategoryListForMonth(DateTimeHelper.getCurrentYear(), Month.getCurrentMonth());
     }
 
     private void resetMonthCategoriesListView()
@@ -272,16 +276,16 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         return adapter;
     }
 
-    private void setupCategoryListForMonth(Month month)
+    private void setupCategoryListForMonth(int year, Month month)
     {
         UnitOfWork uow = this.persistenceContext.createUnitOfWork();
-        MonthlyPlansModel model = uow.getMonthlyPlansRepository().findForMonth(month);
+        MonthlyPlansModel model = uow.getMonthlyPlansRepository().findForMonth(year, month);
 
         if(model == null)
         {
             model = new MonthlyPlansModel();
             // todo: find good way to assign ids
-            model.setId(1);
+            model.setId(year ^ month.getNumValue());
             model.setMonth(month);
             uow.getMonthlyPlansRepository().add(model);
         }
@@ -294,15 +298,15 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         uow.complete();
     }
 
-    private void setupHeaderForCategoryListForMonth(MonthlyPlansModel monthlyPlans)
+    private void setupHeaderForCategoryListForMonth(final MonthlyPlansModel monthlyPlansValue)
     {
         final LayoutInflater inflater = this.getLayoutInflater();
-        SpinnerHelper.setSelectedValue(this.monthListSpinner, ResourcesHelper.toResourceStringId(monthlyPlans.getMonth()));
+        SpinnerHelper.setSelectedValue(this.monthListSpinner, ResourcesHelper.toResourceStringId(monthlyPlansValue.getMonth()));
 
         this.daysNumbersHeaderView.removeAllViews();
 
         //month days list
-        List<Integer> listOfDays = CollectionUtils.createList(monthlyPlans.getMonth().getDaysCount(), new ElementCreator<Integer>() {
+        List<Integer> listOfDays = CollectionUtils.createList(monthlyPlansValue.getMonth().getDaysCount(), new ElementCreator<Integer>() {
 
             @Override
             public Integer Create(int index, List<Integer> currentList) {
@@ -317,8 +321,23 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
                 View dayNumberCell = inflater.inflate(R.layout.monthly_goals_header_day_number_cell, null);
                 TextView dayNumberText = (TextView) dayNumberCell.findViewById(R.id.monthly_goals_table_header_day_number_text);
                 dayNumberText.setText(input.toString());
+                if(isCurrentDate(monthlyPlansValue, input))
+                {
+                    ColorsHelper.setSecondAccentBackgroundColor(dayNumberCell);
+                }
                 daysNumbersHeaderView.addView(dayNumberCell);
             }
         });
+    }
+
+    private boolean isCurrentDate(MonthlyPlansModel model, int dayNumber)
+    {
+        int year = model.getYear() > 0 ?
+                model.getYear() : DateTimeHelper.getCurrentYear();
+
+        return DateTimeHelper.isCurrentDate(
+                year,
+                model.getMonth().getNumValue(),
+                dayNumber);
     }
 }

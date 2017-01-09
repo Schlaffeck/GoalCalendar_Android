@@ -68,16 +68,16 @@ public class InMemoryCategoriesRepository extends InMemoryRepositoryBase<Categor
         List<CategoryModel> categories = CollectionUtils.createList(categoriesNames.length, new ElementCreator<CategoryModel>() {
                     @Override
                     public CategoryModel Create(int index, List<CategoryModel> currentList) {
-                        CategoryModel result = new CategoryModel(index+startingIndex);
-
-                        result.setName(categoriesNames[index]);
-                        result.setFrequencyValue(categoriesFrequencyValues[index]);
-                        result.setPeriod(categoriesFrequency[index]);
+                        CategoryModel result = new CategoryModel(
+                                index+startingIndex,
+                                categoriesNames[index],
+                                categoriesFrequency[index],
+                                categoriesFrequencyValues[index]);
 
                         result.setDailyPlans(CollectionUtils.createList(month.getDaysCount(), new ElementCreator<DailyPlanModel>() {
                             @Override
                             public DailyPlanModel Create(int index, List<DailyPlanModel> currentList) {
-                                return new DailyPlanModel(PlanStatus.Empty, index+1);
+                                return new DailyPlanModel(index+1, PlanStatus.Empty, index+1);
                             }
                         }));
                         return result;

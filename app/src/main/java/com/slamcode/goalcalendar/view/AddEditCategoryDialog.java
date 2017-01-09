@@ -18,6 +18,7 @@ import com.slamcode.collections.ElementCreator;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
+import com.slamcode.goalcalendar.planning.PlanStatus;
 import com.slamcode.goalcalendar.view.utils.SpinnerHelper;
 import com.slamcode.goalcalendar.view.validation.TextViewValidator;
 import com.slamcode.goalcalendar.view.validation.ViewValidator;
@@ -153,7 +154,7 @@ public class AddEditCategoryDialog extends DialogFragment {
             newModel.setDailyPlans(CollectionUtils.createList(31, new ElementCreator<DailyPlanModel>() {
                 @Override
                 public DailyPlanModel Create(int index, List<DailyPlanModel> currentList) {
-                    return new DailyPlanModel();
+                    return new DailyPlanModel(index+1, PlanStatus.Empty, index+1);
                 }
             }));
             this.setModel(newModel);

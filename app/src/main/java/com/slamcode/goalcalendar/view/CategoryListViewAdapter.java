@@ -2,6 +2,7 @@ package com.slamcode.goalcalendar.view;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.slamcode.goalcalendar.R;
+import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.view.lists.ListViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.ViewHolderBase;
 import com.slamcode.goalcalendar.data.model.*;
+import com.slamcode.goalcalendar.view.utils.ColorsHelper;
 
 import java.util.*;
 
@@ -93,7 +96,7 @@ public class CategoryListViewAdapter extends ListViewDataAdapter<CategoryModel, 
         innerViewHolder[0].daysListGridView.removeAllViews();
         for (DailyPlanModel dailyPlan : monthlyGoals.getDailyPlans())
         {
-            View elem = getDayPlanStatusView(dailyPlan);
+            View elem = getDayPlanStatusView(monthlyGoals, dailyPlan);
             innerViewHolder[0].daysListGridView.addView(elem);
         }
 
@@ -140,9 +143,10 @@ public class CategoryListViewAdapter extends ListViewDataAdapter<CategoryModel, 
         }
     }
 
-    private View getDayPlanStatusView(final DailyPlanModel planStatus)
+    private View getDayPlanStatusView(CategoryModel monthlyGoals, final DailyPlanModel planStatus)
     {
         View layout = this.getLayoutInflater().inflate(R.layout.monthly_goals_plan_status_cell, null);
+
         Button button = (Button)layout.findViewById(R.id.plan_status_list_item_view_button);
         button.setText(planStatus.getStatus().toString());
 
@@ -155,34 +159,29 @@ public class CategoryListViewAdapter extends ListViewDataAdapter<CategoryModel, 
             }
         });
 
-        if(this.isCurrentDate(planStatus.getDayNumber()))
+        if(this.isCurrentDate(monthlyGoals, planStatus))
         {
-            layout.setBackgroundColor(this.getContext().getResources().getColor(R.color.colorAccent2));
+            ColorsHelper.setSecondAccentBackgroundColor(layout);
         }
 
         return layout;
     }
 
-    private boolean isCurrentDate(int day)
+    private boolean isCurrentDate(CategoryModel category, DailyPlanModel dailyPlanModel)
     {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
+        int dayNumber = dailyPlanModel.getDayNumber();
 
-        if((cal.get(Calendar.YEAR)) != this.monthlyPlans.getYear())
+        if(dayNumber <= 0 && category.getDailyPlans().contains(dailyPlanModel))
         {
-            return false;
+            dayNumber = category.getDailyPlans().indexOf(dailyPlanModel)+1;
         }
 
-        if((cal.get(Calendar.MONTH)) != this.monthlyPlans.getMonth().getNumValue()-1)
-        {
-            return false;
-        }
+        int year = this.monthlyPlans.getYear() > 0 ?
+                    this.monthlyPlans.getYear() : DateTimeHelper.getCurrentYear();
 
-        if((cal.get(Calendar.DAY_OF_MONTH)) != day)
-        {
-            return false;
-        }
-
-        return true;
+        return DateTimeHelper.isCurrentDate(
+                year,
+                this.monthlyPlans.getMonth().getNumValue(),
+                dayNumber);
     }
 }
