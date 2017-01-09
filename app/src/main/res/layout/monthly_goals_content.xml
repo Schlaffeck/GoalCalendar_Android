@@ -46,7 +46,8 @@
                 android:layout_height="match_parent"
                 android:verticalSpacing="@dimen/default_vertical_spacing"
                 android:horizontalSpacing="@dimen/no_horizontal_spacing"
-                android:gravity="left"></ListView>
+                android:gravity="left"
+                android:scrollbars="none"></ListView>
         </LinearLayout>
 
     <HorizontalScrollView

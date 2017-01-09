@@ -6,7 +6,7 @@ import android.widget.Spinner;
  * Created by moriasla on 23.12.2016.
  */
 
-public class SpinnerHelper {
+public final class SpinnerHelper {
 
     public static <T> int getValuePosition(Spinner spinner, T value)
     {

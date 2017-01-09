@@ -30,6 +30,7 @@ import com.slamcode.goalcalendar.view.CategoryListViewAdapter;
 import com.slamcode.goalcalendar.view.ResourcesHelper;
 import com.slamcode.goalcalendar.view.lists.ListViewDataAdapter;
 import com.slamcode.goalcalendar.view.utils.ColorsHelper;
+import com.slamcode.goalcalendar.view.utils.ListViewHelper;
 import com.slamcode.goalcalendar.view.utils.SpinnerHelper;
 
 import org.apache.commons.collections4.Closure;
@@ -226,6 +227,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         /// categories list adapter
         this.categoryListViewAdapter = this.provideMonthCategoriesListViewAdapter();
 
+        ListViewHelper.setSimultaneousScrolling(this.monthlyGoalsListView, this.dailyPlansListView);
+
         this.monthlyGoalsListView.setAdapter(this.categoryListViewAdapter);
         this.dailyPlansListView.setAdapter(this.categoryListViewAdapter);
 
@@ -250,6 +253,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
             @Override
             public void onNewItemAdded(int itemPosition) {
                 monthlyGoalsListView.smoothScrollToPosition(itemPosition);
+                dailyPlansListView.smoothScrollToPosition(itemPosition);
             }
 
             @Override
@@ -259,8 +263,10 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
                     // dirty hack for updating modified list with single-item
                     resetMonthCategoriesListView();
                 }
-                else
+                else {
                     monthlyGoalsListView.smoothScrollToPosition(itemPosition);
+                    dailyPlansListView.smoothScrollToPosition(itemPosition);
+                }
             }
 
             @Override
