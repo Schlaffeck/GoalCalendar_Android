@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
 
-    <color name="colorAccent2">#40FFBE</color>
+    <!--  palette colors: http://paletton.com/palette.php?uid=72K0u0k70UE00%2B%2B2TZBbmMqfMAo -->
+    <color name="colorPrimary">#336998</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FBD59B</color>
+
+
+    <color name="listAccentColor">#87DD70</color>
+
+    <color name="listActivityBackgroundColor">#EBFDE7</color>
+    <color name="listItemBackgroundColor">#CCF7C1</color>
+    <color name="listItemHeaderBackgroundColor">#CCF7C1</color>
 </resources>

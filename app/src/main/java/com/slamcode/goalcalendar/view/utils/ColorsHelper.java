@@ -13,7 +13,7 @@ public final class ColorsHelper {
 
     public static View setSecondAccentBackgroundColor(View view)
     {
-        view.setBackgroundColor(ContextCompat.getColor(view.getContext(), R.color.colorAccent2));
+        view.setBackgroundColor(ContextCompat.getColor(view.getContext(), R.color.listAccentColor));
         return view;
     }
 }
