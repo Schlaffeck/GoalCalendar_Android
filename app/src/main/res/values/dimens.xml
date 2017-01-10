@@ -25,4 +25,6 @@
     <dimen name="planning_state_button_border_width">5dp</dimen>
     <dimen name="planning_state_button_padding">5dp</dimen>
     <dimen name="planning_state_button_margin">5dp</dimen>
+    <dimen name="planning_state_button_width">45dp</dimen>
+    <dimen name="planning_state_button_height">45dp</dimen>
 </resources>
