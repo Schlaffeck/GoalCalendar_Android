@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.view.controls;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
@@ -8,7 +9,9 @@ import android.widget.Button;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.planning.PlanStatus;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,6 +23,8 @@ public class GoalPlanStatusButton extends Button implements View.OnClickListener
     private PlanStatus currentPlanStatus;
     private static Map<PlanStatus, Integer> STATUS_TO_BACKGROUND_MAP;
     private static Map<PlanStatus, Integer> STATUS_TO_FOREGROUND_COLOR_MAP;
+
+    private List<OnStateChangedListener> onStateChangedListeners = new ArrayList<>();
 
     static
     {
@@ -55,8 +60,39 @@ public class GoalPlanStatusButton extends Button implements View.OnClickListener
     {
         this.currentPlanStatus = status;
         this.setBackgroundResource(STATUS_TO_BACKGROUND_MAP.get(status));
-        this.setTextColor(STATUS_TO_FOREGROUND_COLOR_MAP.get(status));
+        this.setTextColor(
+                ContextCompat.getColor(this.getContext(), STATUS_TO_FOREGROUND_COLOR_MAP.get(status)));
         this.setText(status.toString());
+        this.notifyOnStateChanged(status);
+    }
+
+    private void notifyOnStateChanged(PlanStatus status) {
+
+        for (OnStateChangedListener listener :
+                this.onStateChangedListeners) {
+            if(listener != null)
+            {
+                listener.onStateChanged(status);
+            }
+        }
+    }
+
+    public void addOnStateChangedListener(OnStateChangedListener listener)
+    {
+        if(this.onStateChangedListeners.contains(listener))
+        {
+            return;
+        }
+        this.onStateChangedListeners.add(listener);
+    }
+
+    public void removeOnStateChangedListener(OnStateChangedListener listener)
+    {
+        if(!this.onStateChangedListeners.contains(listener))
+        {
+            return;
+        }
+        this.onStateChangedListeners.remove(listener);
     }
 
     @Override
@@ -67,5 +103,9 @@ public class GoalPlanStatusButton extends Button implements View.OnClickListener
         }
 
         this.setStatus(this.currentPlanStatus.nextStatus());
+    }
+
+    public interface OnStateChangedListener{
+        void onStateChanged(PlanStatus newState);
     }
 }

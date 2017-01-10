@@ -14,16 +14,20 @@
     <color name="listItemHeaderBackgroundColor">#CCF7C1</color>
 
     <!-- planning state button colors -->
-    <color name="planningStateButton_stateEmpty_foregroundColor">#89D4C7</color>
+    <color name="planningStateButton_stateEmpty_borderColor">#89D4C7</color>
+    <color name="planningStateButton_stateEmpty_foregroundColor">#389686</color>
     <color name="planningStateButton_stateEmpty_backgroundColor">#B9ECE3</color>
 
-    <color name="planningStateButton_statePlanned_foregroundColor">#FFB481</color>
+    <color name="planningStateButton_statePlanned_borderColor">#FFB481</color>
+    <color name="planningStateButton_statePlanned_foregroundColor">#BC662C</color>
     <color name="planningStateButton_statePlanned_backgroundColor">#FFC9A5</color>
 
-    <color name="planningStateButton_stateSuccess_foregroundColor">#87DD70</color>
+    <color name="planningStateButton_stateSuccess_borderColor">#87DD70</color>
+    <color name="planningStateButton_stateSuccess_foregroundColor">#46AE2A</color>
     <color name="planningStateButton_stateSuccess_backgroundColor">#ABED99</color>
 
-    <color name="planningStateButton_stateFailed_foregroundColor">#F67D8B</color>
+    <color name="planningStateButton_stateFailed_borderColor">#F67D8B</color>
+    <color name="planningStateButton_stateFailed_foregroundColor">#C52F41</color>
     <color name="planningStateButton_stateFailed_backgroundColor">#FAA2AC</color>
 
 </resources>

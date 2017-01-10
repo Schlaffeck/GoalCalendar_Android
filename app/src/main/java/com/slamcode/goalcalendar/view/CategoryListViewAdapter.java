@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
+import com.slamcode.goalcalendar.planning.PlanStatus;
 import com.slamcode.goalcalendar.view.controls.GoalPlanStatusButton;
 import com.slamcode.goalcalendar.view.lists.ListViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.ViewHolderBase;
@@ -147,6 +148,13 @@ public class CategoryListViewAdapter extends ListViewDataAdapter<CategoryModel, 
         View layout = this.getLayoutInflater().inflate(R.layout.monthly_goals_plan_status_cell, null);
         GoalPlanStatusButton button = (GoalPlanStatusButton) layout.findViewById(R.id.plan_status_list_item_view_button);
         button.setStatus(planStatus.getStatus());
+        button.addOnStateChangedListener(new GoalPlanStatusButton.OnStateChangedListener() {
+            @Override
+            public void onStateChanged(PlanStatus newState) {
+                planStatus.setStatus(newState);
+            }
+        });
+
         if(this.isCurrentDate(monthlyGoals, planStatus))
         {
             ColorsHelper.setSecondAccentBackgroundColor(layout);
