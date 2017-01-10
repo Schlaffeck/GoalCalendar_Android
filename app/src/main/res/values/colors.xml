@@ -6,10 +6,24 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FBD59B</color>
 
-
+    <!-- list colors -->
     <color name="listAccentColor">#87DD70</color>
 
     <color name="listActivityBackgroundColor">#EBFDE7</color>
     <color name="listItemBackgroundColor">#CCF7C1</color>
     <color name="listItemHeaderBackgroundColor">#CCF7C1</color>
+
+    <!-- planning state button colors -->
+    <color name="planningStateButton_stateEmpty_foregroundColor">#89D4C7</color>
+    <color name="planningStateButton_stateEmpty_backgroundColor">#B9ECE3</color>
+
+    <color name="planningStateButton_statePlanned_foregroundColor">#FFB481</color>
+    <color name="planningStateButton_statePlanned_backgroundColor">#FFC9A5</color>
+
+    <color name="planningStateButton_stateSuccess_foregroundColor">#87DD70</color>
+    <color name="planningStateButton_stateSuccess_backgroundColor">#ABED99</color>
+
+    <color name="planningStateButton_stateFailed_foregroundColor">#F67D8B</color>
+    <color name="planningStateButton_stateFailed_backgroundColor">#FAA2AC</color>
+
 </resources>

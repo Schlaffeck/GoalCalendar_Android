@@ -4,7 +4,9 @@
     android:layout_height="match_parent">
     <Button
         android:id="@+id/plan_status_list_item_view_button"
+        android:background="@drawable/planning_button_state_empty"
         android:layout_width="@dimen/monthly_goals_table_day_plan_height"
         android:layout_height="@dimen/monthly_goals_table_day_plan_column_width"
+        android:layout_margin="@dimen/planning_state_button_margin"
         android:text="Status"/>
 </LinearLayout>
