@@ -292,6 +292,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
             model = new MonthlyPlansModel();
             // todo: find good way to assign ids
             model.setId(year ^ month.getNumValue());
+            model.setYear(year);
             model.setMonth(month);
             uow.getMonthlyPlansRepository().add(model);
         }
