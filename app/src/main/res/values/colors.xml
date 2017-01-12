@@ -7,11 +7,11 @@
     <color name="colorAccent">#FBD59B</color>
 
     <!-- list colors -->
-    <color name="listAccentColor">#87DD70</color>
+    <color name="listAccentColor">#CCF7C1</color>
 
     <color name="listActivityBackgroundColor">#EBFDE7</color>
-    <color name="listItemBackgroundColor">#CCF7C1</color>
-    <color name="listItemHeaderBackgroundColor">#CCF7C1</color>
+    <color name="listItemBackgroundColor">#EBFDE7</color>
+    <color name="listItemHeaderBackgroundColor">#EBFDE7</color>
 
     <!-- planning state button colors -->
     <color name="planningStateButton_stateEmpty_borderColor">#89D4C7</color>

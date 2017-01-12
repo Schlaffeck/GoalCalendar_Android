@@ -1,10 +1,12 @@
 package com.slamcode.goalcalendar.view.controls;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.planning.PlanStatus;
@@ -18,27 +20,36 @@ import java.util.Map;
  * Created by moriasla on 10.01.2017.
  */
 
-public class GoalPlanStatusButton extends Button implements View.OnClickListener {
+public class GoalPlanStatusButton extends ImageButton implements View.OnClickListener {
 
     private PlanStatus currentPlanStatus;
-    private static Map<PlanStatus, Integer> STATUS_TO_BACKGROUND_MAP;
-    private static Map<PlanStatus, Integer> STATUS_TO_FOREGROUND_COLOR_MAP;
+    private static Map<PlanStatus, ButtonStatusData> STATUS_TO_DATA_MAP;
 
     private List<OnStateChangedListener> onStateChangedListeners = new ArrayList<>();
 
     static
     {
-        STATUS_TO_BACKGROUND_MAP = new HashMap<>();
-        STATUS_TO_BACKGROUND_MAP.put(PlanStatus.Empty, R.drawable.planning_button_state_empty);
-        STATUS_TO_BACKGROUND_MAP.put(PlanStatus.Failure, R.drawable.planning_button_state_failed);
-        STATUS_TO_BACKGROUND_MAP.put(PlanStatus.Success, R.drawable.planning_button_state_success);
-        STATUS_TO_BACKGROUND_MAP.put(PlanStatus.Planned, R.drawable.planning_button_state_planned);
+        STATUS_TO_DATA_MAP = new HashMap<>();
 
-        STATUS_TO_FOREGROUND_COLOR_MAP = new HashMap<>();
-        STATUS_TO_FOREGROUND_COLOR_MAP.put(PlanStatus.Empty, R.color.planningStateButton_stateEmpty_foregroundColor);
-        STATUS_TO_FOREGROUND_COLOR_MAP.put(PlanStatus.Failure, R.color.planningStateButton_stateFailed_foregroundColor);
-        STATUS_TO_FOREGROUND_COLOR_MAP.put(PlanStatus.Success, R.color.planningStateButton_stateSuccess_foregroundColor);
-        STATUS_TO_FOREGROUND_COLOR_MAP.put(PlanStatus.Planned, R.color.planningStateButton_statePlanned_foregroundColor);
+        STATUS_TO_DATA_MAP.put(PlanStatus.Empty, new ButtonStatusData(
+                R.drawable.planning_button_state_empty,
+                R.color.planningStateButton_stateEmpty_foregroundColor,
+                -1));
+
+        STATUS_TO_DATA_MAP.put(PlanStatus.Failure, new ButtonStatusData(
+                R.drawable.planning_button_state_failed,
+                R.color.planningStateButton_stateFailed_foregroundColor,
+                R.drawable.ic_clear_white_24dp));
+
+        STATUS_TO_DATA_MAP.put(PlanStatus.Success, new ButtonStatusData(
+                R.drawable.planning_button_state_success,
+                R.color.planningStateButton_stateSuccess_foregroundColor,
+                R.drawable.ic_done_white_24dp));
+
+        STATUS_TO_DATA_MAP.put(PlanStatus.Planned, new ButtonStatusData(
+                R.drawable.planning_button_state_planned,
+                R.color.planningStateButton_statePlanned_foregroundColor,
+                R.drawable.ic_date_range_white_24dp));
     }
 
     public GoalPlanStatusButton(Context context) {
@@ -59,10 +70,21 @@ public class GoalPlanStatusButton extends Button implements View.OnClickListener
     public void setStatus(PlanStatus status)
     {
         this.currentPlanStatus = status;
-        this.setBackgroundResource(STATUS_TO_BACKGROUND_MAP.get(status));
-        this.setTextColor(
-                ContextCompat.getColor(this.getContext(), STATUS_TO_FOREGROUND_COLOR_MAP.get(status)));
-        this.setText(status.toString());
+        this.setBackgroundResource(STATUS_TO_DATA_MAP.get(status).backgroundId);
+        if(STATUS_TO_DATA_MAP.get(status).iconId == -1)
+        {
+            this.setImageDrawable(null);
+            this.setColorFilter(null);
+        }
+        else {
+            this.setImageResource(STATUS_TO_DATA_MAP.get(status).iconId);
+            this.setColorFilter(null);
+            this.setColorFilter(
+                    ContextCompat.getColor(
+                            this.getContext(),
+                            STATUS_TO_DATA_MAP.get(status).foregroundColorId),
+                    PorterDuff.Mode.MULTIPLY);
+        }
         this.notifyOnStateChanged(status);
     }
 
@@ -107,5 +129,19 @@ public class GoalPlanStatusButton extends Button implements View.OnClickListener
 
     public interface OnStateChangedListener{
         void onStateChanged(PlanStatus newState);
+    }
+
+    private static class ButtonStatusData
+    {
+        private final int backgroundId;
+        private final int foregroundColorId;
+        private final int iconId;
+
+        ButtonStatusData(int backgroundId, int foregroundColorId, int iconId)
+        {
+            this.backgroundId = backgroundId;
+            this.foregroundColorId = foregroundColorId;
+            this.iconId = iconId;
+        }
     }
 }

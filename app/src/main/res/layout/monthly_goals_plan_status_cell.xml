@@ -8,5 +8,6 @@
         android:layout_width="@dimen/planning_state_button_height"
         android:layout_height="@dimen/planning_state_button_width"
         android:layout_margin="@dimen/planning_state_button_margin"
-        android:text="Status"/>
+        android:padding="@dimen/default_padding">
+    </com.slamcode.goalcalendar.view.controls.GoalPlanStatusButton>
 </LinearLayout>
