@@ -28,6 +28,8 @@ public class GoalPlanStatusButton extends ImageButton implements View.OnClickLis
     private PlanStatus currentPlanStatus;
     private static Map<PlanStatus, ButtonStatusData> STATUS_TO_DATA_MAP;
 
+    private boolean initialized;
+
     private List<OnStateChangedListener> onStateChangedListeners = new ArrayList<>();
 
     static
@@ -73,49 +75,8 @@ public class GoalPlanStatusButton extends ImageButton implements View.OnClickLis
     public void setStatus(PlanStatus status)
     {
         this.currentPlanStatus = status;
-
-        // scale out animation
-        Animation outAnimation = AnimationUtils.loadAnimation(this.getContext(), R.anim.scale_out);
-        outAnimation.setDuration(android.R.integer.config_mediumAnimTime);
-
-        Animation inAnimation = AnimationUtils.loadAnimation(this.getContext(), R.anim.scale_in);
-        outAnimation.setStartOffset(android.R.integer.config_mediumAnimTime);
-        outAnimation.setDuration(android.R.integer.config_shortAnimTime);
-
-        this.setBackgroundResource(STATUS_TO_DATA_MAP.get(status).backgroundId);
-
-        //scale in
-        this.startAnimation(inAnimation);
-        if(STATUS_TO_DATA_MAP.get(status).iconId == -1)
-        {
-            this.setImageDrawable(null);
-            this.setColorFilter(null);
-        }
-        else {
-            Drawable drawable = ContextCompat.getDrawable(
-                    this.getContext(),
-                    STATUS_TO_DATA_MAP.get(status).iconId);
-            this.setImageDrawable(drawable);
-
-            this.setColorFilter(null);
-            this.setColorFilter(
-                    ContextCompat.getColor(
-                            this.getContext(),
-                            STATUS_TO_DATA_MAP.get(status).foregroundColorId),
-                    PorterDuff.Mode.MULTIPLY);
-        }
+        this.animateStatusChange(status);
         this.notifyOnStateChanged(status);
-    }
-
-    private void notifyOnStateChanged(PlanStatus status) {
-
-        for (OnStateChangedListener listener :
-                this.onStateChangedListeners) {
-            if(listener != null)
-            {
-                listener.onStateChanged(status);
-            }
-        }
     }
 
     public void addOnStateChangedListener(OnStateChangedListener listener)
@@ -148,6 +109,59 @@ public class GoalPlanStatusButton extends ImageButton implements View.OnClickLis
 
     public interface OnStateChangedListener{
         void onStateChanged(PlanStatus newState);
+    }
+
+    private void animateStatusChange(PlanStatus status)
+    {
+        if(this.initialized) {
+            // scale out animation
+            Animation outAnimation = AnimationUtils.loadAnimation(this.getContext(), R.anim.scale_out);
+            outAnimation.setDuration(android.R.integer.config_shortAnimTime);
+
+            Animation inAnimation = AnimationUtils.loadAnimation(this.getContext(), R.anim.scale_in);
+            outAnimation.setStartOffset(android.R.integer.config_shortAnimTime);
+            outAnimation.setDuration(android.R.integer.config_shortAnimTime);
+
+            this.setBackgroundResource(STATUS_TO_DATA_MAP.get(status).backgroundId);
+
+            //scale in
+            this.startAnimation(inAnimation);
+        }
+        else
+        {
+            this.setBackgroundResource(STATUS_TO_DATA_MAP.get(status).backgroundId);
+            this.initialized = true;
+        }
+
+        if(STATUS_TO_DATA_MAP.get(status).iconId == -1)
+        {
+            this.setImageDrawable(null);
+            this.setColorFilter(null);
+        }
+        else {
+            Drawable drawable = ContextCompat.getDrawable(
+                    this.getContext(),
+                    STATUS_TO_DATA_MAP.get(status).iconId);
+            this.setImageDrawable(drawable);
+
+            this.setColorFilter(null);
+            this.setColorFilter(
+                    ContextCompat.getColor(
+                            this.getContext(),
+                            STATUS_TO_DATA_MAP.get(status).foregroundColorId),
+                    PorterDuff.Mode.MULTIPLY);
+        }
+    }
+
+    private void notifyOnStateChanged(PlanStatus status) {
+
+        for (OnStateChangedListener listener :
+                this.onStateChangedListeners) {
+            if(listener != null)
+            {
+                listener.onStateChanged(status);
+            }
+        }
     }
 
     private static class ButtonStatusData
