@@ -2,9 +2,12 @@ package com.slamcode.goalcalendar.view.controls;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 
@@ -70,14 +73,30 @@ public class GoalPlanStatusButton extends ImageButton implements View.OnClickLis
     public void setStatus(PlanStatus status)
     {
         this.currentPlanStatus = status;
+
+        // scale out animation
+        Animation outAnimation = AnimationUtils.loadAnimation(this.getContext(), R.anim.scale_out);
+        outAnimation.setDuration(android.R.integer.config_mediumAnimTime);
+
+        Animation inAnimation = AnimationUtils.loadAnimation(this.getContext(), R.anim.scale_in);
+        outAnimation.setStartOffset(android.R.integer.config_mediumAnimTime);
+        outAnimation.setDuration(android.R.integer.config_shortAnimTime);
+
         this.setBackgroundResource(STATUS_TO_DATA_MAP.get(status).backgroundId);
+
+        //scale in
+        this.startAnimation(inAnimation);
         if(STATUS_TO_DATA_MAP.get(status).iconId == -1)
         {
             this.setImageDrawable(null);
             this.setColorFilter(null);
         }
         else {
-            this.setImageResource(STATUS_TO_DATA_MAP.get(status).iconId);
+            Drawable drawable = ContextCompat.getDrawable(
+                    this.getContext(),
+                    STATUS_TO_DATA_MAP.get(status).iconId);
+            this.setImageDrawable(drawable);
+
             this.setColorFilter(null);
             this.setColorFilter(
                     ContextCompat.getColor(
