@@ -46,4 +46,10 @@ public final class DateTimeHelper {
         calendar.set(year, month-1, day);
         return calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault());
     }
+
+    public static int currentDayNumber() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        return calendar.get(Calendar.DAY_OF_MONTH);
+    }
 }

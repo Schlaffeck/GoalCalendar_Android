@@ -54,6 +54,7 @@
         </LinearLayout>
 
     <HorizontalScrollView
+        android:id="@+id/monthly_goals_table_horizontalScrollView"
         android:layout_toRightOf="@id/monthly_goals_category_column_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

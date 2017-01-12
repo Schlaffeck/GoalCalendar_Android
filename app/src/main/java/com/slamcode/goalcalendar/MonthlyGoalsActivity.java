@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -66,6 +67,9 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     @BindView(R.id.monthly_goals_header_list_item_days_list)
     LinearLayout daysNumbersHeaderView;
 
+    @BindView(R.id.monthly_goals_table_horizontalScrollView)
+    HorizontalScrollView tableHorizontalScrollView;
+
     // constructed elements
     private CategoryListViewAdapter categoryListViewAdapter;
 
@@ -74,6 +78,9 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     // dependencies
     @Inject
     PersistenceContext persistenceContext;
+
+    // other
+    private boolean created;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +92,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
         this.setSupportActionBar(this.toolbar);
         this.setupMonthlyPlanningCategoryList();
+        this.created = true;
     }
 
     @Override
@@ -237,6 +245,18 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         setupCategoryListForMonth(DateTimeHelper.getCurrentYear(), Month.getCurrentMonth());
     }
 
+    private void scrollToCurrentDay()
+    {
+        int viewIndexToScrollTo = DateTimeHelper.currentDayNumber() - 3;
+        View childView = this.daysNumbersHeaderView.getChildAt(viewIndexToScrollTo);
+        if(childView != null) {
+            int x = childView.getLeft();
+            int scrollX = childView.getScrollX();
+            int computed = childView.getWidth() * viewIndexToScrollTo;
+            this.tableHorizontalScrollView.scrollTo(computed, 0);
+        }
+    }
+
     private void resetMonthCategoriesListView()
     {
         this.categoryListViewAdapter = provideMonthCategoriesListViewAdapter();
@@ -335,13 +355,17 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
                         monthlyPlansValue.getMonth().getNumValue(),
                         input));
 
-                if(isCurrentDate(monthlyPlansValue, input))
+                boolean isCurrentDate = isCurrentDate(monthlyPlansValue, input);
+                if(isCurrentDate)
                 {
                     ColorsHelper.setSecondAccentBackgroundColor(dayNumberCell);
                 }
                 daysNumbersHeaderView.addView(dayNumberCell);
             }
         });
+
+        if(!created)
+            scrollToCurrentDay();
     }
 
     private boolean isCurrentDate(MonthlyPlansModel model, int dayNumber)
