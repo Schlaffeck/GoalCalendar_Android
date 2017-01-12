@@ -328,6 +328,13 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
                 View dayNumberCell = inflater.inflate(R.layout.monthly_goals_header_day_number_cell, null);
                 TextView dayNumberText = (TextView) dayNumberCell.findViewById(R.id.monthly_goals_table_header_day_number_text);
                 dayNumberText.setText(input.toString());
+
+                TextView dayNameText = (TextView) dayNumberCell.findViewById(R.id.monthly_goals_table_header_day_name_text);
+                dayNameText.setText(DateTimeHelper.getWeekDayNameShort(
+                        monthlyPlansValue.getYear(),
+                        monthlyPlansValue.getMonth().getNumValue(),
+                        input));
+
                 if(isCurrentDate(monthlyPlansValue, input))
                 {
                     ColorsHelper.setSecondAccentBackgroundColor(dayNumberCell);

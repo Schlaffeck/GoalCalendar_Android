@@ -2,6 +2,7 @@ package com.slamcode.goalcalendar.planning;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by moriasla on 09.01.2017.
@@ -38,5 +39,11 @@ public final class DateTimeHelper {
         }
 
         return true;
+    }
+
+    public static String getWeekDayNameShort(int year, int month, int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month-1, day);
+        return calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault());
     }
 }

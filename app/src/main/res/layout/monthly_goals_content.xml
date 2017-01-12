@@ -24,14 +24,14 @@
             <Spinner
                 android:id="@+id/monthly_goals_list_header_month_spinner"
                 android:layout_width="@dimen/monthly_goals_table_category_column_width"
-                android:layout_height="@dimen/monthly_goals_table_category_name_height"
+                android:layout_height="@dimen/monthly_goals_table_header_height"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignWithParentIfMissing="true"
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:layout_marginTop="@dimen/default_margin"
-                android:layout_marginBottom="@dimen/default_margin"
+                android:layout_marginBottom="@dimen/monthly_goals_table_header_bottomMargin"
                 android:textSize="@dimen/list_item_text_size"
                 android:ellipsize="marquee"
                 android:paddingLeft="0dp"
@@ -43,6 +43,7 @@
             <!-- categories names -->
             <ListView
                 android:id="@+id/monthly_goals_listview"
+                android:layout_marginTop="@dimen/monthly_goals_table_listView_marginTop"
                 android:layout_width="@dimen/monthly_goals_table_category_column_width"
                 android:layout_height="match_parent"
                 android:verticalSpacing="@dimen/default_vertical_spacing"
@@ -64,17 +65,18 @@
             android:orientation="vertical">
         <!-- days in month list -->
         <LinearLayout
-            android:layout_height="@dimen/monthly_goals_table_category_name_height"
+            android:layout_height="@dimen/monthly_goals_table_header_height"
             android:orientation="horizontal"
             android:id="@+id/monthly_goals_header_list_item_days_list"
             android:layout_width="wrap_content"
             android:layout_marginTop="@dimen/default_margin"
-            android:layout_marginBottom="@dimen/default_margin">
+            android:layout_marginBottom="@dimen/monthly_goals_table_header_bottomMargin">
         </LinearLayout>
 
         <!-- categories daily plans -->
         <ListView
             android:id="@+id/monthly_goals_dailyplans_listview"
+            android:layout_marginTop="@dimen/monthly_goals_table_listView_marginTop"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:verticalSpacing="@dimen/default_vertical_spacing"
