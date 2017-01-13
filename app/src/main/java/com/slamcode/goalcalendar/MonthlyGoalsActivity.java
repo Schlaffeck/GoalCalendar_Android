@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.HorizontalScrollView;
@@ -29,6 +30,7 @@ import com.slamcode.goalcalendar.planning.*;
 import com.slamcode.goalcalendar.view.AddEditCategoryDialog;
 import com.slamcode.goalcalendar.view.CategoryListViewAdapter;
 import com.slamcode.goalcalendar.view.ResourcesHelper;
+import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
 import com.slamcode.goalcalendar.view.lists.ListViewDataAdapter;
 import com.slamcode.goalcalendar.view.utils.ColorsHelper;
 import com.slamcode.goalcalendar.view.lists.ListViewHelper;
@@ -47,6 +49,8 @@ import butterknife.OnClick;
 import butterknife.OnItemSelected;
 
 public class MonthlyGoalsActivity extends AppCompatActivity {
+
+    final String ACTIVITY_ID = MonthlyGoalsActivity.class.getName();
 
     // view elements
     @BindView(R.id.toolbar)
@@ -79,8 +83,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     @Inject
     PersistenceContext persistenceContext;
 
-    // other
-    private boolean created;
+    @Inject
+    ActivityViewStateProvider viewStateProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +96,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
         this.setSupportActionBar(this.toolbar);
         this.setupMonthlyPlanningCategoryList();
-        this.created = true;
     }
 
     @Override
@@ -131,7 +134,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     }
 
     private void injectDependencies() {
-        ((ComposableApplication)this.getApplication()).getDataComponent().inject(this);
+        ComposableApplication capp = (ComposableApplication)this.getApplication();
+        capp.getApplicationComponent().inject(this);
     }
 
     private void showConfirmDeleteCategoryDialog(final CategoryModel model) {
@@ -243,6 +247,18 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         this.registerForContextMenu(this.monthlyGoalsListView);
 
         setupCategoryListForMonth(DateTimeHelper.getCurrentYear(), Month.getCurrentMonth());
+        if(!this.viewStateProvider.provideStateForActivity(ACTIVITY_ID).isWasDisplayed()) {
+            this.daysNumbersHeaderView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    daysNumbersHeaderView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    if (daysNumbersHeaderView.getMeasuredHeight() > 0 && daysNumbersHeaderView.getMeasuredWidth() > 0) {
+                        scrollToCurrentDay();
+                        viewStateProvider.provideStateForActivity(ACTIVITY_ID).setWasDisplayed(true);
+                    }
+                }
+            });
+        }
     }
 
     private void scrollToCurrentDay()
@@ -250,10 +266,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         int viewIndexToScrollTo = DateTimeHelper.currentDayNumber() - 3;
         View childView = this.daysNumbersHeaderView.getChildAt(viewIndexToScrollTo);
         if(childView != null) {
-            int x = childView.getLeft();
-            int scrollX = childView.getScrollX();
-            int computed = childView.getWidth() * viewIndexToScrollTo;
-            this.tableHorizontalScrollView.scrollTo(computed, 0);
+            this.tableHorizontalScrollView.smoothScrollTo(childView.getLeft(), 0);
         }
     }
 
@@ -363,9 +376,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
                 daysNumbersHeaderView.addView(dayNumberCell);
             }
         });
-
-        if(!created)
-            scrollToCurrentDay();
     }
 
     private boolean isCurrentDate(MonthlyPlansModel model, int dayNumber)

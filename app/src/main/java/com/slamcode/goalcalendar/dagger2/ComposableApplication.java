@@ -10,19 +10,19 @@ import com.slamcode.goalcalendar.data.dagger2.*;
 
 public final class ComposableApplication extends Application {
 
-    private DataDagger2Component dataComponent;
+    private ApplicationDagger2Component applicationComponent;
 
     @Override
     public void onCreate()
     {
         super.onCreate();
-        this.dataComponent = DaggerDataDagger2Component.builder()
+        this.applicationComponent = DaggerApplicationDagger2Component.builder()
                 .dataDagger2Module(new DataDagger2Module(this))
                 .build();
     }
 
-    public DataDagger2Component getDataComponent()
+    public ApplicationDagger2Component getApplicationComponent()
     {
-        return this.dataComponent;
+        return this.applicationComponent;
     }
 }
