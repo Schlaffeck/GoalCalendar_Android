@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,6 +74,9 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
     @BindView(R.id.monthly_goals_table_horizontalScrollView)
     HorizontalScrollView tableHorizontalScrollView;
+
+    @BindView(R.id.monthly_goals_emptyListView)
+    RelativeLayout emptyListLayout;
 
     // constructed elements
     private CategoryListViewAdapter categoryListViewAdapter;
@@ -270,6 +274,16 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         }
     }
 
+    private void setContentVisibilities()
+    {
+        int visibility = this.selectedMonthlyPlansModel != null
+                && !this.categoryListViewAdapter.isEmpty() ?
+                View.INVISIBLE :
+                View.VISIBLE;
+        this.emptyListLayout.setVisibility(visibility);
+        this.emptyListLayout.invalidate();
+    }
+
     private void resetMonthCategoriesListView()
     {
         this.categoryListViewAdapter = provideMonthCategoriesListViewAdapter();
@@ -287,6 +301,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
             public void onNewItemAdded(int itemPosition) {
                 monthlyGoalsListView.smoothScrollToPosition(itemPosition);
                 dailyPlansListView.smoothScrollToPosition(itemPosition);
+                setContentVisibilities();
             }
 
             @Override
@@ -308,6 +323,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
                         getApplicationContext(),
                         String.format("%s: %s", getResources().getString(R.string.confirm_category_deleted_toast), item.getName()),
                         Toast.LENGTH_SHORT);
+                setContentVisibilities();
                 itemRemovedToast.show();
             }
         });
@@ -332,6 +348,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
         this.setupHeaderForCategoryListForMonth(model);
         this.categoryListViewAdapter.updateMonthlyPlans(model);
+        setContentVisibilities();
 
         this.selectedMonthlyPlansModel = model;
 
