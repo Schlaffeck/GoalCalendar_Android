@@ -38,4 +38,9 @@
     <string name="month_october">Październik</string>
     <string name="month_november">Listopad</string>
     <string name="month_december">Grudzień</string>
+
+    <!-- empty view -->
+    <string name="monthly_plans_empty_view_copyLastUsedCategories_button_text">Kopiuj kategorie</string>
+    <string name="monthly_plans_empty_view_header_text">Brak kategorii</string>
+    <string name="monthly_plans_empty_view_content_text">Dodaj nową używając przycisku \'+\' lub skopiuj kategorie z poprzedniego miesiąca</string>
 </resources>

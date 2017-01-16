@@ -14,14 +14,15 @@ import android.view.MenuItem;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.internal.util.Predicate;
 import com.slamcode.collections.CollectionUtils;
 import com.slamcode.collections.ElementCreator;
 import com.slamcode.goalcalendar.dagger2.ComposableApplication;
@@ -76,7 +77,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     HorizontalScrollView tableHorizontalScrollView;
 
     @BindView(R.id.monthly_goals_emptyListView)
-    RelativeLayout emptyListLayout;
+    LinearLayout emptyListLayout;
 
     // constructed elements
     private CategoryListViewAdapter categoryListViewAdapter;
@@ -274,13 +275,61 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         }
     }
 
-    private void setContentVisibilities()
+    private void setEmptyListContent(final MonthlyPlansModel currentMonthlyPlans)
     {
         int visibility = this.selectedMonthlyPlansModel != null
                 && !this.categoryListViewAdapter.isEmpty() ?
                 View.INVISIBLE :
                 View.VISIBLE;
         this.emptyListLayout.setVisibility(visibility);
+
+        UnitOfWork uow = this.persistenceContext.createUnitOfWork();
+        final MonthlyPlansModel previousMonthWithCategories = uow.getMonthlyPlansRepository().findLast(new Predicate<MonthlyPlansModel>() {
+                    @Override
+                    public boolean apply(MonthlyPlansModel monthlyPlansModel) {
+                        if(monthlyPlansModel.getMonth().getNumValue() < monthlyPlansModel.getMonth().getNumValue())
+                        {
+                            return false;
+                        }
+
+                        return !monthlyPlansModel.getCategories().isEmpty();
+                    }
+                });
+        uow.complete();
+
+        Button copyCategoriesButton = (Button)this.emptyListLayout.findViewById(R.id.monthly_plans_empty_view_copyLastUsedCategories_button);
+        TextView emptyContentTextView = (TextView) this.emptyListLayout.findViewById(R.id.monthly_goals_empty_view_content_textView);
+        if(previousMonthWithCategories == null)
+        {
+            copyCategoriesButton.setVisibility(View.INVISIBLE);
+            emptyContentTextView.setText(R.string.monthly_plans_empty_view_simplyAdd_content_text);
+        }
+        else
+        {
+            emptyContentTextView.setText(R.string.monthly_plans_empty_view_content_text);
+            copyCategoriesButton.setVisibility(View.VISIBLE);
+
+            copyCategoriesButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    int year = currentMonthlyPlans.getYear();
+                    Month currentMonth = currentMonthlyPlans.getMonth();
+                    for(CategoryModel category : previousMonthWithCategories.getCategories())
+                    {
+                        CategoryModel newCategory = new CategoryModel(
+                                category.getId() ^ currentMonth.getNumValue(),
+                                category.getName(),
+                                category.getPeriod(),
+                                category.getFrequencyValue());
+                        newCategory.setDailyPlans(ModelHelper.createListOfDailyPlansForMonth(year, currentMonth));
+
+                        categoryListViewAdapter.addOrUpdateItem(newCategory);
+                    }
+                }
+            });
+        }
+
         this.emptyListLayout.invalidate();
     }
 
@@ -301,7 +350,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
             public void onNewItemAdded(int itemPosition) {
                 monthlyGoalsListView.smoothScrollToPosition(itemPosition);
                 dailyPlansListView.smoothScrollToPosition(itemPosition);
-                setContentVisibilities();
+                setEmptyListContent(selectedMonthlyPlansModel);
             }
 
             @Override
@@ -323,7 +372,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
                         getApplicationContext(),
                         String.format("%s: %s", getResources().getString(R.string.confirm_category_deleted_toast), item.getName()),
                         Toast.LENGTH_SHORT);
-                setContentVisibilities();
+                setEmptyListContent(selectedMonthlyPlansModel);
                 itemRemovedToast.show();
             }
         });
@@ -348,7 +397,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
         this.setupHeaderForCategoryListForMonth(model);
         this.categoryListViewAdapter.updateMonthlyPlans(model);
-        setContentVisibilities();
+        setEmptyListContent(model);
 
         this.selectedMonthlyPlansModel = model;
 

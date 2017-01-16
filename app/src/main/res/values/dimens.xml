@@ -36,4 +36,8 @@
     <dimen name="planning_state_button_margin">5dp</dimen>
     <dimen name="planning_state_button_width">45dp</dimen>
     <dimen name="planning_state_button_height">45dp</dimen>
+
+    <!-- empty view -->
+    <dimen name="monthly_goals_empty_view_header_textSize">20sp</dimen>
+    <dimen name="monthly_goals_empty_view_layout_width">300dp</dimen>
 </resources>

@@ -4,6 +4,7 @@ import com.android.internal.util.Predicate;
 import com.slamcode.goalcalendar.data.Identifiable;
 import com.slamcode.goalcalendar.data.Repository;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
+import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,6 +54,18 @@ public class InMemoryRepositoryBase<ModelType extends Identifiable<IdentityType>
     @Override
     public ModelType findFirst(Predicate<ModelType> predicate) {
         for (ModelType cm : this.inMemoryEntityList) {
+            if (predicate.apply(cm))
+            {
+                return cm;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public ModelType findLast(Predicate<ModelType> predicate) {
+        for(int i = this.inMemoryEntityList.size() - 1; i >=0; i--) {
+            ModelType cm = this.inMemoryEntityList.get(i);
             if (predicate.apply(cm))
             {
                 return cm;

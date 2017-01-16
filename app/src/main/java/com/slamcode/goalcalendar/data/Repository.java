@@ -17,6 +17,8 @@ public interface Repository<TEntity extends Identifiable<TId>, TId extends Compa
 
     TEntity findFirst(Predicate<TEntity> predicate);
 
+    TEntity findLast(Predicate<TEntity> predicate);
+
     List<TEntity> findAll();
 
     void remove(TEntity entity);

@@ -37,4 +37,11 @@
     <string name="month_october">October</string>
     <string name="month_november">November</string>
     <string name="month_december">December</string>
+
+    <!-- empty view -->
+    <string name="monthly_plans_empty_view_copyLastUsedCategories_button_text">Copy categories</string>
+    <string name="monthly_plans_empty_view_header_text">No categories</string>
+    <string name="monthly_plans_empty_view_content_text">Add new category using \'+\' button or copy categories from last used month</string>
+    <string name="monthly_plans_empty_view_simplyAdd_content_text">Add new category using \'+\' button</string>
+
 </resources>

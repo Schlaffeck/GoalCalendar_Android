@@ -1,5 +1,6 @@
 package com.slamcode.goalcalendar.data.inmemory;
 
+import com.android.internal.util.Predicate;
 import com.slamcode.collections.CollectionUtils;
 import com.slamcode.collections.ElementCreator;
 import com.slamcode.goalcalendar.data.*;
