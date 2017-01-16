@@ -277,11 +277,11 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
     private void setEmptyListContent(final MonthlyPlansModel currentMonthlyPlans)
     {
-        int visibility = this.selectedMonthlyPlansModel != null
+        int listLayoutVisibility = this.selectedMonthlyPlansModel != null
                 && !this.categoryListViewAdapter.isEmpty() ?
                 View.INVISIBLE :
                 View.VISIBLE;
-        this.emptyListLayout.setVisibility(visibility);
+        this.emptyListLayout.setVisibility(listLayoutVisibility);
 
         UnitOfWork uow = this.persistenceContext.createUnitOfWork();
         final MonthlyPlansModel previousMonthWithCategories = uow.getMonthlyPlansRepository().findLast(new Predicate<MonthlyPlansModel>() {
@@ -299,7 +299,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
         Button copyCategoriesButton = (Button)this.emptyListLayout.findViewById(R.id.monthly_plans_empty_view_copyLastUsedCategories_button);
         TextView emptyContentTextView = (TextView) this.emptyListLayout.findViewById(R.id.monthly_goals_empty_view_content_textView);
-        if(previousMonthWithCategories == null)
+        if(previousMonthWithCategories == null || listLayoutVisibility == View.INVISIBLE)
         {
             copyCategoriesButton.setVisibility(View.INVISIBLE);
             emptyContentTextView.setText(R.string.monthly_plans_empty_view_simplyAdd_content_text);

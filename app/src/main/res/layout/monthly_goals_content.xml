@@ -14,6 +14,9 @@
     tools:showIn="@layout/monthly_goals_activity"
     android:background="@color/listActivityBackgroundColor">
 
+
+    <include layout="@layout/monthly_goals_empty_list_content"/>
+
         <LinearLayout
             android:id="@+id/monthly_goals_category_column_layout"
             android:layout_width="wrap_content"
@@ -86,7 +89,5 @@
             android:animateLayoutChanges="true"></ListView>
         </LinearLayout>
     </HorizontalScrollView>
-
-    <include layout="@layout/monthly_goals_empty_list_content"/>
 
 </RelativeLayout>
