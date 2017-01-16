@@ -18,9 +18,13 @@
     <color name="planningStateButton_stateEmpty_foregroundColor">#389686</color>
     <color name="planningStateButton_stateEmpty_backgroundColor">#B9ECE3</color>
 
-    <color name="planningStateButton_statePlanned_borderColor">#FFB481</color>
-    <color name="planningStateButton_statePlanned_foregroundColor">#BC662C</color>
-    <color name="planningStateButton_statePlanned_backgroundColor">#FFC9A5</color>
+    <!--<color name="planningStateButton_statePlanned_borderColor">#FFB481</color>-->
+    <!--<color name="planningStateButton_statePlanned_foregroundColor">#BC662C</color>-->
+    <!--<color name="planningStateButton_statePlanned_backgroundColor">#FFC9A5</color>-->
+
+    <color name="planningStateButton_statePlanned_borderColor">#FFEB88</color>
+    <color name="planningStateButton_statePlanned_foregroundColor">#F4D53E</color>
+    <color name="planningStateButton_statePlanned_backgroundColor">#FFF5C7</color>
 
     <color name="planningStateButton_stateSuccess_borderColor">#87DD70</color>
     <color name="planningStateButton_stateSuccess_foregroundColor">#46AE2A</color>
