@@ -1,7 +1,5 @@
 package com.slamcode.goalcalendar;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -22,14 +20,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.internal.util.Predicate;
 import com.slamcode.collections.CollectionUtils;
 import com.slamcode.collections.ElementCreator;
 import com.slamcode.goalcalendar.dagger2.ComposableApplication;
-import com.slamcode.goalcalendar.data.*;
-import com.slamcode.goalcalendar.data.model.*;
+import com.slamcode.goalcalendar.data.PersistenceContext;
+import com.slamcode.goalcalendar.data.model.CategoryModel;
+import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.*;
-import com.slamcode.goalcalendar.view.AddEditCategoryDialog;
 import com.slamcode.goalcalendar.view.CategoryListViewAdapter;
 import com.slamcode.goalcalendar.view.ResourcesHelper;
 import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
@@ -37,6 +34,7 @@ import com.slamcode.goalcalendar.view.lists.ListViewDataAdapter;
 import com.slamcode.goalcalendar.view.utils.ColorsHelper;
 import com.slamcode.goalcalendar.view.lists.ListViewHelper;
 import com.slamcode.goalcalendar.view.utils.SpinnerHelper;
+import com.slamcode.goalcalendar.view.viewmodel.MonthlyGoalsViewModel;
 
 import org.apache.commons.collections4.Closure;
 import org.apache.commons.collections4.IteratorUtils;
@@ -79,17 +77,16 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     @BindView(R.id.monthly_goals_emptyListView)
     LinearLayout emptyListLayout;
 
-    // constructed elements
-    private CategoryListViewAdapter categoryListViewAdapter;
-
-    private MonthlyPlansModel selectedMonthlyPlansModel;
+    //todo: move to di container and inject
+    MonthlyGoalsViewModel viewModel;
 
     // dependencies
-    @Inject
-    PersistenceContext persistenceContext;
 
     @Inject
     ActivityViewStateProvider viewStateProvider;
+
+    @Inject
+    PersistenceContext persistenceContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,16 +105,9 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     {
         if(view.getId() == R.id.monthly_goals_listview)
         {
-            ListView listView = (ListView) view;
             AdapterView.AdapterContextMenuInfo adapterContextMenuInfo
                     = (AdapterView.AdapterContextMenuInfo) menuInfo;
-            CategoryModel item = (CategoryModel) listView.getItemAtPosition(adapterContextMenuInfo.position);
-            if(item == null)
-            {
-                return;
-            }
-
-            menu.setHeaderTitle(item.getName());
+            menu.setHeaderTitle(this.viewModel.getCategoryNameOnPosition(adapterContextMenuInfo.position));
             menu.add(R.string.context_menu_edit_item);
             menu.add(R.string.context_menu_delete_item);
         }
@@ -127,44 +117,16 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
         CharSequence menuItem = item.getTitle();
-        CategoryModel model = this.categoryListViewAdapter.getItem(info.position);
-        if(getResources().getString(R.string.context_menu_edit_item).equals(menuItem)) {
-            this.showAddEditCategoryDialog(model);
-        }
+        if(getResources().getString(R.string.context_menu_edit_item).equals(menuItem))
+            this.viewModel.createAddEditCategoryDialog(info.position).show(this.getFragmentManager(), null);
         else if(getResources().getString(R.string.context_menu_delete_item).equals(menuItem))
-        {
-            this.showConfirmDeleteCategoryDialog(model);
-        }
+            this.viewModel.createDeleteCategoryDialog(info.position).show();
         return true;
     }
 
     private void injectDependencies() {
         ComposableApplication capp = (ComposableApplication)this.getApplication();
         capp.getApplicationComponent().inject(this);
-    }
-
-    private void showConfirmDeleteCategoryDialog(final CategoryModel model) {
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-
-        dialogBuilder
-                .setTitle(R.string.confirm_delete_category_dialog_header)
-                .setMessage(model.getName())
-                .setPositiveButton(R.string.button_yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        categoryListViewAdapter.removeItem(model);
-                        dialogInterface.dismiss();
-                    }
-                })
-        .setNegativeButton(R.string.button_no, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.cancel();
-                dialogInterface.dismiss();
-            }
-        });
-
-        dialogBuilder.create().show();
     }
 
     @Override
@@ -189,51 +151,26 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onStop() {
-        if(this.persistenceContext != null)
-        {
-            this.persistenceContext.persistData();
-        }
-        super.onStop();
-    }
-
     @OnClick(R.id.monthly_goals_add_category_floatingactionbutton)
     void showAddNewCategoryDialog()
     {
-        this.showAddEditCategoryDialog(null);
-    }
-
-    private void showAddEditCategoryDialog(CategoryModel model)
-    {
-        final AddEditCategoryDialog dialog = new AddEditCategoryDialog();
-        dialog.setModel(model);
-        dialog.setDialogStateChangedListener(new AddEditCategoryDialog.DialogStateChangedListener() {
-            @Override
-            public void onDialogClosed(boolean confirmed) {
-                if(confirmed)
-                {
-                    CategoryModel newCategory = dialog.getModel();
-                    categoryListViewAdapter.addOrUpdateItem(newCategory);
-                }
-            }
-        });
-        dialog.show(getFragmentManager(), null);
+        this.viewModel.createAddEditCategoryDialog(-1).show(this.getFragmentManager(), null);
     }
 
     @OnItemSelected(R.id.monthly_goals_list_header_month_spinner)
     void onMonthSelected(AdapterView<?> adapterView, View view, int position, long id) {
 
-        Month m = Month.getMonthByNumber(position+1);
-        setupCategoryListForMonth(
-                this.selectedMonthlyPlansModel != null
-                    ? this.selectedMonthlyPlansModel.getYear()
-                        : DateTimeHelper.getCurrentYear(),
-                m);
+        Month month = Month.getMonthByNumber(position+1);
+        this.viewModel.setYearAndMonth(this.viewModel.getCurrentYear(), month);
+        this.setupHeaderForCategoryListForMonth();
     }
 
     private void setupMonthlyPlanningCategoryList() {
 
+        if(this.viewModel == null)
+        {
+            this.viewModel = new MonthlyGoalsViewModel(this, this.getLayoutInflater(), this.persistenceContext);
+        }
         // month spinner
         final ArrayAdapter<String> monthsStringsAdapter = new ArrayAdapter<String>(
                 this,
@@ -241,17 +178,15 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
                 ResourcesHelper.monthsResourceStrings(this));
         this.monthListSpinner.setAdapter(monthsStringsAdapter);
 
-        /// categories list adapter
-        this.categoryListViewAdapter = this.provideMonthCategoriesListViewAdapter();
-
+        this.setupAdapterListeners(this.viewModel.getMonthlyPlannedCategoryListViewAdapter());
         ListViewHelper.setSimultaneousScrolling(this.monthlyGoalsListView, this.dailyPlansListView);
 
-        this.monthlyGoalsListView.setAdapter(this.categoryListViewAdapter);
-        this.dailyPlansListView.setAdapter(this.categoryListViewAdapter);
+        this.monthlyGoalsListView.setAdapter(this.viewModel.getMonthlyPlannedCategoryListViewAdapter());
+        this.dailyPlansListView.setAdapter(this.viewModel.getMonthlyPlannedCategoryListViewAdapter());
 
         this.registerForContextMenu(this.monthlyGoalsListView);
 
-        setupCategoryListForMonth(DateTimeHelper.getCurrentYear(), Month.getCurrentMonth());
+        this.viewModel.setYearAndMonth(DateTimeHelper.getCurrentYear(), Month.getCurrentMonth());
         if(!this.viewStateProvider.provideStateForActivity(ACTIVITY_ID).isWasDisplayed()) {
             this.daysNumbersHeaderView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
@@ -264,6 +199,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
                 }
             });
         }
+
+        this.setupHeaderForCategoryListForMonth();
     }
 
     private void scrollToCurrentDay()
@@ -275,31 +212,13 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         }
     }
 
-    private void setEmptyListContent(final MonthlyPlansModel currentMonthlyPlans)
+    private void setEmptyListContent()
     {
-        int listLayoutVisibility = this.selectedMonthlyPlansModel != null
-                && !this.categoryListViewAdapter.isEmpty() ?
-                View.INVISIBLE :
-                View.VISIBLE;
-        this.emptyListLayout.setVisibility(listLayoutVisibility);
-
-        UnitOfWork uow = this.persistenceContext.createUnitOfWork();
-        final MonthlyPlansModel previousMonthWithCategories = uow.getMonthlyPlansRepository().findLast(new Predicate<MonthlyPlansModel>() {
-                    @Override
-                    public boolean apply(MonthlyPlansModel monthlyPlansModel) {
-                        if(monthlyPlansModel.getMonth().getNumValue() < monthlyPlansModel.getMonth().getNumValue())
-                        {
-                            return false;
-                        }
-
-                        return !monthlyPlansModel.getCategories().isEmpty();
-                    }
-                });
-        uow.complete();
+        this.emptyListLayout.setVisibility(this.viewModel.isEmptyCategoriesList() ? View.VISIBLE : View.INVISIBLE);
 
         Button copyCategoriesButton = (Button)this.emptyListLayout.findViewById(R.id.monthly_plans_empty_view_copyLastUsedCategories_button);
         TextView emptyContentTextView = (TextView) this.emptyListLayout.findViewById(R.id.monthly_goals_empty_view_content_textView);
-        if(previousMonthWithCategories == null || listLayoutVisibility == View.INVISIBLE)
+        if(this.viewModel.canCopyCategoriesFromPreviousMonth())
         {
             copyCategoriesButton.setVisibility(View.INVISIBLE);
             emptyContentTextView.setText(R.string.monthly_plans_empty_view_simplyAdd_content_text);
@@ -312,20 +231,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
             copyCategoriesButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    int year = currentMonthlyPlans.getYear();
-                    Month currentMonth = currentMonthlyPlans.getMonth();
-                    for(CategoryModel category : previousMonthWithCategories.getCategories())
-                    {
-                        CategoryModel newCategory = new CategoryModel(
-                                category.getId() ^ currentMonth.getNumValue(),
-                                category.getName(),
-                                category.getPeriod(),
-                                category.getFrequencyValue());
-                        newCategory.setDailyPlans(ModelHelper.createListOfDailyPlansForMonth(year, currentMonth));
-
-                        categoryListViewAdapter.addOrUpdateItem(newCategory);
-                    }
+                    viewModel.copyCategoriesFromPreviousMonth();
                 }
             });
         }
@@ -335,27 +241,24 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
     private void resetMonthCategoriesListView()
     {
-        this.categoryListViewAdapter = provideMonthCategoriesListViewAdapter();
-        this.categoryListViewAdapter.updateMonthlyPlans(this.selectedMonthlyPlansModel);
-
-        this.monthlyGoalsListView.setAdapter(this.categoryListViewAdapter);
-        this.dailyPlansListView.setAdapter(this.categoryListViewAdapter);
+        this.viewModel.setYearAndMonth(this.viewModel.getCurrentYear(), this.viewModel.getCurrentMonth());
+        this.monthlyGoalsListView.setAdapter(this.viewModel.getMonthlyPlannedCategoryListViewAdapter());
+        this.dailyPlansListView.setAdapter(this.viewModel.getMonthlyPlannedCategoryListViewAdapter());
     }
 
-    private CategoryListViewAdapter provideMonthCategoriesListViewAdapter()
+    private void setupAdapterListeners(final CategoryListViewAdapter adapter)
     {
-        CategoryListViewAdapter adapter = new CategoryListViewAdapter(this, getLayoutInflater());
         adapter.addItemSourceChangedEventListener(new ListViewDataAdapter.ItemsSourceChangedEventListener<CategoryModel>() {
             @Override
             public void onNewItemAdded(int itemPosition) {
                 monthlyGoalsListView.smoothScrollToPosition(itemPosition);
                 dailyPlansListView.smoothScrollToPosition(itemPosition);
-                setEmptyListContent(selectedMonthlyPlansModel);
+                setEmptyListContent();
             }
 
             @Override
             public void onItemModified(int itemPosition) {
-                if(categoryListViewAdapter.getCount() == 1)
+                if(adapter.getCount() == 1)
                 {
                     // dirty hack for updating modified list with single-item
                     resetMonthCategoriesListView();
@@ -372,47 +275,24 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
                         getApplicationContext(),
                         String.format("%s: %s", getResources().getString(R.string.confirm_category_deleted_toast), item.getName()),
                         Toast.LENGTH_SHORT);
-                setEmptyListContent(selectedMonthlyPlansModel);
+                setEmptyListContent();
                 itemRemovedToast.show();
             }
         });
-
-        return adapter;
     }
 
-    private void setupCategoryListForMonth(int year, Month month)
-    {
-        UnitOfWork uow = this.persistenceContext.createUnitOfWork();
-        MonthlyPlansModel model = uow.getMonthlyPlansRepository().findForMonth(year, month);
-
-        if(model == null)
-        {
-            model = new MonthlyPlansModel();
-            // todo: find good way to assign ids
-            model.setId(year ^ month.getNumValue());
-            model.setYear(year);
-            model.setMonth(month);
-            uow.getMonthlyPlansRepository().add(model);
-        }
-
-        this.setupHeaderForCategoryListForMonth(model);
-        this.categoryListViewAdapter.updateMonthlyPlans(model);
-        setEmptyListContent(model);
-
-        this.selectedMonthlyPlansModel = model;
-
-        uow.complete();
-    }
-
-    private void setupHeaderForCategoryListForMonth(final MonthlyPlansModel monthlyPlansValue)
+    private void setupHeaderForCategoryListForMonth()
     {
         final LayoutInflater inflater = this.getLayoutInflater();
-        SpinnerHelper.setSelectedValue(this.monthListSpinner, ResourcesHelper.toResourceStringId(monthlyPlansValue.getMonth()));
+        SpinnerHelper.setSelectedValue(this.monthListSpinner, ResourcesHelper.toResourceStringId(this.viewModel.getCurrentMonth()));
 
         this.daysNumbersHeaderView.removeAllViews();
 
         //month days list
-        List<Integer> listOfDays = CollectionUtils.createList(monthlyPlansValue.getMonth().getDaysCount(), new ElementCreator<Integer>() {
+        List<Integer> listOfDays = CollectionUtils.createList(
+                this.viewModel.getCurrentMonth()
+                        .getDaysCount(this.viewModel.getCurrentYear()),
+                new ElementCreator<Integer>() {
 
             @Override
             public Integer Create(int index, List<Integer> currentList) {
@@ -422,19 +302,22 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
         IteratorUtils.forEach(listOfDays.iterator(), new Closure<Integer>() {
             @Override
-            public void execute(Integer input) {
+            public void execute(Integer dayNumber) {
 
                 View dayNumberCell = inflater.inflate(R.layout.monthly_goals_header_day_number_cell, null);
                 TextView dayNumberText = (TextView) dayNumberCell.findViewById(R.id.monthly_goals_table_header_day_number_text);
-                dayNumberText.setText(input.toString());
+                dayNumberText.setText(dayNumber.toString());
 
                 TextView dayNameText = (TextView) dayNumberCell.findViewById(R.id.monthly_goals_table_header_day_name_text);
                 dayNameText.setText(DateTimeHelper.getWeekDayNameShort(
-                        monthlyPlansValue.getYear(),
-                        monthlyPlansValue.getMonth().getNumValue(),
-                        input));
+                        viewModel.getCurrentYear(),
+                        viewModel.getCurrentMonth().getNumValue(),
+                        dayNumber));
 
-                boolean isCurrentDate = isCurrentDate(monthlyPlansValue, input);
+                boolean isCurrentDate = DateTimeHelper.isCurrentDate(
+                        viewModel.getCurrentYear(),
+                        viewModel.getCurrentMonth().getNumValue(),
+                        dayNumber);
                 if(isCurrentDate)
                 {
                     ColorsHelper.setSecondAccentBackgroundColor(dayNumberCell);
@@ -442,16 +325,5 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
                 daysNumbersHeaderView.addView(dayNumberCell);
             }
         });
-    }
-
-    private boolean isCurrentDate(MonthlyPlansModel model, int dayNumber)
-    {
-        int year = model.getYear() > 0 ?
-                model.getYear() : DateTimeHelper.getCurrentYear();
-
-        return DateTimeHelper.isCurrentDate(
-                year,
-                model.getMonth().getNumValue(),
-                dayNumber);
     }
 }
