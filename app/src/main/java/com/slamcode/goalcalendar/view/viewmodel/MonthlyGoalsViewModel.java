@@ -25,12 +25,15 @@ public class MonthlyGoalsViewModel {
 
     private MonthlyPlansModel currentMonthlyPlans;
 
-    private CategoryListViewAdapter monthlyPlannedCategoryListViewAdapter;
+    private final CategoryListViewAdapter monthlyPlannedCategoryListViewAdapter;
 
-    private PersistenceContext persistenceContext;
+    private final Context context;
+
+    private final PersistenceContext persistenceContext;
 
     public MonthlyGoalsViewModel(Context context, LayoutInflater layoutInflater, PersistenceContext persistenceContext)
     {
+        this.context = context;
         this.persistenceContext = persistenceContext;
         monthlyPlannedCategoryListViewAdapter = new CategoryListViewAdapter(context,layoutInflater);
     }
@@ -146,7 +149,7 @@ public class MonthlyGoalsViewModel {
     public AlertDialog createDeleteCategoryDialog(int categoryPosition)
     {
         final CategoryModel model = this.monthlyPlannedCategoryListViewAdapter.getItem(categoryPosition);
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(null);
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this.context);
 
         dialogBuilder
                 .setTitle(R.string.confirm_delete_category_dialog_header)
