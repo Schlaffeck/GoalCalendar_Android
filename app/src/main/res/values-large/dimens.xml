@@ -1,0 +1,44 @@
+<resources>
+    <dimen name="activity_horizontal_margin">20dp</dimen>
+    <dimen name="activity_vertical_margin">20dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <!--  default values  -->
+    <dimen name="default_horizontal_spacing">10dp</dimen>
+    <dimen name="default_margin">10dp</dimen>
+    <dimen name="default_padding">10dp</dimen>
+    <dimen name="default_vertical_spacing">10dp</dimen>
+    <dimen name="list_item_text_size">20sp</dimen>
+    <dimen name="list_item_text_small_size">16sp</dimen>
+    <dimen name="dialog_header_text_size">24sp</dimen>
+
+    <!-- monthly goals view -->
+    <!--  year bar -->
+    <dimen name="monthly_goals_yearTextView_textSize">20sp</dimen>
+    <dimen name="monthly_goals_yearTextView_buttonSize">34dp</dimen>
+
+    <!--  list view -->
+    <dimen name="monthly_goals_table_day_plan_column_width">80dp</dimen>
+    <dimen name="monthly_goals_table_day_plan_height">80dp</dimen>
+
+    <dimen name="monthly_goals_table_header_height">60dp</dimen>
+    <dimen name="monthly_goals_table_header_bottomMargin">-32dp</dimen>
+
+    <dimen name="monthly_goals_table_listView_marginTop">24dp</dimen>
+    <dimen name="monthly_goals_table_listView_marginBottom">10dp</dimen>
+
+    <dimen name="monthly_goals_table_category_column_width">120dp</dimen>
+    <dimen name="monthly_goals_table_category_name_height">45dp</dimen>
+    <dimen name="monthly_goals_table_category_frequency_height">35dp</dimen>
+
+    <!-- state cell -->
+    <dimen name="planning_state_button_border_width">10dp</dimen>
+    <dimen name="planning_state_button_padding">10dp</dimen>
+    <dimen name="planning_state_button_margin">10dp</dimen>
+    <dimen name="planning_state_button_width">60dp</dimen>
+    <dimen name="planning_state_button_height">60dp</dimen>
+
+    <!-- empty view -->
+    <dimen name="monthly_goals_empty_view_header_textSize">24sp</dimen>
+    <dimen name="monthly_goals_empty_view_layout_width">320dp</dimen>
+</resources>

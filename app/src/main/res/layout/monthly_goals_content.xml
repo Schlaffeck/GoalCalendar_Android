@@ -21,11 +21,12 @@
         <ImageButton
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:id="@+id/monthly_goals_decrement_year_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/monthly_goals_yearTextView_buttonSize"
+            android:layout_height="@dimen/monthly_goals_yearTextView_buttonSize"
             android:layout_alignParentLeft="true"
             android:background="@drawable/ic_keyboard_arrow_left_white_24dp"/>
         <TextView
+            android:textSize="@dimen/monthly_goals_yearTextView_textSize"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:layout_centerInParent="true"
@@ -37,8 +38,8 @@
         <ImageButton
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:id="@+id/monthly_goals_increment_year_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/monthly_goals_yearTextView_buttonSize"
+            android:layout_height="@dimen/monthly_goals_yearTextView_buttonSize"
             android:layout_alignParentRight="true"
             android:background="@drawable/ic_keyboard_arrow_right_white_24dp"/>
     </RelativeLayout>
@@ -54,7 +55,7 @@
         android:orientation="horizontal"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/monthly_goals_table_listView_marginTop"
         android:layout_marginBottom="@dimen/monthly_goals_table_listView_marginBottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

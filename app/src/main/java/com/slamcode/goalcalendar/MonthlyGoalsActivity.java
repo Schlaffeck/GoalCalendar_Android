@@ -210,7 +210,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         // month spinner
         final ArrayAdapter<String> monthsStringsAdapter = new ArrayAdapter<String>(
                 this,
-                android.R.layout.simple_spinner_dropdown_item,
+                R.layout.monthly_goals_month_spinner_item_layout,
                 ResourcesHelper.monthsResourceStrings(this));
         this.monthListSpinner.setAdapter(monthsStringsAdapter);
 
