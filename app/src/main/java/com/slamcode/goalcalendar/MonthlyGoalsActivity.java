@@ -163,6 +163,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         Month month = Month.getMonthByNumber(position+1);
         this.viewModel.setYearAndMonth(this.viewModel.getCurrentYear(), month);
         this.setupHeaderForCategoryListForMonth();
+        this.setEmptyListContent();
     }
 
     private void setupMonthlyPlanningCategoryList() {
@@ -214,11 +215,15 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
     private void setEmptyListContent()
     {
-        this.emptyListLayout.setVisibility(this.viewModel.isEmptyCategoriesList() ? View.VISIBLE : View.INVISIBLE);
+        boolean listIsEmpty = this.viewModel.isEmptyCategoriesList();
+        this.emptyListLayout.setVisibility(listIsEmpty ? View.VISIBLE : View.INVISIBLE);
+
+        if(!listIsEmpty)
+            return;
 
         Button copyCategoriesButton = (Button)this.emptyListLayout.findViewById(R.id.monthly_plans_empty_view_copyLastUsedCategories_button);
         TextView emptyContentTextView = (TextView) this.emptyListLayout.findViewById(R.id.monthly_goals_empty_view_content_textView);
-        if(this.viewModel.canCopyCategoriesFromPreviousMonth())
+        if(!this.viewModel.canCopyCategoriesFromPreviousMonth())
         {
             copyCategoriesButton.setVisibility(View.INVISIBLE);
             emptyContentTextView.setText(R.string.monthly_plans_empty_view_simplyAdd_content_text);
@@ -232,6 +237,11 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     viewModel.copyCategoriesFromPreviousMonth();
+                    Toast categoriesCopied = Toast.makeText(
+                            getApplicationContext(),
+                            String.format(getResources().getString(R.string.monthly_plans_empty_view_categories_copied_toast_text)),
+                            Toast.LENGTH_SHORT);
+                    categoriesCopied.show();
                 }
             });
         }

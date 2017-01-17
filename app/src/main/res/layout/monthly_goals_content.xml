@@ -15,7 +15,12 @@
     android:background="@color/listActivityBackgroundColor">
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
     <include layout="@layout/monthly_goals_empty_list_content"/>
+    </LinearLayout>
 
         <LinearLayout
             android:id="@+id/monthly_goals_category_column_layout"

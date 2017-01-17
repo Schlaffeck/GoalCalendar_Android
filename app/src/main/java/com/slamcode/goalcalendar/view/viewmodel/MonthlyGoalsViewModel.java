@@ -62,8 +62,9 @@ public class MonthlyGoalsViewModel {
 
     public boolean isEmptyCategoriesList()
     {
-        return this.currentMonthlyPlans != null
-            && !this.currentMonthlyPlans.getCategories().isEmpty();
+        return this.currentMonthlyPlans == null
+            || this.currentMonthlyPlans.getCategories() == null
+            || this.currentMonthlyPlans.getCategories().isEmpty();
     }
 
     public boolean canCopyCategoriesFromPreviousMonth()

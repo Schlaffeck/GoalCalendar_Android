@@ -43,5 +43,5 @@
     <string name="monthly_plans_empty_view_header_text">No categories</string>
     <string name="monthly_plans_empty_view_content_text">Add new category using \'+\' button or copy categories from last used month</string>
     <string name="monthly_plans_empty_view_simplyAdd_content_text">Add new category using \'+\' button</string>
-
+    <string name="monthly_plans_empty_view_categories_copied_toast_text">Categories copied successfully</string>
 </resources>
