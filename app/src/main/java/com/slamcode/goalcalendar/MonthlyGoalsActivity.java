@@ -187,6 +187,13 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         this.setupUiForYearAndMonth(this.viewModel.getCurrentYear(), month);
     }
 
+    @Override
+    protected void onStop() {
+        if(this.persistenceContext != null)
+            this.persistenceContext.persistData();
+        super.onStop();
+    }
+
     private void setupUiForYearAndMonth(int year, Month month)
     {
         this.viewModel.setYearAndMonth(year, month);

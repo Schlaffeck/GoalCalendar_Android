@@ -40,8 +40,6 @@ public class MonthlyGoalsViewModel {
 
         MonthlyPlansModel model = uow.getMonthlyPlansRepository().findForMonth(year, month);
 
-        uow.complete();
-
         if(model == null)
         {
             model = new MonthlyPlansModel();
@@ -51,6 +49,8 @@ public class MonthlyGoalsViewModel {
             model.setMonth(month);
             uow.getMonthlyPlansRepository().add(model);
         }
+
+        uow.complete();
 
         this.currentMonthlyPlans = model;
         this.monthlyPlannedCategoryListViewAdapter.updateMonthlyPlans(currentMonthlyPlans);
