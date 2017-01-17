@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -77,11 +78,19 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     @BindView(R.id.monthly_goals_emptyListView)
     LinearLayout emptyListLayout;
 
+    @BindView(R.id.monthly_goals_year_textView)
+    TextView yearTextView;
+
+    @BindView(R.id.monthly_goals_decrement_year_button)
+    ImageButton decrementYearButton;
+
+    @BindView(R.id.monthly_goals_increment_year_button)
+    ImageButton incrementYearButton;
+
     //todo: move to di container and inject
     MonthlyGoalsViewModel viewModel;
 
     // dependencies
-
     @Inject
     ActivityViewStateProvider viewStateProvider;
 
@@ -151,6 +160,20 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @OnClick(R.id.monthly_goals_decrement_year_button)
+    void goToPreviousYear()
+    {
+        int year = this.viewModel.getCurrentYear() -1;
+        this.setupUiForYearAndMonth(year, this.viewModel.getCurrentMonth());
+    }
+
+    @OnClick(R.id.monthly_goals_increment_year_button)
+    void goToNextYear()
+    {
+        int year = this.viewModel.getCurrentYear() +1;
+        this.setupUiForYearAndMonth(year, this.viewModel.getCurrentMonth());
+    }
+
     @OnClick(R.id.monthly_goals_add_category_floatingactionbutton)
     void showAddNewCategoryDialog()
     {
@@ -161,7 +184,12 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     void onMonthSelected(AdapterView<?> adapterView, View view, int position, long id) {
 
         Month month = Month.getMonthByNumber(position+1);
-        this.viewModel.setYearAndMonth(this.viewModel.getCurrentYear(), month);
+        this.setupUiForYearAndMonth(this.viewModel.getCurrentYear(), month);
+    }
+
+    private void setupUiForYearAndMonth(int year, Month month)
+    {
+        this.viewModel.setYearAndMonth(year, month);
         this.setupHeaderForCategoryListForMonth();
         this.setEmptyListContent();
     }
@@ -293,6 +321,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
     private void setupHeaderForCategoryListForMonth()
     {
+        this.yearTextView.setText(String.format("%s", this.viewModel.getCurrentYear()));
+
         final LayoutInflater inflater = this.getLayoutInflater();
         SpinnerHelper.setSelectedValue(this.monthListSpinner, ResourcesHelper.toResourceStringId(this.viewModel.getCurrentMonth()));
 

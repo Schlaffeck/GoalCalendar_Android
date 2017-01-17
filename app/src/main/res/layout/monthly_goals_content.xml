@@ -5,15 +5,43 @@
     android:id="@+id/content_monthly_goals"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".MonthlyGoalsActivity"
     tools:showIn="@layout/monthly_goals_activity"
     android:background="@color/listActivityBackgroundColor">
 
+    <RelativeLayout
+        android:id="@+id/monthly_goals_yearValue_layout"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:gravity="center">
+        <ImageButton
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:id="@+id/monthly_goals_decrement_year_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/ic_keyboard_arrow_left_white_24dp"/>
+        <TextView
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_centerInParent="true"
+            android:id="@+id/monthly_goals_year_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="2016"></TextView>
+        <ImageButton
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:id="@+id/monthly_goals_increment_year_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/ic_keyboard_arrow_right_white_24dp"/>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,6 +50,14 @@
     <include layout="@layout/monthly_goals_empty_list_content"/>
     </LinearLayout>
 
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/monthly_goals_table_listView_marginBottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <LinearLayout
             android:id="@+id/monthly_goals_category_column_layout"
             android:layout_width="wrap_content"
@@ -61,38 +97,39 @@
                 android:animateLayoutChanges="true"></ListView>
         </LinearLayout>
 
-    <HorizontalScrollView
-        android:id="@+id/monthly_goals_table_horizontalScrollView"
-        android:layout_toRightOf="@id/monthly_goals_category_column_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none">
+        <HorizontalScrollView
+            android:id="@+id/monthly_goals_table_horizontalScrollView"
+            android:layout_toRightOf="@id/monthly_goals_category_column_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-        <!-- days in month list -->
-        <LinearLayout
-            android:layout_height="@dimen/monthly_goals_table_header_height"
-            android:orientation="horizontal"
-            android:id="@+id/monthly_goals_header_list_item_days_list"
-            android:layout_width="wrap_content"
-            android:layout_marginTop="@dimen/default_margin"
-            android:layout_marginBottom="@dimen/monthly_goals_table_header_bottomMargin">
-        </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+            <!-- days in month list -->
+            <LinearLayout
+                android:layout_height="@dimen/monthly_goals_table_header_height"
+                android:orientation="horizontal"
+                android:id="@+id/monthly_goals_header_list_item_days_list"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/default_margin"
+                android:layout_marginBottom="@dimen/monthly_goals_table_header_bottomMargin">
+            </LinearLayout>
 
-        <!-- categories daily plans -->
-        <ListView
-            android:id="@+id/monthly_goals_dailyplans_listview"
-            android:layout_marginTop="@dimen/monthly_goals_table_listView_marginTop"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:verticalSpacing="@dimen/default_vertical_spacing"
-            android:horizontalSpacing="@dimen/default_horizontal_spacing"
-            android:gravity="center"
-            android:animateLayoutChanges="true"></ListView>
-        </LinearLayout>
-    </HorizontalScrollView>
+            <!-- categories daily plans -->
+            <ListView
+                android:id="@+id/monthly_goals_dailyplans_listview"
+                android:layout_marginTop="@dimen/monthly_goals_table_listView_marginTop"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:verticalSpacing="@dimen/default_vertical_spacing"
+                android:horizontalSpacing="@dimen/default_horizontal_spacing"
+                android:gravity="center"
+                android:animateLayoutChanges="true"></ListView>
+            </LinearLayout>
+        </HorizontalScrollView>
+    </RelativeLayout>
 
 </RelativeLayout>
