@@ -217,4 +217,72 @@ public class InMemoryCategoriesRepositoryTest {
 
         assertEquals(cm2, filtered);
     }
+
+    @Test
+    public void inMemoryCategoriesRepository_findLast_test()
+    {
+        CategoryModel cm1 = new CategoryModel(1);
+        cm1.setFrequencyValue(2);
+        cm1.setPeriod(FrequencyPeriod.Week);
+        cm1.setName("Category 1 - XYZ");
+
+        CategoryModel cm2 = new CategoryModel(2);
+        cm2.setFrequencyValue(3);
+        cm2.setPeriod(FrequencyPeriod.Month);
+        cm2.setName("Category 2 - do stuff");
+
+        CategoryModel cm3 = new CategoryModel(3);
+        cm3.setFrequencyValue(1);
+        cm3.setPeriod(FrequencyPeriod.Week);
+        cm3.setName("Cat 3 - Do more");
+        cm3.setDailyPlans(CollectionUtils.createList(new DailyPlanModel()));
+
+        CategoryRepository repo
+                = new InMemoryCategoriesRepository(
+                CollectionUtils.createList(cm1, cm2, cm3));
+
+        List<CategoryModel> all = repo.findAll();
+        assertEquals(3, all.size());
+
+        // find last element with frequency period = week
+        CategoryModel filtered = repo.findLast(new Predicate<CategoryModel>() {
+            @Override
+            public boolean apply(CategoryModel categoryModel) {
+                return categoryModel.getPeriod() == FrequencyPeriod.Week;
+            }
+        });
+
+        assertEquals(cm3, filtered);
+
+        // find last category with 'do' in name
+        filtered = repo.findLast(new Predicate<CategoryModel>() {
+            @Override
+            public boolean apply(CategoryModel categoryModel) {
+                return categoryModel.getName().toLowerCase().contains("do");
+            }
+        });
+
+        assertEquals(cm3, filtered);
+
+        // find last category with 'category' in name
+        filtered = repo.findLast(new Predicate<CategoryModel>() {
+            @Override
+            public boolean apply(CategoryModel categoryModel) {
+                return categoryModel.getName().contains("Category");
+            }
+        });
+
+        assertEquals(cm2, filtered);
+
+
+        // find last category with freq value '2'
+        filtered = repo.findLast(new Predicate<CategoryModel>() {
+            @Override
+            public boolean apply(CategoryModel categoryModel) {
+                return categoryModel.getFrequencyValue() == 2;
+            }
+        });
+
+        assertEquals(cm1, filtered);
+    }
 }

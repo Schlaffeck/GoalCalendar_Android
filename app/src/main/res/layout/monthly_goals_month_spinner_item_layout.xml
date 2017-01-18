@@ -6,4 +6,6 @@
         android:textSize="@dimen/list_item_text_size"
         android:gravity="left"
         android:padding="@dimen/default_padding"
+        android:lines="1"
+        android:ellipsize="marquee"
     />

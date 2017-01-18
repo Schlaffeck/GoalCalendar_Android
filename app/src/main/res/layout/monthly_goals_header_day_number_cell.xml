@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="@dimen/zero">
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
         <TextView
+            android:layout_marginLeft="@dimen/planning_state_button_margin"
+            android:layout_marginRight="@dimen/planning_state_button_margin"
             android:id="@+id/monthly_goals_table_header_day_number_text"
-            android:layout_width="@dimen/monthly_goals_table_day_plan_height"
+            android:layout_width="@dimen/planning_state_button_width"
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:text="1"
             android:textSize="@dimen/list_item_text_size"
             android:layout_gravity="center_horizontal"/>
         <TextView
+            android:layout_marginLeft="@dimen/planning_state_button_margin"
+            android:layout_marginRight="@dimen/planning_state_button_margin"
             android:id="@+id/monthly_goals_table_header_day_name_text"
-            android:layout_width="@dimen/monthly_goals_table_day_plan_height"
+            android:layout_width="@dimen/planning_state_button_width"
             android:layout_height="wrap_content"
             android:textColor="@color/planningStateButton_stateSuccess_borderColor"
             android:textAlignment="center"
             android:text="tue"
             android:textSize="@dimen/list_item_text_size"
-            android:layout_gravity="fill_vertical|center_horizontal"/>
+            android:layout_gravity="center_horizontal"/>
 </LinearLayout>

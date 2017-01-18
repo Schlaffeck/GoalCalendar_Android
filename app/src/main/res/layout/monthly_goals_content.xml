@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/zero"
         android:gravity="center">
         <ImageButton
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
@@ -47,11 +47,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_below="@id/monthly_goals_yearValue_layout">
     <include layout="@layout/monthly_goals_empty_list_content"/>
     </LinearLayout>
 
     <RelativeLayout
+        android:layout_below="@id/monthly_goals_yearValue_layout"
         android:orientation="horizontal"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
