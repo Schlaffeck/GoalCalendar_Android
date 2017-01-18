@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.slamcode.goalcalendar">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application
         android:name=".dagger2.ComposableApplication"
         android:allowBackup="true"
@@ -9,6 +11,25 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <service android:name="com.slamcode.goalcalendar.service.NotificationService" android:label="Notification Service">
+            <intent-filter>
+                <action android:name="com.slamcode.goalcalendar.service.NotificationService" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED"
+            android:name="com.slamcode.goalcalendar.service.BootCompletedReceiver"
+            android:label="BootCompletedReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.SCREEN_ON" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".MonthlyGoalsActivity"
             android:label="@string/app_name"

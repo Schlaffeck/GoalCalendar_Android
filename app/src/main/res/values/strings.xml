@@ -44,4 +44,9 @@
     <string name="monthly_plans_empty_view_content_text">Add new category using \'+\' button or copy categories from last used month</string>
     <string name="monthly_plans_empty_view_simplyAdd_content_text">Add new category using \'+\' button</string>
     <string name="monthly_plans_empty_view_categories_copied_toast_text">Categories copied successfully</string>
+
+    <!-- notification -->
+    <string name="notification_plannedForToday_title">Planned for today</string>
+    <string name="notification_plannedForToday_content">You have %d things planned for today</string>
+
 </resources>
