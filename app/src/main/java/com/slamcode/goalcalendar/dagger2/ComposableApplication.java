@@ -18,11 +18,7 @@ public final class ComposableApplication extends Application {
     public void onCreate()
     {
         super.onCreate();
-        this.applicationComponent = DaggerApplicationDagger2Component.builder()
-                .dataDagger2Module(new DataDagger2Module(this))
-                .viewDagger2Module(new ViewDagger2Module())
-                .serviceDagger2Module(new ServiceDagger2Module())
-                .build();
+        this.applicationComponent = Dagger2ComponentContainer.getApplicationDagger2Component(this);
     }
 
     public ApplicationDagger2Component getApplicationComponent()

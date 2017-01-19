@@ -24,7 +24,6 @@ public final class DataDagger2Module {
     }
 
     @Provides
-    @Singleton
     public PersistenceContext providePersistenceContext()
     {
         // create and return proper persistence context used in app

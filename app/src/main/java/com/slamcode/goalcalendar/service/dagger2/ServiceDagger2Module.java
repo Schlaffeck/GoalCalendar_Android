@@ -1,13 +1,14 @@
 package com.slamcode.goalcalendar.service.dagger2;
 
-import com.slamcode.collections.CollectionUtils;
-import com.slamcode.goalcalendar.data.PersistenceContext;
-import com.slamcode.goalcalendar.data.json.JsonFilePersistenceContext;
-import com.slamcode.goalcalendar.service.NotificationService;
-import com.slamcode.goalcalendar.service.StartupService;
+import android.content.Context;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.slamcode.goalcalendar.data.PersistenceContext;
+import com.slamcode.goalcalendar.service.NotificationService;
+import com.slamcode.goalcalendar.service.notification.NotificationProvider;
+import com.slamcode.goalcalendar.service.notification.PlannedForTodayNotificationProvider;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Singleton;
 
@@ -20,19 +21,26 @@ import dagger.Provides;
 @Module
 public class ServiceDagger2Module {
 
+    private final Context context;
+
+    public ServiceDagger2Module(Context context)
+    {
+        this.context = context;
+    }
+
+    @Provides
+    public Map<String, NotificationProvider> getNotificationProvidersMap(PersistenceContext persistenceContext)
+    {
+        HashMap<String, NotificationProvider> providerHashMap = new HashMap<>();
+        providerHashMap.put(PlannedForTodayNotificationProvider.class.getName(),
+                new PlannedForTodayNotificationProvider(this.context, persistenceContext));
+        return providerHashMap;
+    }
+
     @Provides
     @Singleton
     public NotificationService provideNotificationService()
     {
         return new NotificationService();
-    }
-
-    @Provides
-    @Singleton
-    public List<StartupService> provideStartupServices()
-    {
-        List<StartupService> startupServices = new ArrayList<>();
-        startupServices.add(this.provideNotificationService());
-        return startupServices;
     }
 }

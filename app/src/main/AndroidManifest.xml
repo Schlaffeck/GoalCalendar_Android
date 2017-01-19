@@ -20,7 +20,7 @@
 
         <receiver
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED"
-            android:name="com.slamcode.goalcalendar.service.BootCompletedReceiver"
+            android:name="com.slamcode.goalcalendar.service.NotificationServiceStarterReceiver"
             android:label="BootCompletedReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -28,6 +28,11 @@
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.slamcode.goalcalendar.service.NotificationPublisher"
+            android:label="NotificationPublisher">
         </receiver>
 
         <activity

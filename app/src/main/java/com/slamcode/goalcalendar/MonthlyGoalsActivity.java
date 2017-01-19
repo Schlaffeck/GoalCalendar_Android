@@ -1,5 +1,6 @@
 package com.slamcode.goalcalendar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +29,7 @@ import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.*;
+import com.slamcode.goalcalendar.service.NotificationService;
 import com.slamcode.goalcalendar.view.CategoryListViewAdapter;
 import com.slamcode.goalcalendar.view.ResourcesHelper;
 import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
@@ -188,9 +190,16 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        this.startService(new Intent(this, NotificationService.class));
+    }
+
+    @Override
     protected void onStop() {
         if(this.persistenceContext != null)
             this.persistenceContext.persistData();
+        this.stopService(new Intent(this, NotificationService.class));
         super.onStop();
     }
 
