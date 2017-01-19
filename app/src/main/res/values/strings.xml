@@ -48,5 +48,6 @@
     <!-- notification -->
     <string name="notification_plannedForToday_title">Planned for today</string>
     <string name="notification_plannedForToday_content">You have %d things planned for today</string>
+    <string name="notification_plannedForToday_single_content">You have %d thing planned for today</string>
 
 </resources>

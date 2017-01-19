@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Parcel;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 
 import com.slamcode.goalcalendar.MonthlyGoalsActivity;
 import com.slamcode.goalcalendar.R;
@@ -61,21 +62,7 @@ public final class PlannedForTodayNotificationProvider implements NotificationPr
             {
                 Intent resultIntent = new Intent(this.context, MonthlyGoalsActivity.class);
                 resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                NotificationCompat.Builder notificationBuilder
-                        = new NotificationCompat.Builder(this.context)
-                        .setSmallIcon(R.drawable.ic_date_range_white_24dp)
-                        .setContentTitle(this.context.getString(R.string.notification_plannedForToday_title))
-                        .setContentText(
-                                String.format(
-                                        this.context.getString(R.string.notification_plannedForToday_content),
-                                        countCategoriesPlannedForToday
-                                ))
-                        .setContentIntent(
-                                PendingIntent.getActivity(this.context, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-                        );
-
-                result = notificationBuilder.build();
+                result = this.buildNotification(resultIntent, countCategoriesPlannedForToday);
             }
         }
         finally {
@@ -83,6 +70,30 @@ public final class PlannedForTodayNotificationProvider implements NotificationPr
         }
 
         return result;
+    }
+
+    private Notification buildNotification(Intent resultIntent, long countCategoriesPlannedForToday)
+    {
+        NotificationCompat.Builder notificationBuilder
+                = new NotificationCompat.Builder(this.context)
+                .setSmallIcon(R.drawable.ic_date_range_white_24dp)
+                .setContentTitle(this.context.getString(
+                        countCategoriesPlannedForToday > 1 ?
+                            R.string.notification_plannedForToday_title :
+                            R.string.notification_plannedForToday_single_content))
+                .setContentText(
+                        String.format(
+                                this.context.getString(R.string.notification_plannedForToday_content),
+                                countCategoriesPlannedForToday
+                        ))
+                .setContentIntent(
+                        PendingIntent.getActivity(this.context, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+                );
+
+        notificationBuilder.setAutoCancel(true);
+        notificationBuilder.setColor(ContextCompat.getColor(this.context, R.color.planningStateButton_statePlanned_foregroundColor));
+
+        return notificationBuilder.build();
     }
 
     private long countCategoriesPlannedForToday(UnitOfWork uow) {

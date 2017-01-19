@@ -192,14 +192,12 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        this.startService(new Intent(this, NotificationService.class));
     }
 
     @Override
     protected void onStop() {
         if(this.persistenceContext != null)
             this.persistenceContext.persistData();
-        this.stopService(new Intent(this, NotificationService.class));
         super.onStop();
     }
 

@@ -23,12 +23,6 @@ import javax.inject.Inject;
 
 public final class NotificationService extends ComposableService {
 
-    public static final String NOTIFICATION_ID = ".goalcalendar.service.Notification";
-
-    public static final String NOTIFICATION = "Notification";
-
-    public static final String NOTIFICATION_PROVIDER = "NotificationProvider";
-
     public static final String NOTIFICATION_PROVIDER_NAME = "NotificationProviderName";
 
     @Inject
@@ -44,7 +38,7 @@ public final class NotificationService extends ComposableService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         int result = super.onStartCommand(intent, flags, startId);
-        this.scheduleNotificationForTasksPlannedForTomorrow();
+        this.scheduleNotificationForTasksPlannedForToday();
         return result;
     }
 
@@ -53,7 +47,7 @@ public final class NotificationService extends ComposableService {
         this.getApplicationComponent().inject(this);
     }
 
-    private void scheduleNotificationForTasksPlannedForTomorrow()
+    private void scheduleNotificationForTasksPlannedForToday()
     {
         Calendar now = DateTimeHelper.getNowCalendar();
         now.add(Calendar.SECOND, 10);
