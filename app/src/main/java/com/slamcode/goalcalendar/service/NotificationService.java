@@ -1,5 +1,6 @@
 package com.slamcode.goalcalendar.service;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -14,6 +15,7 @@ import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.service.notification.PlannedForTodayNotificationProvider;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -24,6 +26,7 @@ import javax.inject.Inject;
 public final class NotificationService extends ComposableService {
 
     public static final String NOTIFICATION_PROVIDER_NAME = "NotificationProviderName";
+    public static final String NOTIFICATION_ORIGINATED_FROM_FLAG = "OriginatedFromNotification";
 
     @Inject
     PersistenceContext persistenceContext;
@@ -49,14 +52,25 @@ public final class NotificationService extends ComposableService {
 
     private void scheduleNotificationForTasksPlannedForToday()
     {
-        Calendar now = DateTimeHelper.getNowCalendar();
-        now.add(Calendar.SECOND, 10);
+        Calendar in10secs = DateTimeHelper.getNowCalendar();
+        in10secs.add(Calendar.SECOND, 10);
+        long diffMillis = DateTimeHelper.getDiffTimeMillis(DateTimeHelper.getNowCalendar(), in10secs);
 
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
         notificationIntent.putExtra(NOTIFICATION_PROVIDER_NAME, PlannedForTodayNotificationProvider.class.getName());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 10000, pendingIntent);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + diffMillis, pendingIntent);
+    }
+
+    public static boolean checkIfOriginatedFromNotification(Activity activity)
+    {
+        Intent intent = activity.getIntent();
+        if(intent == null)
+            return false;
+
+        boolean result = intent.getBooleanExtra(NotificationService.NOTIFICATION_ORIGINATED_FROM_FLAG, false);
+        return result;
     }
 }

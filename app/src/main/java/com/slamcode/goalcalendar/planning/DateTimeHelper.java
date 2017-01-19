@@ -68,8 +68,12 @@ public final class DateTimeHelper {
     }
 
     public static Calendar getNowCalendar() {
-        Calendar calendar = GregorianCalendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
+        Calendar calendar = Calendar.getInstance();
         return calendar;
+    }
+
+    public static long getDiffTimeMillis(Calendar fromTime, Calendar toTime)
+    {
+        return toTime.getTimeInMillis() - fromTime.getTimeInMillis();
     }
 }

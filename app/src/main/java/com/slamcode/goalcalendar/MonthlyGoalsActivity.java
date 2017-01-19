@@ -1,6 +1,5 @@
 package com.slamcode.goalcalendar;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -27,11 +26,11 @@ import com.slamcode.collections.ElementCreator;
 import com.slamcode.goalcalendar.dagger2.ComposableApplication;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
-import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.*;
 import com.slamcode.goalcalendar.service.NotificationService;
 import com.slamcode.goalcalendar.view.CategoryListViewAdapter;
 import com.slamcode.goalcalendar.view.ResourcesHelper;
+import com.slamcode.goalcalendar.view.activity.ActivityViewState;
 import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
 import com.slamcode.goalcalendar.view.lists.ListViewDataAdapter;
 import com.slamcode.goalcalendar.view.utils.ColorsHelper;
@@ -165,15 +164,15 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     @OnClick(R.id.monthly_goals_decrement_year_button)
     void goToPreviousYear()
     {
-        int year = this.viewModel.getCurrentYear() -1;
-        this.setupUiForYearAndMonth(year, this.viewModel.getCurrentMonth());
+        int year = this.viewModel.getSelectedYear() -1;
+        this.setupUiForYearAndMonth(year, this.viewModel.getSelectedMonth());
     }
 
     @OnClick(R.id.monthly_goals_increment_year_button)
     void goToNextYear()
     {
-        int year = this.viewModel.getCurrentYear() +1;
-        this.setupUiForYearAndMonth(year, this.viewModel.getCurrentMonth());
+        int year = this.viewModel.getSelectedYear() +1;
+        this.setupUiForYearAndMonth(year, this.viewModel.getSelectedMonth());
     }
 
     @OnClick(R.id.monthly_goals_add_category_floatingactionbutton)
@@ -186,7 +185,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
     void onMonthSelected(AdapterView<?> adapterView, View view, int position, long id) {
 
         Month month = Month.getMonthByNumber(position+1);
-        this.setupUiForYearAndMonth(this.viewModel.getCurrentYear(), month);
+        this.setupUiForYearAndMonth(this.viewModel.getSelectedYear(), month);
     }
 
     @Override
@@ -230,7 +229,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         this.registerForContextMenu(this.monthlyGoalsListView);
 
         this.viewModel.setYearAndMonth(DateTimeHelper.getCurrentYear(), Month.getCurrentMonth());
-        if(!this.viewStateProvider.provideStateForActivity(ACTIVITY_ID).isWasDisplayed()) {
+        if(this.canScrollToCurrentDay()) {
             this.daysNumbersHeaderView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
@@ -244,6 +243,16 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
         }
 
         this.setupHeaderForCategoryListForMonth();
+    }
+
+    private boolean canScrollToCurrentDay()
+    {
+        if(this.viewModel.getSelectedMonth() != Month.getCurrentMonth())
+            return false;
+
+        ActivityViewState state = this.viewStateProvider.provideStateForActivity(ACTIVITY_ID);
+        return !state.isWasDisplayed()
+            || NotificationService.checkIfOriginatedFromNotification(this);
     }
 
     private void scrollToCurrentDay()
@@ -293,7 +302,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
     private void resetMonthCategoriesListView()
     {
-        this.viewModel.setYearAndMonth(this.viewModel.getCurrentYear(), this.viewModel.getCurrentMonth());
+        this.viewModel.setYearAndMonth(this.viewModel.getSelectedYear(), this.viewModel.getSelectedMonth());
         this.monthlyGoalsListView.setAdapter(this.viewModel.getMonthlyPlannedCategoryListViewAdapter());
         this.dailyPlansListView.setAdapter(this.viewModel.getMonthlyPlannedCategoryListViewAdapter());
     }
@@ -335,17 +344,17 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
     private void setupHeaderForCategoryListForMonth()
     {
-        this.yearTextView.setText(String.format("%s", this.viewModel.getCurrentYear()));
+        this.yearTextView.setText(String.format("%s", this.viewModel.getSelectedYear()));
 
         final LayoutInflater inflater = this.getLayoutInflater();
-        SpinnerHelper.setSelectedValue(this.monthListSpinner, ResourcesHelper.toResourceStringId(this.viewModel.getCurrentMonth()));
+        SpinnerHelper.setSelectedValue(this.monthListSpinner, ResourcesHelper.toResourceStringId(this.viewModel.getSelectedMonth()));
 
         this.daysNumbersHeaderView.removeAllViews();
 
         //month days list
         List<Integer> listOfDays = CollectionUtils.createList(
-                this.viewModel.getCurrentMonth()
-                        .getDaysCount(this.viewModel.getCurrentYear()),
+                this.viewModel.getSelectedMonth()
+                        .getDaysCount(this.viewModel.getSelectedYear()),
                 new ElementCreator<Integer>() {
 
             @Override
@@ -364,13 +373,13 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
                 TextView dayNameText = (TextView) dayNumberCell.findViewById(R.id.monthly_goals_table_header_day_name_text);
                 dayNameText.setText(DateTimeHelper.getWeekDayNameShort(
-                        viewModel.getCurrentYear(),
-                        viewModel.getCurrentMonth().getNumValue(),
+                        viewModel.getSelectedYear(),
+                        viewModel.getSelectedMonth().getNumValue(),
                         dayNumber));
 
                 boolean isCurrentDate = DateTimeHelper.isCurrentDate(
-                        viewModel.getCurrentYear(),
-                        viewModel.getCurrentMonth().getNumValue(),
+                        viewModel.getSelectedYear(),
+                        viewModel.getSelectedMonth().getNumValue(),
                         dayNumber);
                 if(isCurrentDate)
                 {

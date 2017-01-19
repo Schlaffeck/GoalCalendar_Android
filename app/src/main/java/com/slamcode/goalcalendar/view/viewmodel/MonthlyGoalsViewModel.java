@@ -23,7 +23,7 @@ import com.slamcode.goalcalendar.view.CategoryListViewAdapter;
 
 public class MonthlyGoalsViewModel {
 
-    private MonthlyPlansModel currentMonthlyPlans;
+    private MonthlyPlansModel selectedMonthlyPlans;
 
     private final CategoryListViewAdapter monthlyPlannedCategoryListViewAdapter;
 
@@ -55,8 +55,8 @@ public class MonthlyGoalsViewModel {
 
         uow.complete();
 
-        this.currentMonthlyPlans = model;
-        this.monthlyPlannedCategoryListViewAdapter.updateMonthlyPlans(currentMonthlyPlans);
+        this.selectedMonthlyPlans = model;
+        this.monthlyPlannedCategoryListViewAdapter.updateMonthlyPlans(selectedMonthlyPlans);
     }
 
     public CategoryListViewAdapter getMonthlyPlannedCategoryListViewAdapter() {
@@ -65,9 +65,9 @@ public class MonthlyGoalsViewModel {
 
     public boolean isEmptyCategoriesList()
     {
-        return this.currentMonthlyPlans == null
-            || this.currentMonthlyPlans.getCategories() == null
-            || this.currentMonthlyPlans.getCategories().isEmpty();
+        return this.selectedMonthlyPlans == null
+            || this.selectedMonthlyPlans.getCategories() == null
+            || this.selectedMonthlyPlans.getCategories().isEmpty();
     }
 
     public boolean canCopyCategoriesFromPreviousMonth()
@@ -76,26 +76,26 @@ public class MonthlyGoalsViewModel {
                 && this.findPreviousMonthlyPlansModelWithCategories() != null;
     }
 
-    public int getCurrentYear()
+    public int getSelectedYear()
     {
-        if(this.currentMonthlyPlans == null)
+        if(this.selectedMonthlyPlans == null)
         {
             return DateTimeHelper.getCurrentYear();
         }
 
-        return this.currentMonthlyPlans.getYear() > 0 ?
-                this.currentMonthlyPlans.getYear()
+        return this.selectedMonthlyPlans.getYear() > 0 ?
+                this.selectedMonthlyPlans.getYear()
                 : DateTimeHelper.getCurrentYear();
     }
 
-    public Month getCurrentMonth()
+    public Month getSelectedMonth()
     {
-        if(this.currentMonthlyPlans == null)
+        if(this.selectedMonthlyPlans == null)
         {
             return Month.getCurrentMonth();
         }
 
-        return this.currentMonthlyPlans.getMonth();
+        return this.selectedMonthlyPlans.getMonth();
     }
 
     public String getCategoryNameOnPosition(int categoryPosition)
@@ -110,8 +110,8 @@ public class MonthlyGoalsViewModel {
         if(previousMonthModel == null || previousMonthModel.getCategories() == null)
             return;
 
-        int year = this.currentMonthlyPlans.getYear();
-        Month currentMonth = this.currentMonthlyPlans.getMonth();
+        int year = this.selectedMonthlyPlans.getYear();
+        Month currentMonth = this.selectedMonthlyPlans.getMonth();
         for(CategoryModel category : previousMonthModel.getCategories())
         {
             CategoryModel newCategory = new CategoryModel(
