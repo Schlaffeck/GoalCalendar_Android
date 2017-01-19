@@ -55,22 +55,4 @@ public class InMemoryMonthlyPlansRepository extends InMemoryRepositoryBase<Month
     public MonthlyPlansModel findForPreviousMonth() {
         return this.findForMonth(Month.getPreviousMonth());
     }
-
-    public static InMemoryMonthlyPlansRepository buildDefaultRepository()
-    {
-        List<MonthlyPlansModel> entities = CollectionUtils.createList(Month.values().length, new ElementCreator<MonthlyPlansModel>() {
-            @Override
-            public MonthlyPlansModel Create(int index, List<MonthlyPlansModel> currentList) {
-                MonthlyPlansModel plans = new MonthlyPlansModel(
-                        index +1,
-                        DateTimeHelper.getCurrentYear(),
-                        Month.getMonthByNumber(index + 1)
-                );
-                plans.setCategories(InMemoryCategoriesRepository.buildCategoriesList((
-                        index+1)*Month.values().length, plans.getMonth()));
-                return plans;
-            }
-        });
-        return new InMemoryMonthlyPlansRepository(entities);
-    }
 }

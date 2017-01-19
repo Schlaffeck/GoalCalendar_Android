@@ -2,6 +2,7 @@ package com.slamcode.goalcalendar.data;
 
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.planning.Month;
+import com.slamcode.goalcalendar.planning.PlanStatus;
 
 import java.util.List;
 
@@ -11,5 +12,7 @@ import java.util.List;
 
 public interface CategoryRepository extends Repository<CategoryModel,  Integer> {
 
-    List<CategoryModel> findForMonth(Month month);
+    List<CategoryModel> findForMonth(int year, Month month);
+
+    List<CategoryModel> findForDateWithStatus(int year, Month month, int day, PlanStatus planStatus);
 }

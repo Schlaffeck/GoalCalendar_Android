@@ -7,6 +7,7 @@ import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.collections.*;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.data.model.ModelHelper;
+import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.planning.Month;
@@ -14,6 +15,7 @@ import com.slamcode.goalcalendar.planning.PlanStatus;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,8 +47,11 @@ public class InMemoryCategoriesRepositoryTest {
         CategoryModel cm1 = new CategoryModel(1);
         CategoryModel cm2 = new CategoryModel(2);
         CategoryModel cm3 = new CategoryModel(3);
+
+        MonthlyPlansModel monthlyPlansModel = new MonthlyPlansModel();
+        monthlyPlansModel.setCategories(Arrays.asList(cm1, cm2, cm3));
         CategoryRepository repo
-                = new InMemoryCategoriesRepository(Arrays.asList(cm1, cm2, cm3));
+                = new InMemoryCategoriesRepository(Arrays.asList(monthlyPlansModel));
 
         List<CategoryModel> all = repo.findAll();
         assertEquals(3, all.size());
@@ -73,9 +78,10 @@ public class InMemoryCategoriesRepositoryTest {
         CategoryModel cm1 = new CategoryModel(1);
         CategoryModel cm2 = new CategoryModel(2);
         CategoryModel cm3 = new CategoryModel(3);
+        MonthlyPlansModel monthlyPlansModel = new MonthlyPlansModel();
+        monthlyPlansModel.setCategories(Arrays.asList(cm1, cm2, cm3));
         CategoryRepository repo
-                = new InMemoryCategoriesRepository(
-                CollectionUtils.createList(cm1, cm2, cm3));
+                = new InMemoryCategoriesRepository(Arrays.asList(monthlyPlansModel));
 
         List<CategoryModel> all = repo.findAll();
         assertEquals(3, all.size());
@@ -112,9 +118,10 @@ public class InMemoryCategoriesRepositoryTest {
         cm3.setName("Cat 3 - Do more");
         cm3.setDailyPlans(CollectionUtils.createList(new DailyPlanModel()));
 
+        MonthlyPlansModel monthlyPlansModel = new MonthlyPlansModel();
+        monthlyPlansModel.setCategories(Arrays.asList(cm1, cm2, cm3));
         CategoryRepository repo
-                = new InMemoryCategoriesRepository(
-                CollectionUtils.createList(cm1, cm2, cm3));
+                = new InMemoryCategoriesRepository(Arrays.asList(monthlyPlansModel));
 
         List<CategoryModel> all = repo.findAll();
         assertEquals(3, all.size());
@@ -174,9 +181,10 @@ public class InMemoryCategoriesRepositoryTest {
         cm3.setName("Cat 3 - Do more");
         cm3.setDailyPlans(CollectionUtils.createList(new DailyPlanModel()));
 
+        MonthlyPlansModel monthlyPlansModel = new MonthlyPlansModel();
+        monthlyPlansModel.setCategories(Arrays.asList(cm1, cm2, cm3));
         CategoryRepository repo
-                = new InMemoryCategoriesRepository(
-                CollectionUtils.createList(cm1, cm2, cm3));
+                = new InMemoryCategoriesRepository(Arrays.asList(monthlyPlansModel));
 
         List<CategoryModel> all = repo.findAll();
         assertEquals(3, all.size());
@@ -241,9 +249,10 @@ public class InMemoryCategoriesRepositoryTest {
         cm3.setName("Cat 3 - Do more");
         cm3.setDailyPlans(CollectionUtils.createList(new DailyPlanModel()));
 
+        MonthlyPlansModel monthlyPlansModel = new MonthlyPlansModel();
+        monthlyPlansModel.setCategories(Arrays.asList(cm1, cm2, cm3));
         CategoryRepository repo
-                = new InMemoryCategoriesRepository(
-                CollectionUtils.createList(cm1, cm2, cm3));
+                = new InMemoryCategoriesRepository(Arrays.asList(monthlyPlansModel));
 
         List<CategoryModel> all = repo.findAll();
         assertEquals(3, all.size());

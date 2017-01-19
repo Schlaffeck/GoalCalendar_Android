@@ -108,14 +108,7 @@ public class JsonFilePersistenceContext implements PersistenceContext {
 
         JsonUnitOfWork(JsonDataBundle dataBundle)
         {
-            this.categoryRepository = new InMemoryCategoriesRepository(
-                    CollectionUtils.merge(dataBundle.monthlyPlans, new ElementSelector<MonthlyPlansModel, Collection<CategoryModel>>() {
-                        @Override
-                        public Collection<CategoryModel> select(MonthlyPlansModel parent) {
-                            return parent.getCategories();
-                        }
-                    })
-            );
+            this.categoryRepository = new InMemoryCategoriesRepository(dataBundle.monthlyPlans);
 
             this.monthlyPlansRepository = new InMemoryMonthlyPlansRepository(dataBundle.monthlyPlans);
         }

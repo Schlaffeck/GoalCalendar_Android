@@ -100,38 +100,13 @@ public final class PlannedForTodayNotificationProvider implements NotificationPr
 
     private long countCategoriesPlannedForToday(UnitOfWork uow) {
 
-        MonthlyPlansModel monthlyPlansModel = uow.getMonthlyPlansRepository().findForMonth(
-                DateTimeHelper.getCurrentYear(),
-                Month.getCurrentMonth()
-        );
-
-        if (monthlyPlansModel == null
-                || monthlyPlansModel.getCategories() == null)
-            return 0;
-
-        long countPlannedForToday = IterableUtils.countMatches(monthlyPlansModel.getCategories(), new Predicate<CategoryModel>() {
-            @Override
-            public boolean evaluate(CategoryModel categoryModel) {
-                if(categoryModel == null)
-                    return false;
-
-                if(categoryModel.getDailyPlans() == null
-                        || categoryModel.getDailyPlans().isEmpty())
-                    return false;
-
-                final DailyPlanModel dailyPlanModel = IterableUtils.find(
-                        categoryModel.getDailyPlans(),
-                        new Predicate<DailyPlanModel>() {
-                            @Override
-                            public boolean evaluate(DailyPlanModel dailyPlanModel) {
-                                return dailyPlanModel != null
-                                        && dailyPlanModel.getDayNumber() == DateTimeHelper.currentDayNumber()
-                                        && dailyPlanModel.getStatus() == PlanStatus.Planned;
-                            }
-                        });
-
-                return dailyPlanModel != null;
-            }});
+        long countPlannedForToday = uow.getCategoryRepository()
+                .findForDateWithStatus(
+                        DateTimeHelper.getCurrentYear(),
+                        Month.getCurrentMonth(),
+                        DateTimeHelper.currentDayNumber(),
+                        PlanStatus.Planned)
+                .size();
 
         return countPlannedForToday;
     }
