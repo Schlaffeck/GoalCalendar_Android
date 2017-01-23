@@ -72,6 +72,17 @@ public final class DateTimeHelper {
         return calendar;
     }
 
+    public static Calendar getTodayCalendar(int hour, int minute, int second) {
+        Calendar calendar = Calendar.getInstance();
+        Date date = new Date();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, second);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar;
+    }
+
     public static long getDiffTimeMillis(Calendar fromTime, Calendar toTime)
     {
         return toTime.getTimeInMillis() - fromTime.getTimeInMillis();

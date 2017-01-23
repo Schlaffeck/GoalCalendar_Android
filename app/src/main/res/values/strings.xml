@@ -49,5 +49,7 @@
     <string name="notification_plannedForToday_title">Planned for today</string>
     <string name="notification_plannedForToday_content">You have %d things planned for today</string>
     <string name="notification_plannedForToday_single_content">You have %d thing planned for today</string>
+    <string name="notification_endOfDay_title">Day is coming to an end soon</string>
+    <string name="notification_endOfDay_content">Mark things you\'ve done today</string>
 
 </resources>

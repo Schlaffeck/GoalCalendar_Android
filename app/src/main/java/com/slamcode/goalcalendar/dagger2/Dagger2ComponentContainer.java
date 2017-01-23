@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.slamcode.goalcalendar.data.dagger2.DataDagger2Module;
 import com.slamcode.goalcalendar.service.dagger2.ServiceDagger2Module;
+import com.slamcode.goalcalendar.settings.dagger2.SettingsDagger2Module;
 import com.slamcode.goalcalendar.view.dagger2.ViewDagger2Module;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,6 +29,7 @@ public final class Dagger2ComponentContainer {
                 .dataDagger2Module(new DataDagger2Module(context))
                 .viewDagger2Module(new ViewDagger2Module())
                 .serviceDagger2Module(new ServiceDagger2Module(context))
+                .settingsDagger2Module(new SettingsDagger2Module(context))
                 .build();
 
         return result;

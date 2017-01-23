@@ -6,6 +6,8 @@ import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.PlanStatus;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.IterableUtils;
+import org.apache.commons.collections4.Predicate;
 
 import java.util.List;
 
@@ -23,5 +25,38 @@ public class ModelHelper {
                 return new DailyPlanModel(index ^ month.getNumValue() ^ year, PlanStatus.Empty, index+1);
             }
         });
+    }
+
+    public static Predicate<DailyPlanModel> getDailyPlanIsOfStatusPredicate(final PlanStatus status, final int dayNumber)
+    {
+        return new Predicate<DailyPlanModel>() {
+            @Override
+            public boolean evaluate(DailyPlanModel dailyPlanModel) {
+                return dailyPlanModel != null
+                        && dailyPlanModel.getDayNumber() == dayNumber
+                        && dailyPlanModel.getStatus() == status;
+            }
+        };
+    }
+
+    public static Predicate<CategoryModel> getCategoryOfStatusOnDayPredicate(final PlanStatus planStatus, final int dayNumber)
+    {
+        return new Predicate<CategoryModel>() {
+            @Override
+            public boolean evaluate(CategoryModel categoryModel) {
+                if (categoryModel == null)
+                    return false;
+
+                if (categoryModel.getDailyPlans() == null
+                        || categoryModel.getDailyPlans().isEmpty())
+                    return false;
+
+                final DailyPlanModel dailyPlanModel = IterableUtils.find(
+                        categoryModel.getDailyPlans(),
+                        ModelHelper.getDailyPlanIsOfStatusPredicate(planStatus, dayNumber));
+
+                return dailyPlanModel != null;
+            }
+        };
     }
 }

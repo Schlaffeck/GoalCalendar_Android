@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.service.NotificationService;
+import com.slamcode.goalcalendar.service.notification.EndOfDayNotificationProvider;
 import com.slamcode.goalcalendar.service.notification.NotificationProvider;
 import com.slamcode.goalcalendar.service.notification.PlannedForTodayNotificationProvider;
 
@@ -32,8 +33,13 @@ public class ServiceDagger2Module {
     public Map<String, NotificationProvider> getNotificationProvidersMap(PersistenceContext persistenceContext)
     {
         HashMap<String, NotificationProvider> providerHashMap = new HashMap<>();
+
         providerHashMap.put(PlannedForTodayNotificationProvider.class.getName(),
                 new PlannedForTodayNotificationProvider(this.context, persistenceContext));
+
+        providerHashMap.put(EndOfDayNotificationProvider.class.getName(),
+                new EndOfDayNotificationProvider(this.context));
+
         return providerHashMap;
     }
 

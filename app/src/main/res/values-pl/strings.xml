@@ -50,5 +50,7 @@
     <string name="notification_plannedForToday_title">Na dziś</string>
     <string name="notification_plannedForToday_content">Masz %d rzeczy zaplanowane na dzisiaj</string>
     <string name="notification_plannedForToday_single_content">Masz %d rzecz zaplanowaną na dzisiaj</string>
+    <string name="notification_endOfDay_title">Dzień się powoli kończy</string>
+    <string name="notification_endOfDay_content">Oznacz wykonane dziś działania</string>
 
 </resources>

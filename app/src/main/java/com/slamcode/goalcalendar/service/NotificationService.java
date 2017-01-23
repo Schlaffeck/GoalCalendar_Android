@@ -12,10 +12,12 @@ import android.support.annotation.Nullable;
 import com.slamcode.goalcalendar.dagger2.ComposableService;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
+import com.slamcode.goalcalendar.planning.HourMinuteTime;
+import com.slamcode.goalcalendar.service.notification.EndOfDayNotificationProvider;
 import com.slamcode.goalcalendar.service.notification.PlannedForTodayNotificationProvider;
+import com.slamcode.goalcalendar.settings.AppSettingsManager;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -31,6 +33,9 @@ public final class NotificationService extends ComposableService {
     @Inject
     PersistenceContext persistenceContext;
 
+    @Inject
+    AppSettingsManager settingsManager;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -41,7 +46,8 @@ public final class NotificationService extends ComposableService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         int result = super.onStartCommand(intent, flags, startId);
-        this.scheduleNotificationForTasksPlannedForToday();
+        this.scheduleStartupNotification();
+        this.scheduleEndOfDayNotification();
         return result;
     }
 
@@ -50,14 +56,34 @@ public final class NotificationService extends ComposableService {
         this.getApplicationComponent().inject(this);
     }
 
-    private void scheduleNotificationForTasksPlannedForToday()
+    private void scheduleStartupNotification()
     {
+        if(!this.settingsManager.getShowStartupNotification())
+            return;
+
         Calendar in10secs = DateTimeHelper.getNowCalendar();
         in10secs.add(Calendar.SECOND, 10);
         long diffMillis = DateTimeHelper.getDiffTimeMillis(DateTimeHelper.getNowCalendar(), in10secs);
 
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
         notificationIntent.putExtra(NOTIFICATION_PROVIDER_NAME, PlannedForTodayNotificationProvider.class.getName());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + diffMillis, pendingIntent);
+    }
+
+    private void scheduleEndOfDayNotification()
+    {
+        if(!this.settingsManager.getShowEndOfDayNotification())
+            return;
+
+        HourMinuteTime notificationTime = this.settingsManager.getEndOfDayNotificationTime();
+        Calendar inTime = DateTimeHelper.getTodayCalendar(notificationTime.getHour(), notificationTime.getMinute(), 0);
+        long diffMillis = DateTimeHelper.getDiffTimeMillis(DateTimeHelper.getNowCalendar(), inTime);
+
+        Intent notificationIntent = new Intent(this, NotificationPublisher.class);
+        notificationIntent.putExtra(NOTIFICATION_PROVIDER_NAME, EndOfDayNotificationProvider.class.getName());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
