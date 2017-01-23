@@ -1,10 +1,5 @@
 package com.slamcode.goalcalendar.view.activity;
 
-import android.app.Activity;
-import android.content.Intent;
-
-import com.slamcode.goalcalendar.service.NotificationService;
-
 /**
  * Created by moriasla on 13.01.2017.
  */

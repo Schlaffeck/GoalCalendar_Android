@@ -27,7 +27,7 @@ import com.slamcode.goalcalendar.dagger2.ComposableApplication;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.planning.*;
-import com.slamcode.goalcalendar.service.NotificationService;
+import com.slamcode.goalcalendar.service.NotificationScheduler;
 import com.slamcode.goalcalendar.view.CategoryListViewAdapter;
 import com.slamcode.goalcalendar.view.ResourcesHelper;
 import com.slamcode.goalcalendar.view.activity.ActivityViewState;
@@ -252,7 +252,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity {
 
         ActivityViewState state = this.viewStateProvider.provideStateForActivity(ACTIVITY_ID);
         return !state.isWasDisplayed()
-            || NotificationService.checkIfOriginatedFromNotification(this);
+            || NotificationScheduler.checkIfOriginatedFromNotification(this);
     }
 
     private void scrollToCurrentDay()

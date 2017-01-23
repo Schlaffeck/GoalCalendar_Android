@@ -3,7 +3,7 @@ package com.slamcode.goalcalendar.service.dagger2;
 import android.content.Context;
 
 import com.slamcode.goalcalendar.data.PersistenceContext;
-import com.slamcode.goalcalendar.service.NotificationService;
+import com.slamcode.goalcalendar.service.NotificationScheduler;
 import com.slamcode.goalcalendar.service.notification.EndOfDayNotificationProvider;
 import com.slamcode.goalcalendar.service.notification.NotificationProvider;
 import com.slamcode.goalcalendar.service.notification.PlannedForTodayNotificationProvider;
@@ -45,8 +45,8 @@ public class ServiceDagger2Module {
 
     @Provides
     @Singleton
-    public NotificationService provideNotificationService()
+    public NotificationScheduler provideNotificationScheduler()
     {
-        return new NotificationService();
+        return new NotificationScheduler();
     }
 }

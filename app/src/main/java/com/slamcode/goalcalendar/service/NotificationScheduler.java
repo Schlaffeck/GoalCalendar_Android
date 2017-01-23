@@ -25,7 +25,7 @@ import javax.inject.Inject;
  * Created by moriasla on 18.01.2017.
  */
 
-public final class NotificationService extends ComposableService {
+public final class NotificationScheduler extends ComposableService {
 
     public static final String NOTIFICATION_PROVIDER_NAME = "NotificationProviderName";
     public static final String NOTIFICATION_ORIGINATED_FROM_FLAG = "OriginatedFromNotification";
@@ -96,7 +96,7 @@ public final class NotificationService extends ComposableService {
         if(intent == null)
             return false;
 
-        boolean result = intent.getBooleanExtra(NotificationService.NOTIFICATION_ORIGINATED_FROM_FLAG, false);
+        boolean result = intent.getBooleanExtra(NotificationScheduler.NOTIFICATION_ORIGINATED_FROM_FLAG, false);
         return result;
     }
 }

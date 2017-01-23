@@ -9,7 +9,7 @@ import android.support.v4.content.ContextCompat;
 
 import com.slamcode.goalcalendar.MonthlyGoalsActivity;
 import com.slamcode.goalcalendar.R;
-import com.slamcode.goalcalendar.service.NotificationService;
+import com.slamcode.goalcalendar.service.NotificationScheduler;
 
 /**
  * Created by moriasla on 19.01.2017.
@@ -37,7 +37,7 @@ public final class EndOfDayNotificationProvider implements NotificationProvider 
         Notification result = null;
             Intent resultIntent = new Intent(this.context, MonthlyGoalsActivity.class);
             resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            resultIntent.putExtra(NotificationService.NOTIFICATION_ORIGINATED_FROM_FLAG, true);
+            resultIntent.putExtra(NotificationScheduler.NOTIFICATION_ORIGINATED_FROM_FLAG, true);
             result = this.buildNotification(resultIntent);
 
         return result;

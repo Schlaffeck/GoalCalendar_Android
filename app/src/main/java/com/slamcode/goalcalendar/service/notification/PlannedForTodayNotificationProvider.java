@@ -19,7 +19,7 @@ import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.PlanStatus;
-import com.slamcode.goalcalendar.service.NotificationService;
+import com.slamcode.goalcalendar.service.NotificationScheduler;
 
 import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.collections4.Predicate;
@@ -63,7 +63,7 @@ public final class PlannedForTodayNotificationProvider implements NotificationPr
             {
                 Intent resultIntent = new Intent(this.context, MonthlyGoalsActivity.class);
                 resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                resultIntent.putExtra(NotificationService.NOTIFICATION_ORIGINATED_FROM_FLAG, true);
+                resultIntent.putExtra(NotificationScheduler.NOTIFICATION_ORIGINATED_FROM_FLAG, true);
                 result = this.buildNotification(resultIntent, countCategoriesPlannedForToday);
             }
         }

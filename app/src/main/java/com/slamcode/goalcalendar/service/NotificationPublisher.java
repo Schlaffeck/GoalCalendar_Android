@@ -31,7 +31,7 @@ public final class NotificationPublisher extends BroadcastReceiver {
 
         NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        String notificationProviderName = intent.getStringExtra(NotificationService.NOTIFICATION_PROVIDER_NAME);
+        String notificationProviderName = intent.getStringExtra(NotificationScheduler.NOTIFICATION_PROVIDER_NAME);
 
         if(notificationProviderName == null
                 || !this.notificationProviderMap.containsKey(notificationProviderName))

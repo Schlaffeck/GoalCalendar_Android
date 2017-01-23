@@ -2,11 +2,6 @@ package com.slamcode.goalcalendar.settings.dagger2;
 
 import android.content.Context;
 
-import com.slamcode.goalcalendar.data.PersistenceContext;
-import com.slamcode.goalcalendar.service.NotificationService;
-import com.slamcode.goalcalendar.service.notification.EndOfDayNotificationProvider;
-import com.slamcode.goalcalendar.service.notification.NotificationProvider;
-import com.slamcode.goalcalendar.service.notification.PlannedForTodayNotificationProvider;
 import com.slamcode.goalcalendar.settings.AppSettingsManager;
 import com.slamcode.goalcalendar.settings.SharedPreferencesSettingsManager;
 
