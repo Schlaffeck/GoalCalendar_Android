@@ -9,7 +9,7 @@
 
     <!-- monthly goals view -->
     <string name="add_category_dialog_header">Dodaj kategorię</string>
-    <string name="edit_category_dialog_header">Zmien kategorię</string>
+    <string name="edit_category_dialog_header">Zmień kategorię</string>
     <string name="confirm_delete_category_dialog_header">Usunąć kategorię?</string>
     <string name="monthly_goals_category_dialog_times_textview_text">raz(y) na</string>
     <string name="monthly_goals_category_dialog_times_confirm_button_text">Potwierdź</string>
@@ -54,6 +54,7 @@
     <string name="notification_endOfDay_content">Oznacz wykonane dziś działania</string>
 
     <!-- Strings related to Settings -->
+    <string name="title_activity_settings">Ustawienia</string>
 
     <!-- Example General settings -->
     <string name="pref_header_general">Ogólne</string>

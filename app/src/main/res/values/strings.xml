@@ -51,9 +51,9 @@
     <string name="notification_plannedForToday_single_content">You have %d thing planned for today</string>
     <string name="notification_endOfDay_title">Day is coming to an end soon</string>
     <string name="notification_endOfDay_content">Mark things you\'ve done today</string>
-    <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->
+    <string name="title_activity_settings">Settings</string>
 
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
