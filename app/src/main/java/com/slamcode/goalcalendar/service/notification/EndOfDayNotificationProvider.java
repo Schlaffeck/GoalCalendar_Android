@@ -17,7 +17,7 @@ import com.slamcode.goalcalendar.service.NotificationScheduler;
 
 public final class EndOfDayNotificationProvider implements NotificationProvider {
 
-    static final int NOTIFICATION_ON_END_OF_DAY_ID = 2;
+    public static final int NOTIFICATION_ID = 2;
 
     private final Context context;
 
@@ -28,7 +28,7 @@ public final class EndOfDayNotificationProvider implements NotificationProvider 
 
     @Override
     public int getNotificationId() {
-        return NOTIFICATION_ON_END_OF_DAY_ID;
+        return NOTIFICATION_ID;
     }
 
     @Override

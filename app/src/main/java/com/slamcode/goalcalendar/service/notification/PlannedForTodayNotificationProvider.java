@@ -1,11 +1,9 @@
 package com.slamcode.goalcalendar.service.notification;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcel;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 
@@ -13,16 +11,10 @@ import com.slamcode.goalcalendar.MonthlyGoalsActivity;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.data.UnitOfWork;
-import com.slamcode.goalcalendar.data.model.CategoryModel;
-import com.slamcode.goalcalendar.data.model.DailyPlanModel;
-import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.PlanStatus;
 import com.slamcode.goalcalendar.service.NotificationScheduler;
-
-import org.apache.commons.collections4.IterableUtils;
-import org.apache.commons.collections4.Predicate;
 
 /**
  * Created by moriasla on 18.01.2017.
@@ -30,7 +22,7 @@ import org.apache.commons.collections4.Predicate;
 
 public final class PlannedForTodayNotificationProvider implements NotificationProvider {
 
-    static final int NOTIFICATION_PLANNED_FOR_TODAY_ID = 1;
+    public static final int NOTIFICATION_ID = 1;
 
     private final Context context;
     private final PersistenceContext persistenceContext;
@@ -43,7 +35,7 @@ public final class PlannedForTodayNotificationProvider implements NotificationPr
 
     @Override
     public int getNotificationId() {
-        return NOTIFICATION_PLANNED_FOR_TODAY_ID;
+        return NOTIFICATION_ID;
     }
 
     @Override

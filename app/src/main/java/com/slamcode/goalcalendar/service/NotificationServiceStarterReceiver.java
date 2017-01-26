@@ -3,6 +3,8 @@ package com.slamcode.goalcalendar.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.util.HashSet;
 import java.util.List;
@@ -15,7 +17,10 @@ import javax.inject.Inject;
 
 public final class NotificationServiceStarterReceiver extends BroadcastReceiver {
 
+    private static final String LOG_TAG = "GOAL_NotifServStarter";
+
     private HashSet<String> supportedEvents;
+
 
     public NotificationServiceStarterReceiver()
     {
@@ -31,6 +36,7 @@ public final class NotificationServiceStarterReceiver extends BroadcastReceiver 
 
         if(this.supportedEvents.contains(intent.getAction()))
         {
+            Log.v(LOG_TAG, "Starting notification scheduler");
             Intent serviceIntent = new Intent(context, NotificationScheduler.class);
             context.startService(serviceIntent);
         }

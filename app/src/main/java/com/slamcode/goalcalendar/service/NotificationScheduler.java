@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.slamcode.goalcalendar.dagger2.ComposableService;
 import com.slamcode.goalcalendar.data.PersistenceContext;
@@ -26,6 +27,8 @@ import javax.inject.Inject;
  */
 
 public final class NotificationScheduler extends ComposableService {
+
+    private static final String LOG_TAG = "GOAL_NotifSched";
 
     public static final String NOTIFICATION_PROVIDER_NAME = "NotificationProviderName";
     public static final String NOTIFICATION_ORIGINATED_FROM_FLAG = "OriginatedFromNotification";
@@ -67,9 +70,13 @@ public final class NotificationScheduler extends ComposableService {
 
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
         notificationIntent.putExtra(NOTIFICATION_PROVIDER_NAME, PlannedForTodayNotificationProvider.class.getName());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, PlannedForTodayNotificationProvider.NOTIFICATION_ID,
+                notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+
+        Log.v(LOG_TAG, "Scheduled startup notification in " + diffMillis +"ms");
+
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + diffMillis, pendingIntent);
     }
 
@@ -84,9 +91,13 @@ public final class NotificationScheduler extends ComposableService {
 
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
         notificationIntent.putExtra(NOTIFICATION_PROVIDER_NAME, EndOfDayNotificationProvider.class.getName());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, EndOfDayNotificationProvider.NOTIFICATION_ID,
+                notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+
+        Log.v(LOG_TAG, "Scheduled EOD notification in " + diffMillis +"ms");
+
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + diffMillis, pendingIntent);
     }
 
