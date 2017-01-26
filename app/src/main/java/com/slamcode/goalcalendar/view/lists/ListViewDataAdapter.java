@@ -10,6 +10,8 @@ import android.widget.BaseAdapter;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -23,6 +25,8 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
     private LayoutInflater layoutInflater;
     private List<ItemsSourceChangedEventListener> adapterSourceChangedEventListeners;
 
+    private Comparator<TData> itemsComparator;
+
     private List<TData> modifiedItems;
 
     protected ListViewDataAdapter(Context context, LayoutInflater layoutInflater)
@@ -32,6 +36,14 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
         this.context = context;
         this.layoutInflater = layoutInflater;
         this.adapterSourceChangedEventListeners = new ArrayList<>();
+    }
+
+    public Comparator<TData> getItemsComparator() {
+        return itemsComparator;
+    }
+
+    protected void setItemsComparator(Comparator<TData> itemsComparator) {
+        this.itemsComparator = itemsComparator;
     }
 
     @Override

@@ -10,7 +10,7 @@ import java.util.List;
  * Created by moriasla on 16.12.2016.
  */
 
-public class CategoryModel implements Identifiable<Integer> {
+public class CategoryModel implements Identifiable<Integer>, Comparable<CategoryModel> {
 
     private int id;
 
@@ -78,5 +78,13 @@ public class CategoryModel implements Identifiable<Integer> {
 
     public void setFrequencyValue(int frequencyValue) {
         this.frequencyValue = frequencyValue;
+    }
+
+    @Override
+    public int compareTo(CategoryModel categoryModel) {
+        if(categoryModel == null)
+            return 1;
+
+        return this.getName().compareTo(categoryModel.getName());
     }
 }

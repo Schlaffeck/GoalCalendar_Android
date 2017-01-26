@@ -116,6 +116,13 @@ public class CategoryListViewAdapter extends ListViewDataAdapter<CategoryModel, 
     }
 
     @Override
+    public void notifyDataSetChanged() {
+        // sort before update
+        Collections.sort(this.getList(), new CategoryListItemComparator());
+        super.notifyDataSetChanged();
+    }
+
+    @Override
     public void notifyItemModified(int position)
     {
         CategoryModel item = this.getItem(position);
@@ -181,5 +188,22 @@ public class CategoryListViewAdapter extends ListViewDataAdapter<CategoryModel, 
                 year,
                 this.monthlyPlans.getMonth().getNumValue(),
                 dayNumber);
+    }
+
+    public static class CategoryListItemComparator implements Comparator<CategoryModel>
+    {
+        @Override
+        public int compare(CategoryModel first, CategoryModel second) {
+            if(first == null && second == null)
+                return 0;
+
+            if(first == null)
+                return 1;
+
+            if(second == null)
+                return -1;
+
+            return first.compareTo(second);
+        }
     }
 }
