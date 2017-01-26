@@ -15,6 +15,7 @@ import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.PlanStatus;
 import com.slamcode.goalcalendar.service.NotificationScheduler;
+import com.slamcode.goalcalendar.settings.AppSettingsManager;
 
 /**
  * Created by moriasla on 18.01.2017.
@@ -26,11 +27,15 @@ public final class PlannedForTodayNotificationProvider implements NotificationPr
 
     private final Context context;
     private final PersistenceContext persistenceContext;
+    private final AppSettingsManager settingsManager;
 
-    public PlannedForTodayNotificationProvider(Context context, PersistenceContext persistenceContext)
+    public PlannedForTodayNotificationProvider(Context context,
+                                               PersistenceContext persistenceContext,
+                                               AppSettingsManager settingsManager)
     {
         this.context = context;
         this.persistenceContext = persistenceContext;
+        this.settingsManager = settingsManager;
     }
 
     @Override
@@ -45,6 +50,9 @@ public final class PlannedForTodayNotificationProvider implements NotificationPr
 
     private Notification createNotificationForTasksPlannedForToday()
     {
+        if(!this.settingsManager.getShowStartupNotification())
+            return null;
+
         Notification result = null;
         UnitOfWork uow = this.persistenceContext.createUnitOfWork();
 

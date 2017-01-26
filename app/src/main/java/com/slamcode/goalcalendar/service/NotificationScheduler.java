@@ -61,9 +61,6 @@ public final class NotificationScheduler extends ComposableService {
 
     private void scheduleStartupNotification()
     {
-        if(!this.settingsManager.getShowStartupNotification())
-            return;
-
         Calendar in10secs = DateTimeHelper.getNowCalendar();
         in10secs.add(Calendar.SECOND, 10);
         long diffMillis = DateTimeHelper.getDiffTimeMillis(DateTimeHelper.getNowCalendar(), in10secs);

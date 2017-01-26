@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import com.slamcode.goalcalendar.MonthlyGoalsActivity;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.service.NotificationScheduler;
+import com.slamcode.goalcalendar.settings.AppSettingsManager;
 
 /**
  * Created by moriasla on 19.01.2017.
@@ -20,10 +21,13 @@ public final class EndOfDayNotificationProvider implements NotificationProvider 
     public static final int NOTIFICATION_ID = 2;
 
     private final Context context;
+    private final AppSettingsManager settingsManager;
 
-    public EndOfDayNotificationProvider(Context context)
+    public EndOfDayNotificationProvider(Context context,
+                                        AppSettingsManager settingsManager)
     {
         this.context = context;
+        this.settingsManager = settingsManager;
     }
 
     @Override
