@@ -87,7 +87,8 @@ public final class NotificationScheduler extends ComposableService {
 
         HourMinuteTime notificationTime = this.settingsManager.getEndOfDayNotificationTime();
         Calendar inTime = DateTimeHelper.getTodayCalendar(notificationTime.getHour(), notificationTime.getMinute(), 0);
-        long diffMillis = DateTimeHelper.getDiffTimeMillis(DateTimeHelper.getNowCalendar(), inTime);
+
+        Log.v(LOG_TAG, String.format("Scheduled EOD notification in time: %1$tb %1$td %1$tY at %1$tI:%1$tM %1$Tp", inTime));
 
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
         notificationIntent.putExtra(NOTIFICATION_PROVIDER_NAME, EndOfDayNotificationProvider.class.getName());
@@ -96,9 +97,7 @@ public final class NotificationScheduler extends ComposableService {
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
 
-        Log.v(LOG_TAG, "Scheduled EOD notification in " + diffMillis +"ms");
-
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + diffMillis, pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, inTime.getTimeInMillis(), pendingIntent);
     }
 
     public static boolean checkIfOriginatedFromNotification(Activity activity)

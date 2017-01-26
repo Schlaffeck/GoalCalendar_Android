@@ -38,6 +38,25 @@ public class DateTimeHelperTest {
         to.add(Calendar.MINUTE, 30);
 
         assertEquals(expectedDiff, DateTimeHelper.getDiffTimeMillis(from, to));
+
+        expectedDiff = 2*60*60*1000; // two hours
+        from = DateTimeHelper.getTodayCalendar();
+        to = DateTimeHelper.getTodayCalendar(2, 0, 0);
+
+        assertEquals(expectedDiff, DateTimeHelper.getDiffTimeMillis(from, to));
     }
 
+    @Test
+    public void dateTimeHelper_getTodayCalendar_test() throws Exception {
+
+        Calendar actual = DateTimeHelper.getTodayCalendar();
+
+        assertEquals(Calendar.getInstance().get(Calendar.DATE), actual.get(Calendar.DATE));
+        assertEquals(Calendar.getInstance().get(Calendar.MONTH), actual.get(Calendar.MONTH));
+        assertEquals(Calendar.getInstance().get(Calendar.YEAR), actual.get(Calendar.YEAR));
+        assertEquals(0, actual.get(Calendar.HOUR));
+        assertEquals(0, actual.get(Calendar.MONTH));
+        assertEquals(0, actual.get(Calendar.SECOND));
+        assertEquals(0, actual.get(Calendar.MILLISECOND));
+    }
 }
