@@ -12,6 +12,7 @@ import com.slamcode.goalcalendar.planning.HourMinuteTime;
 
 public class SharedPreferencesSettingsManager implements AppSettingsManager {
 
+    // keep below values compatible with the preferences activity resources
     private final static int EOD_NOTIFICATION_HOUR_TIME_DEFAULT_VALUE = 20;
     private final static int EOD_NOTIFICATION_MINUTE_TIME_DEFAULT_VALUE = 0;
 
