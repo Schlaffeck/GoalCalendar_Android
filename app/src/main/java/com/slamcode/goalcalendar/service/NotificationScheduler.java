@@ -49,7 +49,7 @@ public final class NotificationScheduler extends ComposableService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         int result = super.onStartCommand(intent, flags, startId);
-        this.scheduleStartupNotification();
+        this.scheduleStartOfDayNotification();
         this.scheduleEndOfDayNotification();
         return result;
     }
@@ -59,11 +59,9 @@ public final class NotificationScheduler extends ComposableService {
         this.getApplicationComponent().inject(this);
     }
 
-    private void scheduleStartupNotification()
+    private void scheduleStartOfDayNotification()
     {
-        Calendar in10secs = DateTimeHelper.getNowCalendar();
-        in10secs.add(Calendar.SECOND, 10);
-        long diffMillis = DateTimeHelper.getDiffTimeMillis(DateTimeHelper.getNowCalendar(), in10secs);
+        Calendar inTime = DateTimeHelper.getTodayCalendar(8, 0, 0);
 
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
         notificationIntent.putExtra(NOTIFICATION_PROVIDER_NAME, PlannedForTodayNotificationProvider.class.getName());
@@ -72,9 +70,9 @@ public final class NotificationScheduler extends ComposableService {
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
 
-        Log.v(LOG_TAG, "Scheduled startup notification in " + diffMillis +"ms");
+        Log.v(LOG_TAG, String.format("Scheduled Start of day notification in time: %1$tb %1$td %1$tY at %1$tI:%1$tM %1$Tp", inTime));
 
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + diffMillis, pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, inTime.getTimeInMillis(), pendingIntent);
     }
 
     private void scheduleEndOfDayNotification()

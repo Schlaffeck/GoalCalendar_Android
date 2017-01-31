@@ -5,12 +5,12 @@
     <SwitchPreference
         android:defaultValue="true"
         android:key="SHOW_STARTUP_NOTIFICATIONS"
-        android:title="@string/pref_title_showStartupNotifications" />
+        android:title="@string/pref_title_showStartupNotifications"/>
 
     <!-- NOTE: This preference will be enabled only when the checkbox above is checked. -->
     <SwitchPreference
         android:defaultValue="true"
         android:key="SHOW_EOD_NOTIFICATIONS"
-        android:title="@string/pref_title_showEODNotification" />
+        android:title="@string/pref_title_showEODNotification"/>
 
 </PreferenceScreen>

@@ -61,8 +61,8 @@
     <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Notifications</string>
 
-    <string name="pref_title_showStartupNotifications">Show notification on device boot</string>
+    <string name="pref_title_showStartupNotifications">Start of day notification</string>
 
-    <string name="pref_title_showEODNotification">Show end of day notification</string>
+    <string name="pref_title_showEODNotification">End of day notification</string>
 
 </resources>

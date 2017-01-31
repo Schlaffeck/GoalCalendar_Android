@@ -62,7 +62,7 @@
     <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Powiadomienia</string>
 
-    <string name="pref_title_showStartupNotifications">Wyświetlaj powiadomienia po starcie urządzenia</string>
+    <string name="pref_title_showStartupNotifications">Na początek dnia</string>
 
-    <string name="pref_title_showEODNotification">Wyświetlaj powiadomienia na koniec dnia</string>
+    <string name="pref_title_showEODNotification">Na koniec dnia</string>
 </resources>
