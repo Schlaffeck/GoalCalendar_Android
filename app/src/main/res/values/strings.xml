@@ -16,6 +16,8 @@
     <string name="monthly_goals_category_dialog_name_label_text">Name</string>
     <string name="confirm_category_deleted_toast">Deleted category</string>
 
+    <string name="monthlyPlans_monthSelected_toast_message" formatted="false">Showing %s %d</string>
+
     <string name="monthly_goals_category_dialog_Validation_name_edittext_error_empty">
         Category name is required
     </string>
@@ -64,5 +66,8 @@
     <string name="pref_title_showStartupNotifications">Start of day notification</string>
 
     <string name="pref_title_showEODNotification">End of day notification</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

@@ -86,7 +86,7 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
             viewHolder = this.getNewViewHolder(convertView, id);
             convertView = viewHolder.getView();
 
-            // hook up the holder to the view for recyclage
+            // hook UP the holder to the view for recyclage
             convertView.setTag(viewHolder);
         }
         else

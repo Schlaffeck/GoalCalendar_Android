@@ -86,6 +86,13 @@ public class ResourcesHelper {
         return 0;
     }
 
+    public static String toResourceString(Context context, Month month)
+    {
+        int resourceId = toResourceStringId(month);
+
+        return context.getString(resourceId);
+    }
+
     public static String[] monthsResourceStrings(Context context) {
         final int size = Month.values().length;
         String[] result = new String[size];

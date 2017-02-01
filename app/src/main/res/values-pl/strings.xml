@@ -17,6 +17,8 @@
     <string name="monthly_goals_category_dialog_name_label_text">Nazwa</string>
     <string name="confirm_category_deleted_toast">Usunięto kategorię</string>
 
+    <string name="monthlyPlans_monthSelected_toast_message" formatted="false">Ustawiono %s %d</string>
+
     <string name="monthly_goals_category_dialog_Validation_name_edittext_error_empty">
         Nazwa kategorii nie może byc pusta
     </string>

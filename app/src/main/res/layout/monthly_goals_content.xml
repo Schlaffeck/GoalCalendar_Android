@@ -45,6 +45,7 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/monthly_goals_emptyContent_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
