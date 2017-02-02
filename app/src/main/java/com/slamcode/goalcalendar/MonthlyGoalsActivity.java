@@ -460,7 +460,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
                     if (Math.abs(deltaX) > MIN_DISTANCE) {
                         if (deltaX < 0) {
                             this.onLeftToRightSwipe();
-                            return true;
                         }
                         if (deltaX > 0) {
                             this.onRightToLeftSwipe();
