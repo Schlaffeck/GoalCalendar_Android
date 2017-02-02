@@ -105,6 +105,13 @@ public class CategoryListViewAdapter extends ListViewDataAdapter<CategoryModel, 
         if(innerViewHolder[0].isViewRendered()) {
             this.processedCategoriesSet.add(monthlyGoals);
         }
+
+        if(monthlyGoals == this.getItem(this.getCount()-1)) {
+            viewHolder.daysListGridView.setPadding(0, 0, 0,
+                    viewHolder.getView().getResources().getDimensionPixelSize(R.dimen.monthly_goals_category_listView_lastItem_paddingBottom));
+            viewHolder.categoryPanel.setPadding(0, 0, 0,
+                    viewHolder.getView().getResources().getDimensionPixelSize(R.dimen.monthly_goals_category_listView_lastItem_paddingBottom));
+        }
     }
 
     public void updateMonthlyPlans(MonthlyPlansModel monthlyPlansModel)
@@ -135,6 +142,9 @@ public class CategoryListViewAdapter extends ListViewDataAdapter<CategoryModel, 
 
     public class CategoryViewHolder extends ViewHolderBase<CategoryModel>
     {
+        @BindView(R.id.monthly_goals_list_item_category_panel)
+        LinearLayout categoryPanel;
+
         @BindView(R.id.monthly_goals_list_item_category_name)
         TextView categoryNameTextView;
 

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="horizontal"
+    android:id="@+id/monthly_goals_list_item_mainLayout"
     android:layout_height="?android:attr/listPreferredItemHeight">
 
     <LinearLayout
@@ -46,4 +47,5 @@
         android:layout_marginTop="@dimen/default_margin"
         android:layout_marginBottom="@dimen/default_margin"
         android:layout_toRightOf="@id/monthly_goals_list_item_category_panel"></LinearLayout>
+
 </LinearLayout>
