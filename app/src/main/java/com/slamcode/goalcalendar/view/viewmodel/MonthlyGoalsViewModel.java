@@ -16,6 +16,9 @@ import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.view.AddEditCategoryDialog;
 import com.slamcode.goalcalendar.view.CategoryListViewAdapter;
+import com.slamcode.goalcalendar.view.lists.ListAdapterProvider;
+import com.slamcode.goalcalendar.view.lists.ListViewDataAdapter;
+import com.slamcode.goalcalendar.view.lists.ViewHolderBase;
 
 /**
  * Created by moriasla on 16.01.2017.
@@ -31,11 +34,25 @@ public class MonthlyGoalsViewModel {
 
     private final PersistenceContext persistenceContext;
 
-    public MonthlyGoalsViewModel(Context context, LayoutInflater layoutInflater, PersistenceContext persistenceContext)
+    public MonthlyGoalsViewModel(Context context,
+                                 LayoutInflater layoutInflater,
+                                 PersistenceContext persistenceContext,
+                                 ListAdapterProvider listAdapterProvider)
+    {
+        this(context, layoutInflater, persistenceContext, listAdapterProvider, false);
+    }
+
+    public MonthlyGoalsViewModel(Context context,
+                                LayoutInflater layoutInflater,
+                                PersistenceContext persistenceContext,
+                                ListAdapterProvider listAdapterProvider,
+                                boolean setupCategoriesList)
     {
         this.context = context;
         this.persistenceContext = persistenceContext;
-        monthlyPlannedCategoryListViewAdapter = new CategoryListViewAdapter(context,layoutInflater);
+        this.monthlyPlannedCategoryListViewAdapter = listAdapterProvider.provideCategoryListViewAdapter(context,layoutInflater);
+        if(setupCategoriesList)
+            this.setYearAndMonth(this.getSelectedYear(), this.getSelectedMonth());
     }
 
     public void setYearAndMonth(int year, Month month) {

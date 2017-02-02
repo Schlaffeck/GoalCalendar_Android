@@ -36,6 +36,7 @@ import com.slamcode.goalcalendar.view.CategoryListViewAdapter;
 import com.slamcode.goalcalendar.view.ResourcesHelper;
 import com.slamcode.goalcalendar.view.activity.ActivityViewState;
 import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
+import com.slamcode.goalcalendar.view.lists.ListAdapterProvider;
 import com.slamcode.goalcalendar.view.lists.ListViewDataAdapter;
 import com.slamcode.goalcalendar.view.utils.ColorsHelper;
 import com.slamcode.goalcalendar.view.lists.ListViewHelper;
@@ -107,6 +108,9 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
 
     @Inject
     PersistenceContext persistenceContext;
+
+    @Inject
+    ListAdapterProvider adapterProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -261,7 +265,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
 
         if(this.viewModel == null)
         {
-            this.viewModel = new MonthlyGoalsViewModel(this, this.getLayoutInflater(), this.persistenceContext);
+            this.viewModel = new MonthlyGoalsViewModel(this, this.getLayoutInflater(), this.persistenceContext, this.adapterProvider);
         }
         // month spinner
         final ArrayAdapter<String> monthsStringsAdapter = new ArrayAdapter<String>(
