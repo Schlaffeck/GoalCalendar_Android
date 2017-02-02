@@ -131,6 +131,7 @@ public class MonthlyGoalsViewModel {
                 this.monthlyPlannedCategoryListViewAdapter.getItem(categoryPosition)
                 : null;
         final AddEditCategoryDialog dialog = new AddEditCategoryDialog();
+        dialog.setYearAndMonth(this.getSelectedYear(), this.getSelectedMonth());
         dialog.setModel(model);
         dialog.setDialogStateChangedListener(new AddEditCategoryDialog.DialogStateChangedListener() {
             @Override

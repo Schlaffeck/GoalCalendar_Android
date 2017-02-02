@@ -18,6 +18,8 @@ import com.slamcode.collections.ElementCreator;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
+import com.slamcode.goalcalendar.planning.DateTimeHelper;
+import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.PlanStatus;
 import com.slamcode.goalcalendar.view.utils.SpinnerHelper;
 import com.slamcode.goalcalendar.view.validation.TextViewValidator;
@@ -56,6 +58,8 @@ public class AddEditCategoryDialog extends DialogFragment {
     private List<ViewValidator<?>> viewValidatorList =  new ArrayList<>();
 
     private DialogStateChangedListener dialogStateChangedListener;
+    private int selectedYear;
+    private Month selectedMonth;
 
     public CategoryModel getModel() {
         return model;
@@ -150,11 +154,12 @@ public class AddEditCategoryDialog extends DialogFragment {
         {
             CategoryModel newModel = new CategoryModel();
 
-            // todo: provide month and number of days in it
-            newModel.setDailyPlans(CollectionUtils.createList(31, new ElementCreator<DailyPlanModel>() {
+            newModel.setDailyPlans(CollectionUtils.createList(
+                    this.selectedMonth.getDaysCount(this.selectedYear),
+                    new ElementCreator<DailyPlanModel>() {
                 @Override
                 public DailyPlanModel Create(int index, List<DailyPlanModel> currentList) {
-                    return new DailyPlanModel(index+1, PlanStatus.Empty, index+1);
+                        return new DailyPlanModel(index+1, PlanStatus.Empty, index+1);
                 }
             }));
             this.setModel(newModel);
@@ -192,6 +197,11 @@ public class AddEditCategoryDialog extends DialogFragment {
         {
             this.dialogStateChangedListener.onDialogClosed(this.confirmed);
         }
+    }
+
+    public void setYearAndMonth(int selectedYear, Month selectedMonth) {
+        this.selectedYear = selectedYear;
+        this.selectedMonth = selectedMonth;
     }
 
     public interface DialogStateChangedListener
