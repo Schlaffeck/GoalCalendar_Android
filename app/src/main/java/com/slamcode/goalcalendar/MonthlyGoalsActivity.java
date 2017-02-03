@@ -1,13 +1,14 @@
 package com.slamcode.goalcalendar;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.ContextMenu;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -112,6 +113,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
     @Inject
     ListAdapterProvider adapterProvider;
 
+    private GestureDetectorCompat gestureDetector;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -172,6 +175,12 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        this.gestureDetector.onTouchEvent(event);
+        return super.onTouchEvent(event);
     }
 
     private void goToPreviousMonth()
@@ -240,25 +249,11 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
         this.viewModel.setYearAndMonth(year, month);
         this.setupHeaderForCategoryListForMonth();
         this.setEmptyListContent();
-        this.showMonthSelectedToast();
-    }
-
-    private void showMonthSelectedToast() {
-        Toast.makeText(
-                this,
-                String.format(this.getString(R.string.monthlyPlans_monthSelected_toast_message),
-                        ResourcesHelper.toResourceString(this, this.viewModel.getSelectedMonth()),
-                        this.viewModel.getSelectedYear()),
-                Toast.LENGTH_SHORT
-                ).show();
     }
 
     private void setupSwipeListener()
     {
-        SwipeDetector detector = new SwipeDetector();
-        this.tableHorizontalScrollView.setOnTouchListener(detector);
-
-        this.emptyContentHorizontalScrollView.setOnTouchListener(detector);
+        this.gestureDetector = new GestureDetectorCompat(this, new HorizontalFlingGestureListener());
     }
 
     private void setupMonthlyPlanningCategoryList() {
@@ -444,55 +439,50 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
         });
     }
 
-    private class SwipeDetector implements View.OnTouchListener {
+    private class HorizontalFlingGestureListener extends GestureDetector.SimpleOnGestureListener{
 
-        private static final float MIN_DISTANCE = 20;
-        private int SCROLL_X_PX_BUFFER = 10;
+        private static final String LOG_TAG = "GOAL_GestDet";
 
-        private float lastDownX;
+        private static final int SWIPE_MIN_DISTANCE = 120;
+        private static final int SWIPE_MAX_OFF_PATH = 250;
+        private static final int SWIPE_THRESHOLD_VELOCITY = 200;
 
         @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN: {
-                    this.lastDownX = event.getX();
-                }
-                case MotionEvent.ACTION_UP: {
-                    float upX = event.getX();
-                    float deltaX = this.lastDownX - upX;
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            Log.d(LOG_TAG, "onFling: " + e1 +"; "+ e2.toString());
+            return this.checkOnSwipe(e1, e2, velocityX, velocityY);
+        }
 
-                    if (Math.abs(deltaX) > MIN_DISTANCE) {
-                        if (deltaX < 0) {
-                            this.onLeftToRightSwipe();
-                        }
-                        if (deltaX > 0) {
-                            this.onRightToLeftSwipe();
-                        }
-                    }
+        public boolean checkOnSwipe(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
+        {
+            try {
+                if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH){
+                    return false;
                 }
+                // right to left swipe
+                if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
+                        && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                    onLeftSwipe();
+                }
+                // left to right swipe
+                else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
+                        && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                    onRightSwipe();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             return false;
         }
 
-        private void onRightToLeftSwipe() {
-            if(emptyListLayout.getVisibility() == View.VISIBLE )
-                goToNextMonth();
-            else{
-                int maxScrollX = tableHorizontalScrollView.getChildAt(0).getMeasuredWidth()- tableHorizontalScrollView.getMeasuredWidth();
-                int scrollX = tableHorizontalScrollView.getScrollX();
-                if (scrollX >= maxScrollX - SCROLL_X_PX_BUFFER)
-                    goToNextMonth();
-            }
+        private void onRightSwipe() {
+            Log.d(LOG_TAG, "Right swipe");
+            goToPreviousMonth();
         }
 
-        private void onLeftToRightSwipe() {
-            if(emptyListLayout.getVisibility() == View.VISIBLE )
-                goToPreviousMonth();
-            else{
-                int scrollX = tableHorizontalScrollView.getScrollX();
-                if (scrollX <= SCROLL_X_PX_BUFFER )
-                    goToPreviousMonth();
-            }
+        private void onLeftSwipe() {
+            Log.d(LOG_TAG, "Left swipe");
+            goToNextMonth();
         }
     }
 }
