@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.slamcode.collections.CollectionUtils;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.PlanStatus;
@@ -118,7 +119,9 @@ public class CategoryListViewAdapter extends ListViewDataAdapter<CategoryModel, 
     {
         this.processedCategoriesSet.clear();
         this.monthlyPlans = monthlyPlansModel;
-        this.setList(monthlyPlansModel.getCategories());
+        if(monthlyPlansModel != null)
+            this.setList(monthlyPlansModel.getCategories());
+        else this.setList(CollectionUtils.<CategoryModel>emptyList());
         this.notifyDataSetChanged();
     }
 

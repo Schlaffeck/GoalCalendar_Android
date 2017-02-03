@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -254,6 +256,18 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
     private void setupSwipeListener()
     {
         this.gestureDetector = new GestureDetectorCompat(this, new HorizontalFlingGestureListener());
+        this.monthlyGoalsListView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector.onTouchEvent(event);
+            }
+        });
+        this.emptyContentHorizontalScrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector.onTouchEvent(event);
+            }
+        });
     }
 
     private void setupMonthlyPlanningCategoryList() {

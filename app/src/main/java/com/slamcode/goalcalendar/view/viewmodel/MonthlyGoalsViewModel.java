@@ -56,6 +56,8 @@ public class MonthlyGoalsViewModel {
     }
 
     public void setYearAndMonth(int year, Month month) {
+
+        this.monthlyPlannedCategoryListViewAdapter.updateMonthlyPlans(null);
         UnitOfWork uow = persistenceContext.createUnitOfWork();
 
         MonthlyPlansModel model = uow.getMonthlyPlansRepository().findForMonth(year, month);
