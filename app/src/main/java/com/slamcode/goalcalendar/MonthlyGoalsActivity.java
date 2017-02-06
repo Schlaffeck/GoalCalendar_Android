@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -15,15 +17,12 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewTreeObserver;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,12 +34,12 @@ import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.planning.*;
 import com.slamcode.goalcalendar.service.NotificationScheduler;
-import com.slamcode.goalcalendar.view.CategoryListViewAdapter;
+import com.slamcode.goalcalendar.view.CategoryNameRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.ResourcesHelper;
 import com.slamcode.goalcalendar.view.activity.ActivityViewState;
 import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
 import com.slamcode.goalcalendar.view.lists.ListAdapterProvider;
-import com.slamcode.goalcalendar.view.lists.ListViewDataAdapter;
+import com.slamcode.goalcalendar.view.lists.RecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.utils.ColorsHelper;
 import com.slamcode.goalcalendar.view.lists.ListViewHelper;
 import com.slamcode.goalcalendar.view.utils.SpinnerHelper;
@@ -73,10 +72,10 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
     Spinner monthListSpinner;
 
     @BindView(R.id.monthly_goals_listview)
-    ListView monthlyGoalsListView;
+    RecyclerView monthlyGoalsListView;
 
     @BindView(R.id.monthly_goals_dailyplans_listview)
-    ListView dailyPlansListView;
+    RecyclerView dailyPlansListView;
 
     @BindView(R.id.monthly_goals_header_list_item_days_list)
     LinearLayout daysNumbersHeaderView;
@@ -283,11 +282,13 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
                 ResourcesHelper.monthsResourceStrings(this));
         this.monthListSpinner.setAdapter(monthsStringsAdapter);
 
-        this.setupAdapterListeners(this.viewModel.getMonthlyPlannedCategoryListViewAdapter());
+        this.setupAdapterListeners(this.viewModel.getCategoryNamesRecyclerViewAdapter());
         ListViewHelper.setSimultaneousScrolling(this.monthlyGoalsListView, this.dailyPlansListView);
 
-        this.monthlyGoalsListView.setAdapter(this.viewModel.getMonthlyPlannedCategoryListViewAdapter());
-        this.dailyPlansListView.setAdapter(this.viewModel.getMonthlyPlannedCategoryListViewAdapter());
+        this.monthlyGoalsListView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        this.monthlyGoalsListView.setAdapter(this.viewModel.getCategoryNamesRecyclerViewAdapter());
+        this.dailyPlansListView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        this.dailyPlansListView.setAdapter(this.viewModel.getCategoryDailyPlansRecyclerViewAdapter());
 
         this.registerForContextMenu(this.monthlyGoalsListView);
 
@@ -366,13 +367,13 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
     private void resetMonthCategoriesListView()
     {
         this.viewModel.setYearAndMonth(this.viewModel.getSelectedYear(), this.viewModel.getSelectedMonth());
-        this.monthlyGoalsListView.setAdapter(this.viewModel.getMonthlyPlannedCategoryListViewAdapter());
-        this.dailyPlansListView.setAdapter(this.viewModel.getMonthlyPlannedCategoryListViewAdapter());
+        this.monthlyGoalsListView.setAdapter(this.viewModel.getCategoryNamesRecyclerViewAdapter());
+        this.dailyPlansListView.setAdapter(this.viewModel.getCategoryDailyPlansRecyclerViewAdapter());
     }
 
-    private void setupAdapterListeners(final CategoryListViewAdapter adapter)
+    private void setupAdapterListeners(final CategoryNameRecyclerViewAdapter adapter)
     {
-        adapter.addItemSourceChangedEventListener(new ListViewDataAdapter.ItemsSourceChangedEventListener<CategoryModel>() {
+        adapter.addItemSourceChangedEventListener(new RecyclerViewDataAdapter.ItemsSourceChangedEventListener<CategoryModel>() {
             @Override
             public void onNewItemAdded(int itemPosition) {
                 monthlyGoalsListView.smoothScrollToPosition(itemPosition);
@@ -382,7 +383,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
 
             @Override
             public void onItemModified(int itemPosition) {
-                if(adapter.getCount() == 1)
+                if(adapter.getItemCount() == 1)
                 {
                     // dirty hack for updating modified list with single-item
                     resetMonthCategoriesListView();

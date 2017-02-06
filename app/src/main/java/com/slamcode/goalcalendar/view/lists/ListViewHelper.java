@@ -1,5 +1,7 @@
 package com.slamcode.goalcalendar.view.lists;
 
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsListView;
@@ -52,5 +54,34 @@ public final class ListViewHelper {
 
         rightList.setOnScrollListener(scrollListener);
         leftList.setOnScrollListener(scrollListener);
+    }
+
+    public static void setSimultaneousScrolling(final RecyclerView leftList, final RecyclerView rightList)
+    {
+        RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
+
+            boolean isScrolling = false;
+
+            @Override
+            public void onScrollStateChanged(RecyclerView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScrolled(RecyclerView view, int dx, int dy) {
+                if(this.isScrolling)
+                    return;
+
+                this.isScrolling = true;
+                if(view == leftList)
+                    rightList.smoothScrollBy(dx, dy);
+                else
+                    leftList.smoothScrollBy(dx, dy);
+                this.isScrolling = false;
+            }
+        };
+
+        rightList.addOnScrollListener(scrollListener);
+        leftList.addOnScrollListener(scrollListener);
     }
 }

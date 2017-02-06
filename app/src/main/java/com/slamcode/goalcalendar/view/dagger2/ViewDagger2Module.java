@@ -1,13 +1,7 @@
 package com.slamcode.goalcalendar.view.dagger2;
 
-import android.content.Context;
-import android.view.LayoutInflater;
-
-import com.slamcode.goalcalendar.data.model.CategoryModel;
-import com.slamcode.goalcalendar.view.CategoryListViewAdapter;
 import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
 import com.slamcode.goalcalendar.view.lists.ListAdapterProvider;
-import com.slamcode.goalcalendar.view.lists.ListViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.SimpleListViewAdapterProvider;
 
 import javax.inject.Singleton;

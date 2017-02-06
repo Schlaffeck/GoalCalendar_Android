@@ -3,10 +3,8 @@ package com.slamcode.goalcalendar.view.lists;
 import android.content.Context;
 import android.view.LayoutInflater;
 
-import com.slamcode.goalcalendar.view.CategoryListViewAdapter;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.slamcode.goalcalendar.view.CategoryDailyPlansRecyclerViewAdapter;
+import com.slamcode.goalcalendar.view.CategoryNameRecyclerViewAdapter;
 
 /**
  * Created by moriasla on 02.02.2017.
@@ -15,7 +13,12 @@ import java.util.Map;
 public class SimpleListViewAdapterProvider implements ListAdapterProvider {
 
     @Override
-    public CategoryListViewAdapter provideCategoryListViewAdapter(Context context, LayoutInflater inflater) {
-        return new CategoryListViewAdapter(context, inflater);
+    public CategoryNameRecyclerViewAdapter provideCategoryNameListViewAdapter(Context context, LayoutInflater inflater) {
+        return new CategoryNameRecyclerViewAdapter(context, inflater);
+    }
+
+    @Override
+    public CategoryDailyPlansRecyclerViewAdapter provideCategoryDailyPlansListViewAdapter(Context context, LayoutInflater layoutInflater) {
+        return new CategoryDailyPlansRecyclerViewAdapter(context, layoutInflater);
     }
 }

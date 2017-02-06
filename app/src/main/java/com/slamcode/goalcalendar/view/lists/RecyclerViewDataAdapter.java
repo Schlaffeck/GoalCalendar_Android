@@ -1,12 +1,14 @@
 package com.slamcode.goalcalendar.view.lists;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import com.slamcode.collections.CollectionUtils;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 
 import java.util.ArrayList;
@@ -18,7 +20,7 @@ import java.util.List;
  * Created by moriasla on 16.12.2016.
  */
 
-public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderBase<TData>> extends BaseAdapter {
+public abstract class RecyclerViewDataAdapter<TData, TViewHolder extends ViewHolderBase<TData>> extends RecyclerView.Adapter<TViewHolder> {
 
     private List<TData> list;
     private Context context;
@@ -29,9 +31,14 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
 
     private List<TData> modifiedItems;
 
-    protected ListViewDataAdapter(Context context, LayoutInflater layoutInflater)
+    protected RecyclerViewDataAdapter(Context context, LayoutInflater layoutInflater)
     {
-        this.list = new ArrayList<>();
+        this(context, layoutInflater, CollectionUtils.<TData>emptyList());
+    }
+
+    protected RecyclerViewDataAdapter(Context context, LayoutInflater layoutInflater, List<TData> sourceList)
+    {
+        this.list = sourceList;
         this.modifiedItems = new ArrayList<>();
         this.context = context;
         this.layoutInflater = layoutInflater;
@@ -46,13 +53,6 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
         this.itemsComparator = itemsComparator;
     }
 
-    @Override
-    public int getCount()
-    {
-        return this.list != null ? this.list.size() : 0;
-    }
-
-    @Override
     public TData getItem(int position)
     {
         TData result = null;
@@ -70,52 +70,19 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
     }
 
     @Override
+    public abstract TViewHolder onCreateViewHolder(ViewGroup parent, int viewType);
+
+    @Override
+    public abstract void onBindViewHolder(TViewHolder holder, int position);
+
+    @Override
     public long getItemId(int position) {
         return position;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent)
-    {
-        TViewHolder viewHolder;
-        long id = this.getItemId(position);
-        if(convertView == null
-                || ((TViewHolder)convertView.getTag()).getId() != id)
-        {
-            // create new holder for view
-            viewHolder = this.getNewViewHolder(convertView, id);
-            convertView = viewHolder.getView();
-
-            // hook UP the holder to the view for recyclage
-            convertView.setTag(viewHolder);
-        }
-        else
-        {
-            // skip all the expensive inflation/findViewById
-            // and just get the holder you already made
-            viewHolder = (TViewHolder) convertView.getTag();
-        }
-
-        TData object = this.getItem(position);
-        if(object != null
-                && (object != viewHolder.getBaseObject()
-                    || this.modifiedItems.contains(object)))
-        {
-            viewHolder.setBaseObject(object);
-            try
-            {
-                this.fillListElementView(object, viewHolder);
-                this.modifiedItems.remove(object);
-                convertView = viewHolder.getView();
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-                Log.e("Data conversion", e.getMessage());
-            }
-        }
-
-        return convertView;
+    public int getItemCount() {
+        return this.list != null ? this.list.size() : 0;
     }
 
     public void addOrUpdateItem(TData item)
@@ -197,10 +164,6 @@ public abstract class ListViewDataAdapter<TData, TViewHolder extends ViewHolderB
             listener.onItemRemoved(item);
         }
     }
-
-    protected abstract TViewHolder getNewViewHolder(View convertView, long id);
-
-    protected abstract void fillListElementView(TData data, final TViewHolder viewHolder);
 
     public LayoutInflater getLayoutInflater() {
         return layoutInflater;

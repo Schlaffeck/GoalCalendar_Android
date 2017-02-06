@@ -1,5 +1,6 @@
 package com.slamcode.goalcalendar.view.lists;
 
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
@@ -9,16 +10,14 @@ import butterknife.ButterKnife;
  * Created by moriasla on 16.12.2016.
  */
 
-public class ViewHolderBase<TData> {
+public class ViewHolderBase<TData> extends RecyclerView.ViewHolder {
 
     private final View view;
-    private TData baseObject;
-    private long id;
     private boolean viewRendered;
 
-    public ViewHolderBase(View view, long id)
+    public ViewHolderBase(View view)
     {
-        this.id = id;
+        super(view);
         this.view = view;
         ButterKnife.bind(this, view);
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -34,20 +33,8 @@ public class ViewHolderBase<TData> {
         });
     }
 
-    public TData getBaseObject() {
-        return baseObject;
-    }
-
-    public void setBaseObject(TData baseObject) {
-        this.baseObject = baseObject;
-    }
-
     public View getView() {
         return view;
-    }
-
-    public long getId() {
-        return id;
     }
 
     private void setViewRendered()

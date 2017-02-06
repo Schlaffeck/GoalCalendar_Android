@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:orientation="horizontal"
-    android:id="@+id/monthly_goals_list_item_mainLayout"
-    android:layout_height="?android:attr/listPreferredItemHeight">
-
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/monthly_goals_list_item_category_panel"
         android:layout_width="@dimen/monthly_goals_table_category_column_width"
-        android:layout_height="wrap_content"
+    android:layout_height="?android:attr/listPreferredItemHeight"
         android:orientation="vertical"
         android:background="@color/listItemBackgroundColor">
         <TextView
@@ -35,17 +30,3 @@
             android:maxLines="1"
             android:textSize="@dimen/list_item_text_small_size" />
     </LinearLayout>
-
-    <!-- days in month list -->
-    <LinearLayout
-        android:background="@color/listItemBackgroundColor"
-        android:orientation="horizontal"
-        android:id="@+id/monthly_goals_list_item_days_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:horizontalSpacing="@dimen/default_horizontal_spacing"
-        android:layout_marginTop="@dimen/default_margin"
-        android:layout_marginBottom="@dimen/default_margin"
-        android:layout_toRightOf="@id/monthly_goals_list_item_category_panel"></LinearLayout>
-
-</LinearLayout>
