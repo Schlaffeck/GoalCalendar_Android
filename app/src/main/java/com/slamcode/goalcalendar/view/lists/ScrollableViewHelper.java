@@ -16,7 +16,7 @@ import java.util.Map;
  * Created by moriasla on 09.01.2017.
  */
 
-public final class ListViewHelper {
+public final class ScrollableViewHelper {
 
     public static void setSimultaneousScrolling(final ListView leftList, final ListView rightList)
     {
@@ -60,24 +60,30 @@ public final class ListViewHelper {
     {
         RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
 
-            boolean isScrolling = false;
+            RecyclerView startedScrolling = null;
 
             @Override
-            public void onScrollStateChanged(RecyclerView absListView, int i) {
-
+            public void onScrollStateChanged(RecyclerView view, int state) {
+                if(RecyclerView.SCROLL_STATE_IDLE == state
+                        && this.startedScrolling == view) {
+                    this.startedScrolling = null;
+                }
+                else if(state != RecyclerView.SCROLL_STATE_IDLE
+                        && this.startedScrolling == null)
+                {
+                    this.startedScrolling = view;
+                }
             }
 
             @Override
             public void onScrolled(RecyclerView view, int dx, int dy) {
-                if(this.isScrolling)
+                if(this.startedScrolling != view)
                     return;
 
-                this.isScrolling = true;
                 if(view == leftList)
                     rightList.smoothScrollBy(dx, dy);
                 else
                     leftList.smoothScrollBy(dx, dy);
-                this.isScrolling = false;
             }
         };
 

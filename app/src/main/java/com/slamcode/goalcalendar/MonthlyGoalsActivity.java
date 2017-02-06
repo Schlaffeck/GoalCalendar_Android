@@ -41,7 +41,7 @@ import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
 import com.slamcode.goalcalendar.view.lists.ListAdapterProvider;
 import com.slamcode.goalcalendar.view.lists.RecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.utils.ColorsHelper;
-import com.slamcode.goalcalendar.view.lists.ListViewHelper;
+import com.slamcode.goalcalendar.view.lists.ScrollableViewHelper;
 import com.slamcode.goalcalendar.view.utils.SpinnerHelper;
 import com.slamcode.goalcalendar.view.viewmodel.MonthlyGoalsViewModel;
 
@@ -283,7 +283,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
         this.monthListSpinner.setAdapter(monthsStringsAdapter);
 
         this.setupAdapterListeners(this.viewModel.getCategoryNamesRecyclerViewAdapter());
-        ListViewHelper.setSimultaneousScrolling(this.monthlyGoalsListView, this.dailyPlansListView);
+        ScrollableViewHelper.setSimultaneousScrolling(this.monthlyGoalsListView, this.dailyPlansListView);
 
         this.monthlyGoalsListView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         this.monthlyGoalsListView.setAdapter(this.viewModel.getCategoryNamesRecyclerViewAdapter());
