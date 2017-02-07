@@ -6,7 +6,7 @@ package com.slamcode.goalcalendar.data;
 
 public interface UnitOfWork  {
 
-    CategoryRepository getCategoryRepository();
+    CategoriesRepository getCategoriesRepository();
 
     MonthlyPlansRepository getMonthlyPlansRepository();
 

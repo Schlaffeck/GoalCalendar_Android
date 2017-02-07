@@ -143,8 +143,8 @@ public class JsonFilePersistenceContextInstrumentedTest {
         UnitOfWork uow = context.createUnitOfWork();
 
         assertNotNull(context.getDataBundle());
-        assertNotNull(uow.getCategoryRepository());
-        assertEquals(9, uow.getCategoryRepository().findAll().size());
+        assertNotNull(uow.getCategoriesRepository());
+        assertEquals(9, uow.getCategoriesRepository().findAll().size());
 
         assertNotNull(uow.getMonthlyPlansRepository());
         assertEquals(3, uow.getMonthlyPlansRepository().findAll().size());

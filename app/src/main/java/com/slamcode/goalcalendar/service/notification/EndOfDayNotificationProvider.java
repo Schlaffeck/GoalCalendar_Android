@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 
+import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.MonthlyGoalsActivity;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.service.NotificationScheduler;
@@ -20,10 +21,10 @@ public final class EndOfDayNotificationProvider implements NotificationProvider 
 
     public static final int NOTIFICATION_ID = 2;
 
-    private final Context context;
+    private final ApplicationContext context;
     private final AppSettingsManager settingsManager;
 
-    public EndOfDayNotificationProvider(Context context,
+    public EndOfDayNotificationProvider(ApplicationContext context,
                                         AppSettingsManager settingsManager)
     {
         this.context = context;
@@ -38,29 +39,16 @@ public final class EndOfDayNotificationProvider implements NotificationProvider 
     @Override
     public Notification provideNotification() {
 
-        Notification result = null;
-            Intent resultIntent = new Intent(this.context, MonthlyGoalsActivity.class);
+            Intent resultIntent = this.context.createIntent(MonthlyGoalsActivity.class);
             resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             resultIntent.putExtra(NotificationScheduler.NOTIFICATION_ORIGINATED_FROM_FLAG, true);
-            result = this.buildNotification(resultIntent);
+        Notification result = this.context.buildNotification(
+                R.drawable.ic_done_white_24dp,
+                this.context.getStringFromResources(R.string.notification_endOfDay_title),
+                this.context.getStringFromResources(R.string.notification_endOfDay_content),
+                this.context.getColorArgbFromResources(R.color.planningStateButton_stateSuccess_backgroundColor),
+                this.context.createPendingIntent(0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
         return result;
-    }
-
-    private Notification buildNotification(Intent resultIntent)
-    {
-        NotificationCompat.Builder notificationBuilder
-                = new NotificationCompat.Builder(this.context)
-                .setSmallIcon(R.drawable.ic_done_white_24dp)
-                .setContentTitle(this.context.getString(R.string.notification_endOfDay_title))
-                .setContentText(this.context.getString(R.string.notification_endOfDay_content))
-                .setContentIntent(
-                        PendingIntent.getActivity(this.context, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-                );
-
-        notificationBuilder.setAutoCancel(true);
-        notificationBuilder.setColor(ContextCompat.getColor(this.context, R.color.planningStateButton_stateSuccess_backgroundColor));
-
-        return notificationBuilder.build();
     }
 }

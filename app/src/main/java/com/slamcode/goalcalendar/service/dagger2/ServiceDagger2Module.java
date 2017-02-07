@@ -2,6 +2,7 @@ package com.slamcode.goalcalendar.service.dagger2;
 
 import android.content.Context;
 
+import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.service.NotificationScheduler;
 import com.slamcode.goalcalendar.service.notification.EndOfDayNotificationProvider;
@@ -23,9 +24,9 @@ import dagger.Provides;
 @Module
 public class ServiceDagger2Module {
 
-    private final Context context;
+    private final ApplicationContext context;
 
-    public ServiceDagger2Module(Context context)
+    public ServiceDagger2Module(ApplicationContext context)
     {
         this.context = context;
     }

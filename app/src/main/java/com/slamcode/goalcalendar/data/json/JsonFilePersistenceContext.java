@@ -3,21 +3,16 @@ package com.slamcode.goalcalendar.data.json;
 import android.content.Context;
 
 import com.google.gson.Gson;
-import com.slamcode.collections.CollectionUtils;
-import com.slamcode.collections.ElementSelector;
-import com.slamcode.goalcalendar.data.CategoryRepository;
+import com.slamcode.goalcalendar.data.CategoriesRepository;
 import com.slamcode.goalcalendar.data.MonthlyPlansRepository;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.data.UnitOfWork;
 import com.slamcode.goalcalendar.data.inmemory.InMemoryCategoriesRepository;
 import com.slamcode.goalcalendar.data.inmemory.InMemoryMonthlyPlansRepository;
-import com.slamcode.goalcalendar.data.model.CategoryModel;
-import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.util.Collection;
 
 
 /**
@@ -104,18 +99,17 @@ public class JsonFilePersistenceContext implements PersistenceContext {
 
         private boolean working = false;
         private final InMemoryMonthlyPlansRepository monthlyPlansRepository;
-        private final CategoryRepository categoryRepository;
+        private final CategoriesRepository categoriesRepository;
 
         JsonUnitOfWork(JsonDataBundle dataBundle)
         {
-            this.categoryRepository = new InMemoryCategoriesRepository(dataBundle.monthlyPlans);
+            this.categoriesRepository = new InMemoryCategoriesRepository(dataBundle.monthlyPlans);
 
             this.monthlyPlansRepository = new InMemoryMonthlyPlansRepository(dataBundle.monthlyPlans);
         }
 
-        @Override
-        public CategoryRepository getCategoryRepository() {
-            return this.categoryRepository;
+        public CategoriesRepository getCategoriesRepository() {
+            return this.categoriesRepository;
         }
 
         @Override

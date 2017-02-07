@@ -1,15 +1,11 @@
 package com.slamcode.goalcalendar.data.inmemory;
 
-import com.android.internal.util.Predicate;
 import com.slamcode.collections.CollectionUtils;
 import com.slamcode.collections.ElementSelector;
 import com.slamcode.goalcalendar.data.*;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
-import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.data.model.ModelHelper;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
-import com.slamcode.goalcalendar.planning.DateTimeHelper;
-import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.PlanStatus;
 
@@ -22,7 +18,7 @@ import java.util.List;
  * Created by moriasla on 16.12.2016.
  */
 
-public class InMemoryCategoriesRepository extends InMemoryRepositoryBase<CategoryModel, Integer> implements CategoryRepository {
+public class InMemoryCategoriesRepository extends InMemoryRepositoryBase<CategoryModel, Integer> implements CategoriesRepository {
 
     private List<MonthlyPlansModel> monthlyPlansModels;
 

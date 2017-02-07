@@ -1,7 +1,7 @@
 package com.slamcode.goalcalendar.data.inmemory;
 
 import com.android.internal.util.Predicate;
-import com.slamcode.goalcalendar.data.CategoryRepository;
+import com.slamcode.goalcalendar.data.CategoriesRepository;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 
 import com.slamcode.collections.*;
@@ -12,10 +12,11 @@ import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.PlanStatus;
+import com.slamcode.goalcalendar.view.viewmodel.MonthlyGoalsViewModel;
 
+import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class InMemoryCategoriesRepositoryTest {
     @Test
     public void inMemoryCategoriesRepository_findAll_test()
     {
-        CategoryRepository repo = new InMemoryCategoriesRepository();
+        CategoriesRepository repo = new InMemoryCategoriesRepository();
 
         List<CategoryModel> all = repo.findAll();
         assertEquals(0, all.size());
@@ -50,7 +51,7 @@ public class InMemoryCategoriesRepositoryTest {
 
         MonthlyPlansModel monthlyPlansModel = new MonthlyPlansModel();
         monthlyPlansModel.setCategories(Arrays.asList(cm1, cm2, cm3));
-        CategoryRepository repo
+        CategoriesRepository repo
                 = new InMemoryCategoriesRepository(Arrays.asList(monthlyPlansModel));
 
         List<CategoryModel> all = repo.findAll();
@@ -80,7 +81,7 @@ public class InMemoryCategoriesRepositoryTest {
         CategoryModel cm3 = new CategoryModel(3);
         MonthlyPlansModel monthlyPlansModel = new MonthlyPlansModel();
         monthlyPlansModel.setCategories(Arrays.asList(cm1, cm2, cm3));
-        CategoryRepository repo
+        CategoriesRepository repo
                 = new InMemoryCategoriesRepository(Arrays.asList(monthlyPlansModel));
 
         List<CategoryModel> all = repo.findAll();
@@ -120,7 +121,7 @@ public class InMemoryCategoriesRepositoryTest {
 
         MonthlyPlansModel monthlyPlansModel = new MonthlyPlansModel();
         monthlyPlansModel.setCategories(Arrays.asList(cm1, cm2, cm3));
-        CategoryRepository repo
+        CategoriesRepository repo
                 = new InMemoryCategoriesRepository(Arrays.asList(monthlyPlansModel));
 
         List<CategoryModel> all = repo.findAll();
@@ -183,7 +184,7 @@ public class InMemoryCategoriesRepositoryTest {
 
         MonthlyPlansModel monthlyPlansModel = new MonthlyPlansModel();
         monthlyPlansModel.setCategories(Arrays.asList(cm1, cm2, cm3));
-        CategoryRepository repo
+        CategoriesRepository repo
                 = new InMemoryCategoriesRepository(Arrays.asList(monthlyPlansModel));
 
         List<CategoryModel> all = repo.findAll();
@@ -251,7 +252,7 @@ public class InMemoryCategoriesRepositoryTest {
 
         MonthlyPlansModel monthlyPlansModel = new MonthlyPlansModel();
         monthlyPlansModel.setCategories(Arrays.asList(cm1, cm2, cm3));
-        CategoryRepository repo
+        CategoriesRepository repo
                 = new InMemoryCategoriesRepository(Arrays.asList(monthlyPlansModel));
 
         List<CategoryModel> all = repo.findAll();
@@ -298,4 +299,114 @@ public class InMemoryCategoriesRepositoryTest {
 
         assertEquals(cm1, filtered);
     }
+
+    @Test
+    public void inMemoryCategoriesRepository_findForMonth_test() throws Exception {
+        MonthlyPlansModel april = this.createMonthlyPlans(1, 2016, Month.APRIL, "A1", "A2", "A3", "A4", "A5", "A6");
+        MonthlyPlansModel may = this.createMonthlyPlans(2, 2016, Month.MAY, "B1", "B2", "B3", "B4", "B5");
+
+        // set repository
+        CategoriesRepository repository = new InMemoryCategoriesRepository(CollectionUtils.createList(april, may));
+
+        List<CategoryModel> categories = repository.findForMonth(2016, Month.APRIL);
+        assertEquals(6, categories.size());
+        assertEquals("A1", categories.get(0).getName());
+        assertEquals("A2", categories.get(1).getName());
+        assertEquals("A3", categories.get(2).getName());
+        assertEquals("A4", categories.get(3).getName());
+        assertEquals("A5", categories.get(4).getName());
+        assertEquals("A6", categories.get(5).getName());
+
+        categories = repository.findForMonth(2016, Month.MAY);
+        assertEquals(5, categories.size());
+        assertEquals("B1", categories.get(0).getName());
+        assertEquals("B2", categories.get(1).getName());
+        assertEquals("B3", categories.get(2).getName());
+        assertEquals("B4", categories.get(3).getName());
+        assertEquals("B5", categories.get(4).getName());
+
+        categories = repository.findForMonth(2016, Month.JUNE);
+        assertEquals(0, categories.size());
+
+        categories = repository.findForMonth(2016, Month.MARCH);
+        assertEquals(0, categories.size());
+    }
+
+    @Test
+    public void inMemoryCategoriesRepository_findForDateWithStatus_test() throws Exception {
+        MonthlyPlansModel april = this.createMonthlyPlans(1, 2016, Month.APRIL, "A1", "A2", "A3", "A4", "A5", "A6");
+        MonthlyPlansModel may = this.createMonthlyPlans(2, 2016, Month.MAY, "B1", "B2", "B3", "B4", "B5");
+
+        CategoriesRepository repo = new InMemoryCategoriesRepository(CollectionUtils.createList(april, may));
+        // set daily plans statuses
+        int year = 2016;
+        Month month = Month.APRIL;
+        int day = 21;
+        PlanStatus status = PlanStatus.Planned;
+        april.getCategories().get(0).getDailyPlans().get(day-1).setStatus(status); // A1
+        april.getCategories().get(2).getDailyPlans().get(day-1).setStatus(status); // A3
+        april.getCategories().get(4).getDailyPlans().get(day-1).setStatus(status); // A5
+
+
+        // find
+        List<CategoryModel> actual = repo.findForDateWithStatus(year, month, day, PlanStatus.Success);
+        assertEquals(0, actual.size());
+
+        actual = repo.findForDateWithStatus(year, month, day, status);
+        assertEquals(3, actual.size());
+        assertEquals("A1", actual.get(0).getName());
+        assertEquals("A3", actual.get(1).getName());
+        assertEquals("A5", actual.get(2).getName());
+
+        actual = repo.findForDateWithStatus(year, month, day, PlanStatus.Empty);
+        assertEquals(3, actual.size());
+        assertEquals("A2", actual.get(0).getName());
+        assertEquals("A4", actual.get(1).getName());
+        assertEquals("A6", actual.get(2).getName());
+
+        // mark other
+        month = Month.MAY;
+        day = 1;
+        may.getCategories().get(0).getDailyPlans().get(day-1).setStatus(PlanStatus.Failure);
+        may.getCategories().get(1).getDailyPlans().get(day-1).setStatus(PlanStatus.Success);
+        may.getCategories().get(2).getDailyPlans().get(day-1).setStatus(PlanStatus.Empty);
+        may.getCategories().get(3).getDailyPlans().get(day-1).setStatus(PlanStatus.Planned);
+        may.getCategories().get(4).getDailyPlans().get(day-1).setStatus(PlanStatus.Failure);
+
+        actual = repo.findForDateWithStatus(year, month, day, PlanStatus.Planned);
+        assertEquals(1, actual.size());
+        assertEquals("B4", actual.get(0).getName());
+
+        actual = repo.findForDateWithStatus(year, month, day, PlanStatus.Failure);
+        assertEquals(2, actual.size());
+        assertEquals("B1", actual.get(0).getName());
+        assertEquals("B5", actual.get(1).getName());
+
+        actual = repo.findForDateWithStatus(year, month, day, PlanStatus.Success);
+        assertEquals(1, actual.size());
+        assertEquals("B2", actual.get(0).getName());
+
+        actual = repo.findForDateWithStatus(year, month, day, PlanStatus.Empty);
+        assertEquals(1, actual.size());
+        assertEquals("B3", actual.get(0).getName());
+
+        // month not in db
+        actual = repo.findForDateWithStatus(year, Month.MARCH, day, PlanStatus.Success);
+        assertEquals(0, actual.size());
+    }
+
+
+    private MonthlyPlansModel createMonthlyPlans(int id, int year, Month month, String... categoriesNames)
+    {
+        MonthlyPlansModel vm = new MonthlyPlansModel(id, year, month);
+        for (String catName : categoriesNames) {
+            int catId = id^year^month.getNumValue();
+            CategoryModel c = new CategoryModel(catId, catName, FrequencyPeriod.Month, 2);
+            c.setDailyPlans(ModelHelper.createListOfDailyPlansForMonth(year, month));
+            vm.getCategories().add(c);
+        }
+
+        return vm;
+    }
+
 }
