@@ -19,4 +19,6 @@ public interface AppSettingsManager {
     boolean getShowStartupNotification();
 
     void setShowStartupNotification(boolean showStartupNotification);
+
+    boolean getAutomaticallyMarkUncompletedTask();
 }

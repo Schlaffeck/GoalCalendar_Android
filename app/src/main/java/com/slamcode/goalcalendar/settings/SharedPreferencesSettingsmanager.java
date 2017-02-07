@@ -25,6 +25,10 @@ public class SharedPreferencesSettingsManager implements AppSettingsManager {
     private final static String SHOW_EOD_NOTIFICATIONS_SETTING_NAME = "SHOW_EOD_NOTIFICATIONS";
     private final static boolean SHOW_EOD_NOTIFICATIONS_DEFAULT_VALUE = true;
 
+
+    private final static String MARK_UNCOMPLETED_AS_FAILED_NAME = "MARK_UNCOMPLETED_AS_FAILED";
+    private final static boolean MARK_UNCOMPLETED_AS_FAILED_VALUE = true;
+
     private final Context context;
 
     private SharedPreferences sharedPreferences;
@@ -72,5 +76,10 @@ public class SharedPreferencesSettingsManager implements AppSettingsManager {
         SharedPreferences.Editor editor = this.sharedPreferences.edit();
         editor.putBoolean(SHOW_STARTUP_NOTIFICATIONS_SETTING_NAME, showStartupNotification);
         editor.commit();
+    }
+
+    @Override
+    public boolean getAutomaticallyMarkUncompletedTask() {
+        return this.sharedPreferences.getBoolean(MARK_UNCOMPLETED_AS_FAILED_NAME, MARK_UNCOMPLETED_AS_FAILED_VALUE);
     }
 }

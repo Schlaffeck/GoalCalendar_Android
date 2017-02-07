@@ -69,5 +69,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="pref_title_markPlannedAsFailed_desctiption_checkbox">Planned, not completed tasks will be automatically marked as failed next day</string>
+    <string name="pref_title_markPlannedAsFailed_switch">Automatically mark tasks</string>
 
 </resources>
