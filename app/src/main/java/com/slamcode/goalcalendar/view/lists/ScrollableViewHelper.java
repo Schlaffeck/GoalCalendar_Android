@@ -56,38 +56,29 @@ public final class ScrollableViewHelper {
         leftList.setOnScrollListener(scrollListener);
     }
 
-    public static void setSimultaneousScrolling(final RecyclerView leftList, final RecyclerView rightList)
+    public static void setSimultaneousScrolling(final RecyclerView leftRcv, final RecyclerView rightRcv)
     {
         RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
-
-            RecyclerView startedScrolling = null;
-
             @Override
-            public void onScrollStateChanged(RecyclerView view, int state) {
-                if(RecyclerView.SCROLL_STATE_IDLE == state
-                        && this.startedScrolling == view) {
-                    this.startedScrolling = null;
-                }
-                else if(state != RecyclerView.SCROLL_STATE_IDLE
-                        && this.startedScrolling == null)
-                {
-                    this.startedScrolling = view;
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (recyclerView == leftRcv) {
+                    rightRcv.removeOnScrollListener(this);
+                    rightRcv.scrollBy(0, dy);
+                    rightRcv.addOnScrollListener(this);
+                } else if (recyclerView == rightRcv) {
+                    leftRcv.removeOnScrollListener(this);
+                    leftRcv.scrollBy(0, dy);
+                    leftRcv.addOnScrollListener(this);
                 }
             }
 
             @Override
-            public void onScrolled(RecyclerView view, int dx, int dy) {
-                if(this.startedScrolling != view)
-                    return;
-
-                if(view == leftList)
-                    rightList.smoothScrollBy(dx, dy);
-                else
-                    leftList.smoothScrollBy(dx, dy);
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
             }
         };
 
-        rightList.addOnScrollListener(scrollListener);
-        leftList.addOnScrollListener(scrollListener);
+        leftRcv.addOnScrollListener(scrollListener);
+        rightRcv.addOnScrollListener(scrollListener);
     }
 }
