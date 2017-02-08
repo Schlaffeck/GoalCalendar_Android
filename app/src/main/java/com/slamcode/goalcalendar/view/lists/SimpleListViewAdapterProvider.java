@@ -3,6 +3,8 @@ package com.slamcode.goalcalendar.view.lists;
 import android.content.Context;
 import android.view.LayoutInflater;
 
+import com.slamcode.collections.CollectionUtils;
+import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.view.CategoryDailyPlansRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.CategoryNameRecyclerViewAdapter;
 

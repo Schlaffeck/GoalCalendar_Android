@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.view;
 
 import android.content.Context;
+import android.support.v7.util.SortedList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +10,12 @@ import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.planning.PlanStatus;
 import com.slamcode.goalcalendar.view.controls.GoalPlanStatusButton;
+import com.slamcode.goalcalendar.view.lists.ComparatorSortedListCallback;
+import com.slamcode.goalcalendar.view.lists.DefaultComparator;
 import com.slamcode.goalcalendar.view.lists.RecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.ViewHolderBase;
 
-import java.util.List;
+import java.util.Collection;
 
 import butterknife.BindView;
 
@@ -24,8 +27,9 @@ public final class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<
 
     protected DailyPlanRecyclerViewAdapter(Context context,
                                            LayoutInflater layoutInflater,
-                                           List<DailyPlanModel> sourceList) {
-        super(context, layoutInflater, sourceList);
+                                           Collection<DailyPlanModel> sourceCollection) {
+        super(context, layoutInflater, new SortedList<>(DailyPlanModel.class, new ComparatorSortedListCallback<DailyPlanModel>(new DefaultComparator<DailyPlanModel>())));
+        this.updateSourceCollection(sourceCollection);
     }
 
     @Override

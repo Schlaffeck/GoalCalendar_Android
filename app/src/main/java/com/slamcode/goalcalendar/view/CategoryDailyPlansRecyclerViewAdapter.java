@@ -1,13 +1,12 @@
 package com.slamcode.goalcalendar.view;
 
 import android.content.Context;
+import android.support.v7.util.SortedList;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.slamcode.collections.CollectionUtils;
 import com.slamcode.goalcalendar.R;
@@ -15,6 +14,8 @@ import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
+import com.slamcode.goalcalendar.view.lists.ComparatorSortedListCallback;
+import com.slamcode.goalcalendar.view.lists.DefaultComparator;
 import com.slamcode.goalcalendar.view.lists.RecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.ViewHolderBase;
 
@@ -33,8 +34,8 @@ public class CategoryDailyPlansRecyclerViewAdapter extends RecyclerViewDataAdapt
         private MonthlyPlansModel monthlyPlans;
 
     public CategoryDailyPlansRecyclerViewAdapter(Context context, LayoutInflater layoutInflater)
-        {
-            super(context, layoutInflater);
+    {
+        super(context, layoutInflater, new SortedList<CategoryModel>(CategoryModel.class, new ComparatorSortedListCallback<CategoryModel>(new DefaultComparator<CategoryModel>())));
             this.processedCategoriesSet = new HashSet<>();
         }
 
@@ -68,10 +69,10 @@ public class CategoryDailyPlansRecyclerViewAdapter extends RecyclerViewDataAdapt
             this.processedCategoriesSet.add(categoryModel);
         }
 
-        if(categoryModel == this.getItem(this.getItemCount()-1)) {
-            viewHolder.daysListGridView.setPadding(0, 0, 0,
-                    viewHolder.getView().getResources().getDimensionPixelSize(R.dimen.monthly_goals_category_listView_lastItem_paddingBottom));
-        }
+//        if(categoryModel == this.getItem(this.getItemCount()-1)) {
+//            viewHolder.daysListGridView.setPadding(0, 0, 0,
+//                    viewHolder.getView().getResources().getDimensionPixelSize(R.dimen.monthly_goals_category_listView_lastItem_paddingBottom));
+//        }
     }
 
     public void updateMonthlyPlans(MonthlyPlansModel monthlyPlansModel)
@@ -79,8 +80,8 @@ public class CategoryDailyPlansRecyclerViewAdapter extends RecyclerViewDataAdapt
         this.processedCategoriesSet.clear();
         this.monthlyPlans = monthlyPlansModel;
         if(monthlyPlansModel != null)
-            this.setList(monthlyPlansModel.getCategories());
-        else this.setList(CollectionUtils.<CategoryModel>emptyList());
+            this.updateSourceCollection(monthlyPlansModel.getCategories());
+        else this.updateSourceCollection(CollectionUtils.<CategoryModel>emptyList());
         this.notifyDataSetChanged();
     }
 

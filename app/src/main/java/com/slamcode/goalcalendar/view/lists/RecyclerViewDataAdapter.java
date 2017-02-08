@@ -1,18 +1,16 @@
 package com.slamcode.goalcalendar.view.lists;
 
 import android.content.Context;
+import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 
-import com.slamcode.collections.CollectionUtils;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -20,23 +18,16 @@ import java.util.List;
  * Created by moriasla on 16.12.2016.
  */
 
-public abstract class RecyclerViewDataAdapter<TData, TViewHolder extends ViewHolderBase<TData>> extends RecyclerView.Adapter<TViewHolder> {
+public abstract class RecyclerViewDataAdapter<Item, ViewHolder extends ViewHolderBase<Item>> extends RecyclerView.Adapter<ViewHolder> {
 
-    private List<TData> list;
+    private SortedList<Item> list;
     private Context context;
     private LayoutInflater layoutInflater;
     private List<ItemsSourceChangedEventListener> adapterSourceChangedEventListeners;
 
-    private Comparator<TData> itemsComparator;
+    private List<Item> modifiedItems;
 
-    private List<TData> modifiedItems;
-
-    protected RecyclerViewDataAdapter(Context context, LayoutInflater layoutInflater)
-    {
-        this(context, layoutInflater, CollectionUtils.<TData>emptyList());
-    }
-
-    protected RecyclerViewDataAdapter(Context context, LayoutInflater layoutInflater, List<TData> sourceList)
+    protected RecyclerViewDataAdapter(Context context, LayoutInflater layoutInflater, SortedList<Item> sourceList)
     {
         this.list = sourceList;
         this.modifiedItems = new ArrayList<>();
@@ -45,17 +36,9 @@ public abstract class RecyclerViewDataAdapter<TData, TViewHolder extends ViewHol
         this.adapterSourceChangedEventListeners = new ArrayList<>();
     }
 
-    public Comparator<TData> getItemsComparator() {
-        return itemsComparator;
-    }
-
-    protected void setItemsComparator(Comparator<TData> itemsComparator) {
-        this.itemsComparator = itemsComparator;
-    }
-
-    public TData getItem(int position)
+    public Item getItem(int position)
     {
-        TData result = null;
+        Item result = null;
         try
         {
             result =  this.list != null ? this.list.get(position) : null;
@@ -70,10 +53,10 @@ public abstract class RecyclerViewDataAdapter<TData, TViewHolder extends ViewHol
     }
 
     @Override
-    public abstract TViewHolder onCreateViewHolder(ViewGroup parent, int viewType);
+    public abstract ViewHolder onCreateViewHolder(ViewGroup parent, int viewType);
 
     @Override
-    public abstract void onBindViewHolder(TViewHolder holder, int position);
+    public abstract void onBindViewHolder(ViewHolder holder, int position);
 
     @Override
     public long getItemId(int position) {
@@ -85,9 +68,9 @@ public abstract class RecyclerViewDataAdapter<TData, TViewHolder extends ViewHol
         return this.list != null ? this.list.size() : 0;
     }
 
-    public void addOrUpdateItem(TData item)
+    public void addOrUpdateItem(Item item)
     {
-        if(!this.list.contains(item))
+        if(this.list.indexOf(item) == -1)
         {
             this.list.add(item);
             this.notifyDataSetChanged();
@@ -100,9 +83,9 @@ public abstract class RecyclerViewDataAdapter<TData, TViewHolder extends ViewHol
         }
     }
 
-    public void removeItem(TData item)
+    public void removeItem(Item item)
     {
-        if(!this.list.contains(item)) {
+        if(this.list.indexOf(item) == -1) {
             return;
         }
 
@@ -112,7 +95,7 @@ public abstract class RecyclerViewDataAdapter<TData, TViewHolder extends ViewHol
         this.notifyItemRemoved(item);
     }
 
-    public void addItemSourceChangedEventListener(ItemsSourceChangedEventListener<TData> listener)
+    public void addItemSourceChangedEventListener(ItemsSourceChangedEventListener<Item> listener)
     {
         if(this.adapterSourceChangedEventListeners.contains(listener))
         {
@@ -131,16 +114,6 @@ public abstract class RecyclerViewDataAdapter<TData, TViewHolder extends ViewHol
         this.adapterSourceChangedEventListeners.remove(listener);
     }
 
-    protected List<TData> getList()
-    {
-        return this.list;
-    }
-
-    protected void setList(List<TData> newList)
-    {
-        this.list = newList;
-    }
-
     protected void notifyItemAdded(int position)
     {
         for (ItemsSourceChangedEventListener listener :
@@ -157,7 +130,7 @@ public abstract class RecyclerViewDataAdapter<TData, TViewHolder extends ViewHol
         }
     }
 
-    protected void notifyItemRemoved(TData item)
+    protected void notifyItemRemoved(Item item)
     {
         for (ItemsSourceChangedEventListener listener :
                 this.adapterSourceChangedEventListeners) {
@@ -171,6 +144,11 @@ public abstract class RecyclerViewDataAdapter<TData, TViewHolder extends ViewHol
 
     public Context getContext() {
         return context;
+    }
+
+    protected void updateSourceCollection(Collection<Item> newSourceCollection) {
+        this.list.clear();
+        this.list.addAll(newSourceCollection);
     }
 
     public interface ItemsSourceChangedEventListener<ItemType>

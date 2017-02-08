@@ -7,7 +7,7 @@ import com.slamcode.goalcalendar.planning.PlanStatus;
  * Created by moriasla on 16.12.2016.
  */
 
-public class DailyPlanModel implements Identifiable<Integer> {
+public class DailyPlanModel implements Identifiable<Integer>, Comparable<DailyPlanModel> {
 
     private int id;
 
@@ -50,5 +50,13 @@ public class DailyPlanModel implements Identifiable<Integer> {
 
     public void setDayNumber(int dayNumber) {
         this.dayNumber = dayNumber;
+    }
+
+    @Override
+    public int compareTo(DailyPlanModel o) {
+        if(o == null)
+            return 1;
+
+        return new Integer(this.getDayNumber()).compareTo(o.getDayNumber());
     }
 }
