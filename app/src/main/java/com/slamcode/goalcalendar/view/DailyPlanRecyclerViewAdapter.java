@@ -48,20 +48,16 @@ public final class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<
         return new DailyPlanViewHolder(view);
     }
 
-    @Override
-    public void onBindViewHolder(DailyPlanViewHolder dailyPlanViewHolder, int position) {
+    private boolean isCurrentDate(DailyPlanModel dailyPlanModel)
+    {
+        if(this.monthlyPlans == null)
+            return false;
 
-        final DailyPlanModel dailyPlanModel = this.getItem(position);
-        dailyPlanViewHolder.statusButton.setStatus(dailyPlanModel.getStatus());
-        dailyPlanViewHolder.statusButton.addOnStateChangedListener(new GoalPlanStatusButton.OnStateChangedListener() {
-            @Override
-            public void onStateChanged(PlanStatus newState) {
-                dailyPlanModel.setStatus(newState);
-            }
-        });
-
-        if(isCurrentDate(dailyPlanModel))
-            ColorsHelper.setSecondAccentBackgroundColor(dailyPlanViewHolder.getView());
+        int dayNumber = dailyPlanModel.getDayNumber();
+        return DateTimeHelper.isCurrentDate(
+                this.monthlyPlans.getYear(),
+                this.monthlyPlans.getMonth(),
+                dayNumber);
     }
 
     /**
@@ -75,17 +71,21 @@ public final class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<
         public DailyPlanViewHolder(View view) {
             super(view);
         }
-    }
 
-    private boolean isCurrentDate(DailyPlanModel dailyPlanModel)
-    {
-        if(this.monthlyPlans == null)
-            return false;
+        @Override
+        public void bindToModel(final DailyPlanModel modelObject) {
+            super.bindToModel(modelObject);
 
-        int dayNumber = dailyPlanModel.getDayNumber();
-        return DateTimeHelper.isCurrentDate(
-                this.monthlyPlans.getYear(),
-                this.monthlyPlans.getMonth(),
-                dayNumber);
+            this.statusButton.setStatus(modelObject.getStatus());
+            this.statusButton.addOnStateChangedListener(new GoalPlanStatusButton.OnStateChangedListener() {
+                @Override
+                public void onStateChanged(PlanStatus newState) {
+                    modelObject.setStatus(newState);
+                }
+            });
+
+            if(isCurrentDate(modelObject))
+                ColorsHelper.setSecondAccentBackgroundColor(this.getView());
+        }
     }
 }

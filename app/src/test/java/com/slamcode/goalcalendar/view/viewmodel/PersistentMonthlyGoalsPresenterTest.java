@@ -15,6 +15,8 @@ import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.view.CategoryNameRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.ListAdapterProvider;
+import com.slamcode.goalcalendar.view.presenters.MonthlyGoalsPresenter;
+import com.slamcode.goalcalendar.view.presenters.PersistentMonthlyGoalsPresenter;
 
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
@@ -32,7 +34,7 @@ import static org.mockito.Mockito.when;
 /**
  * Created by moriasla on 02.02.2017.
  */
-public class MonthlyGoalsViewModelTest {
+public class PersistentMonthlyGoalsPresenterTest {
 
     @Test
     public void monthlyGoalsViewModel_constructor_emptyList_test()
@@ -45,7 +47,7 @@ public class MonthlyGoalsViewModelTest {
         ListAdapterProvider adapterProvider = Mockito.mock(ListAdapterProvider.class);
         when(adapterProvider.provideCategoryNameListViewAdapter(context, inflater)).thenReturn(adapter);
 
-        MonthlyGoalsViewModel viewModel = new MonthlyGoalsViewModel(context, inflater, persistenceContext, adapterProvider);
+        MonthlyGoalsPresenter viewModel = new PersistentMonthlyGoalsPresenter(context, inflater, persistenceContext, adapterProvider);
 
         assertTrue(viewModel.isEmptyCategoriesList());
         assertEquals(Month.getCurrentMonth(), viewModel.getSelectedMonth());
@@ -84,7 +86,7 @@ public class MonthlyGoalsViewModelTest {
         when(adapterProvider.provideCategoryNameListViewAdapter(context, inflater)).thenReturn(adapter);
 
         // create
-        MonthlyGoalsViewModel viewModel = new MonthlyGoalsViewModel(context, inflater, persistenceContext, adapterProvider, true);
+        MonthlyGoalsPresenter viewModel = new PersistentMonthlyGoalsPresenter(context, inflater, persistenceContext, adapterProvider, true);
 
         assertFalse(viewModel.isEmptyCategoriesList());
         assertEquals(Month.getCurrentMonth(), viewModel.getSelectedMonth());
@@ -134,7 +136,7 @@ public class MonthlyGoalsViewModelTest {
                 .thenReturn(monthlyPlansModel);
 
         // act
-        MonthlyGoalsViewModel viewModel = new MonthlyGoalsViewModel(
+        MonthlyGoalsPresenter viewModel = new PersistentMonthlyGoalsPresenter(
                 context,
                 inflater,
                 persistenceContext,
@@ -174,7 +176,7 @@ public class MonthlyGoalsViewModelTest {
                 .thenReturn(null);
 
         // act
-        MonthlyGoalsViewModel viewModel = new MonthlyGoalsViewModel(
+        MonthlyGoalsPresenter viewModel = new PersistentMonthlyGoalsPresenter(
                 context,
                 inflater,
                 persistenceContext,
@@ -234,7 +236,7 @@ public class MonthlyGoalsViewModelTest {
         when(repository.findLast(Matchers.any(com.android.internal.util.Predicate.class))).thenReturn(currentMonth);
 
         // act
-        MonthlyGoalsViewModel viewModel = new MonthlyGoalsViewModel(
+        MonthlyGoalsPresenter viewModel = new PersistentMonthlyGoalsPresenter(
                 context,
                 inflater,
                 persistenceContext,

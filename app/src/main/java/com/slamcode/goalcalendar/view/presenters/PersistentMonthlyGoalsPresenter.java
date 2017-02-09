@@ -1,4 +1,4 @@
-package com.slamcode.goalcalendar.view.viewmodel;
+package com.slamcode.goalcalendar.view.presenters;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -23,7 +23,7 @@ import com.slamcode.goalcalendar.view.lists.ListAdapterProvider;
  * Created by moriasla on 16.01.2017.
  */
 
-public class MonthlyGoalsViewModel {
+public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
 
     private MonthlyPlansModel selectedMonthlyPlans;
 
@@ -34,19 +34,19 @@ public class MonthlyGoalsViewModel {
 
     private final PersistenceContext persistenceContext;
 
-    public MonthlyGoalsViewModel(Context context,
-                                 LayoutInflater layoutInflater,
-                                 PersistenceContext persistenceContext,
-                                 ListAdapterProvider listAdapterProvider)
+    public PersistentMonthlyGoalsPresenter(Context context,
+                                           LayoutInflater layoutInflater,
+                                           PersistenceContext persistenceContext,
+                                           ListAdapterProvider listAdapterProvider)
     {
         this(context, layoutInflater, persistenceContext, listAdapterProvider, false);
     }
 
-    public MonthlyGoalsViewModel(Context context,
-                                LayoutInflater layoutInflater,
-                                PersistenceContext persistenceContext,
-                                ListAdapterProvider listAdapterProvider,
-                                boolean setupCategoriesList)
+    public PersistentMonthlyGoalsPresenter(Context context,
+                                           LayoutInflater layoutInflater,
+                                           PersistenceContext persistenceContext,
+                                           ListAdapterProvider listAdapterProvider,
+                                           boolean setupCategoriesList)
     {
         this.context = context;
         this.persistenceContext = persistenceContext;
@@ -56,6 +56,7 @@ public class MonthlyGoalsViewModel {
             this.setYearAndMonth(this.getSelectedYear(), this.getSelectedMonth());
     }
 
+    @Override
     public void setYearAndMonth(int year, Month month) {
 
         this.categoryNamesRecyclerViewAdapter.updateMonthlyPlans(null);
@@ -81,14 +82,17 @@ public class MonthlyGoalsViewModel {
         this.categoryDailyPlansRecyclerViewAdapter.updateMonthlyPlans(selectedMonthlyPlans);
     }
 
+    @Override
     public CategoryNameRecyclerViewAdapter getCategoryNamesRecyclerViewAdapter() {
         return categoryNamesRecyclerViewAdapter;
     }
 
+    @Override
     public CategoryDailyPlansRecyclerViewAdapter getCategoryDailyPlansRecyclerViewAdapter() {
         return this.categoryDailyPlansRecyclerViewAdapter;
     }
 
+    @Override
     public boolean isEmptyCategoriesList()
     {
         return this.selectedMonthlyPlans == null
@@ -96,12 +100,14 @@ public class MonthlyGoalsViewModel {
             || this.selectedMonthlyPlans.getCategories().isEmpty();
     }
 
+    @Override
     public boolean canCopyCategoriesFromPreviousMonth()
     {
         return this.isEmptyCategoriesList()
                 && this.findPreviousMonthlyPlansModelWithCategories() != null;
     }
 
+    @Override
     public int getSelectedYear()
     {
         if(this.selectedMonthlyPlans == null)
@@ -114,6 +120,7 @@ public class MonthlyGoalsViewModel {
                 : DateTimeHelper.getCurrentYear();
     }
 
+    @Override
     public Month getSelectedMonth()
     {
         if(this.selectedMonthlyPlans == null)
@@ -124,12 +131,14 @@ public class MonthlyGoalsViewModel {
         return this.selectedMonthlyPlans.getMonth();
     }
 
+    @Override
     public String getCategoryNameOnPosition(int categoryPosition)
     {
         CategoryModel categoryModel = this.categoryNamesRecyclerViewAdapter.getItem(categoryPosition);
         return categoryModel == null ? null : categoryModel.getName();
     }
 
+    @Override
     public void copyCategoriesFromPreviousMonth()
     {
         MonthlyPlansModel previousMonthModel = findPreviousMonthlyPlansModelWithCategories();
@@ -152,6 +161,7 @@ public class MonthlyGoalsViewModel {
         }
     }
 
+    @Override
     public AddEditCategoryDialog createAddEditCategoryDialog(int categoryPosition)
     {
         final CategoryModel model = categoryPosition >= 0 ?
@@ -166,6 +176,8 @@ public class MonthlyGoalsViewModel {
                 if(confirmed)
                 {
                     CategoryModel newCategory = dialog.getModel();
+                    if(!selectedMonthlyPlans.getCategories().contains(newCategory))
+                        selectedMonthlyPlans.getCategories().add(newCategory);
                     categoryNamesRecyclerViewAdapter.addOrUpdateItem(newCategory);
                     categoryDailyPlansRecyclerViewAdapter.addOrUpdateItem(newCategory);
                 }
@@ -175,6 +187,7 @@ public class MonthlyGoalsViewModel {
         return dialog;
     }
 
+    @Override
     public AlertDialog createDeleteCategoryDialog(int categoryPosition)
     {
         final CategoryModel model = this.categoryNamesRecyclerViewAdapter.getItem(categoryPosition);
@@ -186,6 +199,7 @@ public class MonthlyGoalsViewModel {
                 .setPositiveButton(R.string.button_yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        selectedMonthlyPlans.getCategories().remove(model);
                         categoryNamesRecyclerViewAdapter.removeItem(model);
                         categoryDailyPlansRecyclerViewAdapter.removeItem(model);
                         dialogInterface.dismiss();

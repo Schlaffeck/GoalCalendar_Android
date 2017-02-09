@@ -1,4 +1,4 @@
-package com.slamcode.goalcalendar.view.viewmodel;
+package com.slamcode.goalcalendar.view.presenters;
 
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.ModelHelper;
@@ -14,17 +14,18 @@ import java.util.List;
  * Created by moriasla on 23.01.2017.
  */
 
-public class DayPlanSummaryViewModel {
+public class InMemoryDayPlanSummaryPresenter implements DayPlanSummaryPresenter {
 
     private final MonthlyPlansModel monthlyPlansModel;
     private final int dayNumber;
 
-    public DayPlanSummaryViewModel(MonthlyPlansModel monthlyPlansModel, int dayNumber)
+    public InMemoryDayPlanSummaryPresenter(MonthlyPlansModel monthlyPlansModel, int dayNumber)
     {
         this.monthlyPlansModel = monthlyPlansModel;
         this.dayNumber = dayNumber;
     }
 
+    @Override
     public Iterable<CategoryModel> getPlannedCategories()
     {
         return CollectionUtils.select(
@@ -32,6 +33,7 @@ public class DayPlanSummaryViewModel {
                 ModelHelper.getCategoryOfStatusOnDayPredicate(PlanStatus.Planned, this.dayNumber));
     }
 
+    @Override
     public Iterable<CategoryModel> getSuccessfulCategories()
     {
         return CollectionUtils.select(

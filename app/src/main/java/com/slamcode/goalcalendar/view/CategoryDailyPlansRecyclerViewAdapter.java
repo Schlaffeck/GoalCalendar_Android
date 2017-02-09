@@ -28,9 +28,8 @@ import butterknife.BindView;
  * Created by moriasla on 15.12.2016.
  */
 
-public class CategoryDailyPlansRecyclerViewAdapter extends RecyclerViewDataAdapter<CategoryModel, CategoryDailyPlansRecyclerViewAdapter.CategoryDailyPlansViewHolder> {
+public final class CategoryDailyPlansRecyclerViewAdapter extends RecyclerViewDataAdapter<CategoryModel, CategoryDailyPlansRecyclerViewAdapter.CategoryDailyPlansViewHolder> {
 
-        private Set<CategoryModel> processedCategoriesSet;
         private MonthlyPlansModel monthlyPlans;
 
     public CategoryDailyPlansRecyclerViewAdapter(Context context, LayoutInflater layoutInflater)
@@ -41,7 +40,6 @@ public class CategoryDailyPlansRecyclerViewAdapter extends RecyclerViewDataAdapt
     public CategoryDailyPlansRecyclerViewAdapter(Context context, LayoutInflater layoutInflater, MonthlyPlansModel monthlyPlans)
     {
         super(context, layoutInflater, new SortedList<>(CategoryModel.class, new ComparatorSortedListCallback<>(new DefaultComparator<CategoryModel>())));
-            this.processedCategoriesSet = new HashSet<>();
 
         this.monthlyPlans = monthlyPlans;
     }
@@ -55,72 +53,13 @@ public class CategoryDailyPlansRecyclerViewAdapter extends RecyclerViewDataAdapt
         return new CategoryDailyPlansViewHolder(convertView);
     }
 
-    @Override
-    public void onBindViewHolder(CategoryDailyPlansViewHolder viewHolder, int position) {
-
-        CategoryModel categoryModel = this.getItem(position);
-
-        if(this.processedCategoriesSet.contains(categoryModel))
-        {
-            return;
-        }
-
-        DailyPlanRecyclerViewAdapter adapter = new DailyPlanRecyclerViewAdapter(
-                this.getContext(),
-                this.getLayoutInflater(),
-                this.monthlyPlans,
-                categoryModel.getDailyPlans());
-
-        viewHolder.daysListGridView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-
-        if(viewHolder.isViewRendered()) {
-            this.processedCategoriesSet.add(categoryModel);
-        }
-
-//        if(categoryModel == this.getItem(this.getItemCount()-1)) {
-//            viewHolder.daysListGridView.setPadding(0, 0, 0,
-//                    viewHolder.getView().getResources().getDimensionPixelSize(R.dimen.monthly_goals_category_listView_lastItem_paddingBottom));
-//        }
-    }
-
     public void updateMonthlyPlans(MonthlyPlansModel monthlyPlansModel)
     {
-        this.processedCategoriesSet.clear();
         this.monthlyPlans = monthlyPlansModel;
         if(monthlyPlansModel != null)
             this.updateSourceCollection(monthlyPlansModel.getCategories());
         else this.updateSourceCollection(CollectionUtils.<CategoryModel>emptyList());
         this.notifyDataSetChanged();
-    }
-
-    @Override
-    public void notifyItemModified(int position)
-    {
-        CategoryModel item = this.getItem(position);
-        if(item != null)
-        {
-            this.processedCategoriesSet.remove(item);
-        }
-        super.notifyItemModified(position);
-    }
-
-    private boolean isCurrentDate(CategoryModel category, DailyPlanModel dailyPlanModel)
-    {
-        int dayNumber = dailyPlanModel.getDayNumber();
-
-        if(dayNumber <= 0 && category.getDailyPlans().contains(dailyPlanModel))
-        {
-            dayNumber = category.getDailyPlans().indexOf(dailyPlanModel)+1;
-        }
-
-        int year = this.monthlyPlans.getYear() > 0 ?
-                    this.monthlyPlans.getYear() : DateTimeHelper.getCurrentYear();
-
-        return DateTimeHelper.isCurrentDate(
-                year,
-                this.monthlyPlans.getMonth().getNumValue(),
-                dayNumber);
     }
 
     public class CategoryDailyPlansViewHolder extends ViewHolderBase<CategoryModel>
@@ -133,6 +72,25 @@ public class CategoryDailyPlansRecyclerViewAdapter extends RecyclerViewDataAdapt
         {
             super(view);
             this.daysListGridView.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
+        }
+
+        @Override
+        public void bindToModel(CategoryModel modelObject) {
+            super.bindToModel(modelObject);
+
+            DailyPlanRecyclerViewAdapter adapter = new DailyPlanRecyclerViewAdapter(
+                    getView().getContext(),
+                    getLayoutInflater(),
+                    monthlyPlans,
+                    modelObject.getDailyPlans());
+
+            this.daysListGridView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+
+//        if(categoryModel == this.getItem(this.getItemCount()-1)) {
+//            viewHolder.daysListGridView.setPadding(0, 0, 0,
+//                    viewHolder.getView().getResources().getDimensionPixelSize(R.dimen.monthly_goals_category_listView_lastItem_paddingBottom));
+//        }
         }
     }
 

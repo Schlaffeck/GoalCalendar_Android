@@ -8,13 +8,10 @@ import com.slamcode.collections.*;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.data.model.ModelHelper;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
-import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.PlanStatus;
-import com.slamcode.goalcalendar.view.viewmodel.MonthlyGoalsViewModel;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;

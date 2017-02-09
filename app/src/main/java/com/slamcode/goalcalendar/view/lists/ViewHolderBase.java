@@ -10,12 +10,18 @@ import butterknife.ButterKnife;
  * Created by moriasla on 16.12.2016.
  */
 
-public class ViewHolderBase<TData> extends RecyclerView.ViewHolder {
+public class ViewHolderBase<Model> extends RecyclerView.ViewHolder {
 
     private final View view;
     private boolean viewRendered;
 
-    public ViewHolderBase(View view)
+    private Model modelObject;
+
+    public ViewHolderBase(View view){
+        this(view, null);
+    }
+
+    public ViewHolderBase(View view, Model modelObject)
     {
         super(view);
         this.view = view;
@@ -31,6 +37,8 @@ public class ViewHolderBase<TData> extends RecyclerView.ViewHolder {
                 }
             }
         });
+
+        this.modelObject = modelObject;
     }
 
     public View getView() {
@@ -45,5 +53,14 @@ public class ViewHolderBase<TData> extends RecyclerView.ViewHolder {
     public boolean isViewRendered()
     {
         return this.viewRendered;
+    }
+
+    public Model getModelObject() {
+        return modelObject;
+    }
+
+    public void bindToModel(Model modelObject)
+    {
+        this.modelObject = modelObject;
     }
 }

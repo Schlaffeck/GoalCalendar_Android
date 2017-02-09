@@ -1,8 +1,12 @@
 package com.slamcode.goalcalendar.view;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.util.SortedList;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -25,15 +29,16 @@ import butterknife.BindView;
  * Created by moriasla on 15.12.2016.
  */
 
-public class CategoryNameRecyclerViewAdapter extends RecyclerViewDataAdapter<CategoryModel, CategoryNameRecyclerViewAdapter.CategoryNameViewHolder> {
+public final class CategoryNameRecyclerViewAdapter extends RecyclerViewDataAdapter<CategoryModel, CategoryNameRecyclerViewAdapter.CategoryNameViewHolder> {
 
-        private Set<CategoryModel> processedCategoriesSet;
+    public static final int CONTEXT_MENU_DELETE_ITEM_ID = 222;
+    public static final int CONTEXT_MENU_EDIT_ITEM_ID = 221;
+
         private MonthlyPlansModel monthlyPlans;
 
     public CategoryNameRecyclerViewAdapter(Context context, LayoutInflater layoutInflater)
         {
             super(context, layoutInflater, new SortedList<CategoryModel>(CategoryModel.class, new ComparatorSortedListCallback<CategoryModel>(new DefaultComparator<CategoryModel>())));
-            this.processedCategoriesSet = new HashSet<>();
         }
 
     @Override
@@ -41,41 +46,11 @@ public class CategoryNameRecyclerViewAdapter extends RecyclerViewDataAdapter<Cat
         View convertView = this.getLayoutInflater().inflate(R.layout.monthly_goals_category_list_item,null);
         convertView.setLongClickable(true);
 
-        return new CategoryNameViewHolder(convertView);
-    }
-
-    @Override
-    public void onBindViewHolder(CategoryNameViewHolder viewHolder, int position) {
-
-        CategoryModel monthlyGoals = this.getItem(position);
-
-        if(this.processedCategoriesSet.contains(monthlyGoals))
-        {
-            return;
-        }
-
-        // put view holder to array so it can be modified from inner class
-        final CategoryNameViewHolder[] innerViewHolder = new CategoryNameViewHolder[] { viewHolder };
-
-        innerViewHolder[0].categoryNameTextView.setText(monthlyGoals.getName());
-        innerViewHolder[0].frequencyTextView
-                .setText(String.format("%s x %s",
-                        monthlyGoals.getFrequencyValue(),
-                        ResourcesHelper.toResourceString(this.getContext(), monthlyGoals.getPeriod())));
-
-        if(innerViewHolder[0].isViewRendered()) {
-            this.processedCategoriesSet.add(monthlyGoals);
-        }
-
-//        if(monthlyGoals == this.getItem(this.getItemCount()-1)) {
-//            viewHolder.categoryPanel.setPadding(0, 0, 0,
-//                    viewHolder.getView().getResources().getDimensionPixelSize(R.dimen.monthly_goals_category_listView_lastItem_paddingBottom));
-//        }
+        return new CategoryNameViewHolder(convertView, null);
     }
 
     public void updateMonthlyPlans(MonthlyPlansModel monthlyPlansModel)
     {
-        this.processedCategoriesSet.clear();
         this.monthlyPlans = monthlyPlansModel;
         if(monthlyPlansModel != null)
             this.updateSourceCollection(monthlyPlansModel.getCategories());
@@ -83,18 +58,8 @@ public class CategoryNameRecyclerViewAdapter extends RecyclerViewDataAdapter<Cat
         this.notifyDataSetChanged();
     }
 
-    @Override
-    public void notifyItemModified(int position)
-    {
-        CategoryModel item = this.getItem(position);
-        if(item != null)
-        {
-            this.processedCategoriesSet.remove(item);
-        }
-        super.notifyItemModified(position);
-    }
-
-    public class CategoryNameViewHolder extends ViewHolderBase<CategoryModel>
+    public class CategoryNameViewHolder extends ViewHolderBase<CategoryModel> implements View.OnCreateContextMenuListener,
+            MenuItem.OnMenuItemClickListener
     {
         @BindView(R.id.monthly_goals_list_item_category_panel)
         LinearLayout categoryPanel;
@@ -106,9 +71,51 @@ public class CategoryNameRecyclerViewAdapter extends RecyclerViewDataAdapter<Cat
         TextView frequencyTextView;
 
         CategoryNameViewHolder(
-                View view)
+                View view,
+                CategoryModel model)
         {
-            super(view);
+            super(view, model);
+            view.setOnCreateContextMenuListener(this);
+        }
+
+        @Override
+        public void bindToModel(CategoryModel modelObject) {
+            super.bindToModel(modelObject);
+
+            this.categoryNameTextView.setText(this.getModelObject().getName());
+            this.frequencyTextView
+                    .setText(String.format("%s x %s",
+                            this.getModelObject().getFrequencyValue(),
+                            ResourcesHelper.toResourceString(getContext(), this.getModelObject().getPeriod())));
+
+//        if(monthlyGoals == this.getItem(this.getItemCount()-1)) {
+//            viewHolder.categoryPanel.setPadding(0, 0, 0,
+//                    viewHolder.getView().getResources().getDimensionPixelSize(R.dimen.monthly_goals_category_listView_lastItem_paddingBottom));
+//        }
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+
+            menu.setHeaderTitle(this.getModelObject().getName());
+            menu.add(0, CONTEXT_MENU_EDIT_ITEM_ID, 0, R.string.context_menu_edit_item)
+                .setOnMenuItemClickListener(this);
+            menu.add(0, CONTEXT_MENU_DELETE_ITEM_ID, 0, R.string.context_menu_delete_item)
+                .setOnMenuItemClickListener(this);
+        }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            switch(item.getItemId()) {
+                case CONTEXT_MENU_DELETE_ITEM_ID:
+                    notifyItemRemovalRequested(this.getAdapterPosition());
+                    return true;
+                case CONTEXT_MENU_EDIT_ITEM_ID:
+                    notifyItemModificationRequested(this.getAdapterPosition());
+                    return true;
+                default:
+                    return false;
+            }
         }
     }
 

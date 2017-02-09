@@ -7,11 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.slamcode.goalcalendar.data.model.CategoryModel;
-
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -23,7 +20,7 @@ public abstract class RecyclerViewDataAdapter<Item, ViewHolder extends ViewHolde
     private SortedList<Item> list;
     private Context context;
     private LayoutInflater layoutInflater;
-    private List<ItemsSourceChangedEventListener> adapterSourceChangedEventListeners;
+    private List<ItemsSourceChangeRequestListener> adapterSourceRequestsListeners;
 
     private List<Item> modifiedItems;
 
@@ -33,7 +30,7 @@ public abstract class RecyclerViewDataAdapter<Item, ViewHolder extends ViewHolde
         this.modifiedItems = new ArrayList<>();
         this.context = context;
         this.layoutInflater = layoutInflater;
-        this.adapterSourceChangedEventListeners = new ArrayList<>();
+        this.adapterSourceRequestsListeners = new ArrayList<>();
     }
 
     public Item getItem(int position)
@@ -56,7 +53,10 @@ public abstract class RecyclerViewDataAdapter<Item, ViewHolder extends ViewHolde
     public abstract ViewHolder onCreateViewHolder(ViewGroup parent, int viewType);
 
     @Override
-    public abstract void onBindViewHolder(ViewHolder holder, int position);
+    public void onBindViewHolder(ViewHolder holder, int position)
+    {
+        holder.bindToModel(this.list.get(position));
+    }
 
     @Override
     public long getItemId(int position) {
@@ -70,16 +70,18 @@ public abstract class RecyclerViewDataAdapter<Item, ViewHolder extends ViewHolde
 
     public void addOrUpdateItem(Item item)
     {
-        if(this.list.indexOf(item) == -1)
+        int itemIndex = this.getItemIndex(item);
+        if(itemIndex == -1)
         {
             this.list.add(item);
-            this.notifyDataSetChanged();
-            this.notifyItemAdded(this.list.indexOf(item));
+            this.notifyItemInserted(this.list.indexOf(item));
         }
         else {
             this.modifiedItems.add(item);
-            this.notifyItemModified(this.list.indexOf(item));
-            this.notifyDataSetChanged();
+            this.list.recalculatePositionOfItemAt(itemIndex);
+            int newPosition = this.list.indexOf(item);
+            this.notifyItemMoved(itemIndex, newPosition);
+            this.notifyItemChanged(newPosition);
         }
     }
 
@@ -89,53 +91,48 @@ public abstract class RecyclerViewDataAdapter<Item, ViewHolder extends ViewHolde
             return;
         }
 
+        int position = this.list.indexOf(item);
         this.list.remove(item);
         this.modifiedItems.remove(item);
-        this.notifyDataSetChanged();
-        this.notifyItemRemoved(item);
+        this.notifyItemRemoved(position);
     }
 
-    public void addItemSourceChangedEventListener(ItemsSourceChangedEventListener<Item> listener)
+    public void addItemSourceRequestListener(ItemsSourceChangeRequestListener listener)
     {
-        if(this.adapterSourceChangedEventListeners.contains(listener))
+        if(this.adapterSourceRequestsListeners.contains(listener))
         {
             return;
         }
-        this.adapterSourceChangedEventListeners.add(listener);
+        this.adapterSourceRequestsListeners.add(listener);
     }
 
-    public void removeItemSourceChangedEventListener(ItemsSourceChangedEventListener listener)
+    public void removeItemSourceRequestListener(ItemsSourceChangeRequestListener listener)
     {
-        if(!this.adapterSourceChangedEventListeners.contains(listener))
+        if(!this.adapterSourceRequestsListeners.contains(listener))
         {
             return;
         }
 
-        this.adapterSourceChangedEventListeners.remove(listener);
+        this.adapterSourceRequestsListeners.remove(listener);
     }
 
-    protected void notifyItemAdded(int position)
+    public void clearItemSourceRequestListener()
     {
-        for (ItemsSourceChangedEventListener listener :
-                this.adapterSourceChangedEventListeners) {
-            listener.onNewItemAdded(position);
-        }
+        this.adapterSourceRequestsListeners.clear();
     }
 
-    protected void notifyItemModified(int position)
+    protected void notifyItemModificationRequested(int position)
     {
-        for (ItemsSourceChangedEventListener listener :
-                this.adapterSourceChangedEventListeners) {
-            listener.onItemModified(position);
-        }
+        for(ItemsSourceChangeRequestListener listener :
+                this.adapterSourceRequestsListeners)
+            listener.onModifyItemRequest(position);
     }
 
-    protected void notifyItemRemoved(Item item)
+    protected void notifyItemRemovalRequested(int position)
     {
-        for (ItemsSourceChangedEventListener listener :
-                this.adapterSourceChangedEventListeners) {
-            listener.onItemRemoved(item);
-        }
+        for(ItemsSourceChangeRequestListener listener :
+                this.adapterSourceRequestsListeners)
+            listener.onRemoveItemRequest(position);
     }
 
     public LayoutInflater getLayoutInflater() {
@@ -151,12 +148,19 @@ public abstract class RecyclerViewDataAdapter<Item, ViewHolder extends ViewHolde
         this.list.addAll(newSourceCollection);
     }
 
-    public interface ItemsSourceChangedEventListener<ItemType>
+    private int getItemIndex(Item item)
     {
-        void onNewItemAdded(int itemPosition);
+        int i = -1;
+        boolean found = false;
+        while(!found && ++i < this.list.size())
+            found = this.list.get(i) == item;
+        return found ? i : -1;
+    }
 
-        void onItemModified(int itemPosition);
+    public interface ItemsSourceChangeRequestListener
+    {
+        void onModifyItemRequest(int itemPosition);
 
-        void onItemRemoved(ItemType item);
+        void onRemoveItemRequest(int itemPosition);
     }
 }

@@ -3,8 +3,10 @@ package com.slamcode.goalcalendar.data.model;
 import com.slamcode.goalcalendar.data.Identifiable;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by moriasla on 16.12.2016.
@@ -85,6 +87,8 @@ public class CategoryModel implements Identifiable<Integer>, Comparable<Category
         if(categoryModel == null)
             return 1;
 
-        return this.getName().compareTo(categoryModel.getName());
+        Collator usCollator = Collator.getInstance(Locale.getDefault());
+        usCollator.setStrength(Collator.PRIMARY);
+        return usCollator.compare(this.getName(), categoryModel.getName());
     }
 }

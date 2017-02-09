@@ -57,11 +57,12 @@ public class ComparatorSortedListCallback<Model> extends SortedList.Callback<Mod
 
     @Override
     public boolean areContentsTheSame(Model oldItem, Model newItem) {
-        return oldItem.equals(newItem);
+        return comparator.compare(oldItem, newItem) == 0;
     }
 
     @Override
     public boolean areItemsTheSame(Model item1, Model item2) {
+
         return item1 == item2;
     }
 
