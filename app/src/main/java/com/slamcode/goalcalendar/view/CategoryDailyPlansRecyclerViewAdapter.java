@@ -35,9 +35,17 @@ public class CategoryDailyPlansRecyclerViewAdapter extends RecyclerViewDataAdapt
 
     public CategoryDailyPlansRecyclerViewAdapter(Context context, LayoutInflater layoutInflater)
     {
-        super(context, layoutInflater, new SortedList<CategoryModel>(CategoryModel.class, new ComparatorSortedListCallback<CategoryModel>(new DefaultComparator<CategoryModel>())));
+        this(context, layoutInflater, null);
+    }
+
+    public CategoryDailyPlansRecyclerViewAdapter(Context context, LayoutInflater layoutInflater, MonthlyPlansModel monthlyPlans)
+    {
+        super(context, layoutInflater, new SortedList<>(CategoryModel.class, new ComparatorSortedListCallback<>(new DefaultComparator<CategoryModel>())));
             this.processedCategoriesSet = new HashSet<>();
-        }
+
+        this.monthlyPlans = monthlyPlans;
+    }
+
 
     @Override
     public CategoryDailyPlansViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -60,6 +68,7 @@ public class CategoryDailyPlansRecyclerViewAdapter extends RecyclerViewDataAdapt
         DailyPlanRecyclerViewAdapter adapter = new DailyPlanRecyclerViewAdapter(
                 this.getContext(),
                 this.getLayoutInflater(),
+                this.monthlyPlans,
                 categoryModel.getDailyPlans());
 
         viewHolder.daysListGridView.setAdapter(adapter);

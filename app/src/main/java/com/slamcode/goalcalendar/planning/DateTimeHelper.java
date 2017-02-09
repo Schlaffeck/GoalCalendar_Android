@@ -44,6 +44,29 @@ public final class DateTimeHelper {
         return true;
     }
 
+    public static boolean isCurrentDate(int year, Month month, int day)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+
+        if((cal.get(Calendar.YEAR)) != year)
+        {
+            return false;
+        }
+
+        if((cal.get(Calendar.MONTH)) != month.getNumValue()-1)
+        {
+            return false;
+        }
+
+        if((cal.get(Calendar.DAY_OF_MONTH)) != day)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     public static String getWeekDayNameShort(int year, int month, int day) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month-1, day);

@@ -94,24 +94,6 @@ public class CategoryNameRecyclerViewAdapter extends RecyclerViewDataAdapter<Cat
         super.notifyItemModified(position);
     }
 
-    private boolean isCurrentDate(CategoryModel category, DailyPlanModel dailyPlanModel)
-    {
-        int dayNumber = dailyPlanModel.getDayNumber();
-
-        if(dayNumber <= 0 && category.getDailyPlans().contains(dailyPlanModel))
-        {
-            dayNumber = category.getDailyPlans().indexOf(dailyPlanModel)+1;
-        }
-
-        int year = this.monthlyPlans.getYear() > 0 ?
-                    this.monthlyPlans.getYear() : DateTimeHelper.getCurrentYear();
-
-        return DateTimeHelper.isCurrentDate(
-                year,
-                this.monthlyPlans.getMonth().getNumValue(),
-                dayNumber);
-    }
-
     public class CategoryNameViewHolder extends ViewHolderBase<CategoryModel>
     {
         @BindView(R.id.monthly_goals_list_item_category_panel)
