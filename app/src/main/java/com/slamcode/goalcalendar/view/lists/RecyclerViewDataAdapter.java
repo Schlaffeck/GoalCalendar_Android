@@ -17,6 +17,9 @@ import java.util.List;
 
 public abstract class RecyclerViewDataAdapter<Item, ViewHolder extends ViewHolderBase<Item>> extends RecyclerView.Adapter<ViewHolder> {
 
+    public static final int ITEM_VIEM_TYPE_LAST_ITEM = 202;
+    public static final int ITEM_VIEM_TYPE_REGULAR_ITEM = 101;
+
     private SortedList<Item> list;
     private Context context;
     private LayoutInflater layoutInflater;
@@ -47,6 +50,14 @@ public abstract class RecyclerViewDataAdapter<Item, ViewHolder extends ViewHolde
         }
 
         return result;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if(position == this.list.size() -1)
+            return ITEM_VIEM_TYPE_LAST_ITEM;
+
+        return ITEM_VIEM_TYPE_REGULAR_ITEM;
     }
 
     @Override

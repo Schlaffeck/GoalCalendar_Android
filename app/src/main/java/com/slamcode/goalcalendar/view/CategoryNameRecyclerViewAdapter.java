@@ -46,6 +46,11 @@ public final class CategoryNameRecyclerViewAdapter extends RecyclerViewDataAdapt
         View convertView = this.getLayoutInflater().inflate(R.layout.monthly_goals_category_list_item,null);
         convertView.setLongClickable(true);
 
+        convertView.setPadding(0, 0, 0,
+                viewType == ITEM_VIEM_TYPE_LAST_ITEM ?
+                        convertView.getResources().getDimensionPixelSize(R.dimen.monthly_goals_category_listView_lastItem_paddingBottom) : 0
+        );
+
         return new CategoryNameViewHolder(convertView, null);
     }
 
@@ -87,11 +92,6 @@ public final class CategoryNameRecyclerViewAdapter extends RecyclerViewDataAdapt
                     .setText(String.format("%s x %s",
                             this.getModelObject().getFrequencyValue(),
                             ResourcesHelper.toResourceString(getContext(), this.getModelObject().getPeriod())));
-
-//        if(monthlyGoals == this.getItem(this.getItemCount()-1)) {
-//            viewHolder.categoryPanel.setPadding(0, 0, 0,
-//                    viewHolder.getView().getResources().getDimensionPixelSize(R.dimen.monthly_goals_category_listView_lastItem_paddingBottom));
-//        }
         }
 
         @Override

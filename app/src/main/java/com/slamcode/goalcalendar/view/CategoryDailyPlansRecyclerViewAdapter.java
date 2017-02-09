@@ -50,6 +50,10 @@ public final class CategoryDailyPlansRecyclerViewAdapter extends RecyclerViewDat
         View convertView = this.getLayoutInflater().inflate(R.layout.monthly_goals_daily_plans_list_item,null);
         convertView.setLongClickable(true);
 
+        convertView.setPadding(0, 0, 0,
+                viewType == ITEM_VIEM_TYPE_LAST_ITEM ?
+                        convertView.getResources().getDimensionPixelSize(R.dimen.monthly_goals_category_listView_lastItem_paddingBottom) : 0
+        );
         return new CategoryDailyPlansViewHolder(convertView);
     }
 
@@ -86,11 +90,6 @@ public final class CategoryDailyPlansRecyclerViewAdapter extends RecyclerViewDat
 
             this.daysListGridView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
-
-//        if(categoryModel == this.getItem(this.getItemCount()-1)) {
-//            viewHolder.daysListGridView.setPadding(0, 0, 0,
-//                    viewHolder.getView().getResources().getDimensionPixelSize(R.dimen.monthly_goals_category_listView_lastItem_paddingBottom));
-//        }
         }
     }
 
