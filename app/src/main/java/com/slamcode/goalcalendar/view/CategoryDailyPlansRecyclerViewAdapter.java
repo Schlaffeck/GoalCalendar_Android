@@ -28,7 +28,7 @@ import butterknife.BindView;
  * Created by moriasla on 15.12.2016.
  */
 
-public final class CategoryDailyPlansRecyclerViewAdapter extends RecyclerViewDataAdapter<CategoryModel, CategoryDailyPlansRecyclerViewAdapter.CategoryDailyPlansViewHolder> {
+public class CategoryDailyPlansRecyclerViewAdapter extends RecyclerViewDataAdapter<CategoryModel, CategoryDailyPlansRecyclerViewAdapter.CategoryDailyPlansViewHolder> {
 
         private MonthlyPlansModel monthlyPlans;
 

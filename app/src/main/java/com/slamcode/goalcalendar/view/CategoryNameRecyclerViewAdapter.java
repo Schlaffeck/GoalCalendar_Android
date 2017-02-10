@@ -29,7 +29,7 @@ import butterknife.BindView;
  * Created by moriasla on 15.12.2016.
  */
 
-public final class CategoryNameRecyclerViewAdapter extends RecyclerViewDataAdapter<CategoryModel, CategoryNameRecyclerViewAdapter.CategoryNameViewHolder> {
+public class CategoryNameRecyclerViewAdapter extends RecyclerViewDataAdapter<CategoryModel, CategoryNameRecyclerViewAdapter.CategoryNameViewHolder> {
 
     public static final int CONTEXT_MENU_DELETE_ITEM_ID = 222;
     public static final int CONTEXT_MENU_EDIT_ITEM_ID = 221;
