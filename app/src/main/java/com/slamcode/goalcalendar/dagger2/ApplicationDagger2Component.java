@@ -27,4 +27,6 @@ public interface ApplicationDagger2Component {
     void inject(NotificationScheduler notificationScheduler);
 
     void inject(NotificationPublisher notificationPublisher);
+
+    void inject(DefaultAutoMarkTasksService defaultAutoMarkTasksService);
 }

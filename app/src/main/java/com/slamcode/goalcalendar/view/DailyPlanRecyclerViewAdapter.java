@@ -22,6 +22,8 @@ import com.slamcode.goalcalendar.view.lists.ViewHolderBase;
 import com.slamcode.goalcalendar.view.utils.ColorsHelper;
 
 import java.util.Collection;
+import java.util.Observable;
+import java.util.Observer;
 
 import butterknife.BindView;
 
@@ -81,6 +83,13 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
                 @Override
                 public void onStateChanged(PlanStatus newState) {
                     modelObject.setStatus(newState);
+                }
+            });
+
+            modelObject.addObserver(new Observer() {
+                @Override
+                public void update(Observable o, Object arg) {
+                    statusButton.setStatus(modelObject.getStatus());
                 }
             });
 

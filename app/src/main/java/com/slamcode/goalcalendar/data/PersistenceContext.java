@@ -11,4 +11,15 @@ public interface PersistenceContext {
     void initializePersistedData();
 
     UnitOfWork createUnitOfWork();
+
+    void addContextChangedListener(PersistenceContextChangedListener listener);
+
+    void removeContextChangedListener(PersistenceContextChangedListener listener);
+
+    void clearContextChangedListeners();
+
+    interface PersistenceContextChangedListener
+    {
+        void onContextPersisted();
+    }
 }

@@ -85,7 +85,7 @@ public final class PlannedForTodayNotificationProvider implements NotificationPr
 
         }
         finally {
-            uow.complete();
+            uow.complete(false);
         }
 
         return result;

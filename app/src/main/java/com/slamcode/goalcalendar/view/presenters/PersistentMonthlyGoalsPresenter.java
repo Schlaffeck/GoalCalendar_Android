@@ -230,7 +230,7 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
                 return !monthlyPlansModel.getCategories().isEmpty();
             }
         });
-        uow.complete();
+        uow.complete(false);
 
         return previousMonthWithCategories;
     }

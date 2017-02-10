@@ -60,7 +60,7 @@ public class PlannedForTodayNotificationProviderTest {
     }
 
     @Test
-    public void plannedForTodayNotificationProvider_provideNotification_nothingPlanned_test() throws Exception {
+    public void plannedForTodayNotificationProvider_provideNotification_settingSwitchedOff_test() throws Exception {
         // mocks
         ApplicationContext contextMock = Mockito.mock(ApplicationContext.class);
         PersistenceContext persistenceContextMock = Mockito.mock(PersistenceContext.class);
@@ -70,18 +70,7 @@ public class PlannedForTodayNotificationProviderTest {
 
         CategoriesRepository categoriesRepositoryMock = Mockito.mock(CategoriesRepository.class);
 
-        when(appSettingsManagerMock.getShowStartupNotification()).thenReturn(true);
-        when(persistenceContextMock.createUnitOfWork()).thenReturn(uowMock);
-        when(uowMock.getCategoriesRepository()).thenReturn(categoriesRepositoryMock);
-
-        // get date time
-        java.util.Calendar today = java.util.Calendar.getInstance();
-        int year = today.get(java.util.Calendar.YEAR);
-        Month month = Month.getCurrentMonth();
-        int day = DateTimeHelper.currentDayNumber();
-
-        when(categoriesRepositoryMock.findForDateWithStatus(year, month, day, PlanStatus.Planned))
-                .thenReturn(CollectionUtils.<CategoryModel>emptyList());
+        when(appSettingsManagerMock.getShowStartupNotification()).thenReturn(false);
 
         // create provider
         PlannedForTodayNotificationProvider provider = new PlannedForTodayNotificationProvider(contextMock, persistenceContextMock, appSettingsManagerMock);
@@ -91,15 +80,11 @@ public class PlannedForTodayNotificationProviderTest {
 
         // verify methods called
         verify(appSettingsManagerMock, times(1)).getShowStartupNotification();
-        verify(persistenceContextMock, times(1)).createUnitOfWork();
-        verify(uowMock, times(1)).getCategoriesRepository();
-        verify(categoriesRepositoryMock, times(1)).findForDateWithStatus(year, month, day, PlanStatus.Planned);
-        verify(uowMock, times(1)).complete();
 
     }
 
     @Test
-    public void plannedForTodayNotificationProvider_provideNotification_settingSwitchedOff_test() throws Exception {
+    public void plannedForTodayNotificationProvider_provideNotification_nothingPlanned_test() throws Exception {
         // mocks
         ApplicationContext contextMock = mock(ApplicationContext.class);
         PersistenceContext persistenceContextMock = mock(PersistenceContext.class);
@@ -147,7 +132,7 @@ public class PlannedForTodayNotificationProviderTest {
         verify(persistenceContextMock, times(1)).createUnitOfWork();
         verify(uowMock, times(1)).getCategoriesRepository();
         verify(categoriesRepositoryMock, times(1)).findForDateWithStatus(year, month, day, PlanStatus.Planned);
-        verify(uowMock, times(1)).complete();
+        verify(uowMock, times(1)).complete(false);
 
         verify(contextMock, times(1)).createIntent(MonthlyGoalsActivity.class);
         verify(intentMock, times(1)).putExtra(NotificationScheduler.NOTIFICATION_ORIGINATED_FROM_FLAG, true);
@@ -209,7 +194,7 @@ public class PlannedForTodayNotificationProviderTest {
         verify(persistenceContextMock, times(1)).createUnitOfWork();
         verify(uowMock, times(1)).getCategoriesRepository();
         verify(categoriesRepositoryMock, times(1)).findForDateWithStatus(year, month, day, PlanStatus.Planned);
-        verify(uowMock, times(1)).complete();
+        verify(uowMock, times(1)).complete(false);
 
         verify(contextMock, times(1)).createIntent(MonthlyGoalsActivity.class);
         verify(intentMock, times(1)).putExtra(NotificationScheduler.NOTIFICATION_ORIGINATED_FROM_FLAG, true);
@@ -274,7 +259,7 @@ public class PlannedForTodayNotificationProviderTest {
         verify(persistenceContextMock, times(1)).createUnitOfWork();
         verify(uowMock, times(1)).getCategoriesRepository();
         verify(categoriesRepositoryMock, times(1)).findForDateWithStatus(year, month, day, PlanStatus.Planned);
-        verify(uowMock, times(1)).complete();
+        verify(uowMock, times(1)).complete(false);
 
         verify(contextMock, times(1)).createIntent(MonthlyGoalsActivity.class);
         verify(intentMock, times(1)).putExtra(NotificationScheduler.NOTIFICATION_ORIGINATED_FROM_FLAG, true);

@@ -13,6 +13,11 @@ import com.slamcode.goalcalendar.data.inmemory.InMemoryMonthlyPlansRepository;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -26,10 +31,13 @@ public class JsonFilePersistenceContext implements PersistenceContext {
     private final Context appContext;
     private final String fileName;
 
+    private Collection<PersistenceContextChangedListener> contextChangedListeners;
+
     public JsonFilePersistenceContext(Context appContext, String fileName)
     {
         this.appContext = appContext;
         this.fileName = fileName;
+        this.contextChangedListeners =  new HashSet<>();
     }
 
     public JsonFilePersistenceContext(Context appContext)
@@ -51,11 +59,18 @@ public class JsonFilePersistenceContext implements PersistenceContext {
             fileStream = this.appContext.openFileOutput(this.fileName, Context.MODE_PRIVATE);
             fileStream.write(gson.toJson(this.dataBundle, JsonDataBundle.class).getBytes());
             fileStream.close();
+
+            this.onContextDataPersisted();
         }
         catch(Exception exception)
         {
             exception.printStackTrace();
         }
+    }
+
+    private void onContextDataPersisted() {
+        for(PersistenceContextChangedListener listener : this.contextChangedListeners)
+            listener.onContextPersisted();
     }
 
     @Override
@@ -90,12 +105,27 @@ public class JsonFilePersistenceContext implements PersistenceContext {
         return new JsonUnitOfWork(this.dataBundle);
     }
 
+    @Override
+    public void addContextChangedListener(PersistenceContextChangedListener listener) {
+        this.contextChangedListeners.add(listener);
+    }
+
+    @Override
+    public void removeContextChangedListener(PersistenceContextChangedListener listener) {
+        this.contextChangedListeners.remove(listener);
+    }
+
+    @Override
+    public void clearContextChangedListeners() {
+        this.contextChangedListeners.clear();
+    }
+
     private String getFilePath()
     {
         return this.appContext.getFilesDir() +"/" + this.fileName;
     }
 
-    private static class JsonUnitOfWork implements UnitOfWork{
+    private class JsonUnitOfWork implements UnitOfWork{
 
         private boolean working = false;
         private final InMemoryMonthlyPlansRepository monthlyPlansRepository;
@@ -119,7 +149,14 @@ public class JsonFilePersistenceContext implements PersistenceContext {
 
         @Override
         public void complete() {
+            this.complete(true);
+        }
+
+        @Override
+        public void complete(boolean persistData) {
             this.working = false;
+            if(persistData)
+                persistData();
         }
     }
 }

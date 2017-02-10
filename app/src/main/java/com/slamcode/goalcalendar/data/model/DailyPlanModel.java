@@ -3,11 +3,13 @@ package com.slamcode.goalcalendar.data.model;
 import com.slamcode.goalcalendar.data.Identifiable;
 import com.slamcode.goalcalendar.planning.PlanStatus;
 
+import java.util.Observable;
+
 /**
  * Created by moriasla on 16.12.2016.
  */
 
-public class DailyPlanModel implements Identifiable<Integer>, Comparable<DailyPlanModel> {
+public class DailyPlanModel extends Observable implements Identifiable<Integer>, Comparable<DailyPlanModel> {
 
     private int id;
 
@@ -41,7 +43,12 @@ public class DailyPlanModel implements Identifiable<Integer>, Comparable<DailyPl
     }
 
     public void setStatus(PlanStatus status) {
-        this.status = status;
+        if(status != this.status) {
+            this.status = status;
+            this.setChanged();
+            this.notifyObservers();
+            this.clearChanged();
+        }
     }
 
     public int getDayNumber() {

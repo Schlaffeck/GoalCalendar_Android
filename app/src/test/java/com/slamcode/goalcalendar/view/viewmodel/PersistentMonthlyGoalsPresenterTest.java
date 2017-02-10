@@ -261,7 +261,8 @@ public class PersistentMonthlyGoalsPresenterTest {
         // assert
         verify(persistenceContext, times(2)).createUnitOfWork();
         verify(unitOfWork, times(2)).getMonthlyPlansRepository();
-        verify(unitOfWork, times(2)).complete();
+        verify(unitOfWork, times(1)).complete();
+        verify(unitOfWork, times(1)).complete(false);
         verify(repository).findForMonth(Matchers.eq(year), Matchers.eq(nextMonthEnum));
         verify(namesAdapter).updateMonthlyPlans(Matchers.eq(nextMonth));
         verify(dailyPlansAdapter).updateMonthlyPlans(Matchers.eq(nextMonth));

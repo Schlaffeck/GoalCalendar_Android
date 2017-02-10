@@ -89,6 +89,24 @@ public final class DateTimeHelper {
         return calendar;
     }
 
+    public static Calendar getYesterdayCalendar() {
+        Calendar calendar = getTodayCalendar();
+
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        return calendar;
+    }
+
+    public static DateTime getYesterdayDateTime() {
+        return new DateTime(getYesterdayCalendar());
+    }
+
+    public static Calendar getTomorrowCalendar() {
+        Calendar calendar = getTodayCalendar();
+
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        return calendar;
+    }
+
     public static Calendar getNowCalendar() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
