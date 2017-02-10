@@ -55,11 +55,12 @@ public final class PlannedForTodayNotificationProvider implements NotificationPr
         try {
             long countCategoriesPlannedForToday = this.countCategoriesPlannedForToday(uow);
 
+            Intent resultIntent = this.context.createIntent(MonthlyGoalsActivity.class);
+            resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            resultIntent.putExtra(NotificationScheduler.NOTIFICATION_ORIGINATED_FROM_FLAG, true);
+
             if(countCategoriesPlannedForToday > 0)
             {
-                Intent resultIntent = this.context.createIntent(MonthlyGoalsActivity.class);
-                resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                resultIntent.putExtra(NotificationScheduler.NOTIFICATION_ORIGINATED_FROM_FLAG, true);
                 result = this.context.buildNotification(R.drawable.ic_date_range_white_24dp,
                         this.context.getStringFromResources(
                                 R.string.notification_plannedForToday_title),
@@ -73,6 +74,15 @@ public final class PlannedForTodayNotificationProvider implements NotificationPr
                         this.context.getColorArgbFromResources(R.color.planningStateButton_statePlanned_foregroundColor),
                         this.context.createPendingIntent(0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT));
             }
+            else{
+                result = this.context.buildNotification(R.drawable.ic_date_range_white_24dp,
+                        this.context.getStringFromResources(
+                                R.string.notification_plannedForToday_noPlans_title),
+                        this.context.getStringFromResources(R.string.notification_plannedForToday_noPlans_content),
+                        this.context.getColorArgbFromResources(R.color.planningStateButton_statePlanned_foregroundColor),
+                        this.context.createPendingIntent(0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+            }
+
         }
         finally {
             uow.complete();

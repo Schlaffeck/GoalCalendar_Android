@@ -69,4 +69,6 @@
     <string name="pref_title_showEODNotification">Na koniec dnia</string>
     <string name="pref_title_markPlannedAsFailed_switch">Automatyczne oznaczanie</string>
     <string name="pref_title_markPlannedAsFailed_desctiption_checkbox">Oznaczaj niezakończone zadania jako niepowodzenie następnego dnia</string>
+    <string name="notification_plannedForToday_noPlans_content">Moze zaplanujesz coś na dziś?</string>
+    <string name="notification_plannedForToday_noPlans_title">Brak planów na dziś</string>
 </resources>

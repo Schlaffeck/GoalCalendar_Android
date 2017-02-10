@@ -101,15 +101,30 @@ public class PlannedForTodayNotificationProviderTest {
     @Test
     public void plannedForTodayNotificationProvider_provideNotification_settingSwitchedOff_test() throws Exception {
         // mocks
-        ApplicationContext contextMock = Mockito.mock(ApplicationContext.class);
-        PersistenceContext persistenceContextMock = Mockito.mock(PersistenceContext.class);
-        AppSettingsManager appSettingsManagerMock = Mockito.mock(AppSettingsManager.class);
+        ApplicationContext contextMock = mock(ApplicationContext.class);
+        PersistenceContext persistenceContextMock = mock(PersistenceContext.class);
+        AppSettingsManager appSettingsManagerMock = mock(AppSettingsManager.class);
 
-        UnitOfWork uowMock = Mockito.mock(UnitOfWork.class);
+        UnitOfWork uowMock = mock(UnitOfWork.class);
 
-        CategoriesRepository categoriesRepositoryMock = Mockito.mock(CategoriesRepository.class);
+        CategoriesRepository categoriesRepositoryMock = mock(CategoriesRepository.class);
 
-        when(appSettingsManagerMock.getShowStartupNotification()).thenReturn(false);
+        when(appSettingsManagerMock.getShowStartupNotification()).thenReturn(true);
+        when(persistenceContextMock.createUnitOfWork()).thenReturn(uowMock);
+        when(uowMock.getCategoriesRepository()).thenReturn(categoriesRepositoryMock);
+
+        Intent intentMock = mock(Intent.class);
+        when(contextMock.createIntent(MonthlyGoalsActivity.class)).thenReturn(intentMock);
+        when(contextMock.getColorArgbFromResources(R.color.planningStateButton_statePlanned_foregroundColor)).thenReturn(44);
+        when(contextMock.getStringFromResources(R.string.notification_plannedForToday_noPlans_title)).thenReturn("Title 1");
+        when(contextMock.getStringFromResources(R.string.notification_plannedForToday_noPlans_content)).thenReturn("Content 1");
+
+        PendingIntent pendingIntentMock = mock(PendingIntent.class);
+        when(contextMock.createPendingIntent(0, intentMock, PendingIntent.FLAG_UPDATE_CURRENT)).thenReturn(pendingIntentMock);
+
+        Notification notificationMock = mock(Notification.class);
+        when(contextMock.buildNotification(R.drawable.ic_date_range_white_24dp, "Title 1", "Content 1", 44, pendingIntentMock))
+                .thenReturn(notificationMock);
 
         // get date time
         java.util.Calendar today = java.util.Calendar.getInstance();
@@ -123,12 +138,26 @@ public class PlannedForTodayNotificationProviderTest {
         // create provider
         PlannedForTodayNotificationProvider provider = new PlannedForTodayNotificationProvider(contextMock, persistenceContextMock, appSettingsManagerMock);
 
-        // assert no notification as setting is switched off
-        assertNull(provider.provideNotification());
+        // assert notification data
+        Notification actual = provider.provideNotification();
+        assertEquals(notificationMock, actual);
 
         // verify methods called
         verify(appSettingsManagerMock, times(1)).getShowStartupNotification();
-        verify(persistenceContextMock, never()).createUnitOfWork();
+        verify(persistenceContextMock, times(1)).createUnitOfWork();
+        verify(uowMock, times(1)).getCategoriesRepository();
+        verify(categoriesRepositoryMock, times(1)).findForDateWithStatus(year, month, day, PlanStatus.Planned);
+        verify(uowMock, times(1)).complete();
+
+        verify(contextMock, times(1)).createIntent(MonthlyGoalsActivity.class);
+        verify(intentMock, times(1)).putExtra(NotificationScheduler.NOTIFICATION_ORIGINATED_FROM_FLAG, true);
+        verify(intentMock, times(1)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        verify(contextMock, times(1)).getStringFromResources(R.string.notification_plannedForToday_noPlans_title);
+        verify(contextMock, times(1)).getStringFromResources(R.string.notification_plannedForToday_noPlans_content);
+        verify(contextMock, times(1)).getColorArgbFromResources(R.color.planningStateButton_statePlanned_foregroundColor);
+        verify(contextMock, times(1)).createPendingIntent(0, intentMock, PendingIntent.FLAG_UPDATE_CURRENT);
+        verify(contextMock, times(1)).buildNotification(R.drawable.ic_date_range_white_24dp, "Title 1", "Content 1", 44, pendingIntentMock);
     }
 
     @Test
