@@ -4,7 +4,11 @@ import android.content.Context;
 
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.data.PersistenceContext;
+import com.slamcode.goalcalendar.diagniostics.Logger;
+import com.slamcode.goalcalendar.service.AutoMarkTasksService;
+import com.slamcode.goalcalendar.service.DefaultAutoMarkTasksService;
 import com.slamcode.goalcalendar.service.NotificationScheduler;
+import com.slamcode.goalcalendar.service.notification.AutoMarkTasksNotificationProvider;
 import com.slamcode.goalcalendar.service.notification.EndOfDayNotificationProvider;
 import com.slamcode.goalcalendar.service.notification.NotificationProvider;
 import com.slamcode.goalcalendar.service.notification.PlannedForTodayNotificationProvider;
@@ -34,15 +38,22 @@ public class ServiceDagger2Module {
     @Provides
     public Map<String, NotificationProvider> getNotificationProvidersMap(
             PersistenceContext persistenceContext,
-            AppSettingsManager settingsManager)
+            AppSettingsManager settingsManager,
+            AutoMarkTasksService autoMarkTasksService,
+            Logger logger)
     {
+
+        // todo: consider putting all providers dependencies into injectable proeprties rather tha constructors
         HashMap<String, NotificationProvider> providerHashMap = new HashMap<>();
 
         providerHashMap.put(PlannedForTodayNotificationProvider.class.getName(),
-                new PlannedForTodayNotificationProvider(this.context, persistenceContext, settingsManager));
+                new PlannedForTodayNotificationProvider(this.context, persistenceContext, settingsManager, logger));
 
         providerHashMap.put(EndOfDayNotificationProvider.class.getName(),
-                new EndOfDayNotificationProvider(this.context, settingsManager));
+                new EndOfDayNotificationProvider(this.context, settingsManager, logger));
+
+        providerHashMap.put(AutoMarkTasksNotificationProvider.class.getName(),
+                new AutoMarkTasksNotificationProvider(this.context, autoMarkTasksService, logger));
 
         return providerHashMap;
     }
@@ -52,5 +63,12 @@ public class ServiceDagger2Module {
     public NotificationScheduler provideNotificationScheduler()
     {
         return new NotificationScheduler();
+    }
+
+    @Provides
+    @Singleton
+    public AutoMarkTasksService provideAutoMarkTasksService()
+    {
+        return new DefaultAutoMarkTasksService();
     }
 }

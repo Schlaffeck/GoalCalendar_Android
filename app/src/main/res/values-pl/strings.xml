@@ -55,6 +55,10 @@
     <string name="notification_endOfDay_title">Dzień się powoli kończy</string>
     <string name="notification_endOfDay_content">Oznacz wykonane dziś działania</string>
 
+    <string name="notification_autoMarked_title">Nie ukończone działania</string>
+    <string name="notification_autoMarked_single_content">Masz zaplanowane wczoraj nieudane działanie</string>
+    <string name="notification_autoMarked_multiple_content">Masz %d zaplanowane wczoraj nieudane działania</string>
+
     <!-- Strings related to Settings -->
     <string name="title_activity_settings">Ustawienia</string>
 

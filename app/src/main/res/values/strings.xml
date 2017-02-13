@@ -54,6 +54,11 @@
     <string name="notification_endOfDay_title">Day is coming to an end soon</string>
     <string name="notification_endOfDay_content">Mark things you\'ve done today</string>
 
+    <string name="notification_autoMarked_title">Not finished planned tasks</string>
+    <string name="notification_autoMarked_single_content">Planned task from yesterday was marked as failed</string>
+    <string name="notification_autoMarked_multiple_content">%d planned tasks from yesterday were marked as failed</string>
+
+
     <!-- Strings related to Settings -->
     <string name="title_activity_settings">Settings</string>
 
@@ -67,8 +72,6 @@
 
     <string name="pref_title_showEODNotification">End of day notification</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="pref_title_markPlannedAsFailed_desctiption_checkbox">Planned, not completed tasks will be automatically marked as failed next day</string>
     <string name="pref_title_markPlannedAsFailed_switch">Automatically mark tasks</string>
     <string name="notification_plannedForToday_noPlans_content">Maybe you want to plan something?</string>

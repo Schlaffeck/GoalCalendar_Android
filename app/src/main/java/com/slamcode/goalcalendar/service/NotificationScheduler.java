@@ -15,10 +15,14 @@ import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.HourMinuteTime;
 import com.slamcode.goalcalendar.service.notification.EndOfDayNotificationProvider;
+import com.slamcode.goalcalendar.service.notification.NotificationProvider;
 import com.slamcode.goalcalendar.service.notification.PlannedForTodayNotificationProvider;
 import com.slamcode.goalcalendar.settings.AppSettingsManager;
 
+import org.apache.commons.collections4.keyvalue.AbstractMapEntry;
+
 import java.util.Calendar;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -39,6 +43,9 @@ public final class NotificationScheduler extends ComposableService {
     @Inject
     AppSettingsManager settingsManager;
 
+    @Inject
+    Map<String, NotificationProvider> notificationProviderMap;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -49,50 +56,21 @@ public final class NotificationScheduler extends ComposableService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         int result = super.onStartCommand(intent, flags, startId);
-        this.scheduleStartOfDayNotification();
-        this.scheduleEndOfDayNotification();
+        this.scheduleNotifications();
         return result;
+    }
+
+    private void scheduleNotifications()
+    {
+        for(NotificationProvider provider : this.notificationProviderMap.values())
+        {
+            provider.scheduleNotification();
+        }
     }
 
     @Override
     protected void injectDependencies() {
         this.getApplicationComponent().inject(this);
-    }
-
-    private void scheduleStartOfDayNotification()
-    {
-        Calendar inTime = DateTimeHelper.getTodayCalendar(8, 0, 0);
-
-        Intent notificationIntent = new Intent(this, NotificationPublisher.class);
-        notificationIntent.putExtra(NOTIFICATION_PROVIDER_NAME, PlannedForTodayNotificationProvider.class.getName());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, PlannedForTodayNotificationProvider.NOTIFICATION_ID,
-                notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-
-        Log.v(LOG_TAG, String.format("Scheduled Start of day notification in time: %1$tb %1$td %1$tY at %1$tI:%1$tM %1$Tp", inTime));
-
-        alarmManager.set(AlarmManager.RTC_WAKEUP, inTime.getTimeInMillis(), pendingIntent);
-    }
-
-    private void scheduleEndOfDayNotification()
-    {
-        if(!this.settingsManager.getShowEndOfDayNotification())
-            return;
-
-        HourMinuteTime notificationTime = this.settingsManager.getEndOfDayNotificationTime();
-        Calendar inTime = DateTimeHelper.getTodayCalendar(notificationTime.getHour(), notificationTime.getMinute(), 0);
-
-        Log.v(LOG_TAG, String.format("Scheduled EOD notification in time: %1$tb %1$td %1$tY at %1$tI:%1$tM %1$Tp", inTime));
-
-        Intent notificationIntent = new Intent(this, NotificationPublisher.class);
-        notificationIntent.putExtra(NOTIFICATION_PROVIDER_NAME, EndOfDayNotificationProvider.class.getName());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, EndOfDayNotificationProvider.NOTIFICATION_ID,
-                notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-
-        alarmManager.set(AlarmManager.RTC_WAKEUP, inTime.getTimeInMillis(), pendingIntent);
     }
 
     public static boolean checkIfOriginatedFromNotification(Activity activity)

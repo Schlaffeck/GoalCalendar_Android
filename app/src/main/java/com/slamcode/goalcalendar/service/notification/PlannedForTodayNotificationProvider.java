@@ -1,22 +1,28 @@
 package com.slamcode.goalcalendar.service.notification;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.MonthlyGoalsActivity;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.data.UnitOfWork;
+import com.slamcode.goalcalendar.diagniostics.Logger;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.PlanStatus;
+import com.slamcode.goalcalendar.service.NotificationPublisher;
 import com.slamcode.goalcalendar.service.NotificationScheduler;
 import com.slamcode.goalcalendar.settings.AppSettingsManager;
+
+import java.util.Calendar;
 
 /**
  * Created by moriasla on 18.01.2017.
@@ -24,19 +30,23 @@ import com.slamcode.goalcalendar.settings.AppSettingsManager;
 
 public final class PlannedForTodayNotificationProvider implements NotificationProvider {
 
-    public static final int NOTIFICATION_ID = 1;
+    private static final int NOTIFICATION_ID = 1;
+    private static final String LOG_TAG = "GOAL_PlannedNotPrv";
 
     private final ApplicationContext context;
     private final PersistenceContext persistenceContext;
     private final AppSettingsManager settingsManager;
+    private final Logger logger;
 
     public PlannedForTodayNotificationProvider(ApplicationContext context,
                                                PersistenceContext persistenceContext,
-                                               AppSettingsManager settingsManager)
+                                               AppSettingsManager settingsManager,
+                                               Logger logger)
     {
         this.context = context;
         this.persistenceContext = persistenceContext;
         this.settingsManager = settingsManager;
+        this.logger = logger;
     }
 
     @Override
@@ -89,6 +99,22 @@ public final class PlannedForTodayNotificationProvider implements NotificationPr
         }
 
         return result;
+    }
+
+    @Override
+    public void scheduleNotification() {
+        Calendar inTime = DateTimeHelper.getTodayCalendar(8, 0, 0);
+
+        Intent notificationIntent = this.context.createIntent(NotificationPublisher.class);
+        notificationIntent.putExtra(NotificationScheduler.NOTIFICATION_PROVIDER_NAME, PlannedForTodayNotificationProvider.class.getName());
+        PendingIntent pendingIntent = this.context.getBroadcast(PlannedForTodayNotificationProvider.NOTIFICATION_ID,
+                notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager)this.context.getSystemService(Context.ALARM_SERVICE);
+
+        this.logger.v(LOG_TAG, String.format("Scheduled Start of day notification in time: %1$tb %1$td %1$tY at %1$tI:%1$tM %1$Tp", inTime));
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, inTime.getTimeInMillis(), pendingIntent);
     }
 
     private long countCategoriesPlannedForToday(UnitOfWork uow) {

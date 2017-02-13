@@ -21,9 +21,14 @@ public interface ApplicationContext {
 
     int getColorArgbFromResources(int colorId);
 
-    Intent createIntent(Class<? extends Activity> activityClass);
+    Intent createIntent(Class<?> activityOrServiceClass);
 
     PendingIntent createPendingIntent(int id, Intent resultIntent, int flag);
 
     Notification buildNotification(int smallIconId, String title, String content, int colorArgb, PendingIntent pendingIntent);
+
+    PendingIntent getBroadcast(int notificationId, Intent notificationIntent, int intentFlag);
+
+    Object getSystemService(String serviceId);
+
 }

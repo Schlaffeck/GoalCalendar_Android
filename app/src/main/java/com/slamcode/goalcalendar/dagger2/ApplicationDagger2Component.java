@@ -2,6 +2,7 @@ package com.slamcode.goalcalendar.dagger2;
 
 import com.slamcode.goalcalendar.MonthlyGoalsActivity;
 import com.slamcode.goalcalendar.data.dagger2.DataDagger2Module;
+import com.slamcode.goalcalendar.diagniostics.dagger2.DiagnosticsDagger2Module;
 import com.slamcode.goalcalendar.service.*;
 import com.slamcode.goalcalendar.service.dagger2.ServiceDagger2Module;
 import com.slamcode.goalcalendar.settings.dagger2.SettingsDagger2Module;
@@ -19,7 +20,8 @@ import dagger.Component;
         DataDagger2Module.class,
         ViewDagger2Module.class,
         ServiceDagger2Module.class,
-        SettingsDagger2Module.class})
+        SettingsDagger2Module.class,
+        DiagnosticsDagger2Module.class})
 public interface ApplicationDagger2Component {
 
     void inject(MonthlyGoalsActivity activity);

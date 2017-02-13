@@ -40,8 +40,8 @@ public final class DefaultApplicationContext implements ApplicationContext {
     }
 
     @Override
-    public Intent createIntent(Class<? extends Activity> activityClass) {
-        return new Intent(this.context, activityClass);
+    public Intent createIntent(Class<?> activityOrServiceClass) {
+        return new Intent(this.context, activityOrServiceClass);
     }
 
     @Override
@@ -61,5 +61,15 @@ public final class DefaultApplicationContext implements ApplicationContext {
         notificationBuilder.setColor(colorArgb);
 
         return notificationBuilder.build();
+    }
+
+    @Override
+    public PendingIntent getBroadcast(int notificationId, Intent notificationIntent, int intentFlag) {
+        return PendingIntent.getBroadcast(this.context, notificationId, notificationIntent, intentFlag);
+    }
+
+    @Override
+    public Object getSystemService(String serviceId) {
+        return this.context.getSystemService(serviceId);
     }
 }
