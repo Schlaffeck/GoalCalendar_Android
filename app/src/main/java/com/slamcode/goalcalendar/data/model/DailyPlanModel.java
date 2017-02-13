@@ -2,6 +2,7 @@ package com.slamcode.goalcalendar.data.model;
 
 import com.slamcode.goalcalendar.data.Identifiable;
 import com.slamcode.goalcalendar.planning.PlanStatus;
+import com.slamcode.goalcalendar.view.mvvm.PropertyObservableObject;
 
 import java.util.Observable;
 
@@ -9,7 +10,7 @@ import java.util.Observable;
  * Created by moriasla on 16.12.2016.
  */
 
-public class DailyPlanModel extends Observable implements Identifiable<Integer>, Comparable<DailyPlanModel> {
+public class DailyPlanModel extends PropertyObservableObject implements Identifiable<Integer>, Comparable<DailyPlanModel> {
 
     private int id;
 
@@ -45,9 +46,7 @@ public class DailyPlanModel extends Observable implements Identifiable<Integer>,
     public void setStatus(PlanStatus status) {
         if(status != this.status) {
             this.status = status;
-            this.setChanged();
-            this.notifyObservers();
-            this.clearChanged();
+            this.propertyChanged("status");
         }
     }
 

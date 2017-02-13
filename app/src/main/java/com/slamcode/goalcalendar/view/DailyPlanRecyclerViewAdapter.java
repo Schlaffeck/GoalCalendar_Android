@@ -1,29 +1,25 @@
 package com.slamcode.goalcalendar.view;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.util.SortedList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.slamcode.goalcalendar.R;
-import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
-import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.PlanStatus;
 import com.slamcode.goalcalendar.view.controls.GoalPlanStatusButton;
 import com.slamcode.goalcalendar.view.lists.ComparatorSortedListCallback;
 import com.slamcode.goalcalendar.view.lists.DefaultComparator;
 import com.slamcode.goalcalendar.view.lists.RecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.ViewHolderBase;
+import com.slamcode.goalcalendar.view.mvvm.PropertyObserver;
 import com.slamcode.goalcalendar.view.utils.ColorsHelper;
 
 import java.util.Collection;
-import java.util.Observable;
-import java.util.Observer;
 
 import butterknife.BindView;
 
@@ -66,7 +62,6 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
      * View holder for daily plan
      */
     public class DailyPlanViewHolder extends ViewHolderBase<DailyPlanModel>{
-
         @BindView(R.id.plan_status_list_item_view_button)
         GoalPlanStatusButton statusButton;
 
@@ -85,10 +80,10 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
                     modelObject.setStatus(newState);
                 }
             });
-
-            modelObject.addObserver(new Observer() {
+            // todo: observer is null when auto mark service is run
+            modelObject.addPropertyObserver(new PropertyObserver() {
                 @Override
-                public void update(Observable o, Object arg) {
+                public void onPropertyChanged(String propertyName) {
                     statusButton.setStatus(modelObject.getStatus());
                 }
             });

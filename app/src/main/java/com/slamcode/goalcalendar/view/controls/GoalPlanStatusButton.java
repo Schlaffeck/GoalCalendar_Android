@@ -74,6 +74,9 @@ public class GoalPlanStatusButton extends ImageButton implements View.OnClickLis
 
     public void setStatus(PlanStatus status)
     {
+        if(this.currentPlanStatus == status)
+            return;
+
         this.currentPlanStatus = status;
         this.animateStatusChange(status);
         this.notifyOnStateChanged(status);

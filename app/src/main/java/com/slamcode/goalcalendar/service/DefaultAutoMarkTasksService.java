@@ -38,6 +38,12 @@ public class DefaultAutoMarkTasksService extends ComposableService implements Au
         return null;
     }
 
+    public DefaultAutoMarkTasksService(PersistenceContext persistenceContext, AppSettingsManager settingsManager)
+    {
+        this.persistenceContext = persistenceContext;
+        this.settingsManager = settingsManager;
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         int result = super.onStartCommand(intent, flags, startId);

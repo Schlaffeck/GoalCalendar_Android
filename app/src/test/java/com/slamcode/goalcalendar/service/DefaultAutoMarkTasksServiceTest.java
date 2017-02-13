@@ -31,9 +31,7 @@ public class DefaultAutoMarkTasksServiceTest {
     @Test
     public void defaultAutoMarkTasksService_markUnfinishedTasksAsFailed_nothingPlannedYesterday() throws Exception {
 
-        DefaultAutoMarkTasksService service = new DefaultAutoMarkTasksService();
-        service.persistenceContext = mock(PersistenceContext.class);
-        service.settingsManager = mock(AppSettingsManager.class);
+        DefaultAutoMarkTasksService service = new DefaultAutoMarkTasksService(mock(PersistenceContext.class), mock(AppSettingsManager.class));
 
         // mocking actions
 
@@ -65,9 +63,7 @@ public class DefaultAutoMarkTasksServiceTest {
     @Test
     public void defaultAutoMarkTasksService_markUnfinishedTasksAsFailed_settingOff_notRun() throws Exception {
 
-        DefaultAutoMarkTasksService service = new DefaultAutoMarkTasksService();
-        service.persistenceContext = mock(PersistenceContext.class);
-        service.settingsManager = mock(AppSettingsManager.class);
+        DefaultAutoMarkTasksService service = new DefaultAutoMarkTasksService(mock(PersistenceContext.class), mock(AppSettingsManager.class));
 
         // mocking actions
 
@@ -87,9 +83,7 @@ public class DefaultAutoMarkTasksServiceTest {
     @Test
     public void defaultAutoMarkTasksService_markUnfinishedTasksAsFailed_multipleThingsPlanned() throws Exception {
 
-        DefaultAutoMarkTasksService service = new DefaultAutoMarkTasksService();
-        service.persistenceContext = mock(PersistenceContext.class);
-        service.settingsManager = mock(AppSettingsManager.class);
+        DefaultAutoMarkTasksService service = new DefaultAutoMarkTasksService(mock(PersistenceContext.class), mock(AppSettingsManager.class));
 
         // mocking actions
 

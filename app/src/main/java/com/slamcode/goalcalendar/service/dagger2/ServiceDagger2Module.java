@@ -67,8 +67,8 @@ public class ServiceDagger2Module {
 
     @Provides
     @Singleton
-    public AutoMarkTasksService provideAutoMarkTasksService()
+    public AutoMarkTasksService provideAutoMarkTasksService(PersistenceContext persistenceContext, AppSettingsManager settingsManager)
     {
-        return new DefaultAutoMarkTasksService();
+        return new DefaultAutoMarkTasksService(persistenceContext, settingsManager);
     }
 }
