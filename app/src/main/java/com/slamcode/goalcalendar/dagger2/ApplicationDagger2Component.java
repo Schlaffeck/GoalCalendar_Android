@@ -3,7 +3,7 @@ package com.slamcode.goalcalendar.dagger2;
 import com.slamcode.goalcalendar.MonthlyGoalsActivity;
 import com.slamcode.goalcalendar.data.dagger2.DataDagger2Module;
 import com.slamcode.goalcalendar.diagniostics.dagger2.DiagnosticsDagger2Module;
-import com.slamcode.goalcalendar.service.*;
+import com.slamcode.goalcalendar.service.commands.SnackbarShowUpAutoMarkTasksCommand;
 import com.slamcode.goalcalendar.service.dagger2.ServiceDagger2Module;
 import com.slamcode.goalcalendar.service.notification.NotificationPublisher;
 import com.slamcode.goalcalendar.service.notification.NotificationScheduler;
@@ -32,5 +32,5 @@ public interface ApplicationDagger2Component {
 
     void inject(NotificationPublisher notificationPublisher);
 
-    void inject(DefaultAutoMarkTasksService defaultAutoMarkTasksService);
+    void inject(SnackbarShowUpAutoMarkTasksCommand defaultAutoMarkTasksService);
 }

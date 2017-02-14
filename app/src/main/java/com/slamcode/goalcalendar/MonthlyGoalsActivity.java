@@ -31,6 +31,7 @@ import com.slamcode.collections.ElementCreator;
 import com.slamcode.goalcalendar.dagger2.ComposableApplication;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.planning.*;
+import com.slamcode.goalcalendar.service.commands.AutoMarkTasksCommand;
 import com.slamcode.goalcalendar.service.notification.NotificationScheduler;
 import com.slamcode.goalcalendar.view.CategoryNameRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.ResourcesHelper;
@@ -112,6 +113,9 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
 
     @Inject
     ListAdapterProvider adapterProvider;
+    
+    @Inject
+    AutoMarkTasksCommand autoMarkTasksCommand;
 
     private GestureDetectorCompat gestureDetector;
 
@@ -126,6 +130,11 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
         this.setSupportActionBar(this.toolbar);
         this.setupMonthlyPlanningCategoryList();
         this.setupSwipeListener();
+        this.runStartupCommands();
+    }
+
+    private void runStartupCommands() {
+        this.autoMarkTasksCommand.execute(this.findViewById(R.id.monthly_goals_activity_main_coordinator_layout));
     }
 
     private void injectDependencies() {

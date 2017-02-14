@@ -5,14 +5,16 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.view.View;
 
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.MonthlyGoalsActivity;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.diagniostics.Logger;
-import com.slamcode.goalcalendar.service.AutoMarkTasksService;
+import com.slamcode.goalcalendar.service.commands.AutoMarkTasksCommand;
 
 import org.junit.Test;
+import org.mockito.Matchers;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -29,7 +31,7 @@ public class AutoMarkTasksNotificationProviderTest {
 
     @Test
     public void autoMarkTasksNotificationProvider_getNotificationId_test() throws Exception {
-        AutoMarkTasksService serviceMock = mock(AutoMarkTasksService.class);
+        AutoMarkTasksCommand serviceMock = mock(AutoMarkTasksCommand.class);
         ApplicationContext applicationContextMock = mock(ApplicationContext.class);
 
         Logger loggerMock = mock(Logger.class);
@@ -38,13 +40,13 @@ public class AutoMarkTasksNotificationProviderTest {
 
         assertEquals(3, provider.getNotificationId());
 
-        verify(serviceMock, never()).markUnfinishedTasksAsFailed();
+        verify(serviceMock, never()).execute(Matchers.any(View.class));
     }
 
     @Test
     public void autoMarkTasksNotificationProvider_scheduleNotification_test() throws Exception {
         // create and orchestrate mocks
-        AutoMarkTasksService serviceMock = mock(AutoMarkTasksService.class);
+        AutoMarkTasksCommand serviceMock = mock(AutoMarkTasksCommand.class);
         ApplicationContext contextMock = mock(ApplicationContext.class);
 
         Intent intent = mock(Intent.class);
@@ -72,11 +74,11 @@ public class AutoMarkTasksNotificationProviderTest {
     @Test
     public void autoMarkTasksNotificationProvider_provideNotification_nothingMarked_test() throws Exception {
         // mock
-        AutoMarkTasksService serviceMock = mock(AutoMarkTasksService.class);
-        AutoMarkTasksService.AutoMarkResult result = new AutoMarkTasksService.AutoMarkResult();
+        AutoMarkTasksCommand serviceMock = mock(AutoMarkTasksCommand.class);
+        AutoMarkTasksCommand.AutoMarkResult result = new AutoMarkTasksCommand.AutoMarkResult();
         result.setWasRun(true);
         result.setUnfinishedTasksMarkedFailedCount(0);
-        when(serviceMock.markUnfinishedTasksAsFailed()).thenReturn(result);
+        when(serviceMock.execute(Matchers.any(View.class))).thenReturn(result);
 
         ApplicationContext applicationContextMock = mock(ApplicationContext.class);
         Logger loggerMock = mock(Logger.class);
@@ -89,7 +91,7 @@ public class AutoMarkTasksNotificationProviderTest {
         assertNull(notification);
 
         // verify
-        verify(serviceMock, times(1)).markUnfinishedTasksAsFailed();
+        verify(serviceMock, times(1)).execute(Matchers.any(View.class));
         verifyZeroInteractions(applicationContextMock);
         verifyZeroInteractions(loggerMock);
     }
@@ -98,11 +100,11 @@ public class AutoMarkTasksNotificationProviderTest {
     @Test
     public void autoMarkTasksNotificationProvider_provideNotification_singleTaskMarked_test() throws Exception {
         // mock
-        AutoMarkTasksService serviceMock = mock(AutoMarkTasksService.class);
-        AutoMarkTasksService.AutoMarkResult result = new AutoMarkTasksService.AutoMarkResult();
+        AutoMarkTasksCommand serviceMock = mock(AutoMarkTasksCommand.class);
+        AutoMarkTasksCommand.AutoMarkResult result = new AutoMarkTasksCommand.AutoMarkResult();
         result.setWasRun(true);
         result.setUnfinishedTasksMarkedFailedCount(1);
-        when(serviceMock.markUnfinishedTasksAsFailed()).thenReturn(result);
+        when(serviceMock.execute(Matchers.any(View.class))).thenReturn(result);
 
         ApplicationContext contextMock = mock(ApplicationContext.class);
         Logger loggerMock = mock(Logger.class);
@@ -127,7 +129,7 @@ public class AutoMarkTasksNotificationProviderTest {
         assertEquals(notificationMock, notification);
 
         // verify
-        verify(serviceMock, times(1)).markUnfinishedTasksAsFailed();
+        verify(serviceMock, times(1)).execute(Matchers.any(View.class));
         verify(contextMock, times(1)).getStringFromResources(R.string.notification_autoMarked_title);
         verify(contextMock, times(1)).getStringFromResources(R.string.notification_autoMarked_single_content);
         verify(contextMock, times(1)).getColorArgbFromResources(R.color.planningStateButton_stateFailed_foregroundColor);
@@ -140,11 +142,11 @@ public class AutoMarkTasksNotificationProviderTest {
     @Test
     public void autoMarkTasksNotificationProvider_provideNotification_multipleTasksMarked_test() throws Exception {
         // mock
-        AutoMarkTasksService serviceMock = mock(AutoMarkTasksService.class);
-        AutoMarkTasksService.AutoMarkResult result = new AutoMarkTasksService.AutoMarkResult();
+        AutoMarkTasksCommand serviceMock = mock(AutoMarkTasksCommand.class);
+        AutoMarkTasksCommand.AutoMarkResult result = new AutoMarkTasksCommand.AutoMarkResult();
         result.setWasRun(true);
         result.setUnfinishedTasksMarkedFailedCount(3);
-        when(serviceMock.markUnfinishedTasksAsFailed()).thenReturn(result);
+        when(serviceMock.execute(Matchers.any(View.class))).thenReturn(result);
 
         ApplicationContext contextMock = mock(ApplicationContext.class);
         Logger loggerMock = mock(Logger.class);
@@ -169,7 +171,7 @@ public class AutoMarkTasksNotificationProviderTest {
         assertEquals(notificationMock, notification);
 
         // verify
-        verify(serviceMock, times(1)).markUnfinishedTasksAsFailed();
+        verify(serviceMock, times(1)).execute(Matchers.any(View.class));
         verify(contextMock, times(1)).getStringFromResources(R.string.notification_autoMarked_title);
         verify(contextMock, times(1)).getStringFromResources(R.string.notification_autoMarked_multiple_content);
         verify(contextMock, times(1)).getColorArgbFromResources(R.color.planningStateButton_stateFailed_foregroundColor);

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:id="@+id/monthly_goals_activity_main_coordinator_layout"
     tools:context=".MonthlyGoalsActivity">
 
     <android.support.design.widget.AppBarLayout

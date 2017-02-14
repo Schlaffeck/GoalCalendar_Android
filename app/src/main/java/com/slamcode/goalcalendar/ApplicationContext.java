@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 
 /**
  * general application context interface introduced toe ase mocking and testing
@@ -31,4 +33,5 @@ public interface ApplicationContext {
 
     Object getSystemService(String serviceId);
 
+    Snackbar showSnackbar(View view, String message, int durationFlag, String actionName, View.OnClickListener actionOnClickListener);
 }

@@ -59,6 +59,9 @@
     <string name="notification_autoMarked_single_content">Masz zaplanowane wczoraj nieudane działanie</string>
     <string name="notification_autoMarked_multiple_content">Masz %d zaplanowane wczoraj nieudane działania</string>
 
+    <string name="notification_autoMarked_snackbar_content">Nieskończone zadania oznaczono jako nieudane</string>
+    <string name="notification_autoMarked_snackbar_undoAction">Cofnij</string>
+
     <!-- Strings related to Settings -->
     <string name="title_activity_settings">Ustawienia</string>
 

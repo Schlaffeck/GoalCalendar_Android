@@ -58,6 +58,8 @@
     <string name="notification_autoMarked_single_content">Planned task from yesterday was marked as failed</string>
     <string name="notification_autoMarked_multiple_content">%d planned tasks from yesterday were marked as failed</string>
 
+    <string name="notification_autoMarked_snackbar_content">Undone tasks marked as failed</string>
+    <string name="notification_autoMarked_snackbar_undoAction">Undo</string>
 
     <!-- Strings related to Settings -->
     <string name="title_activity_settings">Settings</string>

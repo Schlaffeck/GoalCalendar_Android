@@ -1,6 +1,11 @@
-package com.slamcode.goalcalendar.service;
+package com.slamcode.goalcalendar.service.commands;
+
+import android.support.design.widget.Snackbar;
+import android.view.View;
 
 import com.slamcode.collections.CollectionUtils;
+import com.slamcode.goalcalendar.ApplicationContext;
+import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.data.CategoriesRepository;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.data.UnitOfWork;
@@ -13,11 +18,10 @@ import com.slamcode.goalcalendar.planning.PlanStatus;
 import com.slamcode.goalcalendar.settings.AppSettingsManager;
 
 import org.junit.Test;
-import org.mockito.Mockito;
-
-import java.util.Calendar;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -26,19 +30,22 @@ import static org.mockito.Mockito.when;
 /**
  * Created by moriasla on 10.02.2017.
  */
-public class DefaultAutoMarkTasksServiceTest {
+public class SnackbarShowUpAutoMarkTasksCommandTest {
 
     @Test
-    public void defaultAutoMarkTasksService_markUnfinishedTasksAsFailed_nothingPlannedYesterday() throws Exception {
+    public void defaultAutoMarkTasksService_execute_nothingPlannedYesterday() throws Exception {
 
-        DefaultAutoMarkTasksService service = new DefaultAutoMarkTasksService(mock(PersistenceContext.class), mock(AppSettingsManager.class));
+        AppSettingsManager settingsManager = mock(AppSettingsManager.class);
+        PersistenceContext persistenceContext = mock(PersistenceContext.class);
+        ApplicationContext applicationContext = mock(ApplicationContext.class);
+        SnackbarShowUpAutoMarkTasksCommand autoMarkTasksCommand = new SnackbarShowUpAutoMarkTasksCommand(applicationContext, persistenceContext, settingsManager);
 
         // mocking actions
 
-        when(service.settingsManager.getAutomaticallyMarkUncompletedTask()).thenReturn(true);
+        when(settingsManager.getAutomaticallyMarkUncompletedTask()).thenReturn(true);
 
         UnitOfWork uowMock = mock(UnitOfWork.class);
-        when(service.persistenceContext.createUnitOfWork()).thenReturn(uowMock);
+        when(persistenceContext.createUnitOfWork()).thenReturn(uowMock);
 
         CategoriesRepository categoriesRepositoryMock = mock(CategoriesRepository.class);
         when(uowMock.getCategoriesRepository()).thenReturn(categoriesRepositoryMock);
@@ -48,49 +55,56 @@ public class DefaultAutoMarkTasksServiceTest {
         .thenReturn(CollectionUtils.<CategoryModel>emptyList());
 
         // run method
-        AutoMarkTasksService.AutoMarkResult result = service.markUnfinishedTasksAsFailed();
+        AutoMarkTasksCommand.AutoMarkResult result = autoMarkTasksCommand.execute(null);
         assertTrue(result.getWasRun());
         assertEquals(0, result.getUnfinishedTasksMarkedFailedCount());
 
         // verify mocks
-        verify(service.settingsManager).getAutomaticallyMarkUncompletedTask();
-        verify(service.persistenceContext).createUnitOfWork();
+        verify(settingsManager).getAutomaticallyMarkUncompletedTask();
+        verify(persistenceContext).createUnitOfWork();
         verify(uowMock).getCategoriesRepository();
         verify(categoriesRepositoryMock).findForDateWithStatus(yesterday.getYear(), yesterday.getMonth(), yesterday.getDay(), PlanStatus.Planned);
         verify(uowMock).complete();
     }
 
     @Test
-    public void defaultAutoMarkTasksService_markUnfinishedTasksAsFailed_settingOff_notRun() throws Exception {
+    public void defaultAutoMarkTasksService_execute_settingOff_notRun() throws Exception {
 
-        DefaultAutoMarkTasksService service = new DefaultAutoMarkTasksService(mock(PersistenceContext.class), mock(AppSettingsManager.class));
+        AppSettingsManager settingsManager = mock(AppSettingsManager.class);
+        PersistenceContext persistenceContext = mock(PersistenceContext.class);
+        ApplicationContext applicationContext = mock(ApplicationContext.class);
+        SnackbarShowUpAutoMarkTasksCommand autoMarkTasksCommand = new SnackbarShowUpAutoMarkTasksCommand(applicationContext, persistenceContext, settingsManager);
 
         // mocking actions
 
-        when(service.settingsManager.getAutomaticallyMarkUncompletedTask()).thenReturn(false);
+        when(settingsManager.getAutomaticallyMarkUncompletedTask()).thenReturn(false);
 
         // run method
-        AutoMarkTasksService.AutoMarkResult result = service.markUnfinishedTasksAsFailed();
+        AutoMarkTasksCommand.AutoMarkResult result = autoMarkTasksCommand.execute(null);
         assertFalse(result.getWasRun());
         assertEquals(0, result.getUnfinishedTasksMarkedFailedCount());
 
         // verify mocks
-        verify(service.settingsManager).getAutomaticallyMarkUncompletedTask();
-        verify(service.persistenceContext, never()).createUnitOfWork();
-        verify(service.persistenceContext, never()).persistData();
+        verify(settingsManager).getAutomaticallyMarkUncompletedTask();
+        verify(persistenceContext, never()).createUnitOfWork();
+        verify(persistenceContext, never()).persistData();
     }
 
     @Test
-    public void defaultAutoMarkTasksService_markUnfinishedTasksAsFailed_multipleThingsPlanned() throws Exception {
+    public void defaultAutoMarkTasksService_execute_multipleThingsPlanned() throws Exception {
 
-        DefaultAutoMarkTasksService service = new DefaultAutoMarkTasksService(mock(PersistenceContext.class), mock(AppSettingsManager.class));
+        AppSettingsManager settingsManager = mock(AppSettingsManager.class);
+        PersistenceContext persistenceContext = mock(PersistenceContext.class);
+        ApplicationContext applicationContext = mock(ApplicationContext.class);
+        SnackbarShowUpAutoMarkTasksCommand autoMarkTasksCommand = new SnackbarShowUpAutoMarkTasksCommand(applicationContext, persistenceContext, settingsManager);
 
         // mocking actions
 
-        when(service.settingsManager.getAutomaticallyMarkUncompletedTask()).thenReturn(true);
+        View parameter = mock(View.class);
+        when(settingsManager.getAutomaticallyMarkUncompletedTask()).thenReturn(true);
 
         UnitOfWork uowMock = mock(UnitOfWork.class);
-        when(service.persistenceContext.createUnitOfWork()).thenReturn(uowMock);
+        when(persistenceContext.createUnitOfWork()).thenReturn(uowMock);
 
         CategoriesRepository categoriesRepositoryMock = mock(CategoriesRepository.class);
         when(uowMock.getCategoriesRepository()).thenReturn(categoriesRepositoryMock);
@@ -111,8 +125,12 @@ public class DefaultAutoMarkTasksServiceTest {
         when(categoriesRepositoryMock.findForDateWithStatus(yesterday.getYear(), yesterday.getMonth(), yesterday.getDay(), PlanStatus.Planned))
                 .thenReturn(CollectionUtils.createList(c1, c2, c3));
 
+        when(applicationContext.getStringFromResources(R.string.notification_autoMarked_snackbar_content)).thenReturn("Content");
+        when(applicationContext.getStringFromResources(R.string.notification_autoMarked_snackbar_undoAction)).thenReturn("UNDO");
+
+
         // run method
-        AutoMarkTasksService.AutoMarkResult result = service.markUnfinishedTasksAsFailed();
+        AutoMarkTasksCommand.AutoMarkResult result = autoMarkTasksCommand.execute(parameter);
         assertTrue(result.getWasRun());
         assertEquals(3, result.getUnfinishedTasksMarkedFailedCount());
 
@@ -122,10 +140,11 @@ public class DefaultAutoMarkTasksServiceTest {
         assertEquals(PlanStatus.Failure, c3.getDailyPlans().get(yesterday.getDay()-1).getStatus());
 
         // verify mocks
-        verify(service.settingsManager).getAutomaticallyMarkUncompletedTask();
-        verify(service.persistenceContext).createUnitOfWork();
+        verify(settingsManager).getAutomaticallyMarkUncompletedTask();
+        verify(persistenceContext).createUnitOfWork();
         verify(uowMock).getCategoriesRepository();
         verify(categoriesRepositoryMock).findForDateWithStatus(yesterday.getYear(), yesterday.getMonth(), yesterday.getDay(), PlanStatus.Planned);
         verify(uowMock).complete();
+        verify(applicationContext).showSnackbar(eq(parameter), eq("Content"), eq(Snackbar.LENGTH_LONG), eq("UNDO"), any(View.OnClickListener.class));
     }
 }

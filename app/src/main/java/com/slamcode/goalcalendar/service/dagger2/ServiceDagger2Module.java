@@ -3,8 +3,8 @@ package com.slamcode.goalcalendar.service.dagger2;
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.diagniostics.Logger;
-import com.slamcode.goalcalendar.service.AutoMarkTasksService;
-import com.slamcode.goalcalendar.service.DefaultAutoMarkTasksService;
+import com.slamcode.goalcalendar.service.commands.AutoMarkTasksCommand;
+import com.slamcode.goalcalendar.service.commands.SnackbarShowUpAutoMarkTasksCommand;
 import com.slamcode.goalcalendar.service.notification.NotificationScheduler;
 import com.slamcode.goalcalendar.service.notification.AutoMarkTasksNotificationProvider;
 import com.slamcode.goalcalendar.service.notification.EndOfDayNotificationProvider;
@@ -37,7 +37,7 @@ public class ServiceDagger2Module {
     public Map<String, NotificationProvider> getNotificationProvidersMap(
             PersistenceContext persistenceContext,
             AppSettingsManager settingsManager,
-            AutoMarkTasksService autoMarkTasksService,
+            AutoMarkTasksCommand autoMarkTasksCommand,
             Logger logger)
     {
 
@@ -51,7 +51,7 @@ public class ServiceDagger2Module {
                 new EndOfDayNotificationProvider(this.context, settingsManager, logger));
 
         providerHashMap.put(AutoMarkTasksNotificationProvider.class.getName(),
-                new AutoMarkTasksNotificationProvider(this.context, autoMarkTasksService, logger));
+                new AutoMarkTasksNotificationProvider(this.context, autoMarkTasksCommand, logger));
 
         return providerHashMap;
     }
@@ -65,8 +65,8 @@ public class ServiceDagger2Module {
 
     @Provides
     @Singleton
-    public AutoMarkTasksService provideAutoMarkTasksService(PersistenceContext persistenceContext, AppSettingsManager settingsManager)
+    public AutoMarkTasksCommand provideAutoMarkTasksCommand(PersistenceContext persistenceContext, AppSettingsManager settingsManager)
     {
-        return new DefaultAutoMarkTasksService(persistenceContext, settingsManager);
+        return new SnackbarShowUpAutoMarkTasksCommand(this.context, persistenceContext, settingsManager);
     }
 }

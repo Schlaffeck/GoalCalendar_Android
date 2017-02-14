@@ -1,12 +1,14 @@
-package com.slamcode.goalcalendar.service;
+package com.slamcode.goalcalendar.service.commands;
+
+import android.view.View;
+
+import com.slamcode.goalcalendar.commands.Command;
 
 /**
  * Created by moriasla on 10.02.2017.
  */
 
-public interface AutoMarkTasksService {
-
-    AutoMarkResult markUnfinishedTasksAsFailed();
+public interface AutoMarkTasksCommand extends Command<View, AutoMarkTasksCommand.AutoMarkResult> {
 
     class AutoMarkResult{
 

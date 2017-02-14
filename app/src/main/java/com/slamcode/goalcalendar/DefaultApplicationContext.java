@@ -6,8 +6,10 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
+import android.view.View;
 
 import static android.R.attr.id;
 
@@ -71,5 +73,13 @@ public final class DefaultApplicationContext implements ApplicationContext {
     @Override
     public Object getSystemService(String serviceId) {
         return this.context.getSystemService(serviceId);
+    }
+
+    @Override
+    public Snackbar showSnackbar(View view, String message, int durationFlag, String actionName, View.OnClickListener actionOnClickListener) {
+        Snackbar snackbar = Snackbar.make(view, message, durationFlag);
+        snackbar.setAction(actionName, actionOnClickListener);
+        snackbar.show();
+        return snackbar;
     }
 }

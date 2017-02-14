@@ -10,7 +10,7 @@ import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.MonthlyGoalsActivity;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.diagniostics.Logger;
-import com.slamcode.goalcalendar.service.AutoMarkTasksService;
+import com.slamcode.goalcalendar.service.commands.AutoMarkTasksCommand;
 
 /**
  * Created by moriasla on 10.02.2017.
@@ -22,10 +22,10 @@ public final class AutoMarkTasksNotificationProvider implements NotificationProv
     private static final String LOG_TAG = "GOAL_AutoMNotPrv";
 
     private final ApplicationContext context;
-    private final AutoMarkTasksService service;
+    private final AutoMarkTasksCommand service;
     private final Logger logger;
 
-    public AutoMarkTasksNotificationProvider(ApplicationContext applicationContext, AutoMarkTasksService service, Logger logger)
+    public AutoMarkTasksNotificationProvider(ApplicationContext applicationContext, AutoMarkTasksCommand service, Logger logger)
     {
         this.context = applicationContext;
         this.service = service;
@@ -40,7 +40,7 @@ public final class AutoMarkTasksNotificationProvider implements NotificationProv
     @Override
     public Notification provideNotification() {
 
-        AutoMarkTasksService.AutoMarkResult autoMarkResult = this.service.markUnfinishedTasksAsFailed();
+        AutoMarkTasksCommand.AutoMarkResult autoMarkResult = this.service.execute(null);
 
         Notification notification = null;
 
