@@ -9,23 +9,17 @@ import android.content.Intent;
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.MonthlyGoalsActivity;
 import com.slamcode.goalcalendar.R;
-import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.diagniostics.Logger;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.HourMinuteTime;
-import com.slamcode.goalcalendar.service.NotificationPublisher;
-import com.slamcode.goalcalendar.service.NotificationScheduler;
 import com.slamcode.goalcalendar.settings.AppSettingsManager;
 
 import org.junit.Test;
-import org.mockito.ArgumentMatcher;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import java.util.Calendar;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.matches;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;

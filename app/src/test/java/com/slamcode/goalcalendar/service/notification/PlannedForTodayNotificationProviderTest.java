@@ -5,36 +5,24 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.icu.util.Calendar;
-import android.os.Bundle;
-import android.support.v7.app.NotificationCompat;
-import android.test.mock.MockContext;
 
 import com.slamcode.collections.CollectionUtils;
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.MonthlyGoalsActivity;
-import com.slamcode.goalcalendar.MonthlyGoalsActivity_MembersInjector;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.data.CategoriesRepository;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.data.UnitOfWork;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
-import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.diagniostics.Logger;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
-import com.slamcode.goalcalendar.planning.HourMinuteTime;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.PlanStatus;
-import com.slamcode.goalcalendar.service.NotificationPublisher;
-import com.slamcode.goalcalendar.service.NotificationScheduler;
 import com.slamcode.goalcalendar.settings.AppSettingsManager;
 
 import org.junit.Test;
 import org.mockito.Mockito;
-
-import java.util.GregorianCalendar;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -42,7 +30,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

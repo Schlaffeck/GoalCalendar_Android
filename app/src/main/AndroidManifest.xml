@@ -12,15 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service
-            android:name=".service.NotificationScheduler"
+            android:name=".service.notification.NotificationScheduler"
             android:label="Notification Scheduler">
             <intent-filter>
-                <action android:name="com.slamcode.goalcalendar.service.NotificationScheduler" />
+                <action android:name="com.slamcode.goalcalendar.service.notification.NotificationScheduler" />
             </intent-filter>
         </service>
 
         <receiver
-            android:name=".service.NotificationServiceStarterReceiver"
+            android:name=".service.notification.NotificationServiceStarterReceiver"
             android:label="BootCompletedReceiver"
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
             <intent-filter>
@@ -34,7 +34,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".service.NotificationPublisher"
+            android:name=".service.notification.NotificationPublisher"
             android:label="NotificationPublisher"></receiver>
 
         <activity

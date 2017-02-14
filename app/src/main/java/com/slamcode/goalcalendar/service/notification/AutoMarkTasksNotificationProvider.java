@@ -10,14 +10,7 @@ import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.MonthlyGoalsActivity;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.diagniostics.Logger;
-import com.slamcode.goalcalendar.planning.DateTimeHelper;
-import com.slamcode.goalcalendar.planning.HourMinuteTime;
 import com.slamcode.goalcalendar.service.AutoMarkTasksService;
-import com.slamcode.goalcalendar.service.NotificationPublisher;
-import com.slamcode.goalcalendar.service.NotificationScheduler;
-import com.slamcode.goalcalendar.settings.AppSettingsManager;
-
-import java.util.Calendar;
 
 /**
  * Created by moriasla on 10.02.2017.

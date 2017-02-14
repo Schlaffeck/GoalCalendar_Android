@@ -1,15 +1,11 @@
-package com.slamcode.goalcalendar.service;
+package com.slamcode.goalcalendar.service.notification;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.HashSet;
-import java.util.List;
-
-import javax.inject.Inject;
 
 /**
  * Created by moriasla on 18.01.2017.

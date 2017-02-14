@@ -5,9 +5,6 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.MonthlyGoalsActivity;
@@ -18,8 +15,6 @@ import com.slamcode.goalcalendar.diagniostics.Logger;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.PlanStatus;
-import com.slamcode.goalcalendar.service.NotificationPublisher;
-import com.slamcode.goalcalendar.service.NotificationScheduler;
 import com.slamcode.goalcalendar.settings.AppSettingsManager;
 
 import java.util.Calendar;

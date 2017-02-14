@@ -10,14 +10,9 @@ import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.MonthlyGoalsActivity;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.diagniostics.Logger;
-import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.service.AutoMarkTasksService;
-import com.slamcode.goalcalendar.service.NotificationPublisher;
-import com.slamcode.goalcalendar.service.NotificationScheduler;
-import com.slamcode.goalcalendar.settings.AppSettingsManager;
 
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;

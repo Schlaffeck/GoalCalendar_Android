@@ -1,13 +1,11 @@
 package com.slamcode.goalcalendar.service.dagger2;
 
-import android.content.Context;
-
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.diagniostics.Logger;
 import com.slamcode.goalcalendar.service.AutoMarkTasksService;
 import com.slamcode.goalcalendar.service.DefaultAutoMarkTasksService;
-import com.slamcode.goalcalendar.service.NotificationScheduler;
+import com.slamcode.goalcalendar.service.notification.NotificationScheduler;
 import com.slamcode.goalcalendar.service.notification.AutoMarkTasksNotificationProvider;
 import com.slamcode.goalcalendar.service.notification.EndOfDayNotificationProvider;
 import com.slamcode.goalcalendar.service.notification.NotificationProvider;

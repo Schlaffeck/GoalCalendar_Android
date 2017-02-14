@@ -1,27 +1,14 @@
-package com.slamcode.goalcalendar.service;
+package com.slamcode.goalcalendar.service.notification;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.slamcode.goalcalendar.dagger2.ComposableService;
 import com.slamcode.goalcalendar.data.PersistenceContext;
-import com.slamcode.goalcalendar.planning.DateTimeHelper;
-import com.slamcode.goalcalendar.planning.HourMinuteTime;
-import com.slamcode.goalcalendar.service.notification.EndOfDayNotificationProvider;
-import com.slamcode.goalcalendar.service.notification.NotificationProvider;
-import com.slamcode.goalcalendar.service.notification.PlannedForTodayNotificationProvider;
 import com.slamcode.goalcalendar.settings.AppSettingsManager;
 
-import org.apache.commons.collections4.keyvalue.AbstractMapEntry;
-
-import java.util.Calendar;
 import java.util.Map;
 
 import javax.inject.Inject;

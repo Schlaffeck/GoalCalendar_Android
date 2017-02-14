@@ -1,4 +1,4 @@
-package com.slamcode.goalcalendar.service;
+package com.slamcode.goalcalendar.service.notification;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.slamcode.goalcalendar.dagger2.Dagger2ComponentContainer;
-import com.slamcode.goalcalendar.service.notification.NotificationProvider;
 
 import java.util.Map;
 
