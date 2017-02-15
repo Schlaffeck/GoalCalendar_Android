@@ -8,6 +8,11 @@
     android:id="@+id/monthly_goals_activity_main_coordinator_layout"
     tools:context=".MonthlyGoalsActivity">
 
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,15 +28,29 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/monthly_goals_content" />
+    </LinearLayout>
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/monthly_goals_activity_bottom_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:clipToPadding="true"
+            android:background="@color/listAccentColor"
+            app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+            <include layout="@layout/monthly_goals_summary_content" />
+        </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/monthly_goals_add_category_floatingactionbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:scaleType="center"
+        android:elevation="4dp"
         android:tint="@android:color/white"
+        app:layout_anchorGravity="top|right|end"
+        app:layout_anchor="@id/monthly_goals_activity_bottom_sheet"
         app:srcCompat="@android:drawable/ic_input_add" />
 
 </android.support.design.widget.CoordinatorLayout>
