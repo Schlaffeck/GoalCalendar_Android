@@ -33,7 +33,7 @@
         <android.support.v4.widget.NestedScrollView
             android:id="@+id/monthly_goals_activity_bottom_sheet"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:clipToPadding="true"
             android:background="@color/listAccentColor"
             app:layout_behavior="android.support.design.widget.BottomSheetBehavior">

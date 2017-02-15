@@ -2,8 +2,10 @@ package com.slamcode.goalcalendar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -101,6 +103,14 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
     @BindView(R.id.monthly_goals_emptyContent_horizontallScrollView)
     HorizontalScrollView emptyContentHorizontalScrollView;
 
+    @BindView(R.id.monthly_goals_activity_bottom_sheet)
+    NestedScrollView bottomSheetScrollView;
+
+    @BindView(R.id.monthly_goals_summary_generalProgress_textView)
+    TextView summaryGeneralPercentageTextView;
+
+    private BottomSheetBehavior bottomSheetBehavior;
+
     //todo: move to di container and inject
     MonthlyGoalsPresenter presenter;
 
@@ -130,7 +140,17 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
         this.setSupportActionBar(this.toolbar);
         this.setupMonthlyPlanningCategoryList();
         this.setupSwipeListener();
+        this.setupBottomSheetBehavior();
         this.runStartupCommands();
+    }
+
+    private void setupBottomSheetBehavior() {
+        this.bottomSheetBehavior = BottomSheetBehavior.from(this.bottomSheetScrollView);
+        this.bottomSheetBehavior.setPeekHeight(150);
+        this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        // todo: count proper summary values (provide separate presenter for this part of view
+        this.summaryGeneralPercentageTextView.setText(
+                String.format(this.getString(R.string.monthly_plans_summary_generalPercentage), 45.6));
     }
 
     private void runStartupCommands() {

@@ -6,6 +6,8 @@
     <string name="context_menu_delete_item">Usuń</string>
     <string name="button_yes">Tak</string>
     <string name="button_no">Nie</string>
+    <string name="button_less">Mniej</string>
+    <string name="button_more">Więcej</string>
 
     <!-- monthly goals view -->
     <string name="add_category_dialog_header">Dodaj kategorię</string>
@@ -47,6 +49,10 @@
     <string name="monthly_plans_empty_view_content_text">Dodaj nową używając przycisku \'+\' lub skopiuj kategorie z poprzedniego miesiąca</string>
     <string name="monthly_plans_empty_view_simplyAdd_content_text">Dodaj nową używając przycisku \'+\'</string>
     <string name="monthly_plans_empty_view_categories_copied_toast_text">Pomyslnie skopiowano kategorie</string>
+
+    <!-- summary view -->
+    <string name="monthly_plans_summary_generalPercentage">Postęp miesięczny: %.2f%%</string>
+    <string name="monthly_plans_summary_details">Dokładny opis postepów dokonanych w obecnym miesiącu</string>
 
     <!-- notification -->
     <string name="notification_plannedForToday_title">Na dziś</string>

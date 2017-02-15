@@ -7,14 +7,28 @@
         android:id="@+id/monthly_goals_summary_generalProgress_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Monthly progress: 50%"
+        android:text="@string/monthly_plans_summary_generalPercentage"
         android:textSize="16sp"
         android:textAllCaps="false"
         android:padding="16dp"/>
+
+    <TextView
+        android:layout_below="@id/monthly_goals_summary_generalProgress_textView"
+        android:id="@+id/monthly_goals_summary_details_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/monthly_plans_summary_details"
+        android:textSize="16sp"
+        android:textAllCaps="false"
+        android:padding="16dp"
+        android:height="300dp"/>
     <!--<Button-->
+        <!--android:id="@+id/monthly_goals_summary_expand_button"-->
+        <!--android:gravity="center_vertical"-->
         <!--android:layout_toRightOf="@id/monthly_goals_summary_generalProgress_textView"-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
-        <!--android:text="more"-->
+        <!--android:text="@string/button_more"-->
+        <!--android:textColor="@color/planningStateButton_stateEmpty_foregroundColor"-->
         <!--style="@style/Widget.AppCompat.Button.Borderless.Colored"/>-->
 </RelativeLayout>
