@@ -329,6 +329,32 @@ public class InMemoryCategoriesRepositoryTest {
         assertEquals(0, categories.size());
     }
 
+
+    @Test
+    public void inMemoryCategoriesRepository_findForMonthWithName_test() throws Exception {
+        MonthlyPlansModel april = this.createMonthlyPlans(1, 2016, Month.APRIL, "A1", "A2", "A3", "A4", "A5", "A6");
+        MonthlyPlansModel may = this.createMonthlyPlans(2, 2016, Month.MAY, "B1", "B2", "B3", "B2", "B5");
+
+        // set repository
+        CategoriesRepository repository = new InMemoryCategoriesRepository(CollectionUtils.createList(april, may));
+
+        List<CategoryModel> categories = repository.findForMonthWithName(2016, Month.APRIL, "A1");
+        assertEquals(1, categories.size());
+        assertEquals("A1", categories.get(0).getName());
+
+        categories = repository.findForMonthWithName(2016, Month.APRIL, "A8");
+        assertEquals(0, categories.size());
+
+        categories = repository.findForMonthWithName(2016, Month.MAY, "B1");
+        assertEquals(1, categories.size());
+        assertEquals("B1", categories.get(0).getName());
+
+        categories = repository.findForMonthWithName(2016, Month.MAY, "B2");
+        assertEquals(2, categories.size());
+        assertEquals("B2", categories.get(0).getName());
+        assertEquals("B2", categories.get(1).getName());
+    }
+
     @Test
     public void inMemoryCategoriesRepository_findForDateWithStatus_test() throws Exception {
         MonthlyPlansModel april = this.createMonthlyPlans(1, 2016, Month.APRIL, "A1", "A2", "A3", "A4", "A5", "A6");

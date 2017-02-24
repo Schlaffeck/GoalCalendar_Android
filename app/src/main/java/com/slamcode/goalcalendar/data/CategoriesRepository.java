@@ -15,5 +15,7 @@ public interface CategoriesRepository extends Repository<CategoryModel,  Integer
 
     List<CategoryModel> findForMonth(int year, Month month);
 
+    List<CategoryModel> findForMonthWithName(int year, Month month, String name);
+
     List<CategoryModel> findForDateWithStatus(int year, Month month, int day, PlanStatus planStatus);
 }
