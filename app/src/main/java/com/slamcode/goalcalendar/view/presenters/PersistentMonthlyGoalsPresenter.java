@@ -223,9 +223,8 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
     }
 
     @Override
-    public double getProgressSummaryValue() {
-        PlansSummaryCalculator.PlansSummary summary = this.summaryCalculator.calculatePlansSummaryForMonth(this.getSelectedYear(), this.getSelectedMonth());
-        return summary.countProgressPercentage();
+    public MonthlyProgressSummary getMonthlyProgressSummary() {
+        return new MonthlyProgressSummary(this.summaryCalculator, this.selectedMonthlyPlans);
     }
 
     private MonthlyPlansModel findPreviousMonthlyPlansModelWithCategories()

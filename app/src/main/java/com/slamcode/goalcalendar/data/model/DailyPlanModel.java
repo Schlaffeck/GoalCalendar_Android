@@ -12,6 +12,8 @@ import java.util.Observable;
 
 public class DailyPlanModel extends PropertyObservableObject implements Identifiable<Integer>, Comparable<DailyPlanModel> {
 
+    public static final String STATUS_PROPERTY_NAME = "status";
+
     private int id;
 
     private PlanStatus status = PlanStatus.Empty;
@@ -46,7 +48,7 @@ public class DailyPlanModel extends PropertyObservableObject implements Identifi
     public void setStatus(PlanStatus status) {
         if(status != this.status) {
             this.status = status;
-            this.propertyChanged("status");
+            this.propertyChanged(STATUS_PROPERTY_NAME);
         }
     }
 

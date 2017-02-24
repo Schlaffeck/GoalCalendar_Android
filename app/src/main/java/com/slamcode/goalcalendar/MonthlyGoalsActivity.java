@@ -151,7 +151,11 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
         this.bottomSheetBehavior = BottomSheetBehavior.from(this.bottomSheetScrollView);
         this.bottomSheetBehavior.setPeekHeight(150);
         this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        this.setupBottomSheetData();
+    }
 
+    private void setupBottomSheetData()
+    {
         this.summaryGeneralPercentageTextView.setText(
                 String.format(this.getString(R.string.monthly_plans_summary_generalPercentage), this.presenter.getProgressSummaryValue()));
     }
