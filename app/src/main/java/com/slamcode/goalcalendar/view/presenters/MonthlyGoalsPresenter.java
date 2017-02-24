@@ -32,4 +32,6 @@ public interface MonthlyGoalsPresenter {
     AddEditCategoryDialog createAddEditCategoryDialog(int categoryPosition);
 
     AlertDialog createDeleteCategoryDialog(int categoryPosition);
+
+    double getProgressSummaryValue();
 }

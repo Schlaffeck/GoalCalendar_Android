@@ -14,6 +14,7 @@ import com.slamcode.goalcalendar.data.model.ModelHelper;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.Month;
+import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 import com.slamcode.goalcalendar.view.AddEditCategoryDialog;
 import com.slamcode.goalcalendar.view.CategoryDailyPlansRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.CategoryNameRecyclerViewAdapter;
@@ -24,6 +25,8 @@ import com.slamcode.goalcalendar.view.lists.ListAdapterProvider;
  */
 
 public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
+
+    private final PlansSummaryCalculator summaryCalculator;
 
     private MonthlyPlansModel selectedMonthlyPlans;
 
@@ -37,21 +40,24 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
     public PersistentMonthlyGoalsPresenter(Context context,
                                            LayoutInflater layoutInflater,
                                            PersistenceContext persistenceContext,
-                                           ListAdapterProvider listAdapterProvider)
+                                           ListAdapterProvider listAdapterProvider,
+                                           PlansSummaryCalculator summaryCalculator)
     {
-        this(context, layoutInflater, persistenceContext, listAdapterProvider, false);
+        this(context, layoutInflater, persistenceContext, listAdapterProvider, summaryCalculator, false);
     }
 
     public PersistentMonthlyGoalsPresenter(Context context,
                                            LayoutInflater layoutInflater,
                                            PersistenceContext persistenceContext,
                                            ListAdapterProvider listAdapterProvider,
+                                           PlansSummaryCalculator summaryCalculator,
                                            boolean setupCategoriesList)
     {
         this.context = context;
         this.persistenceContext = persistenceContext;
         this.categoryNamesRecyclerViewAdapter = listAdapterProvider.provideCategoryNameListViewAdapter(context,layoutInflater);
         this.categoryDailyPlansRecyclerViewAdapter = listAdapterProvider.provideCategoryDailyPlansListViewAdapter(context,layoutInflater);
+        this.summaryCalculator = summaryCalculator;
         if(setupCategoriesList)
             this.setYearAndMonth(this.getSelectedYear(), this.getSelectedMonth());
     }
@@ -214,6 +220,12 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
                 });
 
         return dialogBuilder.create();
+    }
+
+    @Override
+    public double getProgressSummaryValue() {
+        PlansSummaryCalculator.PlansSummary summary = this.summaryCalculator.calculatePlansSummaryForMonth(this.getSelectedYear(), this.getSelectedMonth());
+        return summary.countProgressPercentage();
     }
 
     private MonthlyPlansModel findPreviousMonthlyPlansModelWithCategories()

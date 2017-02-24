@@ -42,6 +42,7 @@ import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
 import com.slamcode.goalcalendar.view.lists.ListAdapterProvider;
 import com.slamcode.goalcalendar.view.lists.RecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.presenters.MonthlyGoalsPresenter;
+import com.slamcode.goalcalendar.view.presenters.PresentersSource;
 import com.slamcode.goalcalendar.view.utils.ColorsHelper;
 import com.slamcode.goalcalendar.view.lists.ScrollableViewHelper;
 import com.slamcode.goalcalendar.view.utils.SpinnerHelper;
@@ -86,7 +87,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
     HorizontalScrollView tableHorizontalScrollView;
 
     @BindView(R.id.monthly_goals_emptyContent_layout)
-    LinearLayout emptyContentlayout;
+    LinearLayout emptyContentLayout;
 
     @BindView(R.id.monthly_goals_emptyListView)
     LinearLayout emptyListLayout;
@@ -111,8 +112,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
 
     private BottomSheetBehavior bottomSheetBehavior;
 
-    //todo: move to di container and inject
-    MonthlyGoalsPresenter presenter;
+    private MonthlyGoalsPresenter presenter;
 
     // dependencies
     @Inject
@@ -126,6 +126,9 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
     
     @Inject
     AutoMarkTasksCommand autoMarkTasksCommand;
+
+    @Inject
+    PresentersSource presentersSource;
 
     private GestureDetectorCompat gestureDetector;
 
@@ -148,9 +151,9 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
         this.bottomSheetBehavior = BottomSheetBehavior.from(this.bottomSheetScrollView);
         this.bottomSheetBehavior.setPeekHeight(150);
         this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        // todo: count proper summary values (provide separate presenter for this part of view
+
         this.summaryGeneralPercentageTextView.setText(
-                String.format(this.getString(R.string.monthly_plans_summary_generalPercentage), 45.6));
+                String.format(this.getString(R.string.monthly_plans_summary_generalPercentage), this.presenter.getProgressSummaryValue()));
     }
 
     private void runStartupCommands() {
@@ -277,7 +280,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
 
         if(this.presenter == null)
         {
-            this.presenter = new PersistentMonthlyGoalsPresenter(this, this.getLayoutInflater(), this.persistenceContext, this.adapterProvider);
+            this.presenter = this.presentersSource.getMonthlyGoalsPresenter(this);;
         }
         // month spinner
         final ArrayAdapter<String> monthsStringsAdapter = new ArrayAdapter<String>(
