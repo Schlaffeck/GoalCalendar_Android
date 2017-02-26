@@ -33,12 +33,18 @@ public class MonthlyProgressSummary extends PropertyObservableObject {
         return this.calculator.calculatePlansSummaryForMonth(model.getYear(), model.getMonth()).countProgressPercentage();
     }
 
+    public void refreshData()
+    {
+        setupPlansListeners();
+    }
+
     private void setupPlansListeners() {
         if(this.model == null)
             return;
 
         for (CategoryModel category : model.getCategories() ){
             for (DailyPlanModel dailyPlan: category.getDailyPlans()) {
+                dailyPlan.removePropertyObserver(this.dailyPlanPropertyObserver);
                 dailyPlan.addPropertyObserver(this.dailyPlanPropertyObserver);
             }
         }

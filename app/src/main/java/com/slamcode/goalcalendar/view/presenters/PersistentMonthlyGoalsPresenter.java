@@ -19,16 +19,19 @@ import com.slamcode.goalcalendar.view.AddEditCategoryDialog;
 import com.slamcode.goalcalendar.view.CategoryDailyPlansRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.CategoryNameRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.ListAdapterProvider;
+import com.slamcode.goalcalendar.view.mvvm.PropertyObservableObject;
 
 /**
  * Created by moriasla on 16.01.2017.
  */
 
-public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
+public class PersistentMonthlyGoalsPresenter extends PropertyObservableObject implements MonthlyGoalsPresenter {
 
     private final PlansSummaryCalculator summaryCalculator;
 
     private MonthlyPlansModel selectedMonthlyPlans;
+
+    private MonthlyProgressSummary plansSummary;
 
     private final CategoryNameRecyclerViewAdapter categoryNamesRecyclerViewAdapter;
     private final CategoryDailyPlansRecyclerViewAdapter categoryDailyPlansRecyclerViewAdapter;
@@ -84,8 +87,10 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
         uow.complete();
 
         this.selectedMonthlyPlans = model;
+        this.plansSummary = null;
         this.categoryNamesRecyclerViewAdapter.updateMonthlyPlans(selectedMonthlyPlans);
         this.categoryDailyPlansRecyclerViewAdapter.updateMonthlyPlans(selectedMonthlyPlans);
+        this.propertyChanged(MONTHLY_SUMMARY_RESULT_PROPERTY_NAME);
     }
 
     @Override
@@ -164,6 +169,8 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
 
             this.categoryNamesRecyclerViewAdapter.addOrUpdateItem(newCategory);
             this.categoryDailyPlansRecyclerViewAdapter.addOrUpdateItem(newCategory);
+            plansSummary.refreshData();
+            this.propertyChanged(MONTHLY_SUMMARY_RESULT_PROPERTY_NAME);
         }
     }
 
@@ -186,6 +193,8 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
                         selectedMonthlyPlans.getCategories().add(newCategory);
                     categoryNamesRecyclerViewAdapter.addOrUpdateItem(newCategory);
                     categoryDailyPlansRecyclerViewAdapter.addOrUpdateItem(newCategory);
+                    plansSummary.refreshData();
+                    propertyChanged(MONTHLY_SUMMARY_RESULT_PROPERTY_NAME);
                 }
             }
         });
@@ -209,6 +218,8 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
                         categoryNamesRecyclerViewAdapter.removeItem(model);
                         categoryDailyPlansRecyclerViewAdapter.removeItem(model);
                         dialogInterface.dismiss();
+                        plansSummary.refreshData();
+                        propertyChanged(MONTHLY_SUMMARY_RESULT_PROPERTY_NAME);
                     }
                 })
                 .setNegativeButton(R.string.button_no, new DialogInterface.OnClickListener() {
@@ -223,8 +234,10 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
     }
 
     @Override
-    public MonthlyProgressSummary getMonthlyProgressSummary() {
-        return new MonthlyProgressSummary(this.summaryCalculator, this.selectedMonthlyPlans);
+    public MonthlyProgressSummary getProgressSummaryValue(){
+        if(this.plansSummary == null)
+            this.plansSummary = new MonthlyProgressSummary(this.summaryCalculator, this.selectedMonthlyPlans);
+        return this.plansSummary;
     }
 
     private MonthlyPlansModel findPreviousMonthlyPlansModelWithCategories()

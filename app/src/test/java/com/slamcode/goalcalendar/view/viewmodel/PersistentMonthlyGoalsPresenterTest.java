@@ -13,6 +13,7 @@ import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.planning.Month;
+import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 import com.slamcode.goalcalendar.view.CategoryDailyPlansRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.CategoryNameRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.ListAdapterProvider;
@@ -28,6 +29,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -41,16 +43,17 @@ public class PersistentMonthlyGoalsPresenterTest {
     public void monthlyGoalsViewModel_constructor_emptyList_test()
     {
         Context context = new MockContext();
-        LayoutInflater inflater = Mockito.mock(LayoutInflater.class);
-        PersistenceContext persistenceContext = Mockito.mock(PersistenceContext.class);
+        LayoutInflater inflater = mock(LayoutInflater.class);
+        PersistenceContext persistenceContext = mock(PersistenceContext.class);
+        PlansSummaryCalculator calculatorMock = mock(PlansSummaryCalculator.class);
 
-        CategoryNameRecyclerViewAdapter namesAdapter = Mockito.mock(CategoryNameRecyclerViewAdapter.class);
-        CategoryDailyPlansRecyclerViewAdapter dailyPlansAdapter = Mockito.mock(CategoryDailyPlansRecyclerViewAdapter.class);
-        ListAdapterProvider adapterProvider = Mockito.mock(ListAdapterProvider.class);
+        CategoryNameRecyclerViewAdapter namesAdapter = mock(CategoryNameRecyclerViewAdapter.class);
+        CategoryDailyPlansRecyclerViewAdapter dailyPlansAdapter = mock(CategoryDailyPlansRecyclerViewAdapter.class);
+        ListAdapterProvider adapterProvider = mock(ListAdapterProvider.class);
         when(adapterProvider.provideCategoryNameListViewAdapter(context, inflater)).thenReturn(namesAdapter);
         when(adapterProvider.provideCategoryDailyPlansListViewAdapter(context, inflater)).thenReturn(dailyPlansAdapter);
 
-        MonthlyGoalsPresenter viewModel = new PersistentMonthlyGoalsPresenter(context, inflater, persistenceContext, adapterProvider);
+        MonthlyGoalsPresenter viewModel = new PersistentMonthlyGoalsPresenter(context, inflater, persistenceContext, adapterProvider, calculatorMock);
 
         assertTrue(viewModel.isEmptyCategoriesList());
         assertEquals(Month.getCurrentMonth(), viewModel.getSelectedMonth());
@@ -65,12 +68,13 @@ public class PersistentMonthlyGoalsPresenterTest {
     {
         // mocks
         Context context = new MockContext();
-        LayoutInflater inflater = Mockito.mock(LayoutInflater.class);
-        PersistenceContext persistenceContext = Mockito.mock(PersistenceContext.class);
+        LayoutInflater inflater = mock(LayoutInflater.class);
+        PersistenceContext persistenceContext = mock(PersistenceContext.class);
+        PlansSummaryCalculator calculatorMock = mock(PlansSummaryCalculator.class);
 
-        UnitOfWork unitOfWork = Mockito.mock(UnitOfWork.class);
+        UnitOfWork unitOfWork = mock(UnitOfWork.class);
 
-        MonthlyPlansRepository repository = Mockito.mock(MonthlyPlansRepository.class);
+        MonthlyPlansRepository repository = mock(MonthlyPlansRepository.class);
 
         MonthlyPlansModel monthlyPlansModel =
                 new MonthlyPlansModel(1,
@@ -84,14 +88,14 @@ public class PersistentMonthlyGoalsPresenterTest {
         when(repository.findForMonth(DateTimeHelper.getCurrentYear(), Month.getCurrentMonth()))
                 .thenReturn(monthlyPlansModel);
 
-        CategoryNameRecyclerViewAdapter namesAdapter = Mockito.mock(CategoryNameRecyclerViewAdapter.class);
-        CategoryDailyPlansRecyclerViewAdapter dailyPlansAdapter = Mockito.mock(CategoryDailyPlansRecyclerViewAdapter.class);
-        ListAdapterProvider adapterProvider = Mockito.mock(ListAdapterProvider.class);
+        CategoryNameRecyclerViewAdapter namesAdapter = mock(CategoryNameRecyclerViewAdapter.class);
+        CategoryDailyPlansRecyclerViewAdapter dailyPlansAdapter = mock(CategoryDailyPlansRecyclerViewAdapter.class);
+        ListAdapterProvider adapterProvider = mock(ListAdapterProvider.class);
         when(adapterProvider.provideCategoryNameListViewAdapter(context, inflater)).thenReturn(namesAdapter);
         when(adapterProvider.provideCategoryDailyPlansListViewAdapter(context, inflater)).thenReturn(dailyPlansAdapter);
 
         // create
-        MonthlyGoalsPresenter viewModel = new PersistentMonthlyGoalsPresenter(context, inflater, persistenceContext, adapterProvider, true);
+        MonthlyGoalsPresenter viewModel = new PersistentMonthlyGoalsPresenter(context, inflater, persistenceContext, adapterProvider, calculatorMock, true);
 
         assertFalse(viewModel.isEmptyCategoriesList());
         assertEquals(Month.getCurrentMonth(), viewModel.getSelectedMonth());
@@ -116,19 +120,19 @@ public class PersistentMonthlyGoalsPresenterTest {
     {
         // mocks
         Context context = new MockContext();
-        LayoutInflater inflater = Mockito.mock(LayoutInflater.class);
+        LayoutInflater inflater = mock(LayoutInflater.class);
 
-        CategoryNameRecyclerViewAdapter namesAdapter = Mockito.mock(CategoryNameRecyclerViewAdapter.class);
-        CategoryDailyPlansRecyclerViewAdapter dailyPlansAdapter = Mockito.mock(CategoryDailyPlansRecyclerViewAdapter.class);
-        ListAdapterProvider adapterProvider = Mockito.mock(ListAdapterProvider.class);
+        CategoryNameRecyclerViewAdapter namesAdapter = mock(CategoryNameRecyclerViewAdapter.class);
+        CategoryDailyPlansRecyclerViewAdapter dailyPlansAdapter = mock(CategoryDailyPlansRecyclerViewAdapter.class);
+        ListAdapterProvider adapterProvider = mock(ListAdapterProvider.class);
         when(adapterProvider.provideCategoryNameListViewAdapter(context, inflater)).thenReturn(namesAdapter);
         when(adapterProvider.provideCategoryDailyPlansListViewAdapter(context, inflater)).thenReturn(dailyPlansAdapter);
 
-        PersistenceContext persistenceContext = Mockito.mock(PersistenceContext.class);;
+        PersistenceContext persistenceContext = mock(PersistenceContext.class);;
 
-        UnitOfWork unitOfWork = Mockito.mock(UnitOfWork.class);
+        UnitOfWork unitOfWork = mock(UnitOfWork.class);
 
-        MonthlyPlansRepository repository = Mockito.mock(MonthlyPlansRepository.class);
+        MonthlyPlansRepository repository = mock(MonthlyPlansRepository.class);
 
         MonthlyPlansModel monthlyPlansModel =
                 new MonthlyPlansModel(1,
@@ -144,12 +148,14 @@ public class PersistentMonthlyGoalsPresenterTest {
         when(repository.findForMonth(2017, Month.APRIL))
                 .thenReturn(monthlyPlansModel);
 
+        PlansSummaryCalculator calculatorMock = mock(PlansSummaryCalculator.class);
         // act
         MonthlyGoalsPresenter viewModel = new PersistentMonthlyGoalsPresenter(
                 context,
                 inflater,
                 persistenceContext,
-                adapterProvider);
+                adapterProvider,
+                calculatorMock);
         viewModel.setYearAndMonth(2017, Month.APRIL);
 
         // assert
@@ -167,19 +173,19 @@ public class PersistentMonthlyGoalsPresenterTest {
     {
         // mocks
         Context context = new MockContext();
-        LayoutInflater inflater = Mockito.mock(LayoutInflater.class);
+        LayoutInflater inflater = mock(LayoutInflater.class);
 
-        CategoryNameRecyclerViewAdapter namesAdapter = Mockito.mock(CategoryNameRecyclerViewAdapter.class);
-        CategoryDailyPlansRecyclerViewAdapter dailyPlansAdapter = Mockito.mock(CategoryDailyPlansRecyclerViewAdapter.class);
-        ListAdapterProvider adapterProvider = Mockito.mock(ListAdapterProvider.class);
+        CategoryNameRecyclerViewAdapter namesAdapter = mock(CategoryNameRecyclerViewAdapter.class);
+        CategoryDailyPlansRecyclerViewAdapter dailyPlansAdapter = mock(CategoryDailyPlansRecyclerViewAdapter.class);
+        ListAdapterProvider adapterProvider = mock(ListAdapterProvider.class);
         when(adapterProvider.provideCategoryNameListViewAdapter(context, inflater)).thenReturn(namesAdapter);
         when(adapterProvider.provideCategoryDailyPlansListViewAdapter(context, inflater)).thenReturn(dailyPlansAdapter);
 
-        PersistenceContext persistenceContext = Mockito.mock(PersistenceContext.class);;
+        PersistenceContext persistenceContext = mock(PersistenceContext.class);;
 
-        UnitOfWork unitOfWork = Mockito.mock(UnitOfWork.class);
+        UnitOfWork unitOfWork = mock(UnitOfWork.class);
 
-        MonthlyPlansRepository repository = Mockito.mock(MonthlyPlansRepository.class);
+        MonthlyPlansRepository repository = mock(MonthlyPlansRepository.class);
 
         // arrange
         when(persistenceContext.createUnitOfWork()).thenReturn(unitOfWork);
@@ -187,12 +193,15 @@ public class PersistentMonthlyGoalsPresenterTest {
         when(repository.findForMonth(2017, Month.APRIL))
                 .thenReturn(null);
 
+        PlansSummaryCalculator calculatorMock = mock(PlansSummaryCalculator.class);
+
         // act
         MonthlyGoalsPresenter viewModel = new PersistentMonthlyGoalsPresenter(
                 context,
                 inflater,
                 persistenceContext,
-                adapterProvider);
+                adapterProvider,
+                calculatorMock);
         viewModel.setYearAndMonth(2017, Month.APRIL);
 
         // assert
@@ -210,19 +219,19 @@ public class PersistentMonthlyGoalsPresenterTest {
     {
         // mocks
         Context context = new MockContext();
-        LayoutInflater inflater = Mockito.mock(LayoutInflater.class);
+        LayoutInflater inflater = mock(LayoutInflater.class);
 
-        CategoryNameRecyclerViewAdapter namesAdapter = Mockito.mock(CategoryNameRecyclerViewAdapter.class);
-        CategoryDailyPlansRecyclerViewAdapter dailyPlansAdapter = Mockito.mock(CategoryDailyPlansRecyclerViewAdapter.class);
-        ListAdapterProvider adapterProvider = Mockito.mock(ListAdapterProvider.class);
+        CategoryNameRecyclerViewAdapter namesAdapter = mock(CategoryNameRecyclerViewAdapter.class);
+        CategoryDailyPlansRecyclerViewAdapter dailyPlansAdapter = mock(CategoryDailyPlansRecyclerViewAdapter.class);
+        ListAdapterProvider adapterProvider = mock(ListAdapterProvider.class);
         when(adapterProvider.provideCategoryNameListViewAdapter(context, inflater)).thenReturn(namesAdapter);
         when(adapterProvider.provideCategoryDailyPlansListViewAdapter(context, inflater)).thenReturn(dailyPlansAdapter);
 
-        PersistenceContext persistenceContext = Mockito.mock(PersistenceContext.class);;
+        PersistenceContext persistenceContext = mock(PersistenceContext.class);;
 
-        UnitOfWork unitOfWork = Mockito.mock(UnitOfWork.class);
+        UnitOfWork unitOfWork = mock(UnitOfWork.class);
 
-        MonthlyPlansRepository repository = Mockito.mock(MonthlyPlansRepository.class);
+        MonthlyPlansRepository repository = mock(MonthlyPlansRepository.class);
 
         final Month nextMonthEnum = Month.getNextMonth();
         final Month currentMonthEnum = Month.getCurrentMonth();
@@ -249,12 +258,15 @@ public class PersistentMonthlyGoalsPresenterTest {
                 .thenReturn(nextMonth);
         when(repository.findLast(Matchers.any(com.android.internal.util.Predicate.class))).thenReturn(currentMonth);
 
+        PlansSummaryCalculator calculatorMock = mock(PlansSummaryCalculator.class);
+
         // act
         MonthlyGoalsPresenter viewModel = new PersistentMonthlyGoalsPresenter(
                 context,
                 inflater,
                 persistenceContext,
-                adapterProvider);
+                adapterProvider,
+                calculatorMock);
         viewModel.setYearAndMonth(DateTimeHelper.getCurrentYear(), Month.getNextMonth());
         viewModel.copyCategoriesFromPreviousMonth();
 

@@ -6,11 +6,15 @@ import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.view.AddEditCategoryDialog;
 import com.slamcode.goalcalendar.view.CategoryDailyPlansRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.CategoryNameRecyclerViewAdapter;
+import com.slamcode.goalcalendar.view.mvvm.PropertyObservable;
 
 /**
  * Created by moriasla on 09.02.2017.
  */
-public interface MonthlyGoalsPresenter {
+public interface MonthlyGoalsPresenter extends PropertyObservable {
+
+    String MONTHLY_SUMMARY_RESULT_PROPERTY_NAME = "monthlyPlansSummary";
+
     void setYearAndMonth(int year, Month month);
 
     CategoryNameRecyclerViewAdapter getCategoryNamesRecyclerViewAdapter();
@@ -33,5 +37,5 @@ public interface MonthlyGoalsPresenter {
 
     AlertDialog createDeleteCategoryDialog(int categoryPosition);
 
-    double getProgressSummaryValue();
+    MonthlyProgressSummary getProgressSummaryValue();
 }

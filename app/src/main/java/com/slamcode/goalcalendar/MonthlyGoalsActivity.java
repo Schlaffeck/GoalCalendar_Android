@@ -41,12 +41,13 @@ import com.slamcode.goalcalendar.view.activity.ActivityViewState;
 import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
 import com.slamcode.goalcalendar.view.lists.ListAdapterProvider;
 import com.slamcode.goalcalendar.view.lists.RecyclerViewDataAdapter;
+import com.slamcode.goalcalendar.view.mvvm.PropertyObserver;
 import com.slamcode.goalcalendar.view.presenters.MonthlyGoalsPresenter;
+import com.slamcode.goalcalendar.view.presenters.MonthlyProgressSummary;
 import com.slamcode.goalcalendar.view.presenters.PresentersSource;
 import com.slamcode.goalcalendar.view.utils.ColorsHelper;
 import com.slamcode.goalcalendar.view.lists.ScrollableViewHelper;
 import com.slamcode.goalcalendar.view.utils.SpinnerHelper;
-import com.slamcode.goalcalendar.view.presenters.PersistentMonthlyGoalsPresenter;
 
 import org.apache.commons.collections4.Closure;
 import org.apache.commons.collections4.IteratorUtils;
@@ -132,6 +133,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
 
     private GestureDetectorCompat gestureDetector;
 
+    private MonthlyProgressSummary summaryViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,7 +146,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
         this.setSupportActionBar(this.toolbar);
         this.setupMonthlyPlanningCategoryList();
         this.setupSwipeListener();
-        this.setupBottomSheetBehavior();
         this.runStartupCommands();
     }
 
@@ -151,13 +153,23 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
         this.bottomSheetBehavior = BottomSheetBehavior.from(this.bottomSheetScrollView);
         this.bottomSheetBehavior.setPeekHeight(150);
         this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        this.setupBottomSheetData();
     }
 
-    private void setupBottomSheetData()
+    private void summaryViewModelChanged()
     {
+        MonthlyProgressSummary viewModel = this.presenter.getProgressSummaryValue();
+        if(this.summaryViewModel != viewModel) {
+            this.summaryViewModel = viewModel;
+            this.summaryViewModel.addPropertyObserver(new PropertyObserver() {
+                @Override
+                public void onPropertyChanged(String propertyName) {
+                    if(propertyName == MonthlyProgressSummary.SUMMARY_PERCENTAGE_PROPERTY_NAME)
+                        summaryViewModelChanged();
+                }
+            });
+        }
         this.summaryGeneralPercentageTextView.setText(
-                String.format(this.getString(R.string.monthly_plans_summary_generalPercentage), this.presenter.getProgressSummaryValue()));
+                String.format(this.getString(R.string.monthly_plans_summary_generalPercentage), this.summaryViewModel.getPlansSummaryPercentage()));
     }
 
     private void runStartupCommands() {
@@ -284,7 +296,14 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
 
         if(this.presenter == null)
         {
-            this.presenter = this.presentersSource.getMonthlyGoalsPresenter(this);;
+            this.presenter = this.presentersSource.getMonthlyGoalsPresenter(this);
+            this.presenter.addPropertyObserver(new PropertyObserver() {
+                @Override
+                public void onPropertyChanged(String propertyName) {
+                    if(propertyName == MonthlyGoalsPresenter.MONTHLY_SUMMARY_RESULT_PROPERTY_NAME)
+                        summaryViewModelChanged();
+                }
+            });
         }
         // month spinner
         final ArrayAdapter<String> monthsStringsAdapter = new ArrayAdapter<String>(
@@ -318,6 +337,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
         }
 
         this.setupHeaderForCategoryListForMonth();
+        this.setupBottomSheetBehavior();
     }
 
     private boolean canScrollToCurrentDay()
