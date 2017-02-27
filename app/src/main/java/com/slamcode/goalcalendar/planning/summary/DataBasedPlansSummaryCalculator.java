@@ -20,8 +20,10 @@ public class DataBasedPlansSummaryCalculator implements PlansSummaryCalculator {
     }
 
     @Override
-    public PlansSummary calculatePlansSummaryForMonth(int year, Month month) {
-        return calculateMultipleCategoriesSummary(this.categoriesRepository.findForMonth(year, month));
+    public MonthPlansSummary calculatePlansSummaryForMonth(int year, Month month) {
+        MonthPlansSummary plansSummary = new MonthPlansSummary(year, month);
+        calculateMultipleCategoriesSummary(plansSummary, this.categoriesRepository.findForMonth(year, month));
+        return plansSummary;
     }
 
     @Override
@@ -30,17 +32,17 @@ public class DataBasedPlansSummaryCalculator implements PlansSummaryCalculator {
     }
 
     @Override
-    public PlansSummary calculatePlansSummaryForMonthInCategory(int year, Month month, String categoryName) {
-        return calculateMultipleCategoriesSummary(this.categoriesRepository.findForMonthWithName(year, month, categoryName));
+    public CategoryPlansSummary calculatePlansSummaryForMonthInCategory(int year, Month month, String categoryName) {
+        CategoryPlansSummary categoryPlansSummary = new CategoryPlansSummary(categoryName);
+        calculateMultipleCategoriesSummary(categoryPlansSummary, this.categoriesRepository.findForMonthWithName(year, month, categoryName));
+        return categoryPlansSummary;
     }
 
-    private PlansSummary calculateMultipleCategoriesSummary(Iterable<CategoryModel> categories)
+    private PlansSummary calculateMultipleCategoriesSummary(PlansSummary summary, Iterable<CategoryModel> categories)
     {
-        PlansSummary summary = new PlansSummary();
-
         for(CategoryModel categoryModel : categories)
         {
-            PlansSummary categorySummary = calculateCategorySummary(categoryModel);
+            CategoryPlansSummary categorySummary = calculateCategorySummary(categoryModel);
             if(categorySummary.dataAvailable)
             {
                 // add next summary to current one
@@ -55,9 +57,9 @@ public class DataBasedPlansSummaryCalculator implements PlansSummaryCalculator {
         return summary;
     }
 
-    private PlansSummary calculateCategorySummary(CategoryModel categoryModel)
+    private CategoryPlansSummary calculateCategorySummary(CategoryModel categoryModel)
     {
-        PlansSummary categorySummary = new PlansSummary();
+        CategoryPlansSummary categorySummary = new CategoryPlansSummary(categoryModel.getName());
         categorySummary.noOfExpectedTasks = categoryModel.getFrequencyValue() *
                 (categoryModel.getPeriod() == FrequencyPeriod.Month ? 1 : 4);
 

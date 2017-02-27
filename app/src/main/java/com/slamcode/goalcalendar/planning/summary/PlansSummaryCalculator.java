@@ -19,7 +19,7 @@ public interface PlansSummaryCalculator {
      * @param month
      * @return Plans summary calculation result
      */
-    PlansSummary calculatePlansSummaryForMonth(int year, Month month);
+    MonthPlansSummary calculatePlansSummaryForMonth(int year, Month month);
 
     /**
      * Calculates summary of planned and actually executed tasks in given day of month
@@ -38,7 +38,7 @@ public interface PlansSummaryCalculator {
      * @param categoryName
      * @return Plans summary calculation result
      */
-    PlansSummary calculatePlansSummaryForMonthInCategory(int year, Month month, String categoryName);
+    CategoryPlansSummary calculatePlansSummaryForMonthInCategory(int year, Month month, String categoryName);
 
     /**
      * Basic summary calculation result holder.
@@ -91,6 +91,40 @@ public interface PlansSummaryCalculator {
 
         public double getNoOfFailedTasks() {
             return this.noOfFailedTasks;
+        }
+    }
+
+    class CategoryPlansSummary extends PlansSummary
+    {
+        private final String categoryName;
+
+        CategoryPlansSummary(String categoryName)
+        {
+            this.categoryName = categoryName;
+        }
+
+        public String getCategoryName() {
+            return categoryName;
+        }
+    }
+
+    class MonthPlansSummary extends PlansSummary
+    {
+        private final int year;
+        private final Month month;
+
+        MonthPlansSummary(int year, Month month)
+        {
+            this.year = year;
+            this.month = month;
+        }
+
+        public int getYear() {
+            return year;
+        }
+
+        public Month getMonth() {
+            return month;
         }
     }
 }
