@@ -1,7 +1,7 @@
-package slamcode.com.goalcalendar.planning;
+package com.slamcode.goalcalendar.planning;
 
-import com.slamcode.goalcalendar.planning.Month;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Calendar;
@@ -17,18 +17,18 @@ public class MonthTest {
     @Test
     public void month_GetNumValue_Test()
     {
-        assertEquals(1, Month.JANUARY.getNumValue());
-        assertEquals(2, Month.FEBRUARY.getNumValue());
-        assertEquals(3, Month.MARCH.getNumValue());
-        assertEquals(4, Month.APRIL.getNumValue());
-        assertEquals(5, Month.MAY.getNumValue());
-        assertEquals(6, Month.JUNE.getNumValue());
-        assertEquals(7, Month.JULY.getNumValue());
-        assertEquals(8, Month.AUGUST.getNumValue());
-        assertEquals(9, Month.SEPTEMBER.getNumValue());
-        assertEquals(10, Month.OCTOBER.getNumValue());
-        assertEquals(11, Month.NOVEMBER.getNumValue());
-        assertEquals(12, Month.DECEMBER.getNumValue());
+        Assert.assertEquals(1, Month.JANUARY.getNumValue());
+        Assert.assertEquals(2, Month.FEBRUARY.getNumValue());
+        Assert.assertEquals(3, Month.MARCH.getNumValue());
+        Assert.assertEquals(4, Month.APRIL.getNumValue());
+        Assert.assertEquals(5, Month.MAY.getNumValue());
+        Assert.assertEquals(6, Month.JUNE.getNumValue());
+        Assert.assertEquals(7, Month.JULY.getNumValue());
+        Assert.assertEquals(8, Month.AUGUST.getNumValue());
+        Assert.assertEquals(9, Month.SEPTEMBER.getNumValue());
+        Assert.assertEquals(10, Month.OCTOBER.getNumValue());
+        Assert.assertEquals(11, Month.NOVEMBER.getNumValue());
+        Assert.assertEquals(12, Month.DECEMBER.getNumValue());
     }
 
     @Test
@@ -36,7 +36,7 @@ public class MonthTest {
     {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
-        assertEquals(cal.get(Calendar.MONTH) + 1, Month.getCurrentMonth().getNumValue());
+        Assert.assertEquals(cal.get(Calendar.MONTH) + 1, Month.getCurrentMonth().getNumValue());
     }
 
     @Test
@@ -44,51 +44,51 @@ public class MonthTest {
     {
         Month m = Month.JANUARY;
         Month nextM = Month.getPreviousMonth(m);
-        assertEquals(Month.DECEMBER, nextM);
+        Assert.assertEquals(Month.DECEMBER, nextM);
 
         m = Month.FEBRUARY;
         nextM = Month.getPreviousMonth(m);
-        assertEquals(Month.JANUARY, nextM);
+        Assert.assertEquals(Month.JANUARY, nextM);
 
         m = Month.MARCH;
         nextM = Month.getPreviousMonth(m);
-        assertEquals(Month.FEBRUARY, nextM);
+        Assert.assertEquals(Month.FEBRUARY, nextM);
 
         m = Month.APRIL;
         nextM = Month.getPreviousMonth(m);
-        assertEquals(Month.MARCH, nextM);
+        Assert.assertEquals(Month.MARCH, nextM);
 
         m = Month.MAY;
         nextM = Month.getPreviousMonth(m);
-        assertEquals(Month.APRIL, nextM);
+        Assert.assertEquals(Month.APRIL, nextM);
 
         m = Month.JUNE;
         nextM = Month.getPreviousMonth(m);
-        assertEquals(Month.MAY, nextM);
+        Assert.assertEquals(Month.MAY, nextM);
 
         m = Month.JULY;
         nextM = Month.getPreviousMonth(m);
-        assertEquals(Month.JUNE, nextM);
+        Assert.assertEquals(Month.JUNE, nextM);
 
         m = Month.AUGUST;
         nextM = Month.getPreviousMonth(m);
-        assertEquals(Month.JULY, nextM);
+        Assert.assertEquals(Month.JULY, nextM);
 
         m = Month.SEPTEMBER;
         nextM = Month.getPreviousMonth(m);
-        assertEquals(Month.AUGUST, nextM);
+        Assert.assertEquals(Month.AUGUST, nextM);
 
         m = Month.OCTOBER;
         nextM = Month.getPreviousMonth(m);
-        assertEquals(Month.SEPTEMBER, nextM);
+        Assert.assertEquals(Month.SEPTEMBER, nextM);
 
         m = Month.NOVEMBER;
         nextM = Month.getPreviousMonth(m);
-        assertEquals(Month.OCTOBER, nextM);
+        Assert.assertEquals(Month.OCTOBER, nextM);
 
         m = Month.DECEMBER;
         nextM = Month.getPreviousMonth(m);
-        assertEquals(Month.NOVEMBER, nextM);
+        Assert.assertEquals(Month.NOVEMBER, nextM);
     }
 
     @Test
@@ -96,51 +96,51 @@ public class MonthTest {
     {
         Month m = Month.JANUARY;
         Month nextM = Month.getNextMonth(m);
-        assertEquals(Month.FEBRUARY, nextM);
+        Assert.assertEquals(Month.FEBRUARY, nextM);
 
         m = Month.FEBRUARY;
         nextM = Month.getNextMonth(m);
-        assertEquals(Month.MARCH, nextM);
+        Assert.assertEquals(Month.MARCH, nextM);
 
         m = Month.MARCH;
         nextM = Month.getNextMonth(m);
-        assertEquals(Month.APRIL, nextM);
+        Assert.assertEquals(Month.APRIL, nextM);
 
         m = Month.APRIL;
         nextM = Month.getNextMonth(m);
-        assertEquals(Month.MAY, nextM);
+        Assert.assertEquals(Month.MAY, nextM);
 
         m = Month.MAY;
         nextM = Month.getNextMonth(m);
-        assertEquals(Month.JUNE, nextM);
+        Assert.assertEquals(Month.JUNE, nextM);
 
         m = Month.JUNE;
         nextM = Month.getNextMonth(m);
-        assertEquals(Month.JULY, nextM);
+        Assert.assertEquals(Month.JULY, nextM);
 
         m = Month.JULY;
         nextM = Month.getNextMonth(m);
-        assertEquals(Month.AUGUST, nextM);
+        Assert.assertEquals(Month.AUGUST, nextM);
 
         m = Month.AUGUST;
         nextM = Month.getNextMonth(m);
-        assertEquals(Month.SEPTEMBER, nextM);
+        Assert.assertEquals(Month.SEPTEMBER, nextM);
 
         m = Month.SEPTEMBER;
         nextM = Month.getNextMonth(m);
-        assertEquals(Month.OCTOBER, nextM);
+        Assert.assertEquals(Month.OCTOBER, nextM);
 
         m = Month.OCTOBER;
         nextM = Month.getNextMonth(m);
-        assertEquals(Month.NOVEMBER, nextM);
+        Assert.assertEquals(Month.NOVEMBER, nextM);
 
         m = Month.NOVEMBER;
         nextM = Month.getNextMonth(m);
-        assertEquals(Month.DECEMBER, nextM);
+        Assert.assertEquals(Month.DECEMBER, nextM);
 
         m = Month.DECEMBER;
         nextM = Month.getNextMonth(m);
-        assertEquals(Month.JANUARY, nextM);
+        Assert.assertEquals(Month.JANUARY, nextM);
     }
 
     @Test
@@ -154,7 +154,7 @@ public class MonthTest {
 
         int i = 0;
         for (Month m : Month.values()) {
-            assertEquals("For month: " + m, expectedNoOfDays[i], m.getDaysCount(year));
+            Assert.assertEquals("For month: " + m, expectedNoOfDays[i], m.getDaysCount(year));
             i++;
         }
     }
@@ -170,7 +170,7 @@ public class MonthTest {
 
         int i = 0;
         for (Month m : Month.values()) {
-            assertEquals("For month: " + m, expectedNoOfDays[i], m.getDaysCount(year));
+            Assert.assertEquals("For month: " + m, expectedNoOfDays[i], m.getDaysCount(year));
             i++;
         }
     }

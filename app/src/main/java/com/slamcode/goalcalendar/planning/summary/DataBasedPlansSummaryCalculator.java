@@ -36,24 +36,23 @@ public class DataBasedPlansSummaryCalculator implements PlansSummaryCalculator {
 
     private PlansSummary calculateMultipleCategoriesSummary(Iterable<CategoryModel> categories)
     {
-        PlansSummary summary = null;
+        PlansSummary summary = new PlansSummary();
 
         for(CategoryModel categoryModel : categories)
         {
             PlansSummary categorySummary = calculateCategorySummary(categoryModel);
-            if(summary == null)
-                summary = categorySummary;
-            else if(categorySummary.dataAvailable)
+            if(categorySummary.dataAvailable)
             {
                 // add next summary to current one
                 summary.dataAvailable = true;
+                summary.compositeSummaries.add(categorySummary);
                 summary.noOfExpectedTasks += categorySummary.noOfExpectedTasks;
                 summary.noOfFailedTasks += categorySummary.noOfFailedTasks;
                 summary.noOfSuccessfulTasks += categorySummary.noOfSuccessfulTasks;
             }
         }
 
-        return summary != null ? summary : new PlansSummary();
+        return summary;
     }
 
     private PlansSummary calculateCategorySummary(CategoryModel categoryModel)

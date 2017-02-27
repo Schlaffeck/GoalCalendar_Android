@@ -128,12 +128,12 @@ public class DataBasedPlansSummaryCalculatorTest {
 
         verifyRepositoryWithDataForMonth(repository, year, month, null, 3);
 
-        // 4. three done = 150%
+        // 4. three done = 100% (ignored over 100%)
         c1.getDailyPlans().get(2).setStatus(PlanStatus.Success);
         summary = calculator.calculatePlansSummaryForMonth(year, month);
         assertNotNull(summary);
         assertEquals(true, summary.dataAvailable);
-        assertEquals(150, summary.countProgressPercentage(), 0);
+        assertEquals(100, summary.countProgressPercentage(), 0);
         assertEquals(2, summary.noOfExpectedTasks);
         assertEquals(0, summary.noOfFailedTasks);
         assertEquals(3, summary.noOfSuccessfulTasks);
@@ -492,7 +492,7 @@ public class DataBasedPlansSummaryCalculatorTest {
 
         verifyRepositoryWithDataForMonth(repositoryMock, year, month, categoryName, 3);
 
-        // 4. more than everything done
+        // 4. more than everything done (ignored over 100%)
         c1.getDailyPlans().get(0).setStatus(PlanStatus.Success);
         c1.getDailyPlans().get(1).setStatus(PlanStatus.Success);
         c1.getDailyPlans().get(2).setStatus(PlanStatus.Success);
@@ -511,12 +511,41 @@ public class DataBasedPlansSummaryCalculatorTest {
 
         result = calculator.calculatePlansSummaryForMonthInCategory(year, month, categoryName);
         assertEquals(true, result.dataAvailable);
-        assertEquals(120, result.countProgressPercentage(), 0);
+        assertEquals(100, result.countProgressPercentage(), 0);
         assertEquals(10, result.noOfExpectedTasks);
         assertEquals(2, result.noOfFailedTasks);
         assertEquals(12, result.noOfSuccessfulTasks);
 
         verifyRepositoryWithDataForMonth(repositoryMock, year, month, categoryName, 4);
+
+
+        // 5. more than everything done in one, not done in other (ignored over 100%)
+        // (2/3*6 + 1*4)/10  = 80%
+        c1.getDailyPlans().get(0).setStatus(PlanStatus.Success);
+        c1.getDailyPlans().get(1).setStatus(PlanStatus.Success);
+        c1.getDailyPlans().get(2).setStatus(PlanStatus.Success);
+        c1.getDailyPlans().get(3).setStatus(PlanStatus.Success);
+        c1.getDailyPlans().get(4).setStatus(PlanStatus.Failure);
+        c1.getDailyPlans().get(5).setStatus(PlanStatus.Planned);
+        c1.getDailyPlans().get(6).setStatus(PlanStatus.Planned);
+        c1.getDailyPlans().get(7).setStatus(PlanStatus.Failure);
+
+        c2.getDailyPlans().get(0).setStatus(PlanStatus.Success);
+        c2.getDailyPlans().get(1).setStatus(PlanStatus.Success);
+        c2.getDailyPlans().get(2).setStatus(PlanStatus.Success);
+        c2.getDailyPlans().get(3).setStatus(PlanStatus.Success);
+        c2.getDailyPlans().get(4).setStatus(PlanStatus.Failure);
+        c2.getDailyPlans().get(5).setStatus(PlanStatus.Success);
+        c2.getDailyPlans().get(6).setStatus(PlanStatus.Success);
+
+        result = calculator.calculatePlansSummaryForMonthInCategory(year, month, categoryName);
+        assertEquals(true, result.dataAvailable);
+        assertEquals(80, result.countProgressPercentage(), 0);
+        assertEquals(10, result.noOfExpectedTasks);
+        assertEquals(3, result.noOfFailedTasks);
+        assertEquals(10, result.noOfSuccessfulTasks);
+
+        verifyRepositoryWithDataForMonth(repositoryMock, year, month, categoryName, 5);
     }
 
     private CategoriesRepository mockRepositoryWithDataForMonth(int year, Month month, String categoryName, CategoryModel... categories)

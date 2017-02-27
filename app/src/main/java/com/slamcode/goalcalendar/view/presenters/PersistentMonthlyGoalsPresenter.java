@@ -169,7 +169,7 @@ public class PersistentMonthlyGoalsPresenter extends PropertyObservableObject im
 
             this.categoryNamesRecyclerViewAdapter.addOrUpdateItem(newCategory);
             this.categoryDailyPlansRecyclerViewAdapter.addOrUpdateItem(newCategory);
-            plansSummary.refreshData();
+            refreshPlansSummaryData();
             this.propertyChanged(MONTHLY_SUMMARY_RESULT_PROPERTY_NAME);
         }
     }
@@ -193,7 +193,7 @@ public class PersistentMonthlyGoalsPresenter extends PropertyObservableObject im
                         selectedMonthlyPlans.getCategories().add(newCategory);
                     categoryNamesRecyclerViewAdapter.addOrUpdateItem(newCategory);
                     categoryDailyPlansRecyclerViewAdapter.addOrUpdateItem(newCategory);
-                    plansSummary.refreshData();
+                    refreshPlansSummaryData();
                     propertyChanged(MONTHLY_SUMMARY_RESULT_PROPERTY_NAME);
                 }
             }
@@ -218,7 +218,7 @@ public class PersistentMonthlyGoalsPresenter extends PropertyObservableObject im
                         categoryNamesRecyclerViewAdapter.removeItem(model);
                         categoryDailyPlansRecyclerViewAdapter.removeItem(model);
                         dialogInterface.dismiss();
-                        plansSummary.refreshData();
+                        refreshPlansSummaryData();
                         propertyChanged(MONTHLY_SUMMARY_RESULT_PROPERTY_NAME);
                     }
                 })
@@ -238,6 +238,12 @@ public class PersistentMonthlyGoalsPresenter extends PropertyObservableObject im
         if(this.plansSummary == null)
             this.plansSummary = new MonthlyProgressSummary(this.summaryCalculator, this.selectedMonthlyPlans);
         return this.plansSummary;
+    }
+
+    private void refreshPlansSummaryData()
+    {
+        if(this.plansSummary != null)
+            this.plansSummary.refreshData();
     }
 
     private MonthlyPlansModel findPreviousMonthlyPlansModelWithCategories()

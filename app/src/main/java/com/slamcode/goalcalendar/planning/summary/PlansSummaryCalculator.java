@@ -3,6 +3,9 @@ package com.slamcode.goalcalendar.planning.summary;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.planning.Month;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 /**
  * Interface for general objects calculating
  * plans progress and numerical values describing it
@@ -50,6 +53,8 @@ public interface PlansSummaryCalculator {
 
         protected int noOfFailedTasks;
 
+        protected Collection<PlansSummary> compositeSummaries = new ArrayList<>();
+
         public boolean getDataAvailable() {
             return this.dataAvailable;
         }
@@ -58,7 +63,22 @@ public interface PlansSummaryCalculator {
         {
             if(!dataAvailable || noOfExpectedTasks ==  0)
                 return 0;
-            return (this.noOfSuccessfulTasks * 1.0) / (this.noOfExpectedTasks * 1.0) * 100;
+
+            if(compositeSummaries != null && !compositeSummaries.isEmpty())
+            {
+                int allDoneTasks = 0;
+                int allExpectedTasks = 0;
+                for(PlansSummary summary : compositeSummaries)
+                {
+                    allExpectedTasks += summary.noOfExpectedTasks;
+                    allDoneTasks += summary.noOfSuccessfulTasks > summary.noOfExpectedTasks
+                            ? summary.noOfExpectedTasks : summary.noOfSuccessfulTasks;
+                }
+
+                return ((allDoneTasks * 1.0) / (allExpectedTasks * 1.0)) * 100.00;
+            }
+
+            return Math.min(100.0, (this.noOfSuccessfulTasks * 1.0) / (this.noOfExpectedTasks * 1.0) * 100);
         }
 
         public double getNoOfExpectedTasks() {
@@ -72,6 +92,5 @@ public interface PlansSummaryCalculator {
         public double getNoOfFailedTasks() {
             return this.noOfFailedTasks;
         }
-
     }
 }
