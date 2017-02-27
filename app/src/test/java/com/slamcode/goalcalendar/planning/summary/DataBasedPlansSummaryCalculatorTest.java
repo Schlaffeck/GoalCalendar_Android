@@ -1,8 +1,6 @@
 package com.slamcode.goalcalendar.planning.summary;
 
 import com.slamcode.goalcalendar.data.CategoriesRepository;
-import com.slamcode.goalcalendar.data.PersistenceContext;
-import com.slamcode.goalcalendar.data.UnitOfWork;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.ModelHelper;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
@@ -15,7 +13,6 @@ import java.util.Arrays;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -36,7 +33,7 @@ public class DataBasedPlansSummaryCalculatorTest {
         PlansSummaryCalculator.PlansSummary summary = calculator.calculatePlansSummaryForMonth(year, month);
         assertNotNull(summary);
         assertEquals(false, summary.dataAvailable);
-        assertEquals(0, summary.countProgressPercentage(), 0);
+        assertEquals(0, summary.getProgressPercentage(), 0);
 
         verifyRepositoryWithDataForMonth(repository, year, month, null, 1);
     }
@@ -54,7 +51,7 @@ public class DataBasedPlansSummaryCalculatorTest {
         PlansSummaryCalculator.PlansSummary summary = calculator.calculatePlansSummaryForMonth(year, month);
         assertNotNull(summary);
         assertEquals(false, summary.dataAvailable);
-        assertEquals(0, summary.countProgressPercentage(), 0);
+        assertEquals(0, summary.getProgressPercentage(), 0);
 
         verifyRepositoryWithDataForMonth(repository, year, month, null, 1);
     }
@@ -73,7 +70,7 @@ public class DataBasedPlansSummaryCalculatorTest {
         PlansSummaryCalculator.PlansSummary summary = calculator.calculatePlansSummaryForMonth(year, month);
         assertNotNull(summary);
         assertEquals(false, summary.dataAvailable);
-        assertEquals(0, summary.countProgressPercentage(), 0);
+        assertEquals(0, summary.getProgressPercentage(), 0);
 
         verifyRepositoryWithDataForMonth(repository, year, month, null, 1);
     }
@@ -95,7 +92,7 @@ public class DataBasedPlansSummaryCalculatorTest {
         PlansSummaryCalculator.PlansSummary summary = calculator.calculatePlansSummaryForMonth(year, month);
         assertNotNull(summary);
         assertEquals(true, summary.dataAvailable);
-        assertEquals(0, summary.countProgressPercentage(), 0);
+        assertEquals(0, summary.getProgressPercentage(), 0);
         assertEquals(2, summary.noOfExpectedTasks);
         assertEquals(0, summary.noOfFailedTasks);
         assertEquals(0, summary.noOfSuccessfulTasks);
@@ -108,7 +105,7 @@ public class DataBasedPlansSummaryCalculatorTest {
         summary = calculator.calculatePlansSummaryForMonth(year, month);
         assertNotNull(summary);
         assertEquals(true, summary.dataAvailable);
-        assertEquals(50, summary.countProgressPercentage(), 0);
+        assertEquals(50, summary.getProgressPercentage(), 0);
         assertEquals(2, summary.noOfExpectedTasks);
         assertEquals(0, summary.noOfFailedTasks);
         assertEquals(1, summary.noOfSuccessfulTasks);
@@ -121,7 +118,7 @@ public class DataBasedPlansSummaryCalculatorTest {
         summary = calculator.calculatePlansSummaryForMonth(year, month);
         assertNotNull(summary);
         assertEquals(true, summary.dataAvailable);
-        assertEquals(100, summary.countProgressPercentage(), 0);
+        assertEquals(100, summary.getProgressPercentage(), 0);
         assertEquals(2, summary.noOfExpectedTasks);
         assertEquals(0, summary.noOfFailedTasks);
         assertEquals(2, summary.noOfSuccessfulTasks);
@@ -133,7 +130,7 @@ public class DataBasedPlansSummaryCalculatorTest {
         summary = calculator.calculatePlansSummaryForMonth(year, month);
         assertNotNull(summary);
         assertEquals(true, summary.dataAvailable);
-        assertEquals(100, summary.countProgressPercentage(), 0);
+        assertEquals(100, summary.getProgressPercentage(), 0);
         assertEquals(2, summary.noOfExpectedTasks);
         assertEquals(0, summary.noOfFailedTasks);
         assertEquals(3, summary.noOfSuccessfulTasks);
@@ -146,7 +143,7 @@ public class DataBasedPlansSummaryCalculatorTest {
         summary = calculator.calculatePlansSummaryForMonth(year, month);
         assertNotNull(summary);
         assertEquals(true, summary.dataAvailable);
-        assertEquals(50, summary.countProgressPercentage(), 0);
+        assertEquals(50, summary.getProgressPercentage(), 0);
         assertEquals(2, summary.noOfExpectedTasks);
         assertEquals(1, summary.noOfFailedTasks);
         assertEquals(1, summary.noOfSuccessfulTasks);
@@ -161,7 +158,7 @@ public class DataBasedPlansSummaryCalculatorTest {
         summary = calculator.calculatePlansSummaryForMonth(year, month);
         assertNotNull(summary);
         assertEquals(true, summary.dataAvailable);
-        assertEquals(0, summary.countProgressPercentage(), 0);
+        assertEquals(0, summary.getProgressPercentage(), 0);
         assertEquals(2, summary.noOfExpectedTasks);
         assertEquals(3, summary.noOfFailedTasks);
         assertEquals(0, summary.noOfSuccessfulTasks);
@@ -188,7 +185,7 @@ public class DataBasedPlansSummaryCalculatorTest {
         PlansSummaryCalculator.PlansSummary summary = calculator.calculatePlansSummaryForMonth(year, month);
         assertNotNull(summary);
         assertEquals(true, summary.dataAvailable);
-        assertEquals(0, summary.countProgressPercentage(), 0);
+        assertEquals(0, summary.getProgressPercentage(), 0);
         assertEquals(6, summary.noOfExpectedTasks);
         assertEquals(0, summary.noOfFailedTasks);
         assertEquals(0, summary.noOfSuccessfulTasks);
@@ -200,7 +197,7 @@ public class DataBasedPlansSummaryCalculatorTest {
         summary = calculator.calculatePlansSummaryForMonth(year, month);
         assertNotNull(summary);
         assertEquals(true, summary.dataAvailable);
-        assertEquals(16.66, summary.countProgressPercentage(), 0.01);
+        assertEquals(16.66, summary.getProgressPercentage(), 0.01);
         assertEquals(6, summary.noOfExpectedTasks);
         assertEquals(0, summary.noOfFailedTasks);
         assertEquals(1, summary.noOfSuccessfulTasks);
@@ -210,7 +207,7 @@ public class DataBasedPlansSummaryCalculatorTest {
         summary = calculator.calculatePlansSummaryForMonth(year, month);
         assertNotNull(summary);
         assertEquals(true, summary.dataAvailable);
-        assertEquals(33.33, summary.countProgressPercentage(), 0.01);
+        assertEquals(33.33, summary.getProgressPercentage(), 0.01);
         assertEquals(6, summary.noOfExpectedTasks);
         assertEquals(0, summary.noOfFailedTasks);
         assertEquals(2, summary.noOfSuccessfulTasks);
@@ -225,7 +222,7 @@ public class DataBasedPlansSummaryCalculatorTest {
         summary = calculator.calculatePlansSummaryForMonth(year, month);
         assertNotNull(summary);
         assertEquals(true, summary.dataAvailable);
-        assertEquals(50, summary.countProgressPercentage(), 0);
+        assertEquals(50, summary.getProgressPercentage(), 0);
         assertEquals(6, summary.noOfExpectedTasks);
         assertEquals(2, summary.noOfFailedTasks);
         assertEquals(3, summary.noOfSuccessfulTasks);
@@ -243,7 +240,7 @@ public class DataBasedPlansSummaryCalculatorTest {
         summary = calculator.calculatePlansSummaryForMonth(year, month);
         assertNotNull(summary);
         assertEquals(true, summary.dataAvailable);
-        assertEquals(83.33, summary.countProgressPercentage(), 0.01);
+        assertEquals(83.33, summary.getProgressPercentage(), 0.01);
         assertEquals(6, summary.noOfExpectedTasks);
         assertEquals(3, summary.noOfFailedTasks);
         assertEquals(5, summary.noOfSuccessfulTasks);
@@ -268,7 +265,7 @@ public class DataBasedPlansSummaryCalculatorTest {
         // no plans - data not available
         PlansSummaryCalculator.PlansSummary result = calculator.calculatePlansSummaryForMonthInCategory(year, month, categoryName);
         assertEquals(false, result.dataAvailable);
-        assertEquals(0, result.countProgressPercentage(), 0);
+        assertEquals(0, result.getProgressPercentage(), 0);
         assertEquals(0, result.noOfExpectedTasks);
         assertEquals(0, result.noOfFailedTasks);
         assertEquals(0, result.noOfSuccessfulTasks);
@@ -291,7 +288,7 @@ public class DataBasedPlansSummaryCalculatorTest {
         // zero freq - data not available
         PlansSummaryCalculator.PlansSummary result = calculator.calculatePlansSummaryForMonthInCategory(year, month, categoryName);
         assertEquals(false, result.dataAvailable);
-        assertEquals(0, result.countProgressPercentage(), 0);
+        assertEquals(0, result.getProgressPercentage(), 0);
         assertEquals(0, result.noOfExpectedTasks);
         assertEquals(0, result.noOfFailedTasks);
         assertEquals(0, result.noOfSuccessfulTasks);
@@ -315,7 +312,7 @@ public class DataBasedPlansSummaryCalculatorTest {
         // zero freq - data not available
         PlansSummaryCalculator.PlansSummary result = calculator.calculatePlansSummaryForMonthInCategory(year, month, categoryName);
         assertEquals(false, result.dataAvailable);
-        assertEquals(0, result.countProgressPercentage(), 0);
+        assertEquals(0, result.getProgressPercentage(), 0);
         assertEquals(0, result.noOfExpectedTasks);
         assertEquals(0, result.noOfFailedTasks);
         assertEquals(0, result.noOfSuccessfulTasks);
@@ -339,7 +336,7 @@ public class DataBasedPlansSummaryCalculatorTest {
         // 1. nothing done - 0%
         PlansSummaryCalculator.PlansSummary result = calculator.calculatePlansSummaryForMonthInCategory(year, month, categoryName);
         assertEquals(true, result.dataAvailable);
-        assertEquals(0, result.countProgressPercentage(), 0);
+        assertEquals(0, result.getProgressPercentage(), 0);
         assertEquals(5, result.noOfExpectedTasks);
         assertEquals(0, result.noOfFailedTasks);
         assertEquals(0, result.noOfSuccessfulTasks);
@@ -353,7 +350,7 @@ public class DataBasedPlansSummaryCalculatorTest {
 
         result = calculator.calculatePlansSummaryForMonthInCategory(year, month, categoryName);
         assertEquals(true, result.dataAvailable);
-        assertEquals(40, result.countProgressPercentage(), 0);
+        assertEquals(40, result.getProgressPercentage(), 0);
         assertEquals(5, result.noOfExpectedTasks);
         assertEquals(1, result.noOfFailedTasks);
         assertEquals(2, result.noOfSuccessfulTasks);
@@ -369,7 +366,7 @@ public class DataBasedPlansSummaryCalculatorTest {
 
         result = calculator.calculatePlansSummaryForMonthInCategory(year, month, categoryName);
         assertEquals(true, result.dataAvailable);
-        assertEquals(60, result.countProgressPercentage(), 0);
+        assertEquals(60, result.getProgressPercentage(), 0);
         assertEquals(5, result.noOfExpectedTasks);
         assertEquals(2, result.noOfFailedTasks);
         assertEquals(3, result.noOfSuccessfulTasks);
@@ -387,7 +384,7 @@ public class DataBasedPlansSummaryCalculatorTest {
 
         result = calculator.calculatePlansSummaryForMonthInCategory(year, month, categoryName);
         assertEquals(true, result.dataAvailable);
-        assertEquals(60, result.countProgressPercentage(), 0);
+        assertEquals(60, result.getProgressPercentage(), 0);
         assertEquals(5, result.noOfExpectedTasks);
         assertEquals(2, result.noOfFailedTasks);
         assertEquals(3, result.noOfSuccessfulTasks);
@@ -414,7 +411,7 @@ public class DataBasedPlansSummaryCalculatorTest {
         // zero freq - data not available
         PlansSummaryCalculator.PlansSummary result = calculator.calculatePlansSummaryForMonthInCategory(year, month, categoryName);
         assertEquals(true, result.dataAvailable);
-        assertEquals(0, result.countProgressPercentage(), 0);
+        assertEquals(0, result.getProgressPercentage(), 0);
         assertEquals(5, result.noOfExpectedTasks);
         assertEquals(0, result.noOfFailedTasks);
         assertEquals(0, result.noOfSuccessfulTasks);
@@ -441,7 +438,7 @@ public class DataBasedPlansSummaryCalculatorTest {
         // 1. nothing done
         PlansSummaryCalculator.PlansSummary result = calculator.calculatePlansSummaryForMonthInCategory(year, month, categoryName);
         assertEquals(true, result.dataAvailable);
-        assertEquals(0, result.countProgressPercentage(), 0);
+        assertEquals(0, result.getProgressPercentage(), 0);
         assertEquals(10, result.noOfExpectedTasks);
         assertEquals(0, result.noOfFailedTasks);
         assertEquals(0, result.noOfSuccessfulTasks);
@@ -459,7 +456,7 @@ public class DataBasedPlansSummaryCalculatorTest {
 
         result = calculator.calculatePlansSummaryForMonthInCategory(year, month, categoryName);
         assertEquals(true, result.dataAvailable);
-        assertEquals(20, result.countProgressPercentage(), 0);
+        assertEquals(20, result.getProgressPercentage(), 0);
         assertEquals(10, result.noOfExpectedTasks);
         assertEquals(2, result.noOfFailedTasks);
         assertEquals(2, result.noOfSuccessfulTasks);
@@ -485,7 +482,7 @@ public class DataBasedPlansSummaryCalculatorTest {
 
         result = calculator.calculatePlansSummaryForMonthInCategory(year, month, categoryName);
         assertEquals(true, result.dataAvailable);
-        assertEquals(100, result.countProgressPercentage(), 0);
+        assertEquals(100, result.getProgressPercentage(), 0);
         assertEquals(10, result.noOfExpectedTasks);
         assertEquals(4, result.noOfFailedTasks);
         assertEquals(10, result.noOfSuccessfulTasks);
@@ -511,7 +508,7 @@ public class DataBasedPlansSummaryCalculatorTest {
 
         result = calculator.calculatePlansSummaryForMonthInCategory(year, month, categoryName);
         assertEquals(true, result.dataAvailable);
-        assertEquals(100, result.countProgressPercentage(), 0);
+        assertEquals(100, result.getProgressPercentage(), 0);
         assertEquals(10, result.noOfExpectedTasks);
         assertEquals(2, result.noOfFailedTasks);
         assertEquals(12, result.noOfSuccessfulTasks);
@@ -540,7 +537,7 @@ public class DataBasedPlansSummaryCalculatorTest {
 
         result = calculator.calculatePlansSummaryForMonthInCategory(year, month, categoryName);
         assertEquals(true, result.dataAvailable);
-        assertEquals(80, result.countProgressPercentage(), 0);
+        assertEquals(80, result.getProgressPercentage(), 0);
         assertEquals(10, result.noOfExpectedTasks);
         assertEquals(3, result.noOfFailedTasks);
         assertEquals(10, result.noOfSuccessfulTasks);

@@ -1,18 +1,17 @@
 package com.slamcode.goalcalendar.data.model;
 
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
+
+import com.android.databinding.library.baseAdapters.BR;
 import com.slamcode.goalcalendar.data.Identifiable;
 import com.slamcode.goalcalendar.planning.PlanStatus;
-import com.slamcode.goalcalendar.view.mvvm.PropertyObservableObject;
-
-import java.util.Observable;
 
 /**
  * Created by moriasla on 16.12.2016.
  */
 
-public class DailyPlanModel extends PropertyObservableObject implements Identifiable<Integer>, Comparable<DailyPlanModel> {
-
-    public static final String STATUS_PROPERTY_NAME = "status";
+public class DailyPlanModel extends BaseObservable implements Identifiable<Integer>, Comparable<DailyPlanModel> {
 
     private int id;
 
@@ -41,6 +40,7 @@ public class DailyPlanModel extends PropertyObservableObject implements Identifi
         this.id = id;
     }
 
+    @Bindable
     public PlanStatus getStatus() {
         return status;
     }
@@ -48,7 +48,7 @@ public class DailyPlanModel extends PropertyObservableObject implements Identifi
     public void setStatus(PlanStatus status) {
         if(status != this.status) {
             this.status = status;
-            this.propertyChanged(STATUS_PROPERTY_NAME);
+            notifyPropertyChanged(BR.status);
         }
     }
 

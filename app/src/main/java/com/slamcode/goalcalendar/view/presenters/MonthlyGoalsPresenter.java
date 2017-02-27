@@ -1,19 +1,20 @@
 package com.slamcode.goalcalendar.view.presenters;
 
 import android.app.AlertDialog;
+import android.databinding.BaseObservable;
+import android.databinding.Observable;
 
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.view.AddEditCategoryDialog;
 import com.slamcode.goalcalendar.view.CategoryDailyPlansRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.CategoryNameRecyclerViewAdapter;
-import com.slamcode.goalcalendar.view.mvvm.PropertyObservable;
+import com.slamcode.goalcalendar.view.viewmodels.MonthlyProgressSummaryViewModel;
+
 
 /**
  * Created by moriasla on 09.02.2017.
  */
-public interface MonthlyGoalsPresenter extends PropertyObservable {
-
-    String MONTHLY_SUMMARY_RESULT_PROPERTY_NAME = "monthlyPlansSummary";
+public interface MonthlyGoalsPresenter extends Observable {
 
     void setYearAndMonth(int year, Month month);
 
@@ -37,5 +38,5 @@ public interface MonthlyGoalsPresenter extends PropertyObservable {
 
     AlertDialog createDeleteCategoryDialog(int categoryPosition);
 
-    MonthlyProgressSummary getProgressSummaryValue();
+    MonthlyProgressSummaryViewModel getProgressSummaryValue();
 }

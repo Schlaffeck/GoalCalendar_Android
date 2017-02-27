@@ -20,8 +20,7 @@ public class CachedApplicationPresentersSource implements PresentersSource {
     private PlansSummaryCalculator plansSummaryCalculator;
 
     public CachedApplicationPresentersSource(PersistenceContext persistenceContext,
-                                             ListAdapterProvider listAdapterProvider,
-                                             PlansSummaryCalculator plansSummaryCalculator)
+                                             ListAdapterProvider listAdapterProvider, PlansSummaryCalculator plansSummaryCalculator)
     {
         this.persistenceContext = persistenceContext;
         this.listAdapterProvider = listAdapterProvider;

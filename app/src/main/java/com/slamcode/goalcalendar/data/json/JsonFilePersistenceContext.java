@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.data.json;
 
 import android.content.Context;
+import android.databinding.Observable;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
@@ -12,7 +13,6 @@ import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.data.UnitOfWork;
 import com.slamcode.goalcalendar.data.inmemory.InMemoryCategoriesRepository;
 import com.slamcode.goalcalendar.data.inmemory.InMemoryMonthlyPlansRepository;
-import com.slamcode.goalcalendar.view.mvvm.PropertyObserver;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -60,8 +60,6 @@ public class JsonFilePersistenceContext implements PersistenceContext {
         FileOutputStream fileStream;
         try{
             Gson gson = new GsonBuilder()
-                    .addSerializationExclusionStrategy(new PropertyObservableObjectExclusionStrategy())
-                    .addDeserializationExclusionStrategy(new PropertyObservableObjectExclusionStrategy())
                     .create();
             fileStream = this.appContext.openFileOutput(this.fileName, Context.MODE_PRIVATE);
             fileStream.write(gson.toJson(this.dataBundle, JsonDataBundle.class).getBytes());
@@ -88,8 +86,6 @@ public class JsonFilePersistenceContext implements PersistenceContext {
                 FileReader fileReader = new FileReader(this.getFilePath());
 
                 Gson gson = new GsonBuilder()
-                        .addSerializationExclusionStrategy(new PropertyObservableObjectExclusionStrategy())
-                        .addDeserializationExclusionStrategy(new PropertyObservableObjectExclusionStrategy())
                         .create();
                 this.dataBundle = gson.fromJson(fileReader, JsonDataBundle.class);
             }
@@ -167,21 +163,6 @@ public class JsonFilePersistenceContext implements PersistenceContext {
             this.working = false;
             if(persistData)
                 persistData();
-        }
-    }
-
-    class PropertyObservableObjectExclusionStrategy implements ExclusionStrategy{
-
-        @Override
-        public boolean shouldSkipField(FieldAttributes f) {
-            String fieldName = f.getName();
-            boolean result = fieldName.equals("propertyObservers");
-            return result;
-        }
-
-        @Override
-        public boolean shouldSkipClass(Class<?> clazz) {
-            return clazz == PropertyObserver.class;
         }
     }
 

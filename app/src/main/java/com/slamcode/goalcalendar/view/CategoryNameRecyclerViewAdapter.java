@@ -83,6 +83,7 @@ public class CategoryNameRecyclerViewAdapter extends RecyclerViewDataAdapter<Cat
             view.setOnCreateContextMenuListener(this);
         }
 
+        // todo: use android binding for the view
         @Override
         public void bindToModel(CategoryModel modelObject) {
             super.bindToModel(modelObject);

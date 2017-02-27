@@ -3,8 +3,11 @@ package com.slamcode.goalcalendar.view.presenters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.view.LayoutInflater;
 
+import com.android.databinding.library.baseAdapters.BR;
 import com.android.internal.util.Predicate;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.data.PersistenceContext;
@@ -19,19 +22,17 @@ import com.slamcode.goalcalendar.view.AddEditCategoryDialog;
 import com.slamcode.goalcalendar.view.CategoryDailyPlansRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.CategoryNameRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.ListAdapterProvider;
-import com.slamcode.goalcalendar.view.mvvm.PropertyObservableObject;
+import com.slamcode.goalcalendar.view.viewmodels.MonthlyProgressSummaryViewModel;
 
 /**
  * Created by moriasla on 16.01.2017.
  */
 
-public class PersistentMonthlyGoalsPresenter extends PropertyObservableObject implements MonthlyGoalsPresenter {
-
-    private final PlansSummaryCalculator summaryCalculator;
+public class PersistentMonthlyGoalsPresenter extends BaseObservable implements MonthlyGoalsPresenter {
 
     private MonthlyPlansModel selectedMonthlyPlans;
 
-    private MonthlyProgressSummary plansSummary;
+    private MonthlyProgressSummaryViewModel progressSummaryValue;
 
     private final CategoryNameRecyclerViewAdapter categoryNamesRecyclerViewAdapter;
     private final CategoryDailyPlansRecyclerViewAdapter categoryDailyPlansRecyclerViewAdapter;
@@ -40,27 +41,27 @@ public class PersistentMonthlyGoalsPresenter extends PropertyObservableObject im
 
     private final PersistenceContext persistenceContext;
 
+    private PlansSummaryCalculator summaryCalculator;
+
     public PersistentMonthlyGoalsPresenter(Context context,
                                            LayoutInflater layoutInflater,
                                            PersistenceContext persistenceContext,
-                                           ListAdapterProvider listAdapterProvider,
-                                           PlansSummaryCalculator summaryCalculator)
+                                           ListAdapterProvider listAdapterProvider, PlansSummaryCalculator summaryCalculator)
     {
-        this(context, layoutInflater, persistenceContext, listAdapterProvider, summaryCalculator, false);
+        this(context, layoutInflater, persistenceContext, listAdapterProvider, false, summaryCalculator);
     }
 
     public PersistentMonthlyGoalsPresenter(Context context,
                                            LayoutInflater layoutInflater,
                                            PersistenceContext persistenceContext,
                                            ListAdapterProvider listAdapterProvider,
-                                           PlansSummaryCalculator summaryCalculator,
-                                           boolean setupCategoriesList)
+                                           boolean setupCategoriesList, PlansSummaryCalculator summaryCalculator)
     {
         this.context = context;
         this.persistenceContext = persistenceContext;
+        this.summaryCalculator = summaryCalculator;
         this.categoryNamesRecyclerViewAdapter = listAdapterProvider.provideCategoryNameListViewAdapter(context,layoutInflater);
         this.categoryDailyPlansRecyclerViewAdapter = listAdapterProvider.provideCategoryDailyPlansListViewAdapter(context,layoutInflater);
-        this.summaryCalculator = summaryCalculator;
         if(setupCategoriesList)
             this.setYearAndMonth(this.getSelectedYear(), this.getSelectedMonth());
     }
@@ -87,10 +88,9 @@ public class PersistentMonthlyGoalsPresenter extends PropertyObservableObject im
         uow.complete();
 
         this.selectedMonthlyPlans = model;
-        this.plansSummary = null;
+        this.progressSummaryValue = null;
         this.categoryNamesRecyclerViewAdapter.updateMonthlyPlans(selectedMonthlyPlans);
         this.categoryDailyPlansRecyclerViewAdapter.updateMonthlyPlans(selectedMonthlyPlans);
-        this.propertyChanged(MONTHLY_SUMMARY_RESULT_PROPERTY_NAME);
     }
 
     @Override
@@ -169,8 +169,8 @@ public class PersistentMonthlyGoalsPresenter extends PropertyObservableObject im
 
             this.categoryNamesRecyclerViewAdapter.addOrUpdateItem(newCategory);
             this.categoryDailyPlansRecyclerViewAdapter.addOrUpdateItem(newCategory);
+            notifyPropertyChanged(BR.progressSummaryValue);
             refreshPlansSummaryData();
-            this.propertyChanged(MONTHLY_SUMMARY_RESULT_PROPERTY_NAME);
         }
     }
 
@@ -193,8 +193,8 @@ public class PersistentMonthlyGoalsPresenter extends PropertyObservableObject im
                         selectedMonthlyPlans.getCategories().add(newCategory);
                     categoryNamesRecyclerViewAdapter.addOrUpdateItem(newCategory);
                     categoryDailyPlansRecyclerViewAdapter.addOrUpdateItem(newCategory);
+                    notifyPropertyChanged(BR.progressSummaryValue);
                     refreshPlansSummaryData();
-                    propertyChanged(MONTHLY_SUMMARY_RESULT_PROPERTY_NAME);
                 }
             }
         });
@@ -218,8 +218,8 @@ public class PersistentMonthlyGoalsPresenter extends PropertyObservableObject im
                         categoryNamesRecyclerViewAdapter.removeItem(model);
                         categoryDailyPlansRecyclerViewAdapter.removeItem(model);
                         dialogInterface.dismiss();
+                        notifyPropertyChanged(BR.progressSummaryValue);
                         refreshPlansSummaryData();
-                        propertyChanged(MONTHLY_SUMMARY_RESULT_PROPERTY_NAME);
                     }
                 })
                 .setNegativeButton(R.string.button_no, new DialogInterface.OnClickListener() {
@@ -234,16 +234,17 @@ public class PersistentMonthlyGoalsPresenter extends PropertyObservableObject im
     }
 
     @Override
-    public MonthlyProgressSummary getProgressSummaryValue(){
-        if(this.plansSummary == null)
-            this.plansSummary = new MonthlyProgressSummary(this.summaryCalculator, this.selectedMonthlyPlans);
-        return this.plansSummary;
+    @Bindable
+    public MonthlyProgressSummaryViewModel getProgressSummaryValue() {
+        if(this.progressSummaryValue == null)
+            this.progressSummaryValue = new MonthlyProgressSummaryViewModel(this.summaryCalculator, this.selectedMonthlyPlans);
+        return this.progressSummaryValue;
     }
 
     private void refreshPlansSummaryData()
     {
-        if(this.plansSummary != null)
-            this.plansSummary.refreshData();
+        if(this.progressSummaryValue != null)
+            this.progressSummaryValue.refreshData();
     }
 
     private MonthlyPlansModel findPreviousMonthlyPlansModelWithCategories()

@@ -1,6 +1,8 @@
 package com.slamcode.goalcalendar;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
+import android.databinding.Observable;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
@@ -32,6 +34,7 @@ import com.slamcode.collections.CollectionUtils;
 import com.slamcode.collections.ElementCreator;
 import com.slamcode.goalcalendar.dagger2.ComposableApplication;
 import com.slamcode.goalcalendar.data.PersistenceContext;
+import com.slamcode.goalcalendar.databinding.PlansMonthlySummaryContentViewBinding;
 import com.slamcode.goalcalendar.planning.*;
 import com.slamcode.goalcalendar.service.commands.AutoMarkTasksCommand;
 import com.slamcode.goalcalendar.service.notification.NotificationScheduler;
@@ -41,9 +44,8 @@ import com.slamcode.goalcalendar.view.activity.ActivityViewState;
 import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
 import com.slamcode.goalcalendar.view.lists.ListAdapterProvider;
 import com.slamcode.goalcalendar.view.lists.RecyclerViewDataAdapter;
-import com.slamcode.goalcalendar.view.mvvm.PropertyObserver;
 import com.slamcode.goalcalendar.view.presenters.MonthlyGoalsPresenter;
-import com.slamcode.goalcalendar.view.presenters.MonthlyProgressSummary;
+import com.slamcode.goalcalendar.view.viewmodels.MonthlyProgressSummaryViewModel;
 import com.slamcode.goalcalendar.view.presenters.PresentersSource;
 import com.slamcode.goalcalendar.view.utils.ColorsHelper;
 import com.slamcode.goalcalendar.view.lists.ScrollableViewHelper;
@@ -133,7 +135,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
 
     private GestureDetectorCompat gestureDetector;
 
-    private MonthlyProgressSummary summaryViewModel;
+    private PlansMonthlySummaryContentViewBinding monthlySummaryContentViewBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,23 +155,22 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
         this.bottomSheetBehavior = BottomSheetBehavior.from(this.bottomSheetScrollView);
         this.bottomSheetBehavior.setPeekHeight(150);
         this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+        this.monthlySummaryContentViewBinding = DataBindingUtil.bind(this.bottomSheetScrollView.getChildAt(0));
+        this.monthlySummaryContentViewBinding.setVm(this.presenter.getProgressSummaryValue());
+        this.presenter.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable observable, int i) {
+                summaryViewModelChanged();
+            }
+        });
     }
 
     private void summaryViewModelChanged()
     {
-        MonthlyProgressSummary viewModel = this.presenter.getProgressSummaryValue();
-        if(this.summaryViewModel != viewModel) {
-            this.summaryViewModel = viewModel;
-            this.summaryViewModel.addPropertyObserver(new PropertyObserver() {
-                @Override
-                public void onPropertyChanged(String propertyName) {
-                    if(propertyName == MonthlyProgressSummary.SUMMARY_PERCENTAGE_PROPERTY_NAME)
-                        summaryViewModelChanged();
-                }
-            });
-        }
-        this.summaryGeneralPercentageTextView.setText(
-                String.format(this.getString(R.string.monthly_plans_summary_generalPercentage), this.summaryViewModel.getPlansSummaryPercentage()));
+        MonthlyProgressSummaryViewModel viewModel = this.presenter.getProgressSummaryValue();
+            if(this.monthlySummaryContentViewBinding != null)
+                this.monthlySummaryContentViewBinding.setVm(viewModel);
     }
 
     private void runStartupCommands() {
@@ -297,11 +298,11 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
         if(this.presenter == null)
         {
             this.presenter = this.presentersSource.getMonthlyGoalsPresenter(this);
-            this.presenter.addPropertyObserver(new PropertyObserver() {
+            this.presenter.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
                 @Override
-                public void onPropertyChanged(String propertyName) {
-                    if(propertyName == MonthlyGoalsPresenter.MONTHLY_SUMMARY_RESULT_PROPERTY_NAME)
-                        summaryViewModelChanged();
+                public void onPropertyChanged(Observable observable, int i) {
+
+                    summaryViewModelChanged();
                 }
             });
         }

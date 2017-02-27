@@ -78,6 +78,7 @@ public class CategoryDailyPlansRecyclerViewAdapter extends RecyclerViewDataAdapt
             this.daysListGridView.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
         }
 
+        // todo: use android binding for the view
         @Override
         public void bindToModel(CategoryModel modelObject) {
             super.bindToModel(modelObject);

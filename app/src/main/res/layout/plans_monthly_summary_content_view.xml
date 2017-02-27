@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            android:id="@+id/binding_view_model_variable_id"
+            name="vm"
+            type="com.slamcode.goalcalendar.view.viewmodels.MonthlyProgressSummaryViewModel"/>
+    </data>
+<RelativeLayout android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/monthly_goals_summary_generalProgress_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/monthly_plans_summary_generalPercentage"
+        android:text="@{String.format(@string/monthly_plans_summary_generalPercentage, vm.plansSummaryPercentage)}"
         android:textSize="16sp"
         android:textAllCaps="false"
         android:padding="16dp"/>
@@ -32,3 +38,4 @@
         <!--android:textColor="@color/planningStateButton_stateEmpty_foregroundColor"-->
         <!--style="@style/Widget.AppCompat.Button.Borderless.Colored"/>-->
 </RelativeLayout>
+</layout>

@@ -59,7 +59,7 @@ public interface PlansSummaryCalculator {
             return this.dataAvailable;
         }
 
-        public double countProgressPercentage()
+        public double getProgressPercentage()
         {
             if(!dataAvailable || noOfExpectedTasks ==  0)
                 return 0;

@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.view;
 
 import android.content.Context;
+import android.databinding.Observable;
 import android.support.v7.util.SortedList;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,6 @@ import com.slamcode.goalcalendar.view.lists.ComparatorSortedListCallback;
 import com.slamcode.goalcalendar.view.lists.DefaultComparator;
 import com.slamcode.goalcalendar.view.lists.RecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.ViewHolderBase;
-import com.slamcode.goalcalendar.view.mvvm.PropertyObserver;
 import com.slamcode.goalcalendar.view.utils.ColorsHelper;
 
 import java.util.Collection;
@@ -69,6 +69,7 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
             super(view);
         }
 
+        // todo: use android binding for the view
         @Override
         public void bindToModel(final DailyPlanModel modelObject) {
             super.bindToModel(modelObject);
@@ -80,10 +81,9 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
                     modelObject.setStatus(newState);
                 }
             });
-            // todo: observer is null when auto mark service is run
-            modelObject.addPropertyObserver(new PropertyObserver() {
+            modelObject.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
                 @Override
-                public void onPropertyChanged(String propertyName) {
+                public void onPropertyChanged(Observable observable, int i) {
                     statusButton.setStatus(modelObject.getStatus());
                 }
             });
