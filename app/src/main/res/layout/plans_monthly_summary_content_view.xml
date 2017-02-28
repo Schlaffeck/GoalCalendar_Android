@@ -17,9 +17,18 @@
         android:textSize="16sp"
         android:textAllCaps="false"
         android:padding="16dp"/>
+    <TextView
+        android:id="@+id/monthly_goals_summary_daysLeft_textView"
+        android:layout_below="@id/monthly_goals_summary_generalProgress_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{String.format(@string/monthly_plans_summary_noOfDaysLeft, vm.noOfDaysLeft)}"
+        android:textSize="16sp"
+        android:textAllCaps="false"
+        android:padding="16dp"/>
 
     <TextView
-        android:layout_below="@id/monthly_goals_summary_generalProgress_textView"
+        android:layout_below="@id/monthly_goals_summary_daysLeft_textView"
         android:id="@+id/monthly_goals_summary_details_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

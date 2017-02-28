@@ -53,6 +53,7 @@
     <!-- summary view -->
     <string name="monthly_plans_summary_generalPercentage">Postęp miesięczny: %.2f%%</string>
     <string name="monthly_plans_summary_details">Dokładny opis postepów dokonanych w obecnym miesiącu</string>
+    <string name="monthly_plans_summary_noOfDaysLeft">Pozostało dni: %d</string>
 
     <!-- notification -->
     <string name="notification_plannedForToday_title">Na dziś</string>

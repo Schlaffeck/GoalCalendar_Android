@@ -8,6 +8,9 @@ import com.android.databinding.library.baseAdapters.BR;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
+import com.slamcode.goalcalendar.planning.DateTime;
+import com.slamcode.goalcalendar.planning.DateTimeHelper;
+import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 
 /**
@@ -32,6 +35,25 @@ public class MonthlyProgressSummaryViewModel extends BaseObservable {
     public double getPlansSummaryPercentage()
     {
         return this.calculator.calculatePlansSummaryForMonth(model.getYear(), model.getMonth()).getProgressPercentage();
+    }
+
+    @Bindable
+    public int getNoOfDaysLeft()
+    {
+        int noOfDaysTotal = this.model.getMonth().getDaysCount();
+        int currentYear = DateTimeHelper.getCurrentYear();
+        if(this.model.getYear() > currentYear)
+            return noOfDaysTotal;
+        else if(this.model.getYear() < currentYear)
+            return 0;
+
+        Month currentMonth = DateTimeHelper.getCurrentMonth();
+        if(this.model.getMonth().getNumValue() < currentMonth.getNumValue())
+            return 0;
+        else if(this.model.getMonth().getNumValue() > currentMonth.getNumValue())
+            return noOfDaysTotal;
+
+        return noOfDaysTotal - DateTimeHelper.currentDayNumber() + 1;
     }
 
     public void refreshData()

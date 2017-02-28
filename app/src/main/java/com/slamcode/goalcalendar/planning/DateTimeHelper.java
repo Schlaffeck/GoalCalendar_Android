@@ -21,6 +21,11 @@ public final class DateTimeHelper {
         return calendar.get(Calendar.YEAR);
     }
 
+    public static Month getCurrentMonth()
+    {
+        return Month.getCurrentMonth();
+    }
+
     public static boolean isCurrentDate(int year, int month, int day)
     {
         Calendar cal = Calendar.getInstance();
