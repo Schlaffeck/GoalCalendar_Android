@@ -54,7 +54,8 @@ public class MonthlyProgressSummaryViewModel extends BaseObservable {
     private class DailyPlansPropertyObserver extends OnPropertyChangedCallback {
         @Override
         public void onPropertyChanged(Observable observable, int i) {
-            notifyPropertyChanged(BR.plansSummaryPercentage);
+            if(i == BR.status)
+                notifyPropertyChanged(BR.plansSummaryPercentage);
         }
     }
 }

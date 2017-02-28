@@ -91,6 +91,7 @@ public class PersistentMonthlyGoalsPresenter extends BaseObservable implements M
         this.progressSummaryValue = null;
         this.categoryNamesRecyclerViewAdapter.updateMonthlyPlans(selectedMonthlyPlans);
         this.categoryDailyPlansRecyclerViewAdapter.updateMonthlyPlans(selectedMonthlyPlans);
+        this.notifyPropertyChanged(BR.progressSummaryValue);
     }
 
     @Override
@@ -167,11 +168,12 @@ public class PersistentMonthlyGoalsPresenter extends BaseObservable implements M
                     category.getFrequencyValue());
             newCategory.setDailyPlans(ModelHelper.createListOfDailyPlansForMonth(year, currentMonth));
 
+            this.selectedMonthlyPlans.getCategories().add(newCategory);
             this.categoryNamesRecyclerViewAdapter.addOrUpdateItem(newCategory);
             this.categoryDailyPlansRecyclerViewAdapter.addOrUpdateItem(newCategory);
-            notifyPropertyChanged(BR.progressSummaryValue);
-            refreshPlansSummaryData();
         }
+        notifyPropertyChanged(BR.progressSummaryValue);
+        refreshPlansSummaryData();
     }
 
     @Override

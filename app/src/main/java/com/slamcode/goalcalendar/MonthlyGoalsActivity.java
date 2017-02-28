@@ -30,6 +30,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.databinding.library.baseAdapters.*;
 import com.slamcode.collections.CollectionUtils;
 import com.slamcode.collections.ElementCreator;
 import com.slamcode.goalcalendar.dagger2.ComposableApplication;
@@ -161,7 +162,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
         this.presenter.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable observable, int i) {
-                summaryViewModelChanged();
+                if(i == com.android.databinding.library.baseAdapters.BR.progressSummaryValue)
+                    summaryViewModelChanged();
             }
         });
     }
@@ -169,7 +171,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
     private void summaryViewModelChanged()
     {
         MonthlyProgressSummaryViewModel viewModel = this.presenter.getProgressSummaryValue();
-            if(this.monthlySummaryContentViewBinding != null)
+            if(this.monthlySummaryContentViewBinding != null
+                    && this.monthlySummaryContentViewBinding.getVm() != viewModel)
                 this.monthlySummaryContentViewBinding.setVm(viewModel);
     }
 
