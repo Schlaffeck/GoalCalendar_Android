@@ -8,30 +8,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.slamcode.goalcalendar.BR;
 import com.slamcode.goalcalendar.R;
-import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 import com.slamcode.goalcalendar.view.lists.RecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.ViewHolderBase;
+import com.slamcode.goalcalendar.view.viewmodels.CategoryPlansSummaryViewModel;
 
 /**
- * Created by moriasla on 27.02.2017.
+ * Created by moriasla on 28.02.2017.
  */
 
-public class CategoryPlansRecyclerViewAdapter extends RecyclerViewDataAdapter<PlansSummaryCalculator.CategoryPlansSummary, CategoryPlansRecyclerViewAdapter.CategoryPlansSummaryViewHolder> {
+public class CategoryPlansRecyclerViewAdapter extends RecyclerViewDataAdapter<CategoryPlansSummaryViewModel, CategoryPlansRecyclerViewAdapter.CategoryPlansSummaryViewHolder> {
 
-    protected CategoryPlansRecyclerViewAdapter(Context context, LayoutInflater layoutInflater, SortedList<PlansSummaryCalculator.CategoryPlansSummary> sourceList) {
+    public CategoryPlansRecyclerViewAdapter(Context context, LayoutInflater layoutInflater, SortedList<CategoryPlansSummaryViewModel> sourceList) {
         super(context, layoutInflater, sourceList);
     }
 
     @Override
     public CategoryPlansSummaryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        View view = this.getLayoutInflater().inflate(R.layout.plans_category_summary_item_view,null);
-
+        View view = this.getLayoutInflater().inflate(R.layout.plans_category_summary_item_view, null);
         return new CategoryPlansSummaryViewHolder(view);
     }
 
-    public class CategoryPlansSummaryViewHolder extends ViewHolderBase<PlansSummaryCalculator.CategoryPlansSummary>{
+    public  class CategoryPlansSummaryViewHolder extends ViewHolderBase<CategoryPlansSummaryViewModel>{
 
         private final ViewDataBinding binding;
 
@@ -41,8 +40,9 @@ public class CategoryPlansRecyclerViewAdapter extends RecyclerViewDataAdapter<Pl
         }
 
         @Override
-        public void bindToModel(PlansSummaryCalculator.CategoryPlansSummary modelObject) {
+        public void bindToModel(CategoryPlansSummaryViewModel modelObject) {
             super.bindToModel(modelObject);
+            this.binding.setVariable(BR.vm, modelObject);
         }
     }
 }

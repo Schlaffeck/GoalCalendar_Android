@@ -59,6 +59,11 @@ public interface PlansSummaryCalculator {
             return this.dataAvailable;
         }
 
+        public Iterable<PlansSummary> getCompositeSummaries()
+        {
+            return this.compositeSummaries;
+        }
+
         public double getProgressPercentage()
         {
             if(!dataAvailable || noOfExpectedTasks ==  0)

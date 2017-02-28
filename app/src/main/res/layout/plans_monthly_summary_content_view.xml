@@ -37,6 +37,12 @@
         android:textAllCaps="false"
         android:padding="16dp"
         android:height="300dp"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/monthly_goals_summary_categories_recyclerView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
     <!--<Button-->
         <!--android:id="@+id/monthly_goals_summary_expand_button"-->
         <!--android:gravity="center_vertical"-->

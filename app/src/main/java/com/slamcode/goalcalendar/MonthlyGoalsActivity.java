@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.util.SortedList;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -40,12 +41,16 @@ import com.slamcode.goalcalendar.planning.*;
 import com.slamcode.goalcalendar.service.commands.AutoMarkTasksCommand;
 import com.slamcode.goalcalendar.service.notification.NotificationScheduler;
 import com.slamcode.goalcalendar.view.CategoryNameRecyclerViewAdapter;
+import com.slamcode.goalcalendar.view.CategoryPlansRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.ResourcesHelper;
 import com.slamcode.goalcalendar.view.activity.ActivityViewState;
 import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
+import com.slamcode.goalcalendar.view.lists.ComparatorSortedListCallback;
+import com.slamcode.goalcalendar.view.lists.DefaultComparator;
 import com.slamcode.goalcalendar.view.lists.ListAdapterProvider;
 import com.slamcode.goalcalendar.view.lists.RecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.presenters.MonthlyGoalsPresenter;
+import com.slamcode.goalcalendar.view.viewmodels.CategoryPlansSummaryViewModel;
 import com.slamcode.goalcalendar.view.viewmodels.MonthlyProgressSummaryViewModel;
 import com.slamcode.goalcalendar.view.presenters.PresentersSource;
 import com.slamcode.goalcalendar.view.utils.ColorsHelper;
@@ -108,11 +113,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
     @BindView(R.id.monthly_goals_emptyContent_horizontallScrollView)
     HorizontalScrollView emptyContentHorizontalScrollView;
 
-    @BindView(R.id.monthly_goals_activity_bottom_sheet)
-    NestedScrollView bottomSheetScrollView;
-
-    @BindView(R.id.monthly_goals_summary_generalProgress_textView)
-    TextView summaryGeneralPercentageTextView;
+    @BindView(R.id.monthly_goals_summary_categories_recyclerView)
+    RecyclerView categoriesPlansSummaryRecyclerView;
 
     private BottomSheetBehavior bottomSheetBehavior;
 
@@ -153,11 +155,12 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
     }
 
     private void setupBottomSheetBehavior() {
-        this.bottomSheetBehavior = BottomSheetBehavior.from(this.bottomSheetScrollView);
+        NestedScrollView bottomSheetScrollView = (NestedScrollView) this.findViewById(R.id.monthly_goals_activity_bottom_sheet);
+        this.bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetScrollView);
         this.bottomSheetBehavior.setPeekHeight(150);
         this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
-        this.monthlySummaryContentViewBinding = DataBindingUtil.bind(this.bottomSheetScrollView.getChildAt(0));
+        this.monthlySummaryContentViewBinding = DataBindingUtil.bind(bottomSheetScrollView.getChildAt(0));
         this.monthlySummaryContentViewBinding.setVm(this.presenter.getProgressSummaryValue());
         this.presenter.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
@@ -172,8 +175,11 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
     {
         MonthlyProgressSummaryViewModel viewModel = this.presenter.getProgressSummaryValue();
             if(this.monthlySummaryContentViewBinding != null
-                    && this.monthlySummaryContentViewBinding.getVm() != viewModel)
+                    && this.monthlySummaryContentViewBinding.getVm() != viewModel) {
                 this.monthlySummaryContentViewBinding.setVm(viewModel);
+                // todo: set recycler view items source through binding
+                this.categoriesPlansSummaryRecyclerView.setAdapter(viewModel.getCategoryPlansSummaryListAdapter(this, this.getLayoutInflater()));
+            }
     }
 
     private void runStartupCommands() {
