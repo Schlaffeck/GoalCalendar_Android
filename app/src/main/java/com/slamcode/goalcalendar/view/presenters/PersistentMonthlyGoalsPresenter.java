@@ -48,14 +48,15 @@ public class PersistentMonthlyGoalsPresenter extends BaseObservable implements M
                                            PersistenceContext persistenceContext,
                                            ListAdapterProvider listAdapterProvider, PlansSummaryCalculator summaryCalculator)
     {
-        this(context, layoutInflater, persistenceContext, listAdapterProvider, false, summaryCalculator);
+        this(context, layoutInflater, persistenceContext, listAdapterProvider, summaryCalculator, false);
     }
 
     public PersistentMonthlyGoalsPresenter(Context context,
                                            LayoutInflater layoutInflater,
                                            PersistenceContext persistenceContext,
                                            ListAdapterProvider listAdapterProvider,
-                                           boolean setupCategoriesList, PlansSummaryCalculator summaryCalculator)
+                                           PlansSummaryCalculator summaryCalculator,
+                                           boolean setupCategoriesList)
     {
         this.context = context;
         this.persistenceContext = persistenceContext;

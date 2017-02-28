@@ -1,6 +1,10 @@
 package com.slamcode.goalcalendar.view.controls;
 
 import android.content.Context;
+import android.databinding.BindingAdapter;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
+import android.databinding.tool.Binding;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
@@ -80,6 +84,8 @@ public class GoalPlanStatusButton extends ImageButton implements View.OnClickLis
         this.currentPlanStatus = status;
         this.animateStatusChange(status);
         this.notifyOnStateChanged(status);
+
+        ViewDataBinding b = DataBindingUtil.findBinding(this);
     }
 
     public void addOnStateChangedListener(OnStateChangedListener listener)

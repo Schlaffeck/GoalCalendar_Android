@@ -1,12 +1,15 @@
 package com.slamcode.goalcalendar.view;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
+import android.databinding.ViewDataBinding;
 import android.support.v7.util.SortedList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.slamcode.goalcalendar.BR;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
@@ -62,29 +65,27 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
      * View holder for daily plan
      */
     public class DailyPlanViewHolder extends ViewHolderBase<DailyPlanModel>{
+
         @BindView(R.id.plan_status_list_item_view_button)
         GoalPlanStatusButton statusButton;
 
+        private final ViewDataBinding binding;
+
         public DailyPlanViewHolder(View view) {
+
             super(view);
+            this.binding = DataBindingUtil.bind(view);
         }
 
-        // todo: use android binding for the view
         @Override
         public void bindToModel(final DailyPlanModel modelObject) {
             super.bindToModel(modelObject);
+            this.binding.setVariable(BR.vm, modelObject);
 
-            this.statusButton.setStatus(modelObject.getStatus());
             this.statusButton.addOnStateChangedListener(new GoalPlanStatusButton.OnStateChangedListener() {
                 @Override
                 public void onStateChanged(PlanStatus newState) {
                     modelObject.setStatus(newState);
-                }
-            });
-            modelObject.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
-                @Override
-                public void onPropertyChanged(Observable observable, int i) {
-                    statusButton.setStatus(modelObject.getStatus());
                 }
             });
 
