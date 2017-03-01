@@ -40,6 +40,7 @@ public class MonthlyProgressSummaryViewModel extends BaseObservable {
     private ObservableArrayList<CategoryPlansSummaryViewModel> categorySummaryList;
 
     private PlansSummaryCalculator.MonthPlansSummary monthPlansSummary;
+    private boolean statusChanged;
 
     public MonthlyProgressSummaryViewModel(PlansSummaryCalculator calculator, MonthlyPlansModel model)
     {
@@ -51,9 +52,10 @@ public class MonthlyProgressSummaryViewModel extends BaseObservable {
     @Bindable
     public double getPlansSummaryPercentage()
     {
-        if(this.monthPlansSummary == null)
+        if(this.monthPlansSummary == null || statusChanged)
             this.monthPlansSummary = this.calculator.calculatePlansSummaryForMonth(model.getYear(), model.getMonth());
 
+        statusChanged = false;
         return this.monthPlansSummary.getProgressPercentage();
     }
 
@@ -122,8 +124,10 @@ public class MonthlyProgressSummaryViewModel extends BaseObservable {
     private class DailyPlansPropertyObserver extends OnPropertyChangedCallback {
         @Override
         public void onPropertyChanged(Observable observable, int i) {
-            if(i == BR.status)
+            if(i == BR.status) {
+                statusChanged = true;
                 notifyPropertyChanged(BR.plansSummaryPercentage);
+            }
         }
     }
 }
