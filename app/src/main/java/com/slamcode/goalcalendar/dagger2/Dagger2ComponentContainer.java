@@ -41,9 +41,10 @@ public final class Dagger2ComponentContainer {
     private static ApplicationDagger2Component createApplicationDagger2Component(Context context)
     {
         ApplicationDagger2Component result =  DaggerApplicationDagger2Component.builder()
+                .appDagger2Module(new AppDagger2Module(context))
                 .dataDagger2Module(new DataDagger2Module(context))
                 .viewDagger2Module(new ViewDagger2Module())
-                .serviceDagger2Module(new ServiceDagger2Module(new DefaultApplicationContext(context)))
+                .serviceDagger2Module(new ServiceDagger2Module())
                 .settingsDagger2Module(new SettingsDagger2Module(context))
                 .build();
 

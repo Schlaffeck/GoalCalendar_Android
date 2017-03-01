@@ -16,14 +16,13 @@ import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 import com.slamcode.goalcalendar.view.CategoryDailyPlansRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.CategoryNameRecyclerViewAdapter;
-import com.slamcode.goalcalendar.view.lists.ListAdapterProvider;
+import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
 import com.slamcode.goalcalendar.view.presenters.MonthlyGoalsPresenter;
 import com.slamcode.goalcalendar.view.presenters.PersistentMonthlyGoalsPresenter;
 
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Matchers;
-import org.mockito.Mockito;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -49,7 +48,7 @@ public class PersistentMonthlyGoalsPresenterTest {
 
         CategoryNameRecyclerViewAdapter namesAdapter = mock(CategoryNameRecyclerViewAdapter.class);
         CategoryDailyPlansRecyclerViewAdapter dailyPlansAdapter = mock(CategoryDailyPlansRecyclerViewAdapter.class);
-        ListAdapterProvider adapterProvider = mock(ListAdapterProvider.class);
+        ItemsCollectionAdapterProvider adapterProvider = mock(ItemsCollectionAdapterProvider.class);
         when(adapterProvider.provideCategoryNameListViewAdapter(context, inflater)).thenReturn(namesAdapter);
         when(adapterProvider.provideCategoryDailyPlansListViewAdapter(context, inflater)).thenReturn(dailyPlansAdapter);
 
@@ -90,7 +89,7 @@ public class PersistentMonthlyGoalsPresenterTest {
 
         CategoryNameRecyclerViewAdapter namesAdapter = mock(CategoryNameRecyclerViewAdapter.class);
         CategoryDailyPlansRecyclerViewAdapter dailyPlansAdapter = mock(CategoryDailyPlansRecyclerViewAdapter.class);
-        ListAdapterProvider adapterProvider = mock(ListAdapterProvider.class);
+        ItemsCollectionAdapterProvider adapterProvider = mock(ItemsCollectionAdapterProvider.class);
         when(adapterProvider.provideCategoryNameListViewAdapter(context, inflater)).thenReturn(namesAdapter);
         when(adapterProvider.provideCategoryDailyPlansListViewAdapter(context, inflater)).thenReturn(dailyPlansAdapter);
 
@@ -124,7 +123,7 @@ public class PersistentMonthlyGoalsPresenterTest {
 
         CategoryNameRecyclerViewAdapter namesAdapter = mock(CategoryNameRecyclerViewAdapter.class);
         CategoryDailyPlansRecyclerViewAdapter dailyPlansAdapter = mock(CategoryDailyPlansRecyclerViewAdapter.class);
-        ListAdapterProvider adapterProvider = mock(ListAdapterProvider.class);
+        ItemsCollectionAdapterProvider adapterProvider = mock(ItemsCollectionAdapterProvider.class);
         when(adapterProvider.provideCategoryNameListViewAdapter(context, inflater)).thenReturn(namesAdapter);
         when(adapterProvider.provideCategoryDailyPlansListViewAdapter(context, inflater)).thenReturn(dailyPlansAdapter);
 
@@ -177,7 +176,7 @@ public class PersistentMonthlyGoalsPresenterTest {
 
         CategoryNameRecyclerViewAdapter namesAdapter = mock(CategoryNameRecyclerViewAdapter.class);
         CategoryDailyPlansRecyclerViewAdapter dailyPlansAdapter = mock(CategoryDailyPlansRecyclerViewAdapter.class);
-        ListAdapterProvider adapterProvider = mock(ListAdapterProvider.class);
+        ItemsCollectionAdapterProvider adapterProvider = mock(ItemsCollectionAdapterProvider.class);
         when(adapterProvider.provideCategoryNameListViewAdapter(context, inflater)).thenReturn(namesAdapter);
         when(adapterProvider.provideCategoryDailyPlansListViewAdapter(context, inflater)).thenReturn(dailyPlansAdapter);
 
@@ -223,7 +222,7 @@ public class PersistentMonthlyGoalsPresenterTest {
 
         CategoryNameRecyclerViewAdapter namesAdapter = mock(CategoryNameRecyclerViewAdapter.class);
         CategoryDailyPlansRecyclerViewAdapter dailyPlansAdapter = mock(CategoryDailyPlansRecyclerViewAdapter.class);
-        ListAdapterProvider adapterProvider = mock(ListAdapterProvider.class);
+        ItemsCollectionAdapterProvider adapterProvider = mock(ItemsCollectionAdapterProvider.class);
         when(adapterProvider.provideCategoryNameListViewAdapter(context, inflater)).thenReturn(namesAdapter);
         when(adapterProvider.provideCategoryDailyPlansListViewAdapter(context, inflater)).thenReturn(dailyPlansAdapter);
 

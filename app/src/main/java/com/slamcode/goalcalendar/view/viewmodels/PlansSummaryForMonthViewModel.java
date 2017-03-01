@@ -13,36 +13,33 @@ import com.android.databinding.library.baseAdapters.BR;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
-import com.slamcode.goalcalendar.planning.DateTime;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
-import com.slamcode.goalcalendar.view.CategoryDailyPlansRecyclerViewAdapter;
-import com.slamcode.goalcalendar.view.CategoryPlansRecyclerViewAdapter;
+import com.slamcode.goalcalendar.view.PlansSummaryForCategoriesRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.ComparatorSortedListCallback;
 import com.slamcode.goalcalendar.view.lists.DefaultComparator;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.collections4.Transformer;
 
 /**
  * Created by moriasla on 24.02.2017.
  */
 
-public class MonthlyProgressSummaryViewModel extends BaseObservable {
+public class PlansSummaryForMonthViewModel extends BaseObservable {
 
     private final PlansSummaryCalculator calculator;
     private final MonthlyPlansModel model;
 
     private DailyPlansPropertyObserver dailyPlanPropertyObserver = new DailyPlansPropertyObserver();
 
-    private ObservableArrayList<CategoryPlansSummaryViewModel> categorySummaryList;
+    private ObservableArrayList<PlansSummaryForCategoryViewModel> categorySummaryList;
 
     private PlansSummaryCalculator.MonthPlansSummary monthPlansSummary;
     private boolean statusChanged;
 
-    public MonthlyProgressSummaryViewModel(PlansSummaryCalculator calculator, MonthlyPlansModel model)
+    public PlansSummaryForMonthViewModel(PlansSummaryCalculator calculator, MonthlyPlansModel model)
     {
         this.calculator = calculator;
         this.model = model;
@@ -84,17 +81,17 @@ public class MonthlyProgressSummaryViewModel extends BaseObservable {
     }
 
     @Bindable
-    public ObservableList<CategoryPlansSummaryViewModel> getCategorySummaryList()
+    public ObservableList<PlansSummaryForCategoryViewModel> getCategorySummaryList()
     {
         return this.categorySummaryList;
     }
 
-    public CategoryPlansRecyclerViewAdapter getCategoryPlansSummaryListAdapter(Context context, LayoutInflater layoutInflater)
+    public PlansSummaryForCategoriesRecyclerViewAdapter getCategoryPlansSummaryListAdapter(Context context, LayoutInflater layoutInflater)
     {
-        SortedList<CategoryPlansSummaryViewModel> list =
-                new SortedList<>(CategoryPlansSummaryViewModel.class, new ComparatorSortedListCallback<>(new DefaultComparator<CategoryPlansSummaryViewModel>()));
+        SortedList<PlansSummaryForCategoryViewModel> list =
+                new SortedList<>(PlansSummaryForCategoryViewModel.class, new ComparatorSortedListCallback<>(new DefaultComparator<PlansSummaryForCategoryViewModel>()));
         list.addAll(this.getCategorySummaryList());
-        return new CategoryPlansRecyclerViewAdapter(context, layoutInflater,
+        return new PlansSummaryForCategoriesRecyclerViewAdapter(context, layoutInflater,
                list);
     }
 
@@ -110,11 +107,11 @@ public class MonthlyProgressSummaryViewModel extends BaseObservable {
             }
         }
         this.categorySummaryList = new ObservableArrayList<>();
-        this.categorySummaryList.addAll(CollectionUtils.collect(this.monthPlansSummary.getCompositeSummaries(), new Transformer<PlansSummaryCalculator.PlansSummary, CategoryPlansSummaryViewModel>() {
+        this.categorySummaryList.addAll(CollectionUtils.collect(this.monthPlansSummary.getCompositeSummaries(), new Transformer<PlansSummaryCalculator.PlansSummary, PlansSummaryForCategoryViewModel>() {
             @Override
-            public CategoryPlansSummaryViewModel transform(PlansSummaryCalculator.PlansSummary input) {
+            public PlansSummaryForCategoryViewModel transform(PlansSummaryCalculator.PlansSummary input) {
                 if(input instanceof PlansSummaryCalculator.CategoryPlansSummary)
-                    return new CategoryPlansSummaryViewModel((PlansSummaryCalculator.CategoryPlansSummary)input);
+                    return new PlansSummaryForCategoryViewModel((PlansSummaryCalculator.CategoryPlansSummary)input);
 
                 return null;
             }

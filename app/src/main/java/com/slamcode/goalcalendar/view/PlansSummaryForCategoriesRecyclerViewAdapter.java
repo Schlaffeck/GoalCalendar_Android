@@ -10,17 +10,23 @@ import android.view.ViewGroup;
 
 import com.slamcode.goalcalendar.BR;
 import com.slamcode.goalcalendar.R;
+import com.slamcode.goalcalendar.view.lists.ComparatorSortedListCallback;
+import com.slamcode.goalcalendar.view.lists.DefaultComparator;
 import com.slamcode.goalcalendar.view.lists.RecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.ViewHolderBase;
-import com.slamcode.goalcalendar.view.viewmodels.CategoryPlansSummaryViewModel;
+import com.slamcode.goalcalendar.view.viewmodels.PlansSummaryForCategoryViewModel;
 
 /**
  * Created by moriasla on 28.02.2017.
  */
 
-public class CategoryPlansRecyclerViewAdapter extends RecyclerViewDataAdapter<CategoryPlansSummaryViewModel, CategoryPlansRecyclerViewAdapter.CategoryPlansSummaryViewHolder> {
+public class PlansSummaryForCategoriesRecyclerViewAdapter extends RecyclerViewDataAdapter<PlansSummaryForCategoryViewModel, PlansSummaryForCategoriesRecyclerViewAdapter.CategoryPlansSummaryViewHolder> {
 
-    public CategoryPlansRecyclerViewAdapter(Context context, LayoutInflater layoutInflater, SortedList<CategoryPlansSummaryViewModel> sourceList) {
+    public PlansSummaryForCategoriesRecyclerViewAdapter(Context context, LayoutInflater layoutInflater) {
+        super(context, layoutInflater,
+                new SortedList<>(PlansSummaryForCategoryViewModel.class, new ComparatorSortedListCallback<>(new DefaultComparator<PlansSummaryForCategoryViewModel>())));
+    }
+    public PlansSummaryForCategoriesRecyclerViewAdapter(Context context, LayoutInflater layoutInflater, SortedList<PlansSummaryForCategoryViewModel> sourceList) {
         super(context, layoutInflater, sourceList);
     }
 
@@ -30,7 +36,7 @@ public class CategoryPlansRecyclerViewAdapter extends RecyclerViewDataAdapter<Ca
         return new CategoryPlansSummaryViewHolder(view);
     }
 
-    public  class CategoryPlansSummaryViewHolder extends ViewHolderBase<CategoryPlansSummaryViewModel>{
+    public  class CategoryPlansSummaryViewHolder extends ViewHolderBase<PlansSummaryForCategoryViewModel>{
 
         private final ViewDataBinding binding;
 
@@ -40,7 +46,7 @@ public class CategoryPlansRecyclerViewAdapter extends RecyclerViewDataAdapter<Ca
         }
 
         @Override
-        public void bindToModel(CategoryPlansSummaryViewModel modelObject) {
+        public void bindToModel(PlansSummaryForCategoryViewModel modelObject) {
             super.bindToModel(modelObject);
             this.binding.setVariable(BR.vm, modelObject);
         }

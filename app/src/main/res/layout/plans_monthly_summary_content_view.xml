@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             android:id="@+id/binding_view_model_variable_id"
             name="vm"
-            type="com.slamcode.goalcalendar.view.viewmodels.MonthlyProgressSummaryViewModel"/>
+            type="com.slamcode.goalcalendar.view.viewmodels.PlansSummaryForMonthViewModel"/>
     </data>
-<RelativeLayout android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/activity_horizontal_margin">
 
     <TextView
         android:id="@+id/monthly_goals_summary_generalProgress_textView"
@@ -16,7 +19,7 @@
         android:text="@{String.format(@string/monthly_plans_summary_generalPercentage, vm.plansSummaryPercentage)}"
         android:textSize="16sp"
         android:textAllCaps="false"
-        android:padding="16dp"/>
+        android:padding="@dimen/default_padding"/>
     <TextView
         android:id="@+id/monthly_goals_summary_daysLeft_textView"
         android:layout_below="@id/monthly_goals_summary_generalProgress_textView"
@@ -25,32 +28,17 @@
         android:text="@{String.format(@string/monthly_plans_summary_noOfDaysLeft, vm.noOfDaysLeft)}"
         android:textSize="16sp"
         android:textAllCaps="false"
-        android:padding="16dp"/>
+        android:padding="@dimen/default_padding"/>
 
-    <TextView
-        android:layout_below="@id/monthly_goals_summary_daysLeft_textView"
-        android:id="@+id/monthly_goals_summary_details_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/monthly_plans_summary_details"
-        android:textSize="16sp"
-        android:textAllCaps="false"
-        android:padding="16dp"
-        android:height="300dp"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/monthly_goals_summary_categories_recyclerView"
+        android:layout_below="@id/monthly_goals_summary_daysLeft_textView"
+        android:orientation="vertical"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:categoryList="@{vm.categorySummaryList}">
 
     </android.support.v7.widget.RecyclerView>
-    <!--<Button-->
-        <!--android:id="@+id/monthly_goals_summary_expand_button"-->
-        <!--android:gravity="center_vertical"-->
-        <!--android:layout_toRightOf="@id/monthly_goals_summary_generalProgress_textView"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/button_more"-->
-        <!--android:textColor="@color/planningStateButton_stateEmpty_foregroundColor"-->
-        <!--style="@style/Widget.AppCompat.Button.Borderless.Colored"/>-->
-</RelativeLayout>
+</LinearLayout>
 </layout>

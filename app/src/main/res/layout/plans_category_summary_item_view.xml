@@ -1,20 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 <data>
-    <variable android:id="@+id/binding_view_model_variable_id" name="vm" type="com.slamcode.goalcalendar.view.viewmodels.CategoryPlansSummaryViewModel"/>
+    <variable android:id="@+id/binding_view_model_variable_id" name="vm"
+        type="com.slamcode.goalcalendar.view.viewmodels.PlansSummaryForCategoryViewModel"/>
 </data>
-<LinearLayout android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="fill_horizontal"
+    android:height="?android:attr/listPreferredItemHeight"
+    android:padding="@dimen/default_padding">
     <TextView
+        android:id="@+id/plans_category_summary_item_name_textView"
+        android:layout_alignParentLeft="true"
         android:textSize="@dimen/list_item_text_size"
+        android:gravity="fill_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@{vm.name + ':'}"/>
+        android:text="@{vm.name}"
+        android:textColor="@color/colorPrimary"/>
     <TextView
+        android:id="@+id/plans_category_summary_item_percentage_textView"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/plans_category_summary_item_name_textView"
         android:textSize="@dimen/list_item_text_size"
         android:gravity="right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryDark"
         android:text="@{String.format(@string/plans_summary_percentageFormat, vm.progressPercentage)}"/>
-</LinearLayout>
+
+    <LinearLayout
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/plans_category_summary_item_name_textView"
+        android:id="@+id/plans_category_summary_item_percentage_tasksSummary_layout"
+        android:gravity="right"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textColor="@color/planningStateButton_stateSuccess_foregroundColor"
+           android:textSize="@dimen/symbol_font_size"
+           android:text='@{String.format("● %d ", vm.noOfSuccessfulTasks)}'/>
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textColor="@color/planningStateButton_stateFailed_foregroundColor"
+           android:textSize="@dimen/symbol_font_size"
+           android:text='@{String.format("● %d ", vm.noOfFailedTasks)}'/>
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textColor="@color/planningStateButton_stateEmpty_foregroundColor"
+           android:textSize="@dimen/symbol_font_size"
+           android:text='@{String.format("● %d ", vm.noOfExpectedTasks)}'/>
+    </LinearLayout>
+</RelativeLayout>
 </layout>

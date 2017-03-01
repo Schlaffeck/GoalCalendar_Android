@@ -5,14 +5,18 @@ import android.view.LayoutInflater;
 
 import com.slamcode.goalcalendar.view.CategoryDailyPlansRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.CategoryNameRecyclerViewAdapter;
+import com.slamcode.goalcalendar.view.PlansSummaryForCategoriesRecyclerViewAdapter;
 
 /**
  * Created by moriasla on 02.02.2017.
  */
 
-public interface ListAdapterProvider {
+public interface ItemsCollectionAdapterProvider {
 
     CategoryNameRecyclerViewAdapter provideCategoryNameListViewAdapter(Context context, LayoutInflater inflater);
 
     CategoryDailyPlansRecyclerViewAdapter provideCategoryDailyPlansListViewAdapter(Context context, LayoutInflater layoutInflater);
+
+    PlansSummaryForCategoriesRecyclerViewAdapter providePlansSummaryForCategoriesRecyclerViewAdapter(Context context, LayoutInflater layoutInflater);
+
 }

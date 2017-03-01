@@ -3,7 +3,7 @@ package com.slamcode.goalcalendar.view.presenters;
 import com.slamcode.goalcalendar.MonthlyGoalsActivity;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
-import com.slamcode.goalcalendar.view.lists.ListAdapterProvider;
+import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
 
 /**
  * Created by moriasla on 24.02.2017.
@@ -15,12 +15,12 @@ public class CachedApplicationPresentersSource implements PresentersSource {
 
     private PersistenceContext persistenceContext;
 
-    private ListAdapterProvider listAdapterProvider;
+    private ItemsCollectionAdapterProvider listAdapterProvider;
 
     private PlansSummaryCalculator plansSummaryCalculator;
 
     public CachedApplicationPresentersSource(PersistenceContext persistenceContext,
-                                             ListAdapterProvider listAdapterProvider, PlansSummaryCalculator plansSummaryCalculator)
+                                             ItemsCollectionAdapterProvider listAdapterProvider, PlansSummaryCalculator plansSummaryCalculator)
     {
         this.persistenceContext = persistenceContext;
         this.listAdapterProvider = listAdapterProvider;

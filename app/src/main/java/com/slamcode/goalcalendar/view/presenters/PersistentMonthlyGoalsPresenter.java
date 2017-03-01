@@ -21,8 +21,8 @@ import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 import com.slamcode.goalcalendar.view.AddEditCategoryDialog;
 import com.slamcode.goalcalendar.view.CategoryDailyPlansRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.CategoryNameRecyclerViewAdapter;
-import com.slamcode.goalcalendar.view.lists.ListAdapterProvider;
-import com.slamcode.goalcalendar.view.viewmodels.MonthlyProgressSummaryViewModel;
+import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
+import com.slamcode.goalcalendar.view.viewmodels.PlansSummaryForMonthViewModel;
 
 /**
  * Created by moriasla on 16.01.2017.
@@ -32,7 +32,7 @@ public class PersistentMonthlyGoalsPresenter extends BaseObservable implements M
 
     private MonthlyPlansModel selectedMonthlyPlans;
 
-    private MonthlyProgressSummaryViewModel progressSummaryValue;
+    private PlansSummaryForMonthViewModel progressSummaryValue;
 
     private final CategoryNameRecyclerViewAdapter categoryNamesRecyclerViewAdapter;
     private final CategoryDailyPlansRecyclerViewAdapter categoryDailyPlansRecyclerViewAdapter;
@@ -46,7 +46,7 @@ public class PersistentMonthlyGoalsPresenter extends BaseObservable implements M
     public PersistentMonthlyGoalsPresenter(Context context,
                                            LayoutInflater layoutInflater,
                                            PersistenceContext persistenceContext,
-                                           ListAdapterProvider listAdapterProvider, PlansSummaryCalculator summaryCalculator)
+                                           ItemsCollectionAdapterProvider listAdapterProvider, PlansSummaryCalculator summaryCalculator)
     {
         this(context, layoutInflater, persistenceContext, listAdapterProvider, summaryCalculator, false);
     }
@@ -54,7 +54,7 @@ public class PersistentMonthlyGoalsPresenter extends BaseObservable implements M
     public PersistentMonthlyGoalsPresenter(Context context,
                                            LayoutInflater layoutInflater,
                                            PersistenceContext persistenceContext,
-                                           ListAdapterProvider listAdapterProvider,
+                                           ItemsCollectionAdapterProvider listAdapterProvider,
                                            PlansSummaryCalculator summaryCalculator,
                                            boolean setupCategoriesList)
     {
@@ -238,9 +238,9 @@ public class PersistentMonthlyGoalsPresenter extends BaseObservable implements M
 
     @Override
     @Bindable
-    public MonthlyProgressSummaryViewModel getProgressSummaryValue() {
+    public PlansSummaryForMonthViewModel getProgressSummaryValue() {
         if(this.progressSummaryValue == null)
-            this.progressSummaryValue = new MonthlyProgressSummaryViewModel(this.summaryCalculator, this.selectedMonthlyPlans);
+            this.progressSummaryValue = new PlansSummaryForMonthViewModel(this.summaryCalculator, this.selectedMonthlyPlans);
         return this.progressSummaryValue;
     }
 

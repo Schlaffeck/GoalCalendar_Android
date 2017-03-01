@@ -1,14 +1,13 @@
 package com.slamcode.goalcalendar.view.presenters;
 
 import android.app.AlertDialog;
-import android.databinding.BaseObservable;
 import android.databinding.Observable;
 
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.view.AddEditCategoryDialog;
 import com.slamcode.goalcalendar.view.CategoryDailyPlansRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.CategoryNameRecyclerViewAdapter;
-import com.slamcode.goalcalendar.view.viewmodels.MonthlyProgressSummaryViewModel;
+import com.slamcode.goalcalendar.view.viewmodels.PlansSummaryForMonthViewModel;
 
 
 /**
@@ -38,5 +37,5 @@ public interface MonthlyGoalsPresenter extends Observable {
 
     AlertDialog createDeleteCategoryDialog(int categoryPosition);
 
-    MonthlyProgressSummaryViewModel getProgressSummaryValue();
+    PlansSummaryForMonthViewModel getProgressSummaryValue();
 }

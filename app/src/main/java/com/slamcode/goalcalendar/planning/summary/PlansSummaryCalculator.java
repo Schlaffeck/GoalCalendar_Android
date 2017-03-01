@@ -86,15 +86,15 @@ public interface PlansSummaryCalculator {
             return Math.min(100.0, (this.noOfSuccessfulTasks * 1.0) / (this.noOfExpectedTasks * 1.0) * 100);
         }
 
-        public double getNoOfExpectedTasks() {
+        public int getNoOfExpectedTasks() {
             return this.noOfExpectedTasks;
         }
 
-        public double getNoOfSuccessfulTasks() {
+        public int getNoOfSuccessfulTasks() {
             return this.noOfSuccessfulTasks;
         }
 
-        public double getNoOfFailedTasks() {
+        public int getNoOfFailedTasks() {
             return this.noOfFailedTasks;
         }
     }

@@ -3,16 +3,15 @@ package com.slamcode.goalcalendar.view.lists;
 import android.content.Context;
 import android.view.LayoutInflater;
 
-import com.slamcode.collections.CollectionUtils;
-import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.view.CategoryDailyPlansRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.CategoryNameRecyclerViewAdapter;
+import com.slamcode.goalcalendar.view.PlansSummaryForCategoriesRecyclerViewAdapter;
 
 /**
  * Created by moriasla on 02.02.2017.
  */
 
-public class SimpleListViewAdapterProvider implements ListAdapterProvider {
+public class AppContextBasedViewAdapterProvider implements ItemsCollectionAdapterProvider {
 
     @Override
     public CategoryNameRecyclerViewAdapter provideCategoryNameListViewAdapter(Context context, LayoutInflater inflater) {
@@ -22,5 +21,10 @@ public class SimpleListViewAdapterProvider implements ListAdapterProvider {
     @Override
     public CategoryDailyPlansRecyclerViewAdapter provideCategoryDailyPlansListViewAdapter(Context context, LayoutInflater layoutInflater) {
         return new CategoryDailyPlansRecyclerViewAdapter(context, layoutInflater);
+    }
+
+    @Override
+    public PlansSummaryForCategoriesRecyclerViewAdapter providePlansSummaryForCategoriesRecyclerViewAdapter(Context context, LayoutInflater layoutInflater) {
+        return new PlansSummaryForCategoriesRecyclerViewAdapter(context, layoutInflater);
     }
 }

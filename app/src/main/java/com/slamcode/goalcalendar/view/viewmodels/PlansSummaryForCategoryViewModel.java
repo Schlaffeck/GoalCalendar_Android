@@ -2,8 +2,6 @@ package com.slamcode.goalcalendar.view.viewmodels;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.databinding.ObservableArrayList;
-import android.databinding.ObservableList;
 
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 
@@ -14,11 +12,11 @@ import java.util.Locale;
  * Created by moriasla on 28.02.2017.
  */
 
-public class CategoryPlansSummaryViewModel extends BaseObservable implements Comparable<CategoryPlansSummaryViewModel> {
+public class PlansSummaryForCategoryViewModel extends BaseObservable implements Comparable<PlansSummaryForCategoryViewModel> {
 
     private final PlansSummaryCalculator.CategoryPlansSummary model;
 
-    public CategoryPlansSummaryViewModel(PlansSummaryCalculator.CategoryPlansSummary model)
+    public PlansSummaryForCategoryViewModel(PlansSummaryCalculator.CategoryPlansSummary model)
     {
         this.model = model;
     }
@@ -41,8 +39,26 @@ public class CategoryPlansSummaryViewModel extends BaseObservable implements Com
         return this.model.getProgressPercentage();
     }
 
+    @Bindable
+    public int getNoOfExpectedTasks()
+    {
+        return this.model.getNoOfExpectedTasks();
+    }
+
+    @Bindable
+    public int getNoOfFailedTasks()
+    {
+        return this.model.getNoOfFailedTasks();
+    }
+
+    @Bindable
+    public int getNoOfSuccessfulTasks()
+    {
+        return this.model.getNoOfSuccessfulTasks();
+    }
+
     @Override
-    public int compareTo(CategoryPlansSummaryViewModel o) {
+    public int compareTo(PlansSummaryForCategoryViewModel o) {
         if(o == null)
             return 1;
 

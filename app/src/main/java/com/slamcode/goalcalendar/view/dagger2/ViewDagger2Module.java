@@ -3,8 +3,8 @@ package com.slamcode.goalcalendar.view.dagger2;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
-import com.slamcode.goalcalendar.view.lists.ListAdapterProvider;
-import com.slamcode.goalcalendar.view.lists.SimpleListViewAdapterProvider;
+import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
+import com.slamcode.goalcalendar.view.lists.AppContextBasedViewAdapterProvider;
 import com.slamcode.goalcalendar.view.presenters.CachedApplicationPresentersSource;
 import com.slamcode.goalcalendar.view.presenters.PresentersSource;
 
@@ -28,9 +28,9 @@ public final class ViewDagger2Module {
 
     @Provides
     @Singleton
-    public ListAdapterProvider provideListViewAdapterProvider()
+    public ItemsCollectionAdapterProvider provideListViewAdapterProvider()
     {
-        SimpleListViewAdapterProvider provider = new SimpleListViewAdapterProvider();
+        AppContextBasedViewAdapterProvider provider = new AppContextBasedViewAdapterProvider();
         return provider;
     }
 
@@ -38,7 +38,7 @@ public final class ViewDagger2Module {
     @Singleton
     public PresentersSource providePresentersSource(
             PersistenceContext persistenceContext,
-            ListAdapterProvider listAdapterProvider,
+            ItemsCollectionAdapterProvider listAdapterProvider,
             PlansSummaryCalculator plansSummaryCalculator)
     {
         return new CachedApplicationPresentersSource(persistenceContext, listAdapterProvider, plansSummaryCalculator);

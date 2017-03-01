@@ -10,6 +10,7 @@ import com.slamcode.goalcalendar.service.notification.NotificationPublisher;
 import com.slamcode.goalcalendar.service.notification.NotificationScheduler;
 import com.slamcode.goalcalendar.settings.dagger2.SettingsDagger2Module;
 import com.slamcode.goalcalendar.view.dagger2.ViewDagger2Module;
+import com.slamcode.goalcalendar.view.lists.Bindings;
 import com.slamcode.goalcalendar.view.presenters.CachedApplicationPresentersSource;
 
 import javax.inject.Singleton;
@@ -21,6 +22,7 @@ import dagger.Component;
  */
 @Singleton
 @Component(modules = {
+        AppDagger2Module.class,
         DataDagger2Module.class,
         ViewDagger2Module.class,
         ServiceDagger2Module.class,
@@ -38,4 +40,6 @@ public interface ApplicationDagger2Component {
     void inject(SnackbarShowUpAutoMarkTasksCommand defaultAutoMarkTasksService);
 
     void inject(CachedApplicationPresentersSource cachedApplicationPresentersSource);
+
+    void inject(Bindings.Dagger2InjectData listsBindingsInjectData);
 }

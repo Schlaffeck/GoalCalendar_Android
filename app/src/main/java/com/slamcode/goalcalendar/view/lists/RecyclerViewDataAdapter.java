@@ -157,6 +157,7 @@ public abstract class RecyclerViewDataAdapter<Item, ViewHolder extends ViewHolde
     protected void updateSourceCollection(Collection<Item> newSourceCollection) {
         this.list.clear();
         this.list.addAll(newSourceCollection);
+        this.notifyDataSetChanged();
     }
 
     private int getItemIndex(Item item)
