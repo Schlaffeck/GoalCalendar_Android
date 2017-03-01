@@ -23,6 +23,8 @@ import com.slamcode.goalcalendar.view.lists.DefaultComparator;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Transformer;
 
+import java.util.List;
+
 /**
  * Created by moriasla on 24.02.2017.
  */
@@ -34,10 +36,9 @@ public class PlansSummaryForMonthViewModel extends BaseObservable {
 
     private DailyPlansPropertyObserver dailyPlanPropertyObserver = new DailyPlansPropertyObserver();
 
-    private ObservableArrayList<PlansSummaryForCategoryViewModel> categorySummaryList;
-
     private PlansSummaryCalculator.MonthPlansSummary monthPlansSummary;
     private boolean statusChanged;
+    private ObservableArrayList<PlansSummaryForCategoryViewModel> categorySummaryList;
 
     public PlansSummaryForMonthViewModel(PlansSummaryCalculator calculator, MonthlyPlansModel model)
     {
@@ -50,9 +51,7 @@ public class PlansSummaryForMonthViewModel extends BaseObservable {
     public double getPlansSummaryPercentage()
     {
         if(this.monthPlansSummary == null || statusChanged)
-            this.monthPlansSummary = this.calculator.calculatePlansSummaryForMonth(model.getYear(), model.getMonth());
-
-        statusChanged = false;
+            setupPlansListeners();
         return this.monthPlansSummary.getProgressPercentage();
     }
 
@@ -78,21 +77,17 @@ public class PlansSummaryForMonthViewModel extends BaseObservable {
     public void refreshData()
     {
         setupPlansListeners();
+        notifyPropertyChanged(BR.progressSummaryValue);
+        notifyPropertyChanged(BR.categorySummaryList);
     }
 
     @Bindable
-    public ObservableList<PlansSummaryForCategoryViewModel> getCategorySummaryList()
+    public List<PlansSummaryForCategoryViewModel> getCategorySummaryList()
     {
-        return this.categorySummaryList;
-    }
+        if(this.monthPlansSummary == null || statusChanged)
+            setupPlansListeners();
 
-    public PlansSummaryForCategoriesRecyclerViewAdapter getCategoryPlansSummaryListAdapter(Context context, LayoutInflater layoutInflater)
-    {
-        SortedList<PlansSummaryForCategoryViewModel> list =
-                new SortedList<>(PlansSummaryForCategoryViewModel.class, new ComparatorSortedListCallback<>(new DefaultComparator<PlansSummaryForCategoryViewModel>()));
-        list.addAll(this.getCategorySummaryList());
-        return new PlansSummaryForCategoriesRecyclerViewAdapter(context, layoutInflater,
-               list);
+        return this.categorySummaryList;
     }
 
     private void setupPlansListeners() {
@@ -106,6 +101,7 @@ public class PlansSummaryForMonthViewModel extends BaseObservable {
                 dailyPlan.addOnPropertyChangedCallback(this.dailyPlanPropertyObserver);
             }
         }
+
         this.categorySummaryList = new ObservableArrayList<>();
         this.categorySummaryList.addAll(CollectionUtils.collect(this.monthPlansSummary.getCompositeSummaries(), new Transformer<PlansSummaryCalculator.PlansSummary, PlansSummaryForCategoryViewModel>() {
             @Override
@@ -116,6 +112,8 @@ public class PlansSummaryForMonthViewModel extends BaseObservable {
                 return null;
             }
         }));
+
+        statusChanged = false;
     }
 
     private class DailyPlansPropertyObserver extends OnPropertyChangedCallback {
@@ -124,6 +122,7 @@ public class PlansSummaryForMonthViewModel extends BaseObservable {
             if(i == BR.status) {
                 statusChanged = true;
                 notifyPropertyChanged(BR.plansSummaryPercentage);
+                notifyPropertyChanged(BR.categorySummaryList);
             }
         }
     }
