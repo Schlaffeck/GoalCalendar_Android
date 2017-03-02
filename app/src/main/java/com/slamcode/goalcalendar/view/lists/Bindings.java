@@ -7,9 +7,8 @@ import android.view.LayoutInflater;
 
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.dagger2.Dagger2ComponentContainer;
-import com.slamcode.goalcalendar.view.CategoryDailyPlansRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.PlansSummaryForCategoriesRecyclerViewAdapter;
-import com.slamcode.goalcalendar.view.viewmodels.PlansSummaryForCategoryViewModel;
+import com.slamcode.goalcalendar.viewmodels.PlansSummaryForCategoryViewModel;
 
 import java.util.Collection;
 
@@ -21,7 +20,7 @@ import javax.inject.Inject;
 
 public class Bindings {
 
-    @BindingAdapter("app:categoryList")
+    @BindingAdapter("categoryList")
     public static void setItemsSource(RecyclerView recyclerView, Collection<PlansSummaryForCategoryViewModel> itemsSource)
     {
         if(recyclerView == null)

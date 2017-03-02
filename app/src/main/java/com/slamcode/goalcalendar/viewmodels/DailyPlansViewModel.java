@@ -1,4 +1,4 @@
-package com.slamcode.goalcalendar.view.viewmodels;
+package com.slamcode.goalcalendar.viewmodels;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;

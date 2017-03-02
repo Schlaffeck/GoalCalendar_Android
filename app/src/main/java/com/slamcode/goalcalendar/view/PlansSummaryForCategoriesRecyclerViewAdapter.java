@@ -14,7 +14,7 @@ import com.slamcode.goalcalendar.view.lists.ComparatorSortedListCallback;
 import com.slamcode.goalcalendar.view.lists.DefaultComparator;
 import com.slamcode.goalcalendar.view.lists.RecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.ViewHolderBase;
-import com.slamcode.goalcalendar.view.viewmodels.PlansSummaryForCategoryViewModel;
+import com.slamcode.goalcalendar.viewmodels.PlansSummaryForCategoryViewModel;
 
 /**
  * Created by moriasla on 28.02.2017.

@@ -22,7 +22,7 @@ import com.slamcode.goalcalendar.view.AddEditCategoryDialog;
 import com.slamcode.goalcalendar.view.CategoryDailyPlansRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.CategoryNameRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
-import com.slamcode.goalcalendar.view.viewmodels.PlansSummaryForMonthViewModel;
+import com.slamcode.goalcalendar.viewmodels.PlansSummaryForMonthViewModel;
 
 /**
  * Created by moriasla on 16.01.2017.

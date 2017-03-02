@@ -45,11 +45,12 @@ import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
 import com.slamcode.goalcalendar.view.lists.RecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.presenters.MonthlyGoalsPresenter;
-import com.slamcode.goalcalendar.view.viewmodels.PlansSummaryForMonthViewModel;
+import com.slamcode.goalcalendar.viewmodels.PlansSummaryForMonthViewModel;
 import com.slamcode.goalcalendar.view.presenters.PresentersSource;
 import com.slamcode.goalcalendar.view.utils.ColorsHelper;
 import com.slamcode.goalcalendar.view.lists.ScrollableViewHelper;
 import com.slamcode.goalcalendar.view.utils.SpinnerHelper;
+import com.slamcode.goalcalendar.viewmodels.*;
 
 import org.apache.commons.collections4.Closure;
 import org.apache.commons.collections4.IteratorUtils;

@@ -1,13 +1,9 @@
-package com.slamcode.goalcalendar.view.viewmodels;
+package com.slamcode.goalcalendar.viewmodels;
 
-import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.Observable;
 import android.databinding.ObservableArrayList;
-import android.databinding.ObservableList;
-import android.support.v7.util.SortedList;
-import android.view.LayoutInflater;
 
 import com.android.databinding.library.baseAdapters.BR;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
@@ -16,9 +12,6 @@ import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
-import com.slamcode.goalcalendar.view.PlansSummaryForCategoriesRecyclerViewAdapter;
-import com.slamcode.goalcalendar.view.lists.ComparatorSortedListCallback;
-import com.slamcode.goalcalendar.view.lists.DefaultComparator;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Transformer;

@@ -5,7 +5,7 @@
         <variable
             android:id="@+id/binding_view_model_variable_id"
             name="vm"
-            type="com.slamcode.goalcalendar.view.viewmodels.PlansSummaryForMonthViewModel"/>
+            type="com.slamcode.goalcalendar.viewmodels.PlansSummaryForMonthViewModel"/>
     </data>
 <LinearLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"

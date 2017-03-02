@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 <data>
     <variable android:id="@+id/binding_view_model_variable_id" name="vm"
-        type="com.slamcode.goalcalendar.view.viewmodels.PlansSummaryForCategoryViewModel"/>
+        type="com.slamcode.goalcalendar.viewmodels.PlansSummaryForCategoryViewModel"/>
 </data>
 <RelativeLayout android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
