@@ -55,7 +55,7 @@ public class DateTimeHelperTest {
         assertEquals(Calendar.getInstance().get(Calendar.MONTH), actual.get(Calendar.MONTH));
         assertEquals(Calendar.getInstance().get(Calendar.YEAR), actual.get(Calendar.YEAR));
         assertEquals(0, actual.get(Calendar.HOUR));
-        assertEquals(1, actual.get(Calendar.MONTH));
+        assertEquals(0, actual.get(Calendar.MINUTE));
         assertEquals(0, actual.get(Calendar.SECOND));
         assertEquals(0, actual.get(Calendar.MILLISECOND));
     }
