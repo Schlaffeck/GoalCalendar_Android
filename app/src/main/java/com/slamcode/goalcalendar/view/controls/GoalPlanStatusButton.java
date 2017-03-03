@@ -4,7 +4,7 @@ import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
-import android.databinding.tool.Binding;
+import com.slamcode.goalcalendar.BR;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;

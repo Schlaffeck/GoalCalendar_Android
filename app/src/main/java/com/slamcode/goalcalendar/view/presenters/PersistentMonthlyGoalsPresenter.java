@@ -7,7 +7,7 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.view.LayoutInflater;
 
-import com.android.databinding.library.baseAdapters.BR;
+import com.slamcode.goalcalendar.BR;
 import com.android.internal.util.Predicate;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.data.PersistenceContext;
@@ -90,7 +90,6 @@ public class PersistentMonthlyGoalsPresenter extends BaseObservable implements M
 
         this.selectedMonthlyPlans = model;
         this.progressSummaryValue = null;
-        this.categoryNamesRecyclerViewAdapter.updateMonthlyPlans(selectedMonthlyPlans);
         this.categoryDailyPlansRecyclerViewAdapter.updateMonthlyPlans(selectedMonthlyPlans);
         this.notifyPropertyChanged(BR.progressSummaryValue);
     }
@@ -142,13 +141,6 @@ public class PersistentMonthlyGoalsPresenter extends BaseObservable implements M
         }
 
         return this.selectedMonthlyPlans.getMonth();
-    }
-
-    @Override
-    public String getCategoryNameOnPosition(int categoryPosition)
-    {
-        CategoryModel categoryModel = this.categoryNamesRecyclerViewAdapter.getItem(categoryPosition);
-        return categoryModel == null ? null : categoryModel.getName();
     }
 
     @Override

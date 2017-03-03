@@ -11,12 +11,16 @@ import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
+import com.slamcode.goalcalendar.view.ResourcesHelper;
+
+import java.text.Collator;
+import java.util.Locale;
 
 /**
  * view model for category plans in month
  */
 
-public class CategoryPlansViewModel extends BaseObservable {
+public class CategoryPlansViewModel extends BaseObservable implements Comparable<CategoryPlansViewModel> {
 
     private final MonthViewModel monthViewModel;
     private final CategoryModel model;
@@ -146,6 +150,16 @@ public class CategoryPlansViewModel extends BaseObservable {
         DailyPlansViewModel vm = new DailyPlansViewModel(dailyPlan);
         vm.addOnPropertyChangedCallback(new DailyPlanChangeListener());
         return vm;
+    }
+
+    @Override
+    public int compareTo(CategoryPlansViewModel other) {
+        if(other == null)
+            return 1;
+
+            Collator usCollator = Collator.getInstance(Locale.getDefault());
+            usCollator.setStrength(Collator.PRIMARY);
+            return usCollator.compare(this.getName(), other.getName());
     }
 
     private class DailyPlanChangeListener extends OnPropertyChangedCallback {

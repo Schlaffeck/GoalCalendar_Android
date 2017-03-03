@@ -5,7 +5,7 @@
         <variable
             android:id="@+id/binding_view_model_variable_id"
             name="vm"
-            type="com.slamcode.goalcalendar.viewmodels.PlansSummaryForMonthViewModel"/>
+            type="com.slamcode.goalcalendar.viewmodels.MonthlyPlanningCategoryListViewModel"/>
     </data>
 <LinearLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        app:categoryList="@{vm.categorySummaryList}">
+        app:categoryPlansList="@{vm.categoryPlansList}">
 
     </android.support.v7.widget.RecyclerView>
 </LinearLayout>

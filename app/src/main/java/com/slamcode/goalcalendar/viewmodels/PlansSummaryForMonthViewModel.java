@@ -5,7 +5,7 @@ import android.databinding.Bindable;
 import android.databinding.Observable;
 import android.databinding.ObservableArrayList;
 
-import com.android.databinding.library.baseAdapters.BR;
+import com.slamcode.goalcalendar.BR;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;

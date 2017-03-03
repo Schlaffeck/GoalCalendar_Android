@@ -10,7 +10,7 @@ import com.slamcode.goalcalendar.service.notification.NotificationPublisher;
 import com.slamcode.goalcalendar.service.notification.NotificationScheduler;
 import com.slamcode.goalcalendar.settings.dagger2.SettingsDagger2Module;
 import com.slamcode.goalcalendar.view.dagger2.ViewDagger2Module;
-import com.slamcode.goalcalendar.view.lists.Bindings;
+import com.slamcode.goalcalendar.view.Bindings;
 import com.slamcode.goalcalendar.view.presenters.CachedApplicationPresentersSource;
 
 import javax.inject.Singleton;

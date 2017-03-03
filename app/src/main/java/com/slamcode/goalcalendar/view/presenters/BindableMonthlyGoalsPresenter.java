@@ -24,8 +24,6 @@ import com.slamcode.goalcalendar.viewmodels.PlansSummaryForMonthViewModel;
 import java.util.HashMap;
 import java.util.Map;
 
-import kotlin.Unit;
-
 
 /**
  * Created by moriasla on 02.03.2017.
@@ -101,11 +99,6 @@ public class BindableMonthlyGoalsPresenter extends BaseObservable implements Mon
     }
 
     @Override
-    public String getCategoryNameOnPosition(int categoryPosition) {
-        return null;
-    }
-
-    @Override
     public void copyCategoriesFromPreviousMonth() {
 
     }
@@ -123,16 +116,6 @@ public class BindableMonthlyGoalsPresenter extends BaseObservable implements Mon
     @Override
     public PlansSummaryForMonthViewModel getProgressSummaryValue() {
         return null;
-    }
-
-    @Override
-    public void addOnPropertyChangedCallback(OnPropertyChangedCallback onPropertyChangedCallback) {
-
-    }
-
-    @Override
-    public void removeOnPropertyChangedCallback(OnPropertyChangedCallback onPropertyChangedCallback) {
-
     }
 
     private MonthlyPlansModel getMonthlyPlans(YearMonthPair yearMonthPair)

@@ -3,7 +3,7 @@ package com.slamcode.goalcalendar.data.model;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
-import com.android.databinding.library.baseAdapters.BR;
+import com.slamcode.goalcalendar.BR;
 import com.slamcode.goalcalendar.data.Identifiable;
 import com.slamcode.goalcalendar.planning.PlanStatus;
 

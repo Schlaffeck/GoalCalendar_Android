@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="vm"
+            type="com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel"/>
+    </data>
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/monthly_goals_list_item_category_panel"
         android:layout_width="@dimen/monthly_goals_table_category_column_width"
     android:layout_height="?android:attr/listPreferredItemHeight"
@@ -14,7 +19,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignWithParentIfMissing="true"
             android:gravity="center_vertical"
-            android:text="Category"
+            android:text="@{vm.name}"
             android:maxLines="1"
             android:textSize="@dimen/list_item_text_size"
             android:ellipsize="marquee"/>
@@ -26,7 +31,8 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:ellipsize="marquee"
-            android:text="2 x week"
+            android:text="@{String.format(@string/monthly_goals_category_frequencyFormat_textView, vm.frequencyValue, vm.frequencyPeriod)}"
             android:maxLines="1"
             android:textSize="@dimen/list_item_text_small_size" />
     </LinearLayout>
+</layout>

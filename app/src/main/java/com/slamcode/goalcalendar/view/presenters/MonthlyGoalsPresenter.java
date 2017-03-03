@@ -13,7 +13,7 @@ import com.slamcode.goalcalendar.viewmodels.PlansSummaryForMonthViewModel;
 /**
  * Created by moriasla on 09.02.2017.
  */
-public interface MonthlyGoalsPresenter extends Observable {
+public interface MonthlyGoalsPresenter {
 
     void setYearAndMonth(int year, Month month);
 
@@ -28,8 +28,6 @@ public interface MonthlyGoalsPresenter extends Observable {
     int getSelectedYear();
 
     Month getSelectedMonth();
-
-    String getCategoryNameOnPosition(int categoryPosition);
 
     void copyCategoriesFromPreviousMonth();
 

@@ -9,4 +9,6 @@ import com.slamcode.goalcalendar.MonthlyGoalsActivity;
 public interface PresentersSource {
 
     MonthlyGoalsPresenter getMonthlyGoalsPresenter(MonthlyGoalsActivity activity);
+
+    BindableMonthlyGoalsPresenter getBindableMonthlyGoalsPresenter(MonthlyGoalsActivity activity);
 }

@@ -24,6 +24,8 @@
         Category name is required
     </string>
 
+    <string name="monthly_goals_category_frequencyFormat_textView" formatted="false">%d x %s</string>
+
     <!-- frequency period -->
     <string name="frequency_period_month">Month</string>
     <string name="frequency_period_week">Week</string>

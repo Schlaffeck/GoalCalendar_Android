@@ -3,6 +3,7 @@ package com.slamcode.goalcalendar;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
@@ -34,7 +35,6 @@ import com.slamcode.collections.CollectionUtils;
 import com.slamcode.collections.ElementCreator;
 import com.slamcode.goalcalendar.dagger2.ComposableApplication;
 import com.slamcode.goalcalendar.data.PersistenceContext;
-import com.slamcode.goalcalendar.databinding.PlansMonthlySummaryContentViewBinding;
 import com.slamcode.goalcalendar.planning.*;
 import com.slamcode.goalcalendar.service.commands.AutoMarkTasksCommand;
 import com.slamcode.goalcalendar.service.notification.NotificationScheduler;
@@ -44,6 +44,7 @@ import com.slamcode.goalcalendar.view.activity.ActivityViewState;
 import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
 import com.slamcode.goalcalendar.view.lists.RecyclerViewDataAdapter;
+import com.slamcode.goalcalendar.view.presenters.BindableMonthlyGoalsPresenter;
 import com.slamcode.goalcalendar.view.presenters.MonthlyGoalsPresenter;
 import com.slamcode.goalcalendar.viewmodels.PlansSummaryForMonthViewModel;
 import com.slamcode.goalcalendar.view.presenters.PresentersSource;
@@ -113,7 +114,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
 
     private BottomSheetBehavior bottomSheetBehavior;
 
-    private MonthlyGoalsPresenter presenter;
+    private BindableMonthlyGoalsPresenter presenter;
 
     // dependencies
     @Inject
@@ -133,7 +134,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
 
     private GestureDetectorCompat gestureDetector;
 
-    private PlansMonthlySummaryContentViewBinding monthlySummaryContentViewBinding;
+    private ViewDataBinding monthlySummaryContentViewBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,25 +157,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
         this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
         this.monthlySummaryContentViewBinding = DataBindingUtil.bind(bottomSheetScrollView.getChildAt(0));
-        this.monthlySummaryContentViewBinding.setVm(this.presenter.getProgressSummaryValue());
-        this.presenter.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
-            @Override
-            public void onPropertyChanged(Observable observable, int i) {
-                if(i == com.android.databinding.library.baseAdapters.BR.progressSummaryValue)
-                    summaryViewModelChanged();
-            }
-        });
-    }
-
-    private void summaryViewModelChanged()
-    {
-        PlansSummaryForMonthViewModel viewModel = this.presenter.getProgressSummaryValue();
-            if(this.monthlySummaryContentViewBinding != null
-                    && this.monthlySummaryContentViewBinding.getVm() != viewModel) {
-                this.monthlySummaryContentViewBinding.setVm(viewModel);
-
-//                this.categoriesPlansSummaryRecyclerView.setAdapter(viewModel.getCategoryPlansSummaryListAdapter(this, this.getLayoutInflater()));
-            }
+        this.monthlySummaryContentViewBinding.setVariable(BR.vm, this.presenter.getProgressSummaryValue());
     }
 
     private void runStartupCommands() {
@@ -301,14 +284,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
 
         if(this.presenter == null)
         {
-            this.presenter = this.presentersSource.getMonthlyGoalsPresenter(this);
-            this.presenter.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
-                @Override
-                public void onPropertyChanged(Observable observable, int i) {
-
-                    summaryViewModelChanged();
-                }
-            });
+            this.presenter = this.presentersSource.getBindableMonthlyGoalsPresenter(this);
         }
         // month spinner
         final ArrayAdapter<String> monthsStringsAdapter = new ArrayAdapter<String>(

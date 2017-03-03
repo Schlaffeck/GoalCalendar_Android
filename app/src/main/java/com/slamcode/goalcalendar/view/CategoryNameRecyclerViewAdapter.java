@@ -20,6 +20,9 @@ import com.slamcode.goalcalendar.view.lists.DefaultComparator;
 import com.slamcode.goalcalendar.view.lists.RecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.ViewHolderBase;
 import com.slamcode.goalcalendar.data.model.*;
+import com.slamcode.goalcalendar.view.lists.bindable.BindableRecyclerViewDataAdapter;
+import com.slamcode.goalcalendar.view.lists.bindable.BindableViewHolderBase;
+import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 
 import java.util.*;
 
@@ -29,7 +32,7 @@ import butterknife.BindView;
  * Created by moriasla on 15.12.2016.
  */
 
-public class CategoryNameRecyclerViewAdapter extends RecyclerViewDataAdapter<CategoryModel, CategoryNameRecyclerViewAdapter.CategoryNameViewHolder> {
+public class CategoryNameRecyclerViewAdapter extends BindableRecyclerViewDataAdapter<CategoryPlansViewModel, CategoryNameRecyclerViewAdapter.CategoryNameViewHolder> {
 
     public static final int CONTEXT_MENU_DELETE_ITEM_ID = 222;
     public static final int CONTEXT_MENU_EDIT_ITEM_ID = 221;
@@ -38,7 +41,7 @@ public class CategoryNameRecyclerViewAdapter extends RecyclerViewDataAdapter<Cat
 
     public CategoryNameRecyclerViewAdapter(Context context, LayoutInflater layoutInflater)
         {
-            super(context, layoutInflater, new SortedList<CategoryModel>(CategoryModel.class, new ComparatorSortedListCallback<CategoryModel>(new DefaultComparator<CategoryModel>())));
+            super(context, layoutInflater, new SortedList<>(CategoryPlansViewModel.class, new ComparatorSortedListCallback<>(new DefaultComparator<CategoryPlansViewModel>())));
         }
 
     @Override
@@ -54,45 +57,15 @@ public class CategoryNameRecyclerViewAdapter extends RecyclerViewDataAdapter<Cat
         return new CategoryNameViewHolder(convertView, null);
     }
 
-    public void updateMonthlyPlans(MonthlyPlansModel monthlyPlansModel)
-    {
-        this.monthlyPlans = monthlyPlansModel;
-        if(monthlyPlansModel != null)
-            this.updateSourceCollection(monthlyPlansModel.getCategories());
-        else this.updateSourceCollection(CollectionUtils.<CategoryModel>emptyList());
-        this.notifyDataSetChanged();
-    }
-
-    public class CategoryNameViewHolder extends ViewHolderBase<CategoryModel> implements View.OnCreateContextMenuListener,
+    public class CategoryNameViewHolder extends BindableViewHolderBase<CategoryPlansViewModel> implements View.OnCreateContextMenuListener,
             MenuItem.OnMenuItemClickListener
     {
-        @BindView(R.id.monthly_goals_list_item_category_panel)
-        LinearLayout categoryPanel;
-
-        @BindView(R.id.monthly_goals_list_item_category_name)
-        TextView categoryNameTextView;
-
-        @BindView(R.id.monthly_goals_list_item_frequency)
-        TextView frequencyTextView;
-
         CategoryNameViewHolder(
                 View view,
-                CategoryModel model)
+                CategoryPlansViewModel model)
         {
             super(view, model);
             view.setOnCreateContextMenuListener(this);
-        }
-
-        // todo: use android binding for the view
-        @Override
-        public void bindToModel(CategoryModel modelObject) {
-            super.bindToModel(modelObject);
-
-            this.categoryNameTextView.setText(this.getModelObject().getName());
-            this.frequencyTextView
-                    .setText(String.format("%s x %s",
-                            this.getModelObject().getFrequencyValue(),
-                            ResourcesHelper.toResourceString(getContext(), this.getModelObject().getPeriod())));
         }
 
         @Override

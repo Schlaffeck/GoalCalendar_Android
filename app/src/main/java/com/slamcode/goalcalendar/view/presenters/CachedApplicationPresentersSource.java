@@ -13,6 +13,8 @@ public class CachedApplicationPresentersSource implements PresentersSource {
 
     private MonthlyGoalsPresenter monthlyGoalsPresenter;
 
+    private BindableMonthlyGoalsPresenter bindableMonthlyGoalsPresenter;
+
     private PersistenceContext persistenceContext;
 
     private ItemsCollectionAdapterProvider listAdapterProvider;
@@ -39,5 +41,16 @@ public class CachedApplicationPresentersSource implements PresentersSource {
                     this.plansSummaryCalculator);
         }
         return this.monthlyGoalsPresenter;
+    }
+
+    @Override
+    public BindableMonthlyGoalsPresenter getBindableMonthlyGoalsPresenter(MonthlyGoalsActivity activity) {
+        if(this.bindableMonthlyGoalsPresenter == null)
+        {
+            this.bindableMonthlyGoalsPresenter = new BindableMonthlyGoalsPresenter(
+                    this.persistenceContext,
+                    this.plansSummaryCalculator);
+        }
+        return this.bindableMonthlyGoalsPresenter;
     }
 }
