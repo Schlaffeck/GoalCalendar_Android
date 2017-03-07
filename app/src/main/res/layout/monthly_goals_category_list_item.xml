@@ -13,6 +13,7 @@
         android:background="@color/listItemBackgroundColor">
         <TextView
             android:id="@+id/monthly_goals_list_item_category_name"
+            android:textColor="@android:color/tertiary_text_dark"
             android:layout_width="match_parent"
             android:layout_height="@dimen/monthly_goals_table_category_name_height"
             android:layout_alignParentRight="true"
@@ -26,6 +27,7 @@
 
         <TextView
             android:id="@+id/monthly_goals_list_item_frequency"
+            android:textColor="@android:color/tertiary_text_dark"
             android:layout_width="match_parent"
             android:layout_height="@dimen/monthly_goals_table_category_frequency_height"
             android:layout_alignParentBottom="true"

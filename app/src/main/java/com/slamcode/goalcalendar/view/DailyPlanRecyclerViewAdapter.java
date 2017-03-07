@@ -15,11 +15,13 @@ import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.PlanStatus;
+import com.slamcode.goalcalendar.planning.YearMonthPair;
 import com.slamcode.goalcalendar.view.controls.GoalPlanStatusButton;
 import com.slamcode.goalcalendar.view.lists.ComparatorSortedListCallback;
 import com.slamcode.goalcalendar.view.lists.DefaultComparator;
 import com.slamcode.goalcalendar.view.lists.RecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.ViewHolderBase;
+import com.slamcode.goalcalendar.view.lists.bindable.BindableViewHolderBase;
 import com.slamcode.goalcalendar.view.utils.ColorsHelper;
 import com.slamcode.goalcalendar.viewmodels.DailyPlansViewModel;
 
@@ -33,14 +35,14 @@ import butterknife.BindView;
 
 public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyPlansViewModel, DailyPlanRecyclerViewAdapter.DailyPlanViewHolder> {
 
-    private final MonthlyPlansModel monthlyPlans;
+    private final YearMonthPair yearMonthPair;
 
     protected DailyPlanRecyclerViewAdapter(Context context,
                                            LayoutInflater layoutInflater,
-                                           MonthlyPlansModel monthlyPlans,
+                                           YearMonthPair yearMonthPair,
                                            Collection<DailyPlansViewModel> sourceCollection) {
         super(context, layoutInflater, new SortedList<>(DailyPlansViewModel.class, new ComparatorSortedListCallback<DailyPlansViewModel>(new DefaultComparator<DailyPlansViewModel>())));
-        this.monthlyPlans = monthlyPlans;
+        this.yearMonthPair = yearMonthPair;
         this.updateSourceCollection(sourceCollection);
     }
 
@@ -52,36 +54,32 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
 
     private boolean isCurrentDate(DailyPlansViewModel dailyPlanModel)
     {
-        if(this.monthlyPlans == null)
+        if(this.yearMonthPair == null)
             return false;
 
         int dayNumber = dailyPlanModel.getDayNumber();
         return DateTimeHelper.isCurrentDate(
-                this.monthlyPlans.getYear(),
-                this.monthlyPlans.getMonth(),
+                this.yearMonthPair.getYear(),
+                this.yearMonthPair.getMonth(),
                 dayNumber);
     }
 
     /**
      * View holder for daily plan
      */
-    public class DailyPlanViewHolder extends ViewHolderBase<DailyPlansViewModel>{
+    public class DailyPlanViewHolder extends BindableViewHolderBase<DailyPlansViewModel> {
 
         @BindView(R.id.plan_status_list_item_view_button)
         GoalPlanStatusButton statusButton;
 
-        private final ViewDataBinding binding;
-
         public DailyPlanViewHolder(View view) {
 
             super(view);
-            this.binding = DataBindingUtil.bind(view);
         }
 
         @Override
         public void bindToModel(final DailyPlansViewModel modelObject) {
             super.bindToModel(modelObject);
-            this.binding.setVariable(BR.vm, modelObject);
 
             this.statusButton.addOnStateChangedListener(new GoalPlanStatusButton.OnStateChangedListener() {
                 @Override

@@ -62,11 +62,12 @@ public class CategoryPlansViewModel extends BaseObservable implements Comparable
         return this.model.getPeriod();
     }
 
-    public void set(FrequencyPeriod newFrequencyPeriod)
+    public void setFrequencyPerion(FrequencyPeriod newFrequencyPeriod)
     {
         if(this.model.getPeriod() != newFrequencyPeriod)
         {
             this.model.setPeriod(newFrequencyPeriod);
+            this.countPlansSummary(true);
             this.notifyPropertyChanged(BR.frequencyPeriod);
         }
     }
@@ -81,6 +82,7 @@ public class CategoryPlansViewModel extends BaseObservable implements Comparable
     {
         if(this.model.getFrequencyValue() != newFrequencyValue) {
             this.model.setFrequencyValue(newFrequencyValue);
+            this.countPlansSummary(true);
             this.notifyPropertyChanged(BR.frequencyValue);
         }
     }
@@ -132,8 +134,8 @@ public class CategoryPlansViewModel extends BaseObservable implements Comparable
         this.plansSummary = this.plansSummaryCalculator
                 .calculatePlansSummaryForMonthInCategory(this.monthViewModel.getYear(), this.monthViewModel.getMonth(), this.getName());
         if(notify) {
-            notifyPropertyChanged(BR.plansSummaryPercentage);
-            notifyPropertyChanged(BR.noOfDaysLeft);
+            notifyPropertyChanged(BR.dataAvailable);
+            notifyPropertyChanged(BR.progressPercentage);
             notifyPropertyChanged(BR.noOfExpectedTasks);
             notifyPropertyChanged(BR.noOfFailedTasks);
             notifyPropertyChanged(BR.noOfSuccessfulTasks);

@@ -41,7 +41,7 @@ public class DailyPlansViewModel extends BaseObservable implements Comparable<Da
         return this.model.getDayNumber();
     }
 
-    public void changeStatus()
+    public void changeStatus(Object param)
     {
         this.setStatus(this.getStatus().nextStatus());
     }

@@ -10,6 +10,7 @@
             type="com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract.Presenter"/>
     </data>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_monthly_goals"
@@ -44,6 +45,7 @@
             android:id="@+id/monthly_goals_year_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text='@{String.format("%d", vm.monthlyPlans.monthData.year)}'
             android:gravity="center"></TextView>
         <ImageButton
             android:layout_marginRight="@dimen/activity_horizontal_margin"
@@ -61,7 +63,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:layout_below="@id/monthly_goals_yearValue_layout"
-        android:visibility="@{vm.monthlyPlans.empty ? View.INVISIBLE : View.VISIBLE}">
+        android:visibility="@{vm.monthlyPlans.empty ? View.VISIBLE : View.GONE}">
     <include layout="@layout/monthly_goals_empty_list_content"/>
     </LinearLayout>
 
@@ -99,7 +101,7 @@
                 android:layout_marginLeft="-5dp"
                 android:layout_marginRight="0dp"
                 android:entries="@array/months_array"
-                app:selectedValue="@={vm.monthString}">
+                bind:selectedValue="@={vm.monthString}">
             </Spinner>
 
             <!-- categories names -->
@@ -114,7 +116,7 @@
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                 android:gravity="left"
                 android:scrollbars="none"
-                app:categoryNamesSource="@{vm.monthlyPlans.categoryPlansList}"></android.support.v7.widget.RecyclerView>
+                bind:categoryNamesSource="@{vm.monthlyPlans.categoryPlansList}"></android.support.v7.widget.RecyclerView>
         </LinearLayout>
 
         <HorizontalScrollView
@@ -149,7 +151,7 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                 android:gravity="center"
-                app:categoryPlansSource="@{vm.monthlyPlans.categoryPlansList}"></android.support.v7.widget.RecyclerView>
+                bind:categoryPlansSource="@{vm.monthlyPlans.categoryPlansList}"></android.support.v7.widget.RecyclerView>
             </LinearLayout>
         </HorizontalScrollView>
     </RelativeLayout>

@@ -121,6 +121,8 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
             for (CategoryPlansViewModel vm : categoryPlansViewModels) {
                 model.getCategories().add(vm.getModel());
             }
+
+            notifyPropertyChanged(BR.plansSummaryPercentage);
         }
 
         @Override
@@ -140,6 +142,7 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
             }
 
             notifyPropertyChanged(BR.empty);
+            notifyPropertyChanged(BR.plansSummaryPercentage);
         }
 
         @Override
@@ -159,6 +162,7 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
             }
 
             notifyPropertyChanged(BR.empty);
+            notifyPropertyChanged(BR.plansSummaryPercentage);
         }
     }
 }

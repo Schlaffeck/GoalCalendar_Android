@@ -9,13 +9,11 @@ import com.slamcode.goalcalendar.data.UnitOfWork;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.ModelHelper;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
-import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.Month;
-import com.slamcode.goalcalendar.planning.YearMonthPair;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
-import com.slamcode.goalcalendar.view.AddEditCategoryDialog;
 import com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract;
 import com.slamcode.goalcalendar.view.dialogs.AddEditCategoryViewModelDialog;
+import com.slamcode.goalcalendar.view.dialogs.AddEditDialog;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 import com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel;
 import com.slamcode.goalcalendar.viewmodels.MonthlyPlanningCategoryListViewModel;
@@ -91,7 +89,7 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
             newCategory.setDailyPlans(ModelHelper.createListOfDailyPlansForMonth(year, currentMonth));
 
             this.data.getMonthlyPlans().getCategoryPlansList()
-                    .add(new CategoryPlansViewModel(this.data.getMonthlyPlans().getMonthData(), newCategory, this.summaryCalculator));
+                    .add(this.createCategoryPlansViewModel(category));
         }
     }
 
@@ -119,8 +117,9 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
     public void showAddNewCategoryDialog(View view) {
         final AddEditCategoryViewModelDialog dialog = new AddEditCategoryViewModelDialog();
         final MonthlyPlanningCategoryListViewModel monthlyPlans = this.data.getMonthlyPlans();
-        dialog.setMonthData(this.data.getMonthlyPlans().getMonthData());
-        dialog.setDialogStateChangedListener(new AddEditCategoryDialog.DialogStateChangedListener() {
+        dialog.setMonthViewModel(this.data.getMonthlyPlans().getMonthData());
+        dialog.setPlansSummaryCalculator(this.summaryCalculator);
+        dialog.setDialogStateChangedListener(new AddEditDialog.DialogStateChangedListener() {
             @Override
             public void onDialogClosed(boolean confirmed) {
                 if(confirmed)
@@ -133,6 +132,12 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
         });
 
         this.activityView.showDialog(dialog);
+    }
+
+    private CategoryPlansViewModel createCategoryPlansViewModel(CategoryModel categoryModel)
+    {
+        CategoryPlansViewModel viewModel = new CategoryPlansViewModel(this.data.getMonthlyPlans().getMonthData(), categoryModel, this.summaryCalculator);
+        return viewModel;
     }
 
     private MonthlyPlansModel findPreviousMonthlyPlansModelWithCategories()

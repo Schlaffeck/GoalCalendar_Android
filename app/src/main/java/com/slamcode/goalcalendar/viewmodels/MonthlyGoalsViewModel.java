@@ -8,9 +8,7 @@ import com.slamcode.goalcalendar.BR;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.data.UnitOfWork;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
-import com.slamcode.goalcalendar.planning.DateTimeHelper;
-import com.slamcode.goalcalendar.planning.Month;
-import com.slamcode.goalcalendar.planning.YearMonthPair;
+import com.slamcode.goalcalendar.planning.*;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 import com.slamcode.goalcalendar.view.ResourcesHelper;
 
@@ -84,8 +82,8 @@ public class MonthlyGoalsViewModel extends BaseObservable {
         boolean notifyYearChanged = false;
         if(this.monthlyPlansViewModel == null
                 || this.monthlyPlansViewModel.getMonthData() != null
-                    && ((notifyMonthChanged = this.monthlyPlansViewModel.getMonthData().getYear() != year)
-                            || (notifyYearChanged = this.monthlyPlansViewModel.getMonthData().getMonth() != month)))
+                    && ((notifyYearChanged = this.monthlyPlansViewModel.getMonthData().getYear() != year)
+                            || (notifyMonthChanged = this.monthlyPlansViewModel.getMonthData().getMonth() != month)))
         {
             YearMonthPair yearMonthPair = new YearMonthPair(year, month);
             if(!this.viewModelMap.containsKey(yearMonthPair))

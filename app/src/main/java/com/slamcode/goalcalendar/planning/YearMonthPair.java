@@ -9,6 +9,11 @@ public class YearMonthPair {
 
     private Month month;
 
+    public YearMonthPair()
+    {
+        this(DateTimeHelper.getCurrentYear(), DateTimeHelper.getCurrentMonth());
+    }
+
     public YearMonthPair(int year, Month month) {
         this.month = month;
         this.year = year;

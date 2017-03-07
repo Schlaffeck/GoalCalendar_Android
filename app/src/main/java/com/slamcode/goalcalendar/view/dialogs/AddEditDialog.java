@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.slamcode.goalcalendar.view.AddEditCategoryDialog;
 import com.slamcode.goalcalendar.view.validation.ViewValidator;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public abstract class AddEditDialog<ModelType> extends DialogFragment {
 
     private List<ViewValidator<?>> viewValidatorList =  new ArrayList<>();
 
-    private AddEditCategoryDialog.DialogStateChangedListener dialogStateChangedListener;
+    private AddEditDialog.DialogStateChangedListener dialogStateChangedListener;
 
     public View getAssociatedView()
     {
@@ -55,7 +54,7 @@ public abstract class AddEditDialog<ModelType> extends DialogFragment {
         return viewValidatorList;
     }
 
-    public void setDialogStateChangedListener(AddEditCategoryDialog.DialogStateChangedListener dialogStateChangedListener) {
+    public void setDialogStateChangedListener(AddEditDialog.DialogStateChangedListener dialogStateChangedListener) {
         this.dialogStateChangedListener = dialogStateChangedListener;
     }
 

@@ -15,6 +15,7 @@ import android.widget.Spinner;
 
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.dagger2.Dagger2ComponentContainer;
+import com.slamcode.goalcalendar.planning.YearMonthPair;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
 import com.slamcode.goalcalendar.viewmodels.*;
 
@@ -28,7 +29,7 @@ import javax.inject.Inject;
 
 public class Bindings {
 
-    @BindingAdapter("app:categorySummarySource")
+    @BindingAdapter("bind:categorySummarySource")
     public static void setCategorySummariesItemsSource(RecyclerView recyclerView, ObservableList<CategoryPlansViewModel> itemsSource)
     {
         if(recyclerView == null)
@@ -55,7 +56,7 @@ public class Bindings {
         }
     }
 
-    @BindingAdapter("app:categoryNamesSource")
+    @BindingAdapter("bind:categoryNamesSource")
     public static void setCategoryNamesItemsSource(RecyclerView recyclerView, ObservableList<CategoryPlansViewModel> itemsSource)
     {
         if(recyclerView == null)
@@ -82,7 +83,7 @@ public class Bindings {
         }
     }
 
-    @BindingAdapter("app:categoryPlansSource")
+    @BindingAdapter("bind:categoryPlansSource")
     public static void setCategoryPlansItemsSource(RecyclerView recyclerView, ObservableList<CategoryPlansViewModel> itemsSource)
     {
         if(recyclerView == null)
@@ -98,7 +99,8 @@ public class Bindings {
             adapter = injectData.itemsCollectionAdapterProvider
                     .provideCategoryDailyPlansListViewAdapter(
                             injectData.applicationContext.getDefaultContext(),
-                            (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE));
+                            (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                            new YearMonthPair());
             recyclerView.setAdapter(adapter);
         }
 
@@ -109,7 +111,7 @@ public class Bindings {
         }
     }
 
-    @BindingAdapter(value = {"app:selectedValue", "app:selectedValueAttrChanged"}, requireAll = false)
+    @BindingAdapter(value = {"bind:selectedValue", "bind:selectedValueAttrChanged"}, requireAll = false)
     public static void bindSpinnerData(Spinner pAppCompatSpinner, final String newSelectedValue, final InverseBindingListener newTextAttrChanged) {
         pAppCompatSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -129,7 +131,7 @@ public class Bindings {
         }
     }
 
-    @InverseBindingAdapter(attribute = "app:selectedValue", event = "app:selectedValueAttrChanged")
+    @InverseBindingAdapter(attribute = "bind:selectedValue", event = "bind:selectedValueAttrChanged")
     public static String captureSelectedValue(Spinner pAppCompatSpinner) {
         return (String) pAppCompatSpinner.getSelectedItem();
     }

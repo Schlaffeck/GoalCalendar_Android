@@ -132,4 +132,32 @@ public final class DateTimeHelper {
     {
         return toTime.getTimeInMillis() - fromTime.getTimeInMillis();
     }
+
+    public static int getDaysCount(int year, Month month) {
+
+        switch (month)
+        {
+            case JANUARY:
+            case MARCH:
+            case MAY:
+            case JULY:
+            case AUGUST:
+            case OCTOBER:
+            case DECEMBER:
+                return 31;
+            case FEBRUARY: return isLeapYear(year) ? 29 : 28;
+            case APRIL:
+            case JUNE:
+            case SEPTEMBER:
+            case NOVEMBER:
+                return 30;
+        }
+
+        return 0;
+    }
+
+    public static boolean isLeapYear(int year)
+    {
+        return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
+    }
 }

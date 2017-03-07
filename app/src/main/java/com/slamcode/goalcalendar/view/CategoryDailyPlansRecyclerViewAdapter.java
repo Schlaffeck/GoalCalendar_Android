@@ -14,6 +14,7 @@ import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
+import com.slamcode.goalcalendar.planning.YearMonthPair;
 import com.slamcode.goalcalendar.view.lists.ComparatorSortedListCallback;
 import com.slamcode.goalcalendar.view.lists.DefaultComparator;
 import com.slamcode.goalcalendar.view.lists.RecyclerViewDataAdapter;
@@ -31,18 +32,13 @@ import butterknife.BindView;
 
 public class CategoryDailyPlansRecyclerViewAdapter extends RecyclerViewDataAdapter<CategoryPlansViewModel, CategoryDailyPlansRecyclerViewAdapter.CategoryDailyPlansViewHolder> {
 
-        private MonthlyPlansModel monthlyPlans;
+        private YearMonthPair yearMonthPair;
 
-    public CategoryDailyPlansRecyclerViewAdapter(Context context, LayoutInflater layoutInflater)
-    {
-        this(context, layoutInflater, null);
-    }
-
-    public CategoryDailyPlansRecyclerViewAdapter(Context context, LayoutInflater layoutInflater, MonthlyPlansModel monthlyPlans)
+    public CategoryDailyPlansRecyclerViewAdapter(Context context, LayoutInflater layoutInflater, YearMonthPair yearMonthPair)
     {
         super(context, layoutInflater, new SortedList<>(CategoryPlansViewModel.class, new ComparatorSortedListCallback<>(new DefaultComparator<CategoryPlansViewModel>())));
 
-        this.monthlyPlans = monthlyPlans;
+        this.yearMonthPair = yearMonthPair;
     }
 
 
@@ -77,7 +73,7 @@ public class CategoryDailyPlansRecyclerViewAdapter extends RecyclerViewDataAdapt
             DailyPlanRecyclerViewAdapter adapter = new DailyPlanRecyclerViewAdapter(
                     getView().getContext(),
                     getLayoutInflater(),
-                    monthlyPlans,
+                    yearMonthPair,
                     modelObject.getDailyPlansList());
 
             this.daysListGridView.setAdapter(adapter);

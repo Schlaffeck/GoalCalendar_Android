@@ -41,7 +41,6 @@ public class CachedApplicationPresentersSource implements PresentersSource {
                     this.applicationContext,
                     this.persistenceContext,
                     this.plansSummaryCalculator);
-            this.monthlyGoalsPresenter.initializeWithView(activityView);
         }
         return this.monthlyGoalsPresenter;
     }

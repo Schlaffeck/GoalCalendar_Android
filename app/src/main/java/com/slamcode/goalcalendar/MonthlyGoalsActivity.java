@@ -97,6 +97,11 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
         monthlyPlansSummaryContentBinding.setVariable(BR.presenter, this.presenter);
         monthlyPlansSummaryContentBinding.setVariable(BR.vm, data);
+
+        ViewDataBinding emptyContentBinding = DataBindingUtil.findBinding(this.emptyContentHorizontalScrollView);
+
+        emptyContentBinding.setVariable(BR.presenter, this.presenter);
+        emptyContentBinding.setVariable(BR.vm, data);
     }
 
     @Override
@@ -162,6 +167,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
             return;
 
         this.presenter = this.presentersSource.getMonthlyGoalsPresenter(this);
+        this.presenter.initializeWithView(this);
     }
 
     private void setupBottomSheetBehavior() {

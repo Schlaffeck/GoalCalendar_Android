@@ -302,7 +302,7 @@ public class InMemoryCategoriesRepositoryTest {
         MonthlyPlansModel april = this.createMonthlyPlans(1, 2016, Month.APRIL, "A1", "A2", "A3", "A4", "A5", "A6");
         MonthlyPlansModel may = this.createMonthlyPlans(2, 2016, Month.MAY, "B1", "B2", "B3", "B4", "B5");
 
-        // set repository
+        // setFrequencyPerion repository
         CategoriesRepository repository = new InMemoryCategoriesRepository(CollectionUtils.createList(april, may));
 
         List<CategoryModel> categories = repository.findForMonth(2016, Month.APRIL);
@@ -335,7 +335,7 @@ public class InMemoryCategoriesRepositoryTest {
         MonthlyPlansModel april = this.createMonthlyPlans(1, 2016, Month.APRIL, "A1", "A2", "A3", "A4", "A5", "A6");
         MonthlyPlansModel may = this.createMonthlyPlans(2, 2016, Month.MAY, "B1", "B2", "B3", "B2", "B5");
 
-        // set repository
+        // setFrequencyPerion repository
         CategoriesRepository repository = new InMemoryCategoriesRepository(CollectionUtils.createList(april, may));
 
         List<CategoryModel> categories = repository.findForMonthWithName(2016, Month.APRIL, "A1");
@@ -361,7 +361,7 @@ public class InMemoryCategoriesRepositoryTest {
         MonthlyPlansModel may = this.createMonthlyPlans(2, 2016, Month.MAY, "B1", "B2", "B3", "B4", "B5");
 
         CategoriesRepository repo = new InMemoryCategoriesRepository(CollectionUtils.createList(april, may));
-        // set daily plans statuses
+        // setFrequencyPerion daily plans statuses
         int year = 2016;
         Month month = Month.APRIL;
         int day = 21;
