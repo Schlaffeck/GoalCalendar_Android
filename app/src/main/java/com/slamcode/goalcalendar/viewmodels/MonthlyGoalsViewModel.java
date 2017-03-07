@@ -10,6 +10,7 @@ import com.slamcode.goalcalendar.data.UnitOfWork;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.Month;
+import com.slamcode.goalcalendar.planning.YearMonthPair;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 import com.slamcode.goalcalendar.view.ResourcesHelper;
 
@@ -109,10 +110,10 @@ public class MonthlyGoalsViewModel extends BaseObservable {
     {
         UnitOfWork uow = this.persistenceContext.createUnitOfWork();
 
-        MonthlyPlansModel model = uow.getMonthlyPlansRepository().findForMonth(yearMonthPair.year, yearMonthPair.month);
+        MonthlyPlansModel model = uow.getMonthlyPlansRepository().findForMonth(yearMonthPair.getYear(), yearMonthPair.getMonth());
         if(model == null)
         {
-            model = new MonthlyPlansModel(yearMonthPair.hashCode(), yearMonthPair.year, yearMonthPair.month);
+            model = new MonthlyPlansModel(yearMonthPair.hashCode(), yearMonthPair.getYear(), yearMonthPair.getMonth());
             uow.getMonthlyPlansRepository().add(model);
         }
 
@@ -121,27 +122,4 @@ public class MonthlyGoalsViewModel extends BaseObservable {
         return model;
     }
 
-    private class YearMonthPair{
-
-        int year;
-
-        Month month;
-
-        YearMonthPair(int year, Month month)
-        {
-            this.month = month;
-            this.year = year;
-        }
-
-        @Override
-        public int hashCode() {
-            int prime = 37;
-            int result = 11;
-
-            result = prime * result + this.year;
-            result = prime * result + this.month.hashCode();
-
-            return result;
-        }
-    }
 }

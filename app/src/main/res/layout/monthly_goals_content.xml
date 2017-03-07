@@ -44,8 +44,7 @@
             android:id="@+id/monthly_goals_year_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@{vm.monthlyPlans.monthData.year}"></TextView>
+            android:gravity="center"></TextView>
         <ImageButton
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:id="@+id/monthly_goals_increment_year_button"
@@ -62,7 +61,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:layout_below="@id/monthly_goals_yearValue_layout"
-        android:visibility="@{vm.monthlyPlans.empty ? View.GONE : View.VISIBLE}">
+        android:visibility="@{vm.monthlyPlans.empty ? View.INVISIBLE : View.VISIBLE}">
     <include layout="@layout/monthly_goals_empty_list_content"/>
     </LinearLayout>
 
@@ -112,6 +111,7 @@
                 android:verticalSpacing="@dimen/default_vertical_spacing"
                 android:horizontalSpacing="@dimen/default_horizontal_spacing"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                 android:gravity="left"
                 android:scrollbars="none"
                 app:categoryNamesSource="@{vm.monthlyPlans.categoryPlansList}"></android.support.v7.widget.RecyclerView>
@@ -147,6 +147,7 @@
                 android:verticalSpacing="@dimen/default_vertical_spacing"
                 android:horizontalSpacing="@dimen/default_horizontal_spacing"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                 android:gravity="center"
                 app:categoryPlansSource="@{vm.monthlyPlans.categoryPlansList}"></android.support.v7.widget.RecyclerView>
             </LinearLayout>

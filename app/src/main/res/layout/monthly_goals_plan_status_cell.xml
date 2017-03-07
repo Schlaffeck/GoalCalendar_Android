@@ -4,7 +4,7 @@
     <data>
         <variable
             name="vm"
-            type="com.slamcode.goalcalendar.data.model.DailyPlanModel"/>
+            type="com.slamcode.goalcalendar.viewmodels.DailyPlansViewModel"/>
     </data>
 <LinearLayout android:orientation="horizontal"
     android:layout_width="@dimen/monthly_goals_table_day_plan_column_width"

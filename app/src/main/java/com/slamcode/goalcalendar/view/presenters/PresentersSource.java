@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.view.presenters;
 
 import com.slamcode.goalcalendar.MonthlyGoalsActivity;
+import com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract;
 import com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel;
 
 /**
@@ -9,5 +10,5 @@ import com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel;
 
 public interface PresentersSource {
 
-    MonthlyGoalsPresenter getMonthlyGoalsPresenter(MonthlyGoalsActivity activity);
+    MonthlyGoalsPresenter getMonthlyGoalsPresenter(MonthlyGoalsActivityContract.ActivityView activityView);
 }

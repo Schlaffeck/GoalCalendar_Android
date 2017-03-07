@@ -94,6 +94,7 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
         }
 
         this.categoryPlansList.addOnListChangedCallback(new CategoryListChangedListener());
+        this.notifyPropertyChanged(BR.empty);
     }
 
     private CategoryPlansViewModel createCategoryPlans(CategoryModel category)

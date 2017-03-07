@@ -1,24 +1,21 @@
 package com.slamcode.goalcalendar.view.presenters;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.view.LayoutInflater;
 import android.view.View;
 
-import com.slamcode.goalcalendar.ApplicationContext;
-import com.slamcode.goalcalendar.BR;
 import com.android.internal.util.Predicate;
+import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.data.UnitOfWork;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.ModelHelper;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
+import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.Month;
+import com.slamcode.goalcalendar.planning.YearMonthPair;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 import com.slamcode.goalcalendar.view.AddEditCategoryDialog;
+import com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract;
 import com.slamcode.goalcalendar.view.dialogs.AddEditCategoryViewModelDialog;
-import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 import com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel;
 import com.slamcode.goalcalendar.viewmodels.MonthlyPlanningCategoryListViewModel;
@@ -29,15 +26,22 @@ import com.slamcode.goalcalendar.viewmodels.MonthlyPlanningCategoryListViewModel
 
 public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
 
+    private final ApplicationContext applicationContext;
+
     private final PersistenceContext persistenceContext;
 
     private PlansSummaryCalculator summaryCalculator;
 
     private MonthlyGoalsViewModel data;
 
-    public PersistentMonthlyGoalsPresenter(PersistenceContext persistenceContext,
-                                           PlansSummaryCalculator summaryCalculator)
+    private MonthlyGoalsActivityContract.ActivityView activityView;
+
+    public PersistentMonthlyGoalsPresenter(
+            ApplicationContext applicationContext,
+            PersistenceContext persistenceContext,
+            PlansSummaryCalculator summaryCalculator)
     {
+        this.applicationContext = applicationContext;
         this.persistenceContext = persistenceContext;
         this.summaryCalculator = summaryCalculator;
     }
@@ -49,7 +53,18 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
 
     @Override
     public void setData(MonthlyGoalsViewModel data) {
-        this.data = data;
+        if(this.data != data)
+        {
+            this.data = data;
+            this.activityView.onDataSet(data);
+        }
+    }
+
+    @Override
+    public void initializeWithView(MonthlyGoalsActivityContract.ActivityView view) {
+        this.activityView = view;
+        if(this.data == null)
+            this.setData(new MonthlyGoalsViewModel(applicationContext, persistenceContext, summaryCalculator));
     }
 
     @Override
@@ -116,6 +131,8 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
                 }
             }
         });
+
+        this.activityView.showDialog(dialog);
     }
 
     private MonthlyPlansModel findPreviousMonthlyPlansModelWithCategories()

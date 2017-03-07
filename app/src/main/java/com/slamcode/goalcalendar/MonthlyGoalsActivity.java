@@ -19,6 +19,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract;
 import com.slamcode.goalcalendar.dagger2.ComposableApplication;
@@ -44,8 +46,14 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     @BindView(R.id.monthly_goals_listview)
     RecyclerView monthlyGoalsListView;
 
+    @BindView(R.id.content_monthly_goals)
+    RelativeLayout monthlyPlansGridContentLayout;
+
     @BindView(R.id.monthly_goals_emptyContent_horizontallScrollView)
     HorizontalScrollView emptyContentHorizontalScrollView;
+
+    @BindView(R.id.monthly_goals_summary_content_layout)
+    LinearLayout summaryContentLayout;
 
     // dependencies
     @Inject
@@ -68,7 +76,33 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     private BottomSheetBehavior bottomSheetBehavior;
 
     private MonthlyGoalsActivityContract.Presenter presenter;
+
     private ViewDataBinding mainActivityContentBinding;
+
+    @Override
+    public void onDataSet(MonthlyGoalsViewModel data) {
+        if(this.mainActivityContentBinding == null)
+            this.mainActivityContentBinding =  DataBindingUtil.bind(this.monthlyGoalsActivityLayout);
+
+        this.mainActivityContentBinding.setVariable(BR.presenter, this.presenter);
+        this.mainActivityContentBinding.setVariable(BR.vm, data);
+
+        ViewDataBinding monthlyPlansGridContentBinding = DataBindingUtil.bind(this.monthlyPlansGridContentLayout);
+
+        monthlyPlansGridContentBinding.setVariable(BR.presenter, this.presenter);
+        monthlyPlansGridContentBinding.setVariable(BR.vm, data);
+
+
+        ViewDataBinding monthlyPlansSummaryContentBinding = DataBindingUtil.bind(this.summaryContentLayout);
+
+        monthlyPlansSummaryContentBinding.setVariable(BR.presenter, this.presenter);
+        monthlyPlansSummaryContentBinding.setVariable(BR.vm, data);
+    }
+
+    @Override
+    public void showDialog(DialogFragment dialogFragment) {
+        dialogFragment.show(this.getFragmentManager(), null);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,24 +113,10 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         ButterKnife.bind(this);
 
         this.setSupportActionBar((Toolbar)this.findViewById(R.id.toolbar));
+        this.setupPresenter();
         this.setupSwipeListener();
+        this.setupBottomSheetBehavior();
         this.runStartupCommands();
-    }
-
-    private void setupBottomSheetBehavior() {
-        NestedScrollView bottomSheetScrollView = (NestedScrollView) this.findViewById(R.id.monthly_goals_activity_bottom_sheet);
-        this.bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetScrollView);
-        this.bottomSheetBehavior.setPeekHeight(150);
-        this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-    }
-
-    private void runStartupCommands() {
-        this.autoMarkTasksCommand.execute(this.findViewById(R.id.monthly_goals_activity_main_coordinator_layout));
-    }
-
-    private void injectDependencies() {
-        ComposableApplication capp = (ComposableApplication)this.getApplication();
-        capp.getApplicationComponent().inject(this);
     }
 
     @Override
@@ -137,6 +157,29 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         super.onStop();
     }
 
+    private void setupPresenter() {
+        if(this.presenter != null)
+            return;
+
+        this.presenter = this.presentersSource.getMonthlyGoalsPresenter(this);
+    }
+
+    private void setupBottomSheetBehavior() {
+        NestedScrollView bottomSheetScrollView = (NestedScrollView) this.findViewById(R.id.monthly_goals_activity_bottom_sheet);
+        this.bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetScrollView);
+        this.bottomSheetBehavior.setPeekHeight(150);
+        this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    }
+
+    private void runStartupCommands() {
+        this.autoMarkTasksCommand.execute(this.findViewById(R.id.monthly_goals_activity_main_coordinator_layout));
+    }
+
+    private void injectDependencies() {
+        ComposableApplication capp = (ComposableApplication)this.getApplication();
+        capp.getApplicationComponent().inject(this);
+    }
+
     private void setupSwipeListener()
     {
         this.gestureDetector = new GestureDetectorCompat(this, new HorizontalFlingGestureListener());
@@ -152,20 +195,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
                 return gestureDetector.onTouchEvent(event);
             }
         });
-    }
-
-    @Override
-    public void onDataSet(MonthlyGoalsViewModel data) {
-        if(this.mainActivityContentBinding == null)
-            this.mainActivityContentBinding =  DataBindingUtil.bind(this.monthlyGoalsActivityLayout);
-
-        this.mainActivityContentBinding.setVariable(BR.presenter, this.presenter);
-        this.mainActivityContentBinding.setVariable(BR.vm, data);
-    }
-
-    @Override
-    public void showDialog(DialogFragment dialogFragment) {
-        dialogFragment.show(this.getFragmentManager(), null);
     }
 
     private class HorizontalFlingGestureListener extends GestureDetector.SimpleOnGestureListener{

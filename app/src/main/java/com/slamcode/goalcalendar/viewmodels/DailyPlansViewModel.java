@@ -3,6 +3,7 @@ package com.slamcode.goalcalendar.viewmodels;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.support.annotation.NonNull;
+import android.view.View;
 
 import com.slamcode.goalcalendar.BR;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
@@ -38,6 +39,11 @@ public class DailyPlansViewModel extends BaseObservable implements Comparable<Da
     @Bindable
     public int getDayNumber() {
         return this.model.getDayNumber();
+    }
+
+    public void changeStatus()
+    {
+        this.setStatus(this.getStatus().nextStatus());
     }
 
     @Override

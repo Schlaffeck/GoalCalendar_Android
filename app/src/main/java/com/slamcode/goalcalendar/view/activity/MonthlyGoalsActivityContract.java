@@ -8,7 +8,7 @@ import com.slamcode.goalcalendar.view.DataBasedView;
 import com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel;
 
 /**
- * Created by moriasla on 06.03.2017.
+ * Contract interface between monthly goals activity view and its presenter
  */
 
 public interface MonthlyGoalsActivityContract {
@@ -17,6 +17,8 @@ public interface MonthlyGoalsActivityContract {
      * Presenter contains actions for view elements, that can modify the data
      */
     interface Presenter extends DataBasedPresenter<MonthlyGoalsViewModel> {
+
+        void initializeWithView(ActivityView view);
 
         boolean isPreviousMonthWithCategoriesAvailable();
 

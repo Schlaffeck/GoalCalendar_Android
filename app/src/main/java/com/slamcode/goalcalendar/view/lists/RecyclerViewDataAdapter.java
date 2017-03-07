@@ -7,8 +7,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.slamcode.collections.CollectionUtils;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -155,6 +158,12 @@ public abstract class RecyclerViewDataAdapter<Item, ViewHolder extends ViewHolde
     }
 
     public void updateSourceCollection(Collection<Item> newSourceCollection) {
+        if(newSourceCollection == null)
+            newSourceCollection = CollectionUtils.emptyList();
+
+        if(this.list == null)
+            return;
+
         this.list.clear();
         this.list.addAll(newSourceCollection);
         this.notifyDataSetChanged();
