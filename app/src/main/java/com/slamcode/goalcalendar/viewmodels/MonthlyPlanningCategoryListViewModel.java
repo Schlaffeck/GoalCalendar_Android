@@ -72,6 +72,12 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
         return noOfDaysTotal - DateTimeHelper.currentDayNumber() + 1;
     }
 
+    @Bindable
+    public boolean isEmpty()
+    {
+        return this.categoryPlansList == null || this.categoryPlansList.isEmpty();
+    }
+
     private void countPlansSummary(boolean notify)
     {
         this.monthPlansSummary = this.plansSummaryCalculator.calculatePlansSummaryForMonth(this.monthViewModel.getYear(), this.monthViewModel.getMonth());
@@ -86,6 +92,8 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
         for (CategoryModel category : this.model.getCategories()) {
             this.categoryPlansList.add(this.createCategoryPlans(category));
         }
+
+        this.categoryPlansList.addOnListChangedCallback(new CategoryListChangedListener());
     }
 
     private CategoryPlansViewModel createCategoryPlans(CategoryModel category)
@@ -101,6 +109,55 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
         public void onPropertyChanged(Observable observable, int propertyId) {
             if(propertyId == BR.progressPercentage)
                 countPlansSummary(true);
+        }
+    }
+
+    private class CategoryListChangedListener extends ObservableList.OnListChangedCallback<ObservableList<CategoryPlansViewModel>>{
+
+        @Override
+        public void onChanged(ObservableList<CategoryPlansViewModel> categoryPlansViewModels) {
+            model.getCategories().clear();
+            for (CategoryPlansViewModel vm : categoryPlansViewModels) {
+                model.getCategories().add(vm.getModel());
+            }
+        }
+
+        @Override
+        public void onItemRangeChanged(ObservableList<CategoryPlansViewModel> categoryPlansViewModels, int positionStart, int itemCount) {
+
+        }
+
+        @Override
+        public void onItemRangeInserted(ObservableList<CategoryPlansViewModel> categoryPlansViewModels, int positionStart, int itemCount) {
+            if(itemCount == 0)
+                return;
+
+            for(int i = positionStart; i < positionStart + itemCount; i++)
+            {
+                CategoryPlansViewModel itemVm = categoryPlansViewModels.get(i);
+                model.getCategories().add(itemVm.getModel());
+            }
+
+            notifyPropertyChanged(BR.empty);
+        }
+
+        @Override
+        public void onItemRangeMoved(ObservableList<CategoryPlansViewModel> categoryPlansViewModels, int fromPosition, int toPosition, int itemCount) {
+
+        }
+
+        @Override
+        public void onItemRangeRemoved(ObservableList<CategoryPlansViewModel> categoryPlansViewModels, int positionStart, int itemCount) {
+            if(itemCount == 0)
+                return;
+
+            for(int i = positionStart; i < positionStart + itemCount; i++)
+            {
+                CategoryPlansViewModel itemVm = categoryPlansViewModels.get(i);
+                model.getCategories().remove(itemVm.getModel());
+            }
+
+            notifyPropertyChanged(BR.empty);
         }
     }
 }

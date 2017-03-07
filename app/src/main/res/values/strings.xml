@@ -44,6 +44,21 @@
     <string name="month_november">November</string>
     <string name="month_december">December</string>
 
+    <string-array name="months_array">
+        <item name="month_january_item">January</item>
+        <item name="month_february_item">February</item>
+        <item name="month_march_item">March</item>
+        <item name="month_april_item">April</item>
+        <item name="month_may_item">May</item>
+        <item name="month_june_item">June</item>
+        <item name="month_july_item">July</item>
+        <item name="month_august_item">August</item>
+        <item name="month_september_item">September</item>
+        <item name="month_october_item">October</item>
+        <item name="month_november_item">November</item>
+        <item name="month_december_item">December</item>
+    </string-array>
+
     <!-- empty view -->
     <string name="monthly_plans_empty_view_copyLastUsedCategories_button_text">Copy categories</string>
     <string name="monthly_plans_empty_view_header_text">No categories</string>

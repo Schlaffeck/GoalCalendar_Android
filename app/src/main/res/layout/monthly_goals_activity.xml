@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="vm"
+            type="com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel"/>
+        <variable
+            name="presenter"
+            type="com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract.Presenter"/>
+    </data>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -51,6 +60,8 @@
         android:tint="@android:color/white"
         app:layout_anchorGravity="top|right|end"
         app:layout_anchor="@id/monthly_goals_activity_bottom_sheet"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@android:drawable/ic_input_add"
+        android:onClick="@{presenter.showAddNewCategoryDialog}"/>
 
 </android.support.design.widget.CoordinatorLayout>
+</layout>

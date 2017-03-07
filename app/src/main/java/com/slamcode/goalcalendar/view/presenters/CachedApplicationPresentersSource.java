@@ -4,6 +4,7 @@ import com.slamcode.goalcalendar.MonthlyGoalsActivity;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
+import com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel;
 
 /**
  * Created by moriasla on 24.02.2017.
@@ -13,7 +14,7 @@ public class CachedApplicationPresentersSource implements PresentersSource {
 
     private MonthlyGoalsPresenter monthlyGoalsPresenter;
 
-    private BindableMonthlyGoalsPresenter bindableMonthlyGoalsPresenter;
+    private MonthlyGoalsViewModel monthlyGoalsViewModel;
 
     private PersistenceContext persistenceContext;
 
@@ -34,23 +35,9 @@ public class CachedApplicationPresentersSource implements PresentersSource {
         if(this.monthlyGoalsPresenter == null)
         {
             this.monthlyGoalsPresenter = new PersistentMonthlyGoalsPresenter(
-                    activity,
-                    activity.getLayoutInflater(),
                     this.persistenceContext,
-                    this.listAdapterProvider,
                     this.plansSummaryCalculator);
         }
         return this.monthlyGoalsPresenter;
-    }
-
-    @Override
-    public BindableMonthlyGoalsPresenter getBindableMonthlyGoalsPresenter(MonthlyGoalsActivity activity) {
-        if(this.bindableMonthlyGoalsPresenter == null)
-        {
-            this.bindableMonthlyGoalsPresenter = new BindableMonthlyGoalsPresenter(
-                    this.persistenceContext,
-                    this.plansSummaryCalculator);
-        }
-        return this.bindableMonthlyGoalsPresenter;
     }
 }

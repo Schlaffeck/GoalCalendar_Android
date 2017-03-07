@@ -37,7 +37,7 @@
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        app:categoryPlansList="@{vm.categoryPlansList}">
+        app:categoryPlansSource="@{vm.categoryPlansList}">
 
     </android.support.v7.widget.RecyclerView>
 </LinearLayout>

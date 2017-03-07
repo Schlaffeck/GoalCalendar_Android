@@ -93,6 +93,16 @@ public class ResourcesHelper {
         return context.getString(resourceId);
     }
 
+    public static Month monthFromResourceString(Context context, String stringValue)
+    {
+        for (Month month : Month.values() ){
+            if(toResourceString(context, month).equals(stringValue))
+                return month;
+        }
+
+        return null;
+    }
+
     public static String[] monthsResourceStrings(Context context) {
         final int size = Month.values().length;
         String[] result = new String[size];

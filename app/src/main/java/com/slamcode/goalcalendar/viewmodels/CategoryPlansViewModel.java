@@ -37,6 +37,10 @@ public class CategoryPlansViewModel extends BaseObservable implements Comparable
         this.countPlansSummary(false);
     }
 
+    CategoryModel getModel() {
+        return model;
+    }
+
     @Bindable
     public String getName()
     {

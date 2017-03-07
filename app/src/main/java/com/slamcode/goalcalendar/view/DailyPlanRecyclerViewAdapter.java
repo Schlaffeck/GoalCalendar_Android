@@ -21,6 +21,7 @@ import com.slamcode.goalcalendar.view.lists.DefaultComparator;
 import com.slamcode.goalcalendar.view.lists.RecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.ViewHolderBase;
 import com.slamcode.goalcalendar.view.utils.ColorsHelper;
+import com.slamcode.goalcalendar.viewmodels.DailyPlansViewModel;
 
 import java.util.Collection;
 
@@ -30,15 +31,15 @@ import butterknife.BindView;
  * Created by moriasla on 06.02.2017.
  */
 
-public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyPlanModel, DailyPlanRecyclerViewAdapter.DailyPlanViewHolder> {
+public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyPlansViewModel, DailyPlanRecyclerViewAdapter.DailyPlanViewHolder> {
 
     private final MonthlyPlansModel monthlyPlans;
 
     protected DailyPlanRecyclerViewAdapter(Context context,
                                            LayoutInflater layoutInflater,
                                            MonthlyPlansModel monthlyPlans,
-                                           Collection<DailyPlanModel> sourceCollection) {
-        super(context, layoutInflater, new SortedList<>(DailyPlanModel.class, new ComparatorSortedListCallback<DailyPlanModel>(new DefaultComparator<DailyPlanModel>())));
+                                           Collection<DailyPlansViewModel> sourceCollection) {
+        super(context, layoutInflater, new SortedList<>(DailyPlansViewModel.class, new ComparatorSortedListCallback<DailyPlansViewModel>(new DefaultComparator<DailyPlansViewModel>())));
         this.monthlyPlans = monthlyPlans;
         this.updateSourceCollection(sourceCollection);
     }
@@ -49,7 +50,7 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
         return new DailyPlanViewHolder(view);
     }
 
-    private boolean isCurrentDate(DailyPlanModel dailyPlanModel)
+    private boolean isCurrentDate(DailyPlansViewModel dailyPlanModel)
     {
         if(this.monthlyPlans == null)
             return false;
@@ -64,7 +65,7 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
     /**
      * View holder for daily plan
      */
-    public class DailyPlanViewHolder extends ViewHolderBase<DailyPlanModel>{
+    public class DailyPlanViewHolder extends ViewHolderBase<DailyPlansViewModel>{
 
         @BindView(R.id.plan_status_list_item_view_button)
         GoalPlanStatusButton statusButton;
@@ -78,7 +79,7 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
         }
 
         @Override
-        public void bindToModel(final DailyPlanModel modelObject) {
+        public void bindToModel(final DailyPlansViewModel modelObject) {
             super.bindToModel(modelObject);
             this.binding.setVariable(BR.vm, modelObject);
 

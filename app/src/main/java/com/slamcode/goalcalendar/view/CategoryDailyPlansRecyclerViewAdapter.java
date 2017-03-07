@@ -18,6 +18,7 @@ import com.slamcode.goalcalendar.view.lists.ComparatorSortedListCallback;
 import com.slamcode.goalcalendar.view.lists.DefaultComparator;
 import com.slamcode.goalcalendar.view.lists.RecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.ViewHolderBase;
+import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -28,7 +29,7 @@ import butterknife.BindView;
  * Created by moriasla on 15.12.2016.
  */
 
-public class CategoryDailyPlansRecyclerViewAdapter extends RecyclerViewDataAdapter<CategoryModel, CategoryDailyPlansRecyclerViewAdapter.CategoryDailyPlansViewHolder> {
+public class CategoryDailyPlansRecyclerViewAdapter extends RecyclerViewDataAdapter<CategoryPlansViewModel, CategoryDailyPlansRecyclerViewAdapter.CategoryDailyPlansViewHolder> {
 
         private MonthlyPlansModel monthlyPlans;
 
@@ -39,7 +40,7 @@ public class CategoryDailyPlansRecyclerViewAdapter extends RecyclerViewDataAdapt
 
     public CategoryDailyPlansRecyclerViewAdapter(Context context, LayoutInflater layoutInflater, MonthlyPlansModel monthlyPlans)
     {
-        super(context, layoutInflater, new SortedList<>(CategoryModel.class, new ComparatorSortedListCallback<>(new DefaultComparator<CategoryModel>())));
+        super(context, layoutInflater, new SortedList<>(CategoryPlansViewModel.class, new ComparatorSortedListCallback<>(new DefaultComparator<CategoryPlansViewModel>())));
 
         this.monthlyPlans = monthlyPlans;
     }
@@ -57,16 +58,7 @@ public class CategoryDailyPlansRecyclerViewAdapter extends RecyclerViewDataAdapt
         return new CategoryDailyPlansViewHolder(convertView);
     }
 
-    public void updateMonthlyPlans(MonthlyPlansModel monthlyPlansModel)
-    {
-        this.monthlyPlans = monthlyPlansModel;
-        if(monthlyPlansModel != null)
-            this.updateSourceCollection(monthlyPlansModel.getCategories());
-        else this.updateSourceCollection(CollectionUtils.<CategoryModel>emptyList());
-        this.notifyDataSetChanged();
-    }
-
-    public class CategoryDailyPlansViewHolder extends ViewHolderBase<CategoryModel>
+    public class CategoryDailyPlansViewHolder extends ViewHolderBase<CategoryPlansViewModel>
     {
         @BindView(R.id.monthly_goals_list_item_days_list)
         RecyclerView daysListGridView;
@@ -78,16 +70,15 @@ public class CategoryDailyPlansRecyclerViewAdapter extends RecyclerViewDataAdapt
             this.daysListGridView.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
         }
 
-        // todo: use android binding for the view
         @Override
-        public void bindToModel(CategoryModel modelObject) {
+        public void bindToModel(CategoryPlansViewModel modelObject) {
             super.bindToModel(modelObject);
 
             DailyPlanRecyclerViewAdapter adapter = new DailyPlanRecyclerViewAdapter(
                     getView().getContext(),
                     getLayoutInflater(),
                     monthlyPlans,
-                    modelObject.getDailyPlans());
+                    modelObject.getDailyPlansList());
 
             this.daysListGridView.setAdapter(adapter);
             adapter.notifyDataSetChanged();

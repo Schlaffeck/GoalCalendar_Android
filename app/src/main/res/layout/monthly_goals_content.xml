@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="vm"
+            type="com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel"/>
+        <variable
+            name="presenter"
+            type="com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract.Presenter"/>
+    </data>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -24,7 +34,8 @@
             android:layout_width="@dimen/monthly_goals_yearTextView_buttonSize"
             android:layout_height="@dimen/monthly_goals_yearTextView_buttonSize"
             android:layout_alignParentLeft="true"
-            android:background="@drawable/ic_keyboard_arrow_left_white_24dp"/>
+            android:background="@drawable/ic_keyboard_arrow_left_white_24dp"
+            android:onClick="@{presenter::goToPreviousYear}"/>
         <TextView
             android:textSize="@dimen/monthly_goals_yearTextView_textSize"
             android:textColor="@android:color/white"
@@ -34,14 +45,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="2016"></TextView>
+            android:text="@{vm.monthlyPlans.monthData.year}"></TextView>
         <ImageButton
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:id="@+id/monthly_goals_increment_year_button"
             android:layout_width="@dimen/monthly_goals_yearTextView_buttonSize"
             android:layout_height="@dimen/monthly_goals_yearTextView_buttonSize"
             android:layout_alignParentRight="true"
-            android:background="@drawable/ic_keyboard_arrow_right_white_24dp"/>
+            android:background="@drawable/ic_keyboard_arrow_right_white_24dp"
+            android:onClick="@{presenter::goToNextYear}"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -49,7 +61,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:layout_below="@id/monthly_goals_yearValue_layout">
+        android:layout_below="@id/monthly_goals_yearValue_layout"
+        android:visibility="@{vm.monthlyPlans.empty ? View.GONE : View.VISIBLE}">
     <include layout="@layout/monthly_goals_empty_list_content"/>
     </LinearLayout>
 
@@ -85,7 +98,9 @@
                 android:paddingLeft="0dp"
                 android:paddingRight="10dp"
                 android:layout_marginLeft="-5dp"
-                android:layout_marginRight="0dp">
+                android:layout_marginRight="0dp"
+                android:entries="@array/months_array"
+                app:selectedValue="@={vm.monthString}">
             </Spinner>
 
             <!-- categories names -->
@@ -98,7 +113,8 @@
                 android:horizontalSpacing="@dimen/default_horizontal_spacing"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 android:gravity="left"
-                android:scrollbars="none"></android.support.v7.widget.RecyclerView>
+                android:scrollbars="none"
+                app:categoryNamesSource="@{vm.monthlyPlans.categoryPlansList}"></android.support.v7.widget.RecyclerView>
         </LinearLayout>
 
         <HorizontalScrollView
@@ -131,9 +147,11 @@
                 android:verticalSpacing="@dimen/default_vertical_spacing"
                 android:horizontalSpacing="@dimen/default_horizontal_spacing"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                android:gravity="center"></android.support.v7.widget.RecyclerView>
+                android:gravity="center"
+                app:categoryPlansSource="@{vm.monthlyPlans.categoryPlansList}"></android.support.v7.widget.RecyclerView>
             </LinearLayout>
         </HorizontalScrollView>
     </RelativeLayout>
 
 </RelativeLayout>
+</layout>
