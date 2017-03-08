@@ -1,32 +1,20 @@
-package com.slamcode.goalcalendar.view;
+package com.slamcode.goalcalendar.view.lists;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.util.SortedList;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.slamcode.collections.CollectionUtils;
 import com.slamcode.goalcalendar.R;
-import com.slamcode.goalcalendar.planning.DateTimeHelper;
-import com.slamcode.goalcalendar.view.lists.ComparatorSortedListCallback;
-import com.slamcode.goalcalendar.view.lists.DefaultComparator;
-import com.slamcode.goalcalendar.view.lists.RecyclerViewDataAdapter;
-import com.slamcode.goalcalendar.view.lists.ViewHolderBase;
+import com.slamcode.goalcalendar.view.lists.base.ComparatorSortedListCallback;
+import com.slamcode.goalcalendar.view.lists.base.DefaultComparator;
 import com.slamcode.goalcalendar.data.model.*;
-import com.slamcode.goalcalendar.view.lists.bindable.BindableRecyclerViewDataAdapter;
-import com.slamcode.goalcalendar.view.lists.bindable.BindableViewHolderBase;
+import com.slamcode.goalcalendar.view.lists.base.bindable.BindableRecyclerViewDataAdapter;
+import com.slamcode.goalcalendar.view.lists.base.bindable.BindableViewHolderBase;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
-
-import java.util.*;
-
-import butterknife.BindView;
 
 /**
  * Created by moriasla on 15.12.2016.

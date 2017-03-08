@@ -28,7 +28,7 @@ import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.service.commands.AutoMarkTasksCommand;
 import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
-import com.slamcode.goalcalendar.view.lists.ScrollableViewHelper;
+import com.slamcode.goalcalendar.view.lists.utils.ScrollableViewHelper;
 import com.slamcode.goalcalendar.view.presenters.PresentersSource;
 import com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel;
 

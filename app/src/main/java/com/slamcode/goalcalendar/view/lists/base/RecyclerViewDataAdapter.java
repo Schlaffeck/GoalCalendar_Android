@@ -1,4 +1,4 @@
-package com.slamcode.goalcalendar.view.lists;
+package com.slamcode.goalcalendar.view.lists.base;
 
 import android.content.Context;
 import android.support.v7.util.SortedList;
@@ -11,7 +11,6 @@ import com.slamcode.collections.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 /**

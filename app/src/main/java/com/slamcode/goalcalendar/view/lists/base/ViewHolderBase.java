@@ -1,4 +1,4 @@
-package com.slamcode.goalcalendar.view.lists;
+package com.slamcode.goalcalendar.view.lists.base;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

@@ -10,7 +10,7 @@ import com.slamcode.goalcalendar.data.UnitOfWork;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.*;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
-import com.slamcode.goalcalendar.view.ResourcesHelper;
+import com.slamcode.goalcalendar.view.utils.ResourcesHelper;
 
 import java.util.HashMap;
 import java.util.Map;

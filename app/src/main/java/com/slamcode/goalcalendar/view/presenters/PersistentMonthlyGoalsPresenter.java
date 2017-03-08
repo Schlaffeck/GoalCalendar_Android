@@ -13,7 +13,7 @@ import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 import com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract;
 import com.slamcode.goalcalendar.view.dialogs.AddEditCategoryViewModelDialog;
-import com.slamcode.goalcalendar.view.dialogs.AddEditDialog;
+import com.slamcode.goalcalendar.view.dialogs.base.AddEditDialog;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 import com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel;
 import com.slamcode.goalcalendar.viewmodels.MonthlyPlanningCategoryListViewModel;

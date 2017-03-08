@@ -3,8 +3,6 @@ package com.slamcode.goalcalendar.view.activity;
 import android.app.DialogFragment;
 import android.view.View;
 
-import com.slamcode.goalcalendar.view.DataBasedPresenter;
-import com.slamcode.goalcalendar.view.DataBasedView;
 import com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel;
 
 /**
@@ -16,7 +14,11 @@ public interface MonthlyGoalsActivityContract {
     /**
      * Presenter contains actions for view elements, that can modify the data
      */
-    interface Presenter extends DataBasedPresenter<MonthlyGoalsViewModel> {
+    interface Presenter {
+
+        MonthlyGoalsViewModel getData();
+
+        void setData(MonthlyGoalsViewModel data);
 
         void initializeWithView(ActivityView view);
 
@@ -38,7 +40,9 @@ public interface MonthlyGoalsActivityContract {
     /**
      * View has simple logic of managing binding presenters actions and data to concrete controls
      */
-    interface ActivityView extends DataBasedView<MonthlyGoalsViewModel>{
+    interface ActivityView{
+
+        void onDataSet(MonthlyGoalsViewModel data);
 
         void showDialog(DialogFragment dialogFragment);
     }

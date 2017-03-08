@@ -4,9 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 
 import com.slamcode.goalcalendar.planning.YearMonthPair;
-import com.slamcode.goalcalendar.view.CategoryDailyPlansRecyclerViewAdapter;
-import com.slamcode.goalcalendar.view.CategoryNameRecyclerViewAdapter;
-import com.slamcode.goalcalendar.view.CategoryPlansSummaryRecyclerViewAdapter;
 
 /**
  * Created by moriasla on 02.02.2017.

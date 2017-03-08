@@ -16,10 +16,11 @@ import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.PlanStatus;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
-import com.slamcode.goalcalendar.view.CategoryNameTextValidator;
-import com.slamcode.goalcalendar.view.ResourcesHelper;
+import com.slamcode.goalcalendar.view.dialogs.base.AddEditDialog;
+import com.slamcode.goalcalendar.view.validation.CategoryNameTextValidator;
+import com.slamcode.goalcalendar.view.utils.ResourcesHelper;
 import com.slamcode.goalcalendar.view.utils.SpinnerHelper;
-import com.slamcode.goalcalendar.view.validation.TextViewValidator;
+import com.slamcode.goalcalendar.view.validation.base.TextViewValidator;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 import com.slamcode.goalcalendar.viewmodels.MonthViewModel;
 

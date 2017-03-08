@@ -1,9 +1,9 @@
-package com.slamcode.goalcalendar.view;
+package com.slamcode.goalcalendar.view.validation;
 
 import android.widget.TextView;
 
 import com.slamcode.goalcalendar.R;
-import com.slamcode.goalcalendar.view.validation.TextViewValidator;
+import com.slamcode.goalcalendar.view.validation.base.TextViewValidator;
 
 import org.apache.commons.lang3.StringUtils;
 

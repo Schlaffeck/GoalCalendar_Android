@@ -1,6 +1,4 @@
-package com.slamcode.goalcalendar.view.lists;
-
-import android.content.ClipData;
+package com.slamcode.goalcalendar.view.lists.base;
 
 import java.util.Comparator;
 

@@ -1,10 +1,10 @@
-package com.slamcode.goalcalendar.view.lists.bindable;
+package com.slamcode.goalcalendar.view.lists.base.bindable;
 
 import android.content.Context;
 import android.support.v7.util.SortedList;
 import android.view.LayoutInflater;
 
-import com.slamcode.goalcalendar.view.lists.RecyclerViewDataAdapter;
+import com.slamcode.goalcalendar.view.lists.base.RecyclerViewDataAdapter;
 
 /**
  * Created by moriasla on 03.03.2017.

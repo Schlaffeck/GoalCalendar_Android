@@ -1,4 +1,4 @@
-package com.slamcode.goalcalendar.view.dialogs;
+package com.slamcode.goalcalendar.view.dialogs.base;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.slamcode.goalcalendar.view.validation.ViewValidator;
+import com.slamcode.goalcalendar.view.validation.base.ViewValidator;
 
 import java.util.ArrayList;
 import java.util.List;

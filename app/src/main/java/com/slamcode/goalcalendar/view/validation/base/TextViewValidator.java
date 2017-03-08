@@ -1,4 +1,4 @@
-package com.slamcode.goalcalendar.view.validation;
+package com.slamcode.goalcalendar.view.validation.base;
 
 import android.text.Editable;
 import android.text.TextWatcher;

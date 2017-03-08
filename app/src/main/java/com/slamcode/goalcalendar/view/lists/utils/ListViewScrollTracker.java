@@ -1,4 +1,4 @@
-package com.slamcode.goalcalendar.view.lists;
+package com.slamcode.goalcalendar.view.lists.utils;
 
 /**
  * Created by moriasla on 09.01.2017.

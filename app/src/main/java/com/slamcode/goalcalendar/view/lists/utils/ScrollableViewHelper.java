@@ -1,13 +1,8 @@
-package com.slamcode.goalcalendar.view.lists;
+package com.slamcode.goalcalendar.view.lists.utils;
 
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.OnScrollListener;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
-
-import com.slamcode.goalcalendar.view.lists.ListViewScrollTracker;
 
 import java.util.HashMap;
 import java.util.Map;

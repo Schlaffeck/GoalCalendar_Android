@@ -1,4 +1,4 @@
-package com.slamcode.goalcalendar.view;
+package com.slamcode.goalcalendar.view.lists;
 
 import android.content.Context;
 import android.support.v7.util.SortedList;
@@ -7,10 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.slamcode.goalcalendar.R;
-import com.slamcode.goalcalendar.view.lists.ComparatorSortedListCallback;
-import com.slamcode.goalcalendar.view.lists.DefaultComparator;
-import com.slamcode.goalcalendar.view.lists.bindable.BindableRecyclerViewDataAdapter;
-import com.slamcode.goalcalendar.view.lists.bindable.BindableViewHolderBase;
+import com.slamcode.goalcalendar.view.lists.base.ComparatorSortedListCallback;
+import com.slamcode.goalcalendar.view.lists.base.DefaultComparator;
+import com.slamcode.goalcalendar.view.lists.base.bindable.BindableRecyclerViewDataAdapter;
+import com.slamcode.goalcalendar.view.lists.base.bindable.BindableViewHolderBase;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 
 /**

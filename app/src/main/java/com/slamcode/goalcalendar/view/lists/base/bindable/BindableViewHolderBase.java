@@ -1,11 +1,11 @@
-package com.slamcode.goalcalendar.view.lists.bindable;
+package com.slamcode.goalcalendar.view.lists.base.bindable;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.view.View;
 
 import com.android.databinding.library.baseAdapters.BR;
-import com.slamcode.goalcalendar.view.lists.ViewHolderBase;
+import com.slamcode.goalcalendar.view.lists.base.ViewHolderBase;
 
 /**
  * Created by moriasla on 03.03.2017.

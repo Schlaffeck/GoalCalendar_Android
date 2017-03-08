@@ -1,27 +1,20 @@
-package com.slamcode.goalcalendar.view;
+package com.slamcode.goalcalendar.view.lists;
 
 import android.content.Context;
-import android.databinding.DataBindingUtil;
-import android.databinding.Observable;
-import android.databinding.ViewDataBinding;
 import android.support.v7.util.SortedList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.slamcode.goalcalendar.BR;
 import com.slamcode.goalcalendar.R;
-import com.slamcode.goalcalendar.data.model.DailyPlanModel;
-import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.PlanStatus;
 import com.slamcode.goalcalendar.planning.YearMonthPair;
 import com.slamcode.goalcalendar.view.controls.GoalPlanStatusButton;
-import com.slamcode.goalcalendar.view.lists.ComparatorSortedListCallback;
-import com.slamcode.goalcalendar.view.lists.DefaultComparator;
-import com.slamcode.goalcalendar.view.lists.RecyclerViewDataAdapter;
-import com.slamcode.goalcalendar.view.lists.ViewHolderBase;
-import com.slamcode.goalcalendar.view.lists.bindable.BindableViewHolderBase;
+import com.slamcode.goalcalendar.view.lists.base.ComparatorSortedListCallback;
+import com.slamcode.goalcalendar.view.lists.base.DefaultComparator;
+import com.slamcode.goalcalendar.view.lists.base.RecyclerViewDataAdapter;
+import com.slamcode.goalcalendar.view.lists.base.bindable.BindableViewHolderBase;
 import com.slamcode.goalcalendar.view.utils.ColorsHelper;
 import com.slamcode.goalcalendar.viewmodels.DailyPlansViewModel;
 

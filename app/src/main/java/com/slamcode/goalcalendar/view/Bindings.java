@@ -5,7 +5,6 @@ import android.databinding.BindingAdapter;
 import android.databinding.InverseBindingAdapter;
 import android.databinding.InverseBindingListener;
 import android.databinding.ObservableList;
-import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +15,11 @@ import android.widget.Spinner;
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.dagger2.Dagger2ComponentContainer;
 import com.slamcode.goalcalendar.planning.YearMonthPair;
+import com.slamcode.goalcalendar.view.lists.CategoryDailyPlansRecyclerViewAdapter;
+import com.slamcode.goalcalendar.view.lists.CategoryNameRecyclerViewAdapter;
+import com.slamcode.goalcalendar.view.lists.CategoryPlansSummaryRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
 import com.slamcode.goalcalendar.viewmodels.*;
-
-import java.util.Collection;
 
 import javax.inject.Inject;
 

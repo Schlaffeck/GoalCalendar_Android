@@ -1,4 +1,4 @@
-package com.slamcode.goalcalendar.view;
+package com.slamcode.goalcalendar.view.utils;
 
 import android.app.Activity;
 import android.content.Context;
