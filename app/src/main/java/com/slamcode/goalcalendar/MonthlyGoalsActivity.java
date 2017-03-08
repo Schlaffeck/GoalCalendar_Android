@@ -28,6 +28,7 @@ import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.service.commands.AutoMarkTasksCommand;
 import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
+import com.slamcode.goalcalendar.view.lists.ScrollableViewHelper;
 import com.slamcode.goalcalendar.view.presenters.PresentersSource;
 import com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel;
 
@@ -44,7 +45,10 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     CoordinatorLayout monthlyGoalsActivityLayout;
 
     @BindView(R.id.monthly_goals_listview)
-    RecyclerView monthlyGoalsListView;
+    RecyclerView categoryNamesRecyclerView;
+
+    @BindView(R.id.monthly_goals_dailyplans_listview)
+    RecyclerView categoryPlansRecyclerView;
 
     @BindView(R.id.content_monthly_goals)
     RelativeLayout monthlyPlansGridContentLayout;
@@ -80,36 +84,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     private ViewDataBinding mainActivityContentBinding;
 
     @Override
-    public void onDataSet(MonthlyGoalsViewModel data) {
-        if(this.mainActivityContentBinding == null)
-            this.mainActivityContentBinding =  DataBindingUtil.bind(this.monthlyGoalsActivityLayout);
-
-        this.mainActivityContentBinding.setVariable(BR.presenter, this.presenter);
-        this.mainActivityContentBinding.setVariable(BR.vm, data);
-
-        ViewDataBinding monthlyPlansGridContentBinding = DataBindingUtil.bind(this.monthlyPlansGridContentLayout);
-
-        monthlyPlansGridContentBinding.setVariable(BR.presenter, this.presenter);
-        monthlyPlansGridContentBinding.setVariable(BR.vm, data);
-
-
-        ViewDataBinding monthlyPlansSummaryContentBinding = DataBindingUtil.bind(this.summaryContentLayout);
-
-        monthlyPlansSummaryContentBinding.setVariable(BR.presenter, this.presenter);
-        monthlyPlansSummaryContentBinding.setVariable(BR.vm, data);
-
-        ViewDataBinding emptyContentBinding = DataBindingUtil.findBinding(this.emptyContentHorizontalScrollView);
-
-        emptyContentBinding.setVariable(BR.presenter, this.presenter);
-        emptyContentBinding.setVariable(BR.vm, data);
-    }
-
-    @Override
-    public void showDialog(DialogFragment dialogFragment) {
-        dialogFragment.show(this.getFragmentManager(), null);
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(com.slamcode.goalcalendar.R.layout.monthly_goals_activity);
@@ -119,6 +93,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
         this.setSupportActionBar((Toolbar)this.findViewById(R.id.toolbar));
         this.setupPresenter();
+        this.setupRecyclerViews();
         this.setupSwipeListener();
         this.setupBottomSheetBehavior();
         this.runStartupCommands();
@@ -162,6 +137,36 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         super.onStop();
     }
 
+    @Override
+    public void onDataSet(MonthlyGoalsViewModel data) {
+        if(this.mainActivityContentBinding == null)
+            this.mainActivityContentBinding =  DataBindingUtil.bind(this.monthlyGoalsActivityLayout);
+
+        this.mainActivityContentBinding.setVariable(BR.presenter, this.presenter);
+        this.mainActivityContentBinding.setVariable(BR.vm, data);
+
+        ViewDataBinding monthlyPlansGridContentBinding = DataBindingUtil.bind(this.monthlyPlansGridContentLayout);
+
+        monthlyPlansGridContentBinding.setVariable(BR.presenter, this.presenter);
+        monthlyPlansGridContentBinding.setVariable(BR.vm, data);
+
+
+        ViewDataBinding monthlyPlansSummaryContentBinding = DataBindingUtil.bind(this.summaryContentLayout);
+
+        monthlyPlansSummaryContentBinding.setVariable(BR.presenter, this.presenter);
+        monthlyPlansSummaryContentBinding.setVariable(BR.vm, data);
+
+        ViewDataBinding emptyContentBinding = DataBindingUtil.findBinding(this.emptyContentHorizontalScrollView);
+
+        emptyContentBinding.setVariable(BR.presenter, this.presenter);
+        emptyContentBinding.setVariable(BR.vm, data);
+    }
+
+    @Override
+    public void showDialog(DialogFragment dialogFragment) {
+        dialogFragment.show(this.getFragmentManager(), null);
+    }
+
     private void setupPresenter() {
         if(this.presenter != null)
             return;
@@ -177,6 +182,11 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
+    private void setupRecyclerViews()
+    {
+        ScrollableViewHelper.setSimultaneousScrolling(this.categoryNamesRecyclerView, this.categoryPlansRecyclerView);
+    }
+
     private void runStartupCommands() {
         this.autoMarkTasksCommand.execute(this.findViewById(R.id.monthly_goals_activity_main_coordinator_layout));
     }
@@ -189,7 +199,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     private void setupSwipeListener()
     {
         this.gestureDetector = new GestureDetectorCompat(this, new HorizontalFlingGestureListener());
-        this.monthlyGoalsListView.setOnTouchListener(new View.OnTouchListener() {
+        this.categoryNamesRecyclerView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return gestureDetector.onTouchEvent(event);
