@@ -130,15 +130,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/monthly_goals_header_list_item_days_list"
+                    android:layout_marginTop="@dimen/monthly_goals_table_listView_marginTop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:verticalSpacing="@dimen/default_vertical_spacing"
+                    android:horizontalSpacing="@dimen/default_horizontal_spacing"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    bind:daysListHeaderSource="@{vm.monthlyPlans.monthData.daysList}"></android.support.v7.widget.RecyclerView>
             <!-- days in month list -->
-            <LinearLayout
-                android:layout_height="@dimen/monthly_goals_table_header_height"
-                android:orientation="horizontal"
-                android:id="@+id/monthly_goals_header_list_item_days_list"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="@dimen/default_margin"
-                android:layout_marginBottom="@dimen/monthly_goals_table_header_bottomMargin">
-            </LinearLayout>
+            <!--<LinearLayout-->
+                <!--android:layout_height="@dimen/monthly_goals_table_header_height"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:id="@+id/monthly_goals_header_list_item_days_list"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_marginTop="@dimen/default_margin"-->
+                <!--android:layout_marginBottom="@dimen/monthly_goals_table_header_bottomMargin">-->
+            <!--</LinearLayout>-->
 
             <!-- categories daily plans -->
             <android.support.v7.widget.RecyclerView

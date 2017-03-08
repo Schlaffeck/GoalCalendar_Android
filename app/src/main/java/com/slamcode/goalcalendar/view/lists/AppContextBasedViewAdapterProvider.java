@@ -25,4 +25,9 @@ public class AppContextBasedViewAdapterProvider implements ItemsCollectionAdapte
     public CategoryPlansSummaryRecyclerViewAdapter providePlansSummaryForCategoriesRecyclerViewAdapter(Context context, LayoutInflater layoutInflater) {
         return new CategoryPlansSummaryRecyclerViewAdapter(context, layoutInflater);
     }
+
+    @Override
+    public DailyPlanHeaderRecyclerViewAdapter provideDailyPlanHeaderRecyclerViewAdapter(Context context, LayoutInflater layoutInflater) {
+        return new DailyPlanHeaderRecyclerViewAdapter(context, layoutInflater);
+    }
 }

@@ -18,8 +18,11 @@ import com.slamcode.goalcalendar.planning.YearMonthPair;
 import com.slamcode.goalcalendar.view.lists.CategoryDailyPlansRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.CategoryNameRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.CategoryPlansSummaryRecyclerViewAdapter;
+import com.slamcode.goalcalendar.view.lists.DailyPlanHeaderRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
 import com.slamcode.goalcalendar.viewmodels.*;
+
+import java.util.Collection;
 
 import javax.inject.Inject;
 
@@ -107,6 +110,35 @@ public class Bindings {
         if(adapter instanceof CategoryDailyPlansRecyclerViewAdapter)
         {
             CategoryDailyPlansRecyclerViewAdapter dataAdapter = (CategoryDailyPlansRecyclerViewAdapter) adapter;
+            dataAdapter.updateSourceCollection(itemsSource);
+        }
+    }
+
+
+
+    @BindingAdapter("bind:daysListHeaderSource")
+    public static void setDaysListHeaderSource(RecyclerView recyclerView, Collection<DayInMonthViewModel> itemsSource)
+    {
+        if(recyclerView == null)
+            return;
+
+        RecyclerView.Adapter adapter = recyclerView.getAdapter();
+
+        if(adapter == null)
+        {
+            Dagger2InjectData injectData = new Dagger2InjectData();
+            Dagger2ComponentContainer.getApplicationDagger2Component().inject(injectData);
+
+            adapter = injectData.itemsCollectionAdapterProvider
+                    .provideDailyPlanHeaderRecyclerViewAdapter(
+                            injectData.applicationContext.getDefaultContext(),
+                            (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE));
+            recyclerView.setAdapter(adapter);
+        }
+
+        if(adapter instanceof DailyPlanHeaderRecyclerViewAdapter)
+        {
+            DailyPlanHeaderRecyclerViewAdapter dataAdapter = (DailyPlanHeaderRecyclerViewAdapter) adapter;
             dataAdapter.updateSourceCollection(itemsSource);
         }
     }

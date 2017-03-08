@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+        <data>
+                <variable
+                    name="vm"
+                    type="com.slamcode.goalcalendar.viewmodels.DayInMonthViewModel"/>
+        </data>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
         <TextView
+            android:textColor="@android:color/tertiary_text_dark"
             android:layout_marginLeft="@dimen/planning_state_button_margin"
             android:layout_marginRight="@dimen/planning_state_button_margin"
             android:id="@+id/monthly_goals_table_header_day_number_text"
             android:layout_width="@dimen/planning_state_button_width"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:text="1"
+            android:text='@{String.format("%d", vm.dayNumber)}'
             android:textSize="@dimen/list_item_text_size"
             android:layout_gravity="center_horizontal"/>
         <TextView
@@ -21,7 +28,8 @@
             android:layout_height="wrap_content"
             android:textColor="@color/planningStateButton_stateSuccess_borderColor"
             android:textAlignment="center"
-            android:text="tue"
+            android:text="@{vm.dayName}"
             android:textSize="@dimen/list_item_text_size"
             android:layout_gravity="center_horizontal"/>
 </LinearLayout>
+</layout>
