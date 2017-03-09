@@ -12,6 +12,7 @@ import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
+import com.slamcode.goalcalendar.view.SourceChangeRequestNotifier;
 
 /**
  * View model for list of categories in month
@@ -22,14 +23,20 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
     private final MonthlyPlansModel model;
     private final MonthViewModel monthViewModel;
     private final PlansSummaryCalculator plansSummaryCalculator;
+    private final SourceChangeRequestNotifier.SourceChangeRequestListener<CategoryPlansViewModel> categoryChangeRequestListener;
     private ObservableList<CategoryPlansViewModel> categoryPlansList;
     private PlansSummaryCalculator.MonthPlansSummary monthPlansSummary;
+    private OnPropertyChangedCallback categoryPropertyChangedListener;
 
-    public MonthlyPlanningCategoryListViewModel(MonthlyPlansModel model, PlansSummaryCalculator plansSummaryCalculator)
+    public MonthlyPlanningCategoryListViewModel(MonthlyPlansModel model,
+                                                PlansSummaryCalculator plansSummaryCalculator,
+                                                SourceChangeRequestNotifier.SourceChangeRequestListener<CategoryPlansViewModel> categoryChangeRequestListener)
     {
         this.model = model;
         this.monthViewModel = new MonthViewModel(model.getYear(), model.getMonth());
         this.plansSummaryCalculator = plansSummaryCalculator;
+        this.categoryChangeRequestListener = categoryChangeRequestListener;
+        this.categoryPropertyChangedListener = new CategoryPropertyChangeListener();
         this.initializeCategoryPlansList();
         this.countPlansSummary(false);
     }
@@ -100,11 +107,12 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
     private CategoryPlansViewModel createCategoryPlans(CategoryModel category)
     {
         CategoryPlansViewModel vm = new CategoryPlansViewModel(this.monthViewModel, category, this.plansSummaryCalculator);
-        vm.addOnPropertyChangedCallback(new CategoryChangeListener());
+        vm.addOnPropertyChangedCallback(this.categoryPropertyChangedListener);
+        vm.addSourceChangeRequestListener(this.categoryChangeRequestListener);
         return vm;
     }
 
-    private class CategoryChangeListener extends OnPropertyChangedCallback{
+    private class CategoryPropertyChangeListener extends OnPropertyChangedCallback{
 
         @Override
         public void onPropertyChanged(Observable observable, int propertyId) {
@@ -138,6 +146,7 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
             for(int i = positionStart; i < positionStart + itemCount; i++)
             {
                 CategoryPlansViewModel itemVm = categoryPlansViewModels.get(i);
+                itemVm.addOnPropertyChangedCallback(categoryPropertyChangedListener);
                 model.getCategories().add(itemVm.getModel());
             }
 

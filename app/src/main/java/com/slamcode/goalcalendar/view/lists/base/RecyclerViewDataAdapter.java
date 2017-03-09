@@ -25,7 +25,6 @@ public abstract class RecyclerViewDataAdapter<Item, ViewHolder extends ViewHolde
     private SortedList<Item> list;
     private Context context;
     private LayoutInflater layoutInflater;
-    private List<ItemsSourceChangeRequestListener> adapterSourceRequestsListeners;
 
     private List<Item> modifiedItems;
 
@@ -35,7 +34,6 @@ public abstract class RecyclerViewDataAdapter<Item, ViewHolder extends ViewHolde
         this.modifiedItems = new ArrayList<>();
         this.context = context;
         this.layoutInflater = layoutInflater;
-        this.adapterSourceRequestsListeners = new ArrayList<>();
     }
 
     public Item getItem(int position)
@@ -108,44 +106,6 @@ public abstract class RecyclerViewDataAdapter<Item, ViewHolder extends ViewHolde
         this.list.remove(item);
         this.modifiedItems.remove(item);
         this.notifyItemRemoved(position);
-    }
-
-    public void addItemSourceRequestListener(ItemsSourceChangeRequestListener listener)
-    {
-        if(this.adapterSourceRequestsListeners.contains(listener))
-        {
-            return;
-        }
-        this.adapterSourceRequestsListeners.add(listener);
-    }
-
-    public void removeItemSourceRequestListener(ItemsSourceChangeRequestListener listener)
-    {
-        if(!this.adapterSourceRequestsListeners.contains(listener))
-        {
-            return;
-        }
-
-        this.adapterSourceRequestsListeners.remove(listener);
-    }
-
-    public void clearItemSourceRequestListener()
-    {
-        this.adapterSourceRequestsListeners.clear();
-    }
-
-    protected void notifyItemModificationRequested(int position)
-    {
-        for(ItemsSourceChangeRequestListener listener :
-                this.adapterSourceRequestsListeners)
-            listener.onModifyItemRequest(position);
-    }
-
-    protected void notifyItemRemovalRequested(int position)
-    {
-        for(ItemsSourceChangeRequestListener listener :
-                this.adapterSourceRequestsListeners)
-            listener.onRemoveItemRequest(position);
     }
 
     public LayoutInflater getLayoutInflater() {

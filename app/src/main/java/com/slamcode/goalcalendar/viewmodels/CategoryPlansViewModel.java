@@ -11,20 +11,27 @@ import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
+import com.slamcode.goalcalendar.view.SourceChangeRequestNotifier;
 
 import java.text.Collator;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * view model for category plans in month
  */
 
-public class CategoryPlansViewModel extends BaseObservable implements Comparable<CategoryPlansViewModel> {
+public class CategoryPlansViewModel extends BaseObservable implements Comparable<CategoryPlansViewModel>, SourceChangeRequestNotifier<CategoryPlansViewModel> {
+
+    public static final int REQUEST_MODIFY_ITEM = 231;
+    public static final int REQUEST_REMOVE_ITEM = 232;
 
     private final MonthViewModel monthViewModel;
     private final CategoryModel model;
     private final PlansSummaryCalculator plansSummaryCalculator;
     private ObservableList<DailyPlansViewModel> dailyPlansList = new ObservableArrayList<>();
+    private Set<SourceChangeRequestListener<CategoryPlansViewModel>> sourceChangeRequestListenerSet = new HashSet<>();
 
     private PlansSummaryCalculator.CategoryPlansSummary plansSummary;
 
@@ -165,6 +172,27 @@ public class CategoryPlansViewModel extends BaseObservable implements Comparable
             Collator usCollator = Collator.getInstance(Locale.getDefault());
             usCollator.setStrength(Collator.PRIMARY);
             return usCollator.compare(this.getName(), other.getName());
+    }
+
+    @Override
+    public void addSourceChangeRequestListener(SourceChangeRequestListener<CategoryPlansViewModel> listener) {
+        this.sourceChangeRequestListenerSet.add(listener);
+    }
+
+    @Override
+    public void removeSourceChangeRequestListener(SourceChangeRequestListener<CategoryPlansViewModel> listener) {
+        this.sourceChangeRequestListenerSet.remove(listener);
+    }
+
+    @Override
+    public void clearSourceChangeRequestListeners() {
+        sourceChangeRequestListenerSet.clear();
+    }
+
+    @Override
+    public void notifySourceChangeRequested(SourceChangeRequest request) {
+        for(SourceChangeRequestListener<CategoryPlansViewModel> listener : sourceChangeRequestListenerSet)
+            listener.sourceChangeRequested(this, request);
     }
 
     private class DailyPlanChangeListener extends OnPropertyChangedCallback {

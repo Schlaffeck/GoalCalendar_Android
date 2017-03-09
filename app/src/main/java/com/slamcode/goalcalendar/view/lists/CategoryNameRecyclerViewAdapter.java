@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.slamcode.goalcalendar.R;
+import com.slamcode.goalcalendar.view.BaseSourceChangeRequest;
 import com.slamcode.goalcalendar.view.lists.base.ComparatorSortedListCallback;
 import com.slamcode.goalcalendar.view.lists.base.DefaultComparator;
 import com.slamcode.goalcalendar.data.model.*;
@@ -70,10 +71,10 @@ public class CategoryNameRecyclerViewAdapter extends BindableRecyclerViewDataAda
         public boolean onMenuItemClick(MenuItem item) {
             switch(item.getItemId()) {
                 case CONTEXT_MENU_DELETE_ITEM_ID:
-                    notifyItemRemovalRequested(this.getAdapterPosition());
+                    this.getModelObject().notifySourceChangeRequested(new BaseSourceChangeRequest(CategoryPlansViewModel.REQUEST_REMOVE_ITEM));
                     return true;
                 case CONTEXT_MENU_EDIT_ITEM_ID:
-                    notifyItemModificationRequested(this.getAdapterPosition());
+                    this.getModelObject().notifySourceChangeRequested(new BaseSourceChangeRequest(CategoryPlansViewModel.REQUEST_MODIFY_ITEM));
                     return true;
                 default:
                     return false;

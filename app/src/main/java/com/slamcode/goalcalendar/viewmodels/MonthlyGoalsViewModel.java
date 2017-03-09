@@ -10,6 +10,7 @@ import com.slamcode.goalcalendar.data.UnitOfWork;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.*;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
+import com.slamcode.goalcalendar.view.SourceChangeRequestNotifier;
 import com.slamcode.goalcalendar.view.utils.ResourcesHelper;
 
 import java.util.HashMap;
@@ -25,15 +26,20 @@ public class MonthlyGoalsViewModel extends BaseObservable {
     private final ApplicationContext applicationContext;
     private final PersistenceContext persistenceContext;
     private final PlansSummaryCalculator plansSummaryCalculator;
+    private final SourceChangeRequestNotifier.SourceChangeRequestListener<CategoryPlansViewModel> categoryChangeRequestListener;
     private MonthlyPlanningCategoryListViewModel monthlyPlansViewModel;
 
     Map<YearMonthPair, MonthlyPlanningCategoryListViewModel> viewModelMap = new HashMap<>();
 
-    public MonthlyGoalsViewModel(ApplicationContext applicationContext, PersistenceContext persistenceContext, PlansSummaryCalculator plansSummaryCalculator)
+    public MonthlyGoalsViewModel(ApplicationContext applicationContext,
+                                 PersistenceContext persistenceContext,
+                                 PlansSummaryCalculator plansSummaryCalculator,
+                                 SourceChangeRequestNotifier.SourceChangeRequestListener<CategoryPlansViewModel> categoryChangeRequestListener)
     {
         this.applicationContext = applicationContext;
         this.persistenceContext = persistenceContext;
         this.plansSummaryCalculator = plansSummaryCalculator;
+        this.categoryChangeRequestListener = categoryChangeRequestListener;
         this.setYearAndMonth(DateTimeHelper.getCurrentYear(), DateTimeHelper.getCurrentMonth());
     }
 
@@ -89,7 +95,7 @@ public class MonthlyGoalsViewModel extends BaseObservable {
             if(!this.viewModelMap.containsKey(yearMonthPair))
             {
                 MonthlyPlansModel model = this.getMonthlyPlans(yearMonthPair);
-                this.viewModelMap.put(yearMonthPair, new MonthlyPlanningCategoryListViewModel(model, this.plansSummaryCalculator));
+                this.viewModelMap.put(yearMonthPair, new MonthlyPlanningCategoryListViewModel(model, this.plansSummaryCalculator, this.categoryChangeRequestListener));
             }
 
             this.monthlyPlansViewModel = this.viewModelMap.get(yearMonthPair);
