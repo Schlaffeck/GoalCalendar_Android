@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.view.lists;
 
 import android.content.Context;
+import android.databinding.ObservableArrayList;
 import android.support.v7.util.SortedList;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import com.slamcode.goalcalendar.view.lists.base.ComparatorSortedListCallback;
 import com.slamcode.goalcalendar.view.lists.base.DefaultComparator;
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableRecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableViewHolderBase;
+import com.slamcode.goalcalendar.view.lists.base.bindable.ObservableSortedList;
 import com.slamcode.goalcalendar.viewmodels.DailyPlansViewModel;
 import com.slamcode.goalcalendar.viewmodels.DayInMonthViewModel;
 
@@ -21,10 +23,13 @@ import com.slamcode.goalcalendar.viewmodels.DayInMonthViewModel;
 public class DailyPlanHeaderRecyclerViewAdapter extends BindableRecyclerViewDataAdapter<DayInMonthViewModel, DailyPlanHeaderRecyclerViewAdapter.DailyPlanHeaderViewHolder> {
 
     protected DailyPlanHeaderRecyclerViewAdapter(Context context, LayoutInflater layoutInflater) {
-        this(context, layoutInflater, new SortedList<>(DayInMonthViewModel.class, new ComparatorSortedListCallback<>(new DefaultComparator<DayInMonthViewModel>())));
+        this(context, layoutInflater, new ObservableSortedList<>(
+                new ObservableArrayList<DayInMonthViewModel>(),
+                DayInMonthViewModel.class,
+                new ComparatorSortedListCallback<>(new DefaultComparator<DayInMonthViewModel>())));
     }
 
-    protected DailyPlanHeaderRecyclerViewAdapter(Context context, LayoutInflater layoutInflater, SortedList<DayInMonthViewModel> sourceList) {
+    protected DailyPlanHeaderRecyclerViewAdapter(Context context, LayoutInflater layoutInflater, ObservableSortedList<DayInMonthViewModel> sourceList) {
         super(context, layoutInflater, sourceList);
     }
 

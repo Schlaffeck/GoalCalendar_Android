@@ -79,40 +79,11 @@ public abstract class RecyclerViewDataAdapter<Item, ViewHolder extends ViewHolde
         return this.list != null ? this.list.size() : 0;
     }
 
-    public void addOrUpdateItem(Item item)
-    {
-        int itemIndex = this.getItemIndex(item);
-        if(itemIndex == -1)
-        {
-            this.list.add(item);
-            this.notifyItemInserted(this.list.indexOf(item));
-        }
-        else {
-            this.modifiedItems.add(item);
-            this.list.recalculatePositionOfItemAt(itemIndex);
-            int newPosition = this.list.indexOf(item);
-            this.notifyItemMoved(itemIndex, newPosition);
-            this.notifyItemChanged(newPosition);
-        }
-    }
-
-    public void removeItem(Item item)
-    {
-        if(this.list.indexOf(item) == -1) {
-            return;
-        }
-
-        int position = this.list.indexOf(item);
-        this.list.remove(item);
-        this.modifiedItems.remove(item);
-        this.notifyItemRemoved(position);
-    }
-
-    public LayoutInflater getLayoutInflater() {
+    protected LayoutInflater getLayoutInflater() {
         return layoutInflater;
     }
 
-    public Context getContext() {
+    protected Context getContext() {
         return context;
     }
 
@@ -135,12 +106,5 @@ public abstract class RecyclerViewDataAdapter<Item, ViewHolder extends ViewHolde
         while(!found && ++i < this.list.size())
             found = this.list.get(i) == item;
         return found ? i : -1;
-    }
-
-    public interface ItemsSourceChangeRequestListener
-    {
-        void onModifyItemRequest(int itemPosition);
-
-        void onRemoveItemRequest(int itemPosition);
     }
 }

@@ -34,7 +34,10 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
                                            LayoutInflater layoutInflater,
                                            YearMonthPair yearMonthPair,
                                            Collection<DailyPlansViewModel> sourceCollection) {
-        super(context, layoutInflater, new SortedList<>(DailyPlansViewModel.class, new ComparatorSortedListCallback<DailyPlansViewModel>(new DefaultComparator<DailyPlansViewModel>())));
+        super(context, layoutInflater,
+                new SortedList<>(
+                        DailyPlansViewModel.class,
+                        new ComparatorSortedListCallback<>(new DefaultComparator<DailyPlansViewModel>())));
         this.yearMonthPair = yearMonthPair;
         this.updateSourceCollection(sourceCollection);
     }

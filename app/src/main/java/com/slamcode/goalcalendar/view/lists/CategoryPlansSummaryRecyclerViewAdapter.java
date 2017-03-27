@@ -1,6 +1,8 @@
 package com.slamcode.goalcalendar.view.lists;
 
 import android.content.Context;
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
 import android.support.v7.util.SortedList;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import com.slamcode.goalcalendar.view.lists.base.ComparatorSortedListCallback;
 import com.slamcode.goalcalendar.view.lists.base.DefaultComparator;
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableRecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableViewHolderBase;
+import com.slamcode.goalcalendar.view.lists.base.bindable.ObservableSortedList;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 
 /**
@@ -21,9 +24,10 @@ public class CategoryPlansSummaryRecyclerViewAdapter extends BindableRecyclerVie
 
     public CategoryPlansSummaryRecyclerViewAdapter(Context context, LayoutInflater layoutInflater) {
         super(context, layoutInflater,
-                new SortedList<>(CategoryPlansViewModel.class, new ComparatorSortedListCallback<>(new DefaultComparator<CategoryPlansViewModel>())));
+                new ObservableSortedList<>(new ObservableArrayList<CategoryPlansViewModel>(), CategoryPlansViewModel.class, new ComparatorSortedListCallback<>(new DefaultComparator<CategoryPlansViewModel>())));
     }
-    public CategoryPlansSummaryRecyclerViewAdapter(Context context, LayoutInflater layoutInflater, SortedList<CategoryPlansViewModel> sourceList) {
+
+    public CategoryPlansSummaryRecyclerViewAdapter(Context context, LayoutInflater layoutInflater, ObservableSortedList<CategoryPlansViewModel> sourceList) {
         super(context, layoutInflater, sourceList);
     }
 

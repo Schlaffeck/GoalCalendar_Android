@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.view.lists;
 
 import android.content.Context;
+import android.databinding.ObservableList;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,9 @@ import com.slamcode.goalcalendar.view.lists.base.ComparatorSortedListCallback;
 import com.slamcode.goalcalendar.view.lists.base.DefaultComparator;
 import com.slamcode.goalcalendar.view.lists.base.RecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.base.ViewHolderBase;
+import com.slamcode.goalcalendar.view.lists.base.bindable.BindableRecyclerViewDataAdapter;
+import com.slamcode.goalcalendar.view.lists.base.bindable.BindableViewHolderBase;
+import com.slamcode.goalcalendar.view.lists.base.bindable.ObservableSortedList;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 
 import butterknife.BindView;
@@ -22,13 +26,13 @@ import butterknife.BindView;
  * Created by moriasla on 15.12.2016.
  */
 
-public class CategoryDailyPlansRecyclerViewAdapter extends RecyclerViewDataAdapter<CategoryPlansViewModel, CategoryDailyPlansRecyclerViewAdapter.CategoryDailyPlansViewHolder> {
+public class CategoryDailyPlansRecyclerViewAdapter extends BindableRecyclerViewDataAdapter<CategoryPlansViewModel, CategoryDailyPlansRecyclerViewAdapter.CategoryDailyPlansViewHolder> {
 
         private YearMonthPair yearMonthPair;
 
-    public CategoryDailyPlansRecyclerViewAdapter(Context context, LayoutInflater layoutInflater, YearMonthPair yearMonthPair)
+    public CategoryDailyPlansRecyclerViewAdapter(Context context, LayoutInflater layoutInflater, YearMonthPair yearMonthPair, ObservableList<CategoryPlansViewModel> items)
     {
-        super(context, layoutInflater, new SortedList<>(CategoryPlansViewModel.class, new ComparatorSortedListCallback<>(new DefaultComparator<CategoryPlansViewModel>())));
+        super(context, layoutInflater, new ObservableSortedList<>(items, CategoryPlansViewModel.class, new ComparatorSortedListCallback<>(new DefaultComparator<CategoryPlansViewModel>())));
 
         this.yearMonthPair = yearMonthPair;
     }
@@ -46,7 +50,7 @@ public class CategoryDailyPlansRecyclerViewAdapter extends RecyclerViewDataAdapt
         return new CategoryDailyPlansViewHolder(convertView);
     }
 
-    public class CategoryDailyPlansViewHolder extends ViewHolderBase<CategoryPlansViewModel>
+    public class CategoryDailyPlansViewHolder extends BindableViewHolderBase<CategoryPlansViewModel>
     {
         @BindView(R.id.monthly_goals_list_item_days_list)
         RecyclerView daysListGridView;
