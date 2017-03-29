@@ -2,7 +2,9 @@ package com.slamcode.goalcalendar.view.lists.base;
 
 import android.support.v7.util.SortedList;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,6 +17,14 @@ public class SortedListCallbackSet<Item> extends SortedList.Callback<Item> {
 
     private Set<SortedList.Callback<Item>> callbacks = new HashSet<>();
     private Comparator<Item> itemComparator;
+
+    public SortedListCallbackSet(Comparator<Item> itemComparator) {
+        this(Collections.<SortedList.Callback<Item>>emptyList(), itemComparator);
+    }
+
+    public SortedListCallbackSet(SortedList.Callback<Item> callback, Comparator<Item> itemComparator) {
+        this(Arrays.asList(callback), itemComparator);
+    }
 
     public SortedListCallbackSet(Collection<SortedList.Callback<Item>> callbacks) {
         this(callbacks, null);
@@ -53,7 +63,7 @@ public class SortedListCallbackSet<Item> extends SortedList.Callback<Item> {
                 break;
         }
 
-        return value;
+        return value!=null ? value : 0;
     }
 
     @Override

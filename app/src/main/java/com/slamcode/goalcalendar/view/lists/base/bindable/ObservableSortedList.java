@@ -5,6 +5,8 @@ import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
 import android.support.v7.util.SortedList;
 
+import com.slamcode.goalcalendar.view.lists.base.SortedListCallbackSet;
+
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -14,13 +16,14 @@ import java.util.Collection;
 
 public class ObservableSortedList<Item extends Observable> extends SortedList<Item> {
 
+    private final SortedListCallbackSet<Item> callbackSet;
     private ObservableList<Item> baseList;
     private final ObservableListChangedListener listChangedListener;
     private final ItemPropertyChangedListener propertyChangedListener;
     private boolean preventObservableListChangeNotification = false;
     private boolean observableSourceListChanging = false;
 
-    public ObservableSortedList(ObservableList<Item> baseList, Class<Item> klass, Callback<Item> callback) {
+    public ObservableSortedList(ObservableList<Item> baseList, Class<Item> klass, SortedListCallbackSet<Item> callback) {
         super(klass, callback);
         this.baseList = baseList;
         this.listChangedListener = new ObservableListChangedListener();
@@ -29,6 +32,7 @@ public class ObservableSortedList<Item extends Observable> extends SortedList<It
             this.setupItemPropertyChangeListener(item);
         this.addAll(baseList);
         this.baseList.addOnListChangedCallback(this.listChangedListener);
+        this.callbackSet = callback;
     }
 
     public void updateSourceList(Collection<Item> newSourceList)
@@ -132,6 +136,10 @@ public class ObservableSortedList<Item extends Observable> extends SortedList<It
             recalculatePositionOfItemAt(oldPosition);
         }
         else add(item);
+    }
+
+    public SortedListCallbackSet<Item> getCallbackSet() {
+        return callbackSet;
     }
 
     private class ItemPropertyChangedListener extends Observable.OnPropertyChangedCallback {

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.view.lists.base.ComparatorSortedListCallback;
 import com.slamcode.goalcalendar.view.lists.base.DefaultComparator;
+import com.slamcode.goalcalendar.view.lists.base.SortedListCallbackSet;
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableRecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableViewHolderBase;
 import com.slamcode.goalcalendar.view.lists.base.bindable.ObservableSortedList;
@@ -26,7 +27,7 @@ public class DailyPlanHeaderRecyclerViewAdapter extends BindableRecyclerViewData
         this(context, layoutInflater, new ObservableSortedList<>(
                 new ObservableArrayList<DayInMonthViewModel>(),
                 DayInMonthViewModel.class,
-                new ComparatorSortedListCallback<>(new DefaultComparator<DayInMonthViewModel>())));
+                new SortedListCallbackSet<>(new ComparatorSortedListCallback<>(new DefaultComparator<DayInMonthViewModel>()), new DefaultComparator<DayInMonthViewModel>())));
     }
 
     protected DailyPlanHeaderRecyclerViewAdapter(Context context, LayoutInflater layoutInflater, ObservableSortedList<DayInMonthViewModel> sourceList) {

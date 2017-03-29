@@ -13,7 +13,14 @@ import com.slamcode.goalcalendar.view.lists.base.RecyclerViewDataAdapter;
 
 public abstract class BindableRecyclerViewDataAdapter<Item extends Observable, ViewHolder extends BindableViewHolderBase<Item>> extends RecyclerViewDataAdapter<Item, ViewHolder> {
 
-    protected BindableRecyclerViewDataAdapter(Context context, LayoutInflater layoutInflater, SortedList<Item> sourceList) {
+    private final ObservableSortedList<Item> sourceList;
+
+    protected BindableRecyclerViewDataAdapter(Context context, LayoutInflater layoutInflater, ObservableSortedList<Item> sourceList) {
         super(context, layoutInflater, sourceList);
+        this.sourceList = sourceList;
+    }
+
+    protected ObservableSortedList<Item> getSourceList() {
+        return sourceList;
     }
 }
