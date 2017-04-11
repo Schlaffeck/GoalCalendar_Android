@@ -34,7 +34,9 @@ public class AppContextBasedViewAdapterProvider implements ItemsCollectionAdapte
     }
 
     @Override
-    public DailyPlanHeaderRecyclerViewAdapter provideDailyPlanHeaderRecyclerViewAdapter(Context context, LayoutInflater layoutInflater) {
-        return new DailyPlanHeaderRecyclerViewAdapter(context, layoutInflater);
+    public DailyPlanHeaderRecyclerViewAdapter provideDailyPlanHeaderRecyclerViewAdapter(Context context,
+                                                                                        YearMonthPair yearMonthPair,
+                                                                                        LayoutInflater layoutInflater) {
+        return new DailyPlanHeaderRecyclerViewAdapter(context, yearMonthPair, layoutInflater);
     }
 }

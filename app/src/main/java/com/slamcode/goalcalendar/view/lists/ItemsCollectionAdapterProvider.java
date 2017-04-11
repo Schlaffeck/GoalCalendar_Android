@@ -19,5 +19,5 @@ public interface ItemsCollectionAdapterProvider {
 
     CategoryPlansSummaryRecyclerViewAdapter providePlansSummaryForCategoriesRecyclerViewAdapter(Context context, LayoutInflater layoutInflater);
 
-    DailyPlanHeaderRecyclerViewAdapter provideDailyPlanHeaderRecyclerViewAdapter(Context context, LayoutInflater layoutInflater);
+    DailyPlanHeaderRecyclerViewAdapter provideDailyPlanHeaderRecyclerViewAdapter(Context context, YearMonthPair yearMonthPair, LayoutInflater layoutInflater);
 }

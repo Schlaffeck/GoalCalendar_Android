@@ -139,6 +139,7 @@ public class Bindings {
             adapter = injectData.itemsCollectionAdapterProvider
                     .provideDailyPlanHeaderRecyclerViewAdapter(
                             injectData.applicationContext.getDefaultContext(),
+                            new YearMonthPair(),
                             (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE));
             recyclerView.setAdapter(adapter);
         }
