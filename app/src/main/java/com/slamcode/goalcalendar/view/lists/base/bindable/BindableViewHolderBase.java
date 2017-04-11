@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.view.lists.base.bindable;
 
 import android.databinding.DataBindingUtil;
+import android.databinding.Observable;
 import android.databinding.ViewDataBinding;
 import android.view.View;
 
@@ -11,7 +12,7 @@ import com.slamcode.goalcalendar.view.lists.base.ViewHolderBase;
  * Created by moriasla on 03.03.2017.
  */
 
-public class BindableViewHolderBase<Item> extends ViewHolderBase<Item> {
+public class BindableViewHolderBase<Item extends Observable> extends ViewHolderBase<Item> {
 
     private final ViewDataBinding binding;
 

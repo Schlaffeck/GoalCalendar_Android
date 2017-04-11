@@ -1,9 +1,11 @@
 package com.slamcode.goalcalendar.view.lists;
 
 import android.content.Context;
+import android.databinding.ObservableList;
 import android.view.LayoutInflater;
 
 import com.slamcode.goalcalendar.planning.YearMonthPair;
+import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 
 /**
  * Created by moriasla on 02.02.2017.
@@ -12,13 +14,18 @@ import com.slamcode.goalcalendar.planning.YearMonthPair;
 public class AppContextBasedViewAdapterProvider implements ItemsCollectionAdapterProvider {
 
     @Override
-    public CategoryNameRecyclerViewAdapter provideCategoryNameListViewAdapter(Context context, LayoutInflater inflater) {
-        return new CategoryNameRecyclerViewAdapter(context, inflater);
+    public CategoryNameRecyclerViewAdapter provideCategoryNameListViewAdapter(Context context,
+                                                                              LayoutInflater inflater,
+                                                                              ObservableList<CategoryPlansViewModel> itemsSource) {
+        return new CategoryNameRecyclerViewAdapter(context, inflater, itemsSource);
     }
 
     @Override
-    public CategoryDailyPlansRecyclerViewAdapter provideCategoryDailyPlansListViewAdapter(Context context, LayoutInflater layoutInflater, YearMonthPair yearMonthPair) {
-        return new CategoryDailyPlansRecyclerViewAdapter(context, layoutInflater, yearMonthPair);
+    public CategoryDailyPlansRecyclerViewAdapter provideCategoryDailyPlansListViewAdapter(Context context,
+                                                                                          LayoutInflater layoutInflater,
+                                                                                          YearMonthPair yearMonthPair,
+                                                                                          ObservableList<CategoryPlansViewModel> itemsSource) {
+        return new CategoryDailyPlansRecyclerViewAdapter(context, layoutInflater, yearMonthPair, itemsSource);
     }
 
     @Override
@@ -27,7 +34,9 @@ public class AppContextBasedViewAdapterProvider implements ItemsCollectionAdapte
     }
 
     @Override
-    public DailyPlanHeaderRecyclerViewAdapter provideDailyPlanHeaderRecyclerViewAdapter(Context context, LayoutInflater layoutInflater) {
-        return new DailyPlanHeaderRecyclerViewAdapter(context, layoutInflater);
+    public DailyPlanHeaderRecyclerViewAdapter provideDailyPlanHeaderRecyclerViewAdapter(Context context,
+                                                                                        YearMonthPair yearMonthPair,
+                                                                                        LayoutInflater layoutInflater) {
+        return new DailyPlanHeaderRecyclerViewAdapter(context, yearMonthPair, layoutInflater);
     }
 }

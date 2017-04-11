@@ -6,6 +6,7 @@ import android.databinding.Observable;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
 
+import com.slamcode.collections.CollectionUtils;
 import com.slamcode.goalcalendar.BR;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
@@ -123,6 +124,8 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
 
     private class CategoryListChangedListener extends ObservableList.OnListChangedCallback<ObservableList<CategoryPlansViewModel>>{
 
+        private CategoryPlansViewModel itemRequestedForRemoval;
+
         @Override
         public void onChanged(ObservableList<CategoryPlansViewModel> categoryPlansViewModels) {
             model.getCategories().clear();
@@ -164,10 +167,9 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
             if(itemCount == 0)
                 return;
 
-            for(int i = positionStart; i < positionStart + itemCount; i++)
+            for(int i = positionStart; i < positionStart + itemCount && i < model.getCategories().size(); i++)
             {
-                CategoryPlansViewModel itemVm = categoryPlansViewModels.get(i);
-                model.getCategories().remove(itemVm.getModel());
+                model.getCategories().remove(i);
             }
 
             notifyPropertyChanged(BR.empty);

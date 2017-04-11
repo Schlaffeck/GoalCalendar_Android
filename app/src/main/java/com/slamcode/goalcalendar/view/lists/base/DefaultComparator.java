@@ -19,6 +19,9 @@ public class DefaultComparator<Item extends Comparable<Item>> implements Compara
         if(o2 == null)
             return 1;
 
+        if(o1 == o2)
+            return 0;
+
         return o1.compareTo(o2);
     }
 }

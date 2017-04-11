@@ -5,6 +5,8 @@ import android.support.v7.util.SortedList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by moriasla on 08.02.2017.
@@ -14,7 +16,7 @@ public class ComparatorSortedListCallback<Model> extends SortedList.Callback<Mod
 
     private final Comparator<Model> comparator;
 
-    private Collection<ItemsChangeListener> listeners = new ArrayList<>();
+    private Set<ItemsChangeListener> listeners = new HashSet<>();
 
     public ComparatorSortedListCallback(Comparator<Model> comparator)
     {

@@ -40,6 +40,7 @@ public class Bindings {
 
         RecyclerView.Adapter adapter = recyclerView.getAdapter();
 
+        boolean adapterUpToDate = false;
         if(adapter == null)
         {
             Dagger2InjectData injectData = new Dagger2InjectData();
@@ -52,7 +53,7 @@ public class Bindings {
             recyclerView.setAdapter(adapter);
         }
 
-        if(adapter instanceof CategoryPlansSummaryRecyclerViewAdapter)
+        if(!adapterUpToDate && (adapter instanceof CategoryPlansSummaryRecyclerViewAdapter))
         {
             CategoryPlansSummaryRecyclerViewAdapter dataAdapter = (CategoryPlansSummaryRecyclerViewAdapter) adapter;
             dataAdapter.updateSourceCollection(itemsSource);
@@ -67,6 +68,7 @@ public class Bindings {
 
         RecyclerView.Adapter adapter = recyclerView.getAdapter();
 
+        boolean adapterUpToDate = false;
         if(adapter == null)
         {
             Dagger2InjectData injectData = new Dagger2InjectData();
@@ -75,11 +77,13 @@ public class Bindings {
             adapter = injectData.itemsCollectionAdapterProvider
                     .provideCategoryNameListViewAdapter(
                             injectData.applicationContext.getDefaultContext(),
-                            (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE));
+                            (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                            itemsSource);
             recyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
         }
 
-        if(adapter instanceof CategoryNameRecyclerViewAdapter)
+        if(!adapterUpToDate && (adapter instanceof CategoryNameRecyclerViewAdapter))
         {
             CategoryNameRecyclerViewAdapter dataAdapter = (CategoryNameRecyclerViewAdapter) adapter;
             dataAdapter.updateSourceCollection(itemsSource);
@@ -94,6 +98,7 @@ public class Bindings {
 
         RecyclerView.Adapter adapter = recyclerView.getAdapter();
 
+        boolean adapterUpToDate = false;
         if(adapter == null)
         {
             Dagger2InjectData injectData = new Dagger2InjectData();
@@ -103,11 +108,13 @@ public class Bindings {
                     .provideCategoryDailyPlansListViewAdapter(
                             injectData.applicationContext.getDefaultContext(),
                             (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-                            new YearMonthPair());
+                            new YearMonthPair(),
+                            itemsSource);
             recyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
         }
 
-        if(adapter instanceof CategoryDailyPlansRecyclerViewAdapter)
+        if(!adapterUpToDate && (adapter instanceof CategoryDailyPlansRecyclerViewAdapter))
         {
             CategoryDailyPlansRecyclerViewAdapter dataAdapter = (CategoryDailyPlansRecyclerViewAdapter) adapter;
             dataAdapter.updateSourceCollection(itemsSource);
@@ -132,6 +139,7 @@ public class Bindings {
             adapter = injectData.itemsCollectionAdapterProvider
                     .provideDailyPlanHeaderRecyclerViewAdapter(
                             injectData.applicationContext.getDefaultContext(),
+                            new YearMonthPair(),
                             (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE));
             recyclerView.setAdapter(adapter);
         }

@@ -18,10 +18,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract;
 import com.slamcode.goalcalendar.dagger2.ComposableApplication;
 import com.slamcode.goalcalendar.data.PersistenceContext;
@@ -83,6 +85,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
     private ViewDataBinding mainActivityContentBinding;
 
+    private MonthlyGoalsViewModel activityViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,6 +143,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
     @Override
     public void onDataSet(MonthlyGoalsViewModel data) {
+        this.activityViewModel = data;
         if(this.mainActivityContentBinding == null)
             this.mainActivityContentBinding =  DataBindingUtil.bind(this.monthlyGoalsActivityLayout);
 
@@ -160,6 +165,20 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
         emptyContentBinding.setVariable(BR.presenter, this.presenter);
         emptyContentBinding.setVariable(BR.vm, data);
+
+        final RecyclerView dailyPlansRecyclerView = (RecyclerView) this.findViewById(R.id.monthly_goals_header_list_item_days_list);
+
+        dailyPlansRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                View v = dailyPlansRecyclerView;
+                v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                if(v.getMeasuredHeight() >0 && v.getMeasuredWidth() > 0)
+                {
+                    scrollToCurrentDate();
+                }
+            }
+        });
     }
 
     @Override
@@ -211,6 +230,19 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
                 return gestureDetector.onTouchEvent(event);
             }
         });
+    }
+
+    private void scrollToCurrentDate()
+    {
+        if(this.activityViewModel.getMonth() != DateTimeHelper.getCurrentMonth()
+                || this.activityViewModel.getYear() != DateTimeHelper.getCurrentYear())
+            return;
+
+        HorizontalScrollView daysPlanScrollView = (HorizontalScrollView) this.findViewById(R.id.monthly_goals_table_horizontalScrollView);
+        int dayToScrollTo = DateTimeHelper.currentDayNumber() - 3;
+        dayToScrollTo = (dayToScrollTo > 0 ? dayToScrollTo : 0);
+        int width = (int) this.getResources().getDimension(R.dimen.monthly_goals_table_day_plan_column_width);
+        daysPlanScrollView.smoothScrollTo(dayToScrollTo * width, 0);
     }
 
     private class HorizontalFlingGestureListener extends GestureDetector.SimpleOnGestureListener{
