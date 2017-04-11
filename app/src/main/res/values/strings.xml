@@ -70,7 +70,7 @@
     <!-- summary view -->
     <string name="monthly_plans_summary_generalPercentage">Monthly progress: %.2f%%</string>
     <string name="monthly_plans_summary_details">Description of the summary of progress in this month</string>
-    <string name="plans_summary_percentageFormat">%.2f%%</string>
+    <string name="plans_summary_percentageFormat" formatted="false">%s%.2f%%</string>
     <string name="monthly_plans_summary_noOfDaysLeft">Days left: %d</string>
 
     <!-- notification -->
