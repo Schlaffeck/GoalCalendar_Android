@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="vm"
+            type="com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel"/>
+        <variable
+            name="presenter"
+            type="com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract.Presenter"/>
+    </data>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,6 +16,11 @@
     android:fitsSystemWindows="true"
     android:id="@+id/monthly_goals_activity_main_coordinator_layout"
     tools:context=".MonthlyGoalsActivity">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -23,15 +37,31 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/monthly_goals_content" />
+    </LinearLayout>
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/monthly_goals_activity_bottom_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="true"
+            android:background="@color/listAccentColor"
+            app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+            <include layout="@layout/plans_monthly_summary_content_view" />
+        </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/monthly_goals_add_category_floatingactionbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:scaleType="center"
+        android:elevation="4dp"
         android:tint="@android:color/white"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:layout_anchorGravity="top|right|end"
+        app:layout_anchor="@id/monthly_goals_activity_bottom_sheet"
+        app:srcCompat="@android:drawable/ic_input_add"
+        android:onClick="@{presenter::showAddNewCategoryDialog}"/>
 
 </android.support.design.widget.CoordinatorLayout>
+</layout>

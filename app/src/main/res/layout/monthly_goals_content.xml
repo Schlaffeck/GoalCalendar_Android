@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="vm"
+            type="com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel"/>
+        <variable
+            name="presenter"
+            type="com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract.Presenter"/>
+    </data>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_monthly_goals"
@@ -24,7 +35,8 @@
             android:layout_width="@dimen/monthly_goals_yearTextView_buttonSize"
             android:layout_height="@dimen/monthly_goals_yearTextView_buttonSize"
             android:layout_alignParentLeft="true"
-            android:background="@drawable/ic_keyboard_arrow_left_white_24dp"/>
+            android:background="@drawable/ic_keyboard_arrow_left_white_24dp"
+            android:onClick="@{presenter::goToPreviousYear}"/>
         <TextView
             android:textSize="@dimen/monthly_goals_yearTextView_textSize"
             android:textColor="@android:color/white"
@@ -33,15 +45,16 @@
             android:id="@+id/monthly_goals_year_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="2016"></TextView>
+            android:text='@{String.format("%d", vm.monthlyPlans.monthData.year)}'
+            android:gravity="center"></TextView>
         <ImageButton
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:id="@+id/monthly_goals_increment_year_button"
             android:layout_width="@dimen/monthly_goals_yearTextView_buttonSize"
             android:layout_height="@dimen/monthly_goals_yearTextView_buttonSize"
             android:layout_alignParentRight="true"
-            android:background="@drawable/ic_keyboard_arrow_right_white_24dp"/>
+            android:background="@drawable/ic_keyboard_arrow_right_white_24dp"
+            android:onClick="@{presenter::goToNextYear}"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -49,7 +62,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:layout_below="@id/monthly_goals_yearValue_layout">
+        android:layout_below="@id/monthly_goals_yearValue_layout"
+        android:visibility="@{vm.monthlyPlans.empty ? View.VISIBLE : View.GONE}">
     <include layout="@layout/monthly_goals_empty_list_content"/>
     </LinearLayout>
 
@@ -85,7 +99,9 @@
                 android:paddingLeft="0dp"
                 android:paddingRight="10dp"
                 android:layout_marginLeft="-5dp"
-                android:layout_marginRight="0dp">
+                android:layout_marginRight="0dp"
+                android:entries="@array/months_array"
+                bind:selectedValue="@={vm.monthString}">
             </Spinner>
 
             <!-- categories names -->
@@ -96,8 +112,11 @@
                 android:layout_height="match_parent"
                 android:verticalSpacing="@dimen/default_vertical_spacing"
                 android:horizontalSpacing="@dimen/default_horizontal_spacing"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                 android:gravity="left"
-                android:scrollbars="none"></android.support.v7.widget.RecyclerView>
+                android:scrollbars="none"
+                bind:categoryNamesSource="@{vm.monthlyPlans.categoryPlansList}"></android.support.v7.widget.RecyclerView>
         </LinearLayout>
 
         <HorizontalScrollView
@@ -111,15 +130,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/monthly_goals_header_list_item_days_list"
+                    android:layout_marginTop="@dimen/monthly_goals_table_listView_marginTop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:verticalSpacing="@dimen/default_vertical_spacing"
+                    android:horizontalSpacing="@dimen/default_horizontal_spacing"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    bind:daysListHeaderSource="@{vm.monthlyPlans.monthData.daysList}"></android.support.v7.widget.RecyclerView>
             <!-- days in month list -->
-            <LinearLayout
-                android:layout_height="@dimen/monthly_goals_table_header_height"
-                android:orientation="horizontal"
-                android:id="@+id/monthly_goals_header_list_item_days_list"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="@dimen/default_margin"
-                android:layout_marginBottom="@dimen/monthly_goals_table_header_bottomMargin">
-            </LinearLayout>
+            <!--<LinearLayout-->
+                <!--android:layout_height="@dimen/monthly_goals_table_header_height"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:id="@+id/monthly_goals_header_list_item_days_list"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_marginTop="@dimen/default_margin"-->
+                <!--android:layout_marginBottom="@dimen/monthly_goals_table_header_bottomMargin">-->
+            <!--</LinearLayout>-->
 
             <!-- categories daily plans -->
             <android.support.v7.widget.RecyclerView
@@ -129,9 +161,13 @@
                 android:layout_height="match_parent"
                 android:verticalSpacing="@dimen/default_vertical_spacing"
                 android:horizontalSpacing="@dimen/default_horizontal_spacing"
-                android:gravity="center"></android.support.v7.widget.RecyclerView>
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                android:gravity="center"
+                bind:categoryPlansSource="@{vm.monthlyPlans.categoryPlansList}"></android.support.v7.widget.RecyclerView>
             </LinearLayout>
         </HorizontalScrollView>
     </RelativeLayout>
 
 </RelativeLayout>
+</layout>

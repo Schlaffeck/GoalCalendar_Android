@@ -23,7 +23,7 @@ import android.view.MenuItem;
 import java.util.List;
 
 /**
- * A {@link PreferenceActivity} that presents a set of application settings. On
+ * A {@link PreferenceActivity} that presents a setFrequencyPerion of application settings. On
  * handset devices, settings are presented as a single list. On tablets,
  * settings are split by category, with category headers shown to the LEFT of
  * the list of settings.
@@ -55,7 +55,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                 ? listPreference.getEntries()[index]
                                 : null);
             } else {
-                // For all other preferences, set the summary to the value's
+                // For all other preferences, setFrequencyPerion the summary to the value's
                 // simple string representation.
                 preference.setSummary(stringValue);
             }

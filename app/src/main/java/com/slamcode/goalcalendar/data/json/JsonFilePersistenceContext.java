@@ -1,8 +1,12 @@
 package com.slamcode.goalcalendar.data.json;
 
 import android.content.Context;
+import android.databinding.Observable;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.slamcode.goalcalendar.data.CategoriesRepository;
 import com.slamcode.goalcalendar.data.MonthlyPlansRepository;
 import com.slamcode.goalcalendar.data.PersistenceContext;
@@ -55,7 +59,8 @@ public class JsonFilePersistenceContext implements PersistenceContext {
 
         FileOutputStream fileStream;
         try{
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder()
+                    .create();
             fileStream = this.appContext.openFileOutput(this.fileName, Context.MODE_PRIVATE);
             fileStream.write(gson.toJson(this.dataBundle, JsonDataBundle.class).getBytes());
             fileStream.close();
@@ -80,7 +85,8 @@ public class JsonFilePersistenceContext implements PersistenceContext {
             if(bundleFile.exists()) {
                 FileReader fileReader = new FileReader(this.getFilePath());
 
-                Gson gson = new Gson();
+                Gson gson = new GsonBuilder()
+                        .create();
                 this.dataBundle = gson.fromJson(fileReader, JsonDataBundle.class);
             }
 
@@ -159,4 +165,5 @@ public class JsonFilePersistenceContext implements PersistenceContext {
                 persistData();
         }
     }
+
 }

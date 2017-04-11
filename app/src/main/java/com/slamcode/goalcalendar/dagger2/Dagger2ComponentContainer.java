@@ -16,20 +16,35 @@ import java.util.concurrent.ConcurrentMap;
  */
 public final class Dagger2ComponentContainer {
 
+    private static Context firstContextSet = null;
+
     private static ConcurrentMap<Context, ApplicationDagger2Component> defaultContextComponent = new ConcurrentHashMap<>();
 
     public static ApplicationDagger2Component getApplicationDagger2Component(Context context)
     {
        defaultContextComponent.putIfAbsent(context, createApplicationDagger2Component(context));
+        if(firstContextSet == null)
+            firstContextSet = context;
+
         return defaultContextComponent.get(context);
+    }
+
+    public static ApplicationDagger2Component getApplicationDagger2Component()
+    {
+        if(firstContextSet == null
+                || !defaultContextComponent.containsKey(firstContextSet))
+            return null;
+
+        return defaultContextComponent.get(firstContextSet);
     }
 
     private static ApplicationDagger2Component createApplicationDagger2Component(Context context)
     {
         ApplicationDagger2Component result =  DaggerApplicationDagger2Component.builder()
+                .appDagger2Module(new AppDagger2Module(context))
                 .dataDagger2Module(new DataDagger2Module(context))
                 .viewDagger2Module(new ViewDagger2Module())
-                .serviceDagger2Module(new ServiceDagger2Module(new DefaultApplicationContext(context)))
+                .serviceDagger2Module(new ServiceDagger2Module())
                 .settingsDagger2Module(new SettingsDagger2Module(context))
                 .build();
 

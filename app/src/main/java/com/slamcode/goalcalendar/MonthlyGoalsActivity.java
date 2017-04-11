@@ -1,108 +1,65 @@
 package com.slamcode.goalcalendar;
 
+import android.app.DialogFragment;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewTreeObserver;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.HorizontalScrollView;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.RelativeLayout;
 
-import com.slamcode.collections.CollectionUtils;
-import com.slamcode.collections.ElementCreator;
+import com.slamcode.goalcalendar.planning.DateTimeHelper;
+import com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract;
 import com.slamcode.goalcalendar.dagger2.ComposableApplication;
 import com.slamcode.goalcalendar.data.PersistenceContext;
-import com.slamcode.goalcalendar.planning.*;
 import com.slamcode.goalcalendar.service.commands.AutoMarkTasksCommand;
-import com.slamcode.goalcalendar.service.notification.NotificationScheduler;
-import com.slamcode.goalcalendar.view.CategoryNameRecyclerViewAdapter;
-import com.slamcode.goalcalendar.view.ResourcesHelper;
-import com.slamcode.goalcalendar.view.activity.ActivityViewState;
 import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
-import com.slamcode.goalcalendar.view.lists.ListAdapterProvider;
-import com.slamcode.goalcalendar.view.lists.RecyclerViewDataAdapter;
-import com.slamcode.goalcalendar.view.presenters.MonthlyGoalsPresenter;
-import com.slamcode.goalcalendar.view.utils.ColorsHelper;
-import com.slamcode.goalcalendar.view.lists.ScrollableViewHelper;
-import com.slamcode.goalcalendar.view.utils.SpinnerHelper;
-import com.slamcode.goalcalendar.view.presenters.PersistentMonthlyGoalsPresenter;
-
-import org.apache.commons.collections4.Closure;
-import org.apache.commons.collections4.IteratorUtils;
-
-import java.util.List;
+import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
+import com.slamcode.goalcalendar.view.lists.utils.ScrollableViewHelper;
+import com.slamcode.goalcalendar.view.presenters.PresentersSource;
+import com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnItemSelected;
 
-public class MonthlyGoalsActivity extends AppCompatActivity{
+public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGoalsActivityContract.ActivityView{
 
     final String ACTIVITY_ID = MonthlyGoalsActivity.class.getName();
 
-    // view elements
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
-    @BindView((R.id.monthly_goals_add_category_floatingactionbutton))
-    FloatingActionButton floatingActionButton;
-
-    @BindView((R.id.monthly_goals_list_header_month_spinner))
-    Spinner monthListSpinner;
+    @BindView(R.id.monthly_goals_activity_main_coordinator_layout)
+    CoordinatorLayout monthlyGoalsActivityLayout;
 
     @BindView(R.id.monthly_goals_listview)
-    RecyclerView monthlyGoalsListView;
+    RecyclerView categoryNamesRecyclerView;
 
     @BindView(R.id.monthly_goals_dailyplans_listview)
-    RecyclerView dailyPlansListView;
+    RecyclerView categoryPlansRecyclerView;
 
-    @BindView(R.id.monthly_goals_header_list_item_days_list)
-    LinearLayout daysNumbersHeaderView;
-
-    @BindView(R.id.monthly_goals_table_horizontalScrollView)
-    HorizontalScrollView tableHorizontalScrollView;
-
-    @BindView(R.id.monthly_goals_emptyContent_layout)
-    LinearLayout emptyContentlayout;
-
-    @BindView(R.id.monthly_goals_emptyListView)
-    LinearLayout emptyListLayout;
-
-    @BindView(R.id.monthly_goals_year_textView)
-    TextView yearTextView;
-
-    @BindView(R.id.monthly_goals_decrement_year_button)
-    ImageButton decrementYearButton;
-
-    @BindView(R.id.monthly_goals_increment_year_button)
-    ImageButton incrementYearButton;
+    @BindView(R.id.content_monthly_goals)
+    RelativeLayout monthlyPlansGridContentLayout;
 
     @BindView(R.id.monthly_goals_emptyContent_horizontallScrollView)
     HorizontalScrollView emptyContentHorizontalScrollView;
 
-    //todo: move to di container and inject
-    MonthlyGoalsPresenter presenter;
+    @BindView(R.id.monthly_goals_summary_content_layout)
+    LinearLayout summaryContentLayout;
 
     // dependencies
     @Inject
@@ -112,12 +69,23 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
     PersistenceContext persistenceContext;
 
     @Inject
-    ListAdapterProvider adapterProvider;
+    ItemsCollectionAdapterProvider adapterProvider;
     
     @Inject
     AutoMarkTasksCommand autoMarkTasksCommand;
 
+    @Inject
+    PresentersSource presentersSource;
+
     private GestureDetectorCompat gestureDetector;
+
+    private BottomSheetBehavior bottomSheetBehavior;
+
+    private MonthlyGoalsActivityContract.Presenter presenter;
+
+    private ViewDataBinding mainActivityContentBinding;
+
+    private MonthlyGoalsViewModel activityViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,19 +95,12 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
         this.injectDependencies();
         ButterKnife.bind(this);
 
-        this.setSupportActionBar(this.toolbar);
-        this.setupMonthlyPlanningCategoryList();
+        this.setSupportActionBar((Toolbar)this.findViewById(R.id.toolbar));
+        this.setupPresenter();
+        this.setupRecyclerViews();
         this.setupSwipeListener();
+        this.setupBottomSheetBehavior();
         this.runStartupCommands();
-    }
-
-    private void runStartupCommands() {
-        this.autoMarkTasksCommand.execute(this.findViewById(R.id.monthly_goals_activity_main_coordinator_layout));
-    }
-
-    private void injectDependencies() {
-        ComposableApplication capp = (ComposableApplication)this.getApplication();
-        capp.getApplicationComponent().inject(this);
     }
 
     @Override
@@ -168,55 +129,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
         return super.onTouchEvent(event);
     }
 
-    private void goToPreviousMonth()
-    {
-        Month month = Month.getPreviousMonth(this.presenter.getSelectedMonth());
-
-        this.setupUiForYearAndMonth(
-                month == Month.DECEMBER ?
-                        this.presenter.getSelectedYear() -1 :
-                        this.presenter.getSelectedYear(),
-                month);
-    }
-
-    private void goToNextMonth()
-    {
-        Month month = Month.getNextMonth(this.presenter.getSelectedMonth());
-
-        this.setupUiForYearAndMonth(
-                month == Month.JANUARY ?
-                        this.presenter.getSelectedYear() +1 :
-                        this.presenter.getSelectedYear(),
-                month);
-    }
-
-    @OnClick(R.id.monthly_goals_decrement_year_button)
-    void goToPreviousYear()
-    {
-        int year = this.presenter.getSelectedYear() -1;
-        this.setupUiForYearAndMonth(year, this.presenter.getSelectedMonth());
-    }
-
-    @OnClick(R.id.monthly_goals_increment_year_button)
-    void goToNextYear()
-    {
-        int year = this.presenter.getSelectedYear() +1;
-        this.setupUiForYearAndMonth(year, this.presenter.getSelectedMonth());
-    }
-
-    @OnClick(R.id.monthly_goals_add_category_floatingactionbutton)
-    void showAddNewCategoryDialog()
-    {
-        this.presenter.createAddEditCategoryDialog(-1).show(this.getFragmentManager(), null);
-    }
-
-    @OnItemSelected(R.id.monthly_goals_list_header_month_spinner)
-    void onMonthSelected(AdapterView<?> adapterView, View view, int position, long id) {
-
-        Month month = Month.getMonthByNumber(position+1);
-        this.setupUiForYearAndMonth(this.presenter.getSelectedYear(), month);
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -229,17 +141,84 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
         super.onStop();
     }
 
-    private void setupUiForYearAndMonth(int year, Month month)
+    @Override
+    public void onDataSet(MonthlyGoalsViewModel data) {
+        this.activityViewModel = data;
+        if(this.mainActivityContentBinding == null)
+            this.mainActivityContentBinding =  DataBindingUtil.bind(this.monthlyGoalsActivityLayout);
+
+        this.mainActivityContentBinding.setVariable(BR.presenter, this.presenter);
+        this.mainActivityContentBinding.setVariable(BR.vm, data);
+
+        ViewDataBinding monthlyPlansGridContentBinding = DataBindingUtil.bind(this.monthlyPlansGridContentLayout);
+
+        monthlyPlansGridContentBinding.setVariable(BR.presenter, this.presenter);
+        monthlyPlansGridContentBinding.setVariable(BR.vm, data);
+
+
+        ViewDataBinding monthlyPlansSummaryContentBinding = DataBindingUtil.bind(this.summaryContentLayout);
+
+        monthlyPlansSummaryContentBinding.setVariable(BR.presenter, this.presenter);
+        monthlyPlansSummaryContentBinding.setVariable(BR.vm, data);
+
+        ViewDataBinding emptyContentBinding = DataBindingUtil.findBinding(this.emptyContentHorizontalScrollView);
+
+        emptyContentBinding.setVariable(BR.presenter, this.presenter);
+        emptyContentBinding.setVariable(BR.vm, data);
+
+        final RecyclerView dailyPlansRecyclerView = (RecyclerView) this.findViewById(R.id.monthly_goals_header_list_item_days_list);
+
+        dailyPlansRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                View v = dailyPlansRecyclerView;
+                v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                if(v.getMeasuredHeight() >0 && v.getMeasuredWidth() > 0)
+                {
+                    scrollToCurrentDate();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void showDialog(DialogFragment dialogFragment) {
+        dialogFragment.show(this.getFragmentManager(), null);
+    }
+
+    private void setupPresenter() {
+        if(this.presenter != null)
+            return;
+
+        this.presenter = this.presentersSource.getMonthlyGoalsPresenter(this);
+        this.presenter.initializeWithView(this);
+    }
+
+    private void setupBottomSheetBehavior() {
+        NestedScrollView bottomSheetScrollView = (NestedScrollView) this.findViewById(R.id.monthly_goals_activity_bottom_sheet);
+        this.bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetScrollView);
+        this.bottomSheetBehavior.setPeekHeight(150);
+        this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    }
+
+    private void setupRecyclerViews()
     {
-        this.presenter.setYearAndMonth(year, month);
-        this.setupHeaderForCategoryListForMonth();
-        this.setEmptyListContent();
+        ScrollableViewHelper.setSimultaneousScrolling(this.categoryNamesRecyclerView, this.categoryPlansRecyclerView);
+    }
+
+    private void runStartupCommands() {
+        this.autoMarkTasksCommand.execute(this.findViewById(R.id.monthly_goals_activity_main_coordinator_layout));
+    }
+
+    private void injectDependencies() {
+        ComposableApplication capp = (ComposableApplication)this.getApplication();
+        capp.getApplicationComponent().inject(this);
     }
 
     private void setupSwipeListener()
     {
         this.gestureDetector = new GestureDetectorCompat(this, new HorizontalFlingGestureListener());
-        this.monthlyGoalsListView.setOnTouchListener(new View.OnTouchListener() {
+        this.categoryNamesRecyclerView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return gestureDetector.onTouchEvent(event);
@@ -253,169 +232,17 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
         });
     }
 
-    private void setupMonthlyPlanningCategoryList() {
-
-        if(this.presenter == null)
-        {
-            this.presenter = new PersistentMonthlyGoalsPresenter(this, this.getLayoutInflater(), this.persistenceContext, this.adapterProvider);
-        }
-        // month spinner
-        final ArrayAdapter<String> monthsStringsAdapter = new ArrayAdapter<String>(
-                this,
-                R.layout.monthly_goals_month_spinner_item_layout,
-                ResourcesHelper.monthsResourceStrings(this));
-        this.monthListSpinner.setAdapter(monthsStringsAdapter);
-
-        this.setupAdapterListeners(this.presenter.getCategoryNamesRecyclerViewAdapter());
-        ScrollableViewHelper.setSimultaneousScrolling(this.monthlyGoalsListView, this.dailyPlansListView);
-
-        this.monthlyGoalsListView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        this.monthlyGoalsListView.setAdapter(this.presenter.getCategoryNamesRecyclerViewAdapter());
-        this.dailyPlansListView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        this.dailyPlansListView.setAdapter(this.presenter.getCategoryDailyPlansRecyclerViewAdapter());
-
-        //this.registerForContextMenu(this.monthlyGoalsListView);
-
-        this.presenter.setYearAndMonth(DateTimeHelper.getCurrentYear(), Month.getCurrentMonth());
-        if(this.canScrollToCurrentDay()) {
-            this.daysNumbersHeaderView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    daysNumbersHeaderView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                    if (daysNumbersHeaderView.getMeasuredHeight() > 0 && daysNumbersHeaderView.getMeasuredWidth() > 0) {
-                        scrollToCurrentDay();
-                        viewStateProvider.provideStateForActivity(ACTIVITY_ID).setWasDisplayed(true);
-                    }
-                }
-            });
-        }
-
-        this.setupHeaderForCategoryListForMonth();
-    }
-
-    private boolean canScrollToCurrentDay()
+    private void scrollToCurrentDate()
     {
-        if(this.presenter.getSelectedMonth() != Month.getCurrentMonth())
-            return false;
-
-        ActivityViewState state = this.viewStateProvider.provideStateForActivity(ACTIVITY_ID);
-        return !state.isWasDisplayed()
-            || NotificationScheduler.checkIfOriginatedFromNotification(this);
-    }
-
-    private void scrollToCurrentDay()
-    {
-        int viewIndexToScrollTo = DateTimeHelper.currentDayNumber() - 3;
-        View childView = this.daysNumbersHeaderView.getChildAt(viewIndexToScrollTo);
-        if(childView != null) {
-            this.tableHorizontalScrollView.smoothScrollTo(childView.getLeft(), 0);
-        }
-    }
-
-    private void setEmptyListContent()
-    {
-        boolean listIsEmpty = this.presenter.isEmptyCategoriesList();
-        this.emptyListLayout.setVisibility(listIsEmpty ? View.VISIBLE : View.INVISIBLE);
-
-        if(!listIsEmpty)
+        if(this.activityViewModel.getMonth() != DateTimeHelper.getCurrentMonth()
+                || this.activityViewModel.getYear() != DateTimeHelper.getCurrentYear())
             return;
 
-        Button copyCategoriesButton = (Button)this.emptyListLayout.findViewById(R.id.monthly_plans_empty_view_copyLastUsedCategories_button);
-        TextView emptyContentTextView = (TextView) this.emptyListLayout.findViewById(R.id.monthly_goals_empty_view_content_textView);
-        if(!this.presenter.canCopyCategoriesFromPreviousMonth())
-        {
-            copyCategoriesButton.setVisibility(View.INVISIBLE);
-            emptyContentTextView.setText(R.string.monthly_plans_empty_view_simplyAdd_content_text);
-        }
-        else
-        {
-            emptyContentTextView.setText(R.string.monthly_plans_empty_view_content_text);
-            copyCategoriesButton.setVisibility(View.VISIBLE);
-
-            copyCategoriesButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    presenter.copyCategoriesFromPreviousMonth();
-                    Toast categoriesCopied = Toast.makeText(
-                            getApplicationContext(),
-                            String.format(getResources().getString(R.string.monthly_plans_empty_view_categories_copied_toast_text)),
-                            Toast.LENGTH_SHORT);
-                    categoriesCopied.show();
-                }
-            });
-        }
-
-        this.emptyListLayout.invalidate();
-    }
-
-    private void resetMonthCategoriesListView()
-    {
-        this.presenter.setYearAndMonth(this.presenter.getSelectedYear(), this.presenter.getSelectedMonth());
-        this.monthlyGoalsListView.setAdapter(this.presenter.getCategoryNamesRecyclerViewAdapter());
-        this.dailyPlansListView.setAdapter(this.presenter.getCategoryDailyPlansRecyclerViewAdapter());
-    }
-
-    private void setupAdapterListeners(final CategoryNameRecyclerViewAdapter adapter)
-    {
-        adapter.addItemSourceRequestListener(new RecyclerViewDataAdapter.ItemsSourceChangeRequestListener() {
-            @Override
-            public void onModifyItemRequest(int itemPosition) {
-                presenter.createAddEditCategoryDialog(itemPosition).show(getFragmentManager(), null);
-            }
-
-            @Override
-            public void onRemoveItemRequest(int itemPosition) {
-                presenter.createDeleteCategoryDialog(itemPosition).show();
-            }
-        });
-    }
-
-    private void setupHeaderForCategoryListForMonth()
-    {
-        this.yearTextView.setText(String.format("%s", this.presenter.getSelectedYear()));
-
-        final LayoutInflater inflater = this.getLayoutInflater();
-        SpinnerHelper.setSelectedValue(this.monthListSpinner, ResourcesHelper.toResourceString(this, this.presenter.getSelectedMonth()));
-
-        this.daysNumbersHeaderView.removeAllViews();
-
-        //month days list
-        List<Integer> listOfDays = CollectionUtils.createList(
-                this.presenter.getSelectedMonth()
-                        .getDaysCount(this.presenter.getSelectedYear()),
-                new ElementCreator<Integer>() {
-
-            @Override
-            public Integer Create(int index, List<Integer> currentList) {
-                return index+1;
-            }
-        });
-
-        IteratorUtils.forEach(listOfDays.iterator(), new Closure<Integer>() {
-            @Override
-            public void execute(Integer dayNumber) {
-
-                View dayNumberCell = inflater.inflate(R.layout.monthly_goals_header_day_number_cell, null);
-                TextView dayNumberText = (TextView) dayNumberCell.findViewById(R.id.monthly_goals_table_header_day_number_text);
-                dayNumberText.setText(dayNumber.toString());
-
-                TextView dayNameText = (TextView) dayNumberCell.findViewById(R.id.monthly_goals_table_header_day_name_text);
-                dayNameText.setText(DateTimeHelper.getWeekDayNameShort(
-                        presenter.getSelectedYear(),
-                        presenter.getSelectedMonth().getNumValue(),
-                        dayNumber));
-
-                boolean isCurrentDate = DateTimeHelper.isCurrentDate(
-                        presenter.getSelectedYear(),
-                        presenter.getSelectedMonth().getNumValue(),
-                        dayNumber);
-                if(isCurrentDate)
-                {
-                    ColorsHelper.setSecondAccentBackgroundColor(dayNumberCell);
-                }
-                daysNumbersHeaderView.addView(dayNumberCell);
-            }
-        });
+        HorizontalScrollView daysPlanScrollView = (HorizontalScrollView) this.findViewById(R.id.monthly_goals_table_horizontalScrollView);
+        int dayToScrollTo = DateTimeHelper.currentDayNumber() - 3;
+        dayToScrollTo = (dayToScrollTo > 0 ? dayToScrollTo : 0);
+        int width = (int) this.getResources().getDimension(R.dimen.monthly_goals_table_day_plan_column_width);
+        daysPlanScrollView.smoothScrollTo(dayToScrollTo * width, 0);
     }
 
     private class HorizontalFlingGestureListener extends GestureDetector.SimpleOnGestureListener{
@@ -456,12 +283,12 @@ public class MonthlyGoalsActivity extends AppCompatActivity{
 
         private void onRightSwipe() {
             Log.d(LOG_TAG, "Right swipe");
-            goToPreviousMonth();
+            presenter.goToPreviousMonth(null);
         }
 
         private void onLeftSwipe() {
             Log.d(LOG_TAG, "Left swipe");
-            goToNextMonth();
+            presenter.goToNextMonth(null);
         }
     }
 }

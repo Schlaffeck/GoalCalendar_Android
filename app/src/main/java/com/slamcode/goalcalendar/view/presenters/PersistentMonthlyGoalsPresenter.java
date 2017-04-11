@@ -1,23 +1,29 @@
 package com.slamcode.goalcalendar.view.presenters;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
-import android.view.LayoutInflater;
+import android.view.View;
 
+import com.android.databinding.library.baseAdapters.BR;
 import com.android.internal.util.Predicate;
+import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.data.UnitOfWork;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.ModelHelper;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
-import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.Month;
-import com.slamcode.goalcalendar.view.AddEditCategoryDialog;
-import com.slamcode.goalcalendar.view.CategoryDailyPlansRecyclerViewAdapter;
-import com.slamcode.goalcalendar.view.CategoryNameRecyclerViewAdapter;
-import com.slamcode.goalcalendar.view.lists.ListAdapterProvider;
+import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
+import com.slamcode.goalcalendar.view.SourceChangeRequestNotifier;
+import com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract;
+import com.slamcode.goalcalendar.view.dialogs.AddEditCategoryViewModelDialog;
+import com.slamcode.goalcalendar.view.dialogs.base.AddEditDialog;
+import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
+import com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel;
+import com.slamcode.goalcalendar.viewmodels.MonthlyPlanningCategoryListViewModel;
 
 /**
  * Created by moriasla on 16.01.2017.
@@ -25,128 +31,63 @@ import com.slamcode.goalcalendar.view.lists.ListAdapterProvider;
 
 public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
 
-    private MonthlyPlansModel selectedMonthlyPlans;
-
-    private final CategoryNameRecyclerViewAdapter categoryNamesRecyclerViewAdapter;
-    private final CategoryDailyPlansRecyclerViewAdapter categoryDailyPlansRecyclerViewAdapter;
-
-    private final Context context;
+    private final ApplicationContext applicationContext;
 
     private final PersistenceContext persistenceContext;
 
-    public PersistentMonthlyGoalsPresenter(Context context,
-                                           LayoutInflater layoutInflater,
-                                           PersistenceContext persistenceContext,
-                                           ListAdapterProvider listAdapterProvider)
-    {
-        this(context, layoutInflater, persistenceContext, listAdapterProvider, false);
-    }
+    private PlansSummaryCalculator summaryCalculator;
 
-    public PersistentMonthlyGoalsPresenter(Context context,
-                                           LayoutInflater layoutInflater,
-                                           PersistenceContext persistenceContext,
-                                           ListAdapterProvider listAdapterProvider,
-                                           boolean setupCategoriesList)
+    private MonthlyGoalsViewModel data;
+
+    private MonthlyGoalsActivityContract.ActivityView activityView;
+
+    private CategoryPlansViewModelChangeRequestListener categoryChangeRequestListener = new CategoryPlansViewModelChangeRequestListener();
+
+    public PersistentMonthlyGoalsPresenter(
+            ApplicationContext applicationContext,
+            PersistenceContext persistenceContext,
+            PlansSummaryCalculator summaryCalculator)
     {
-        this.context = context;
+        this.applicationContext = applicationContext;
         this.persistenceContext = persistenceContext;
-        this.categoryNamesRecyclerViewAdapter = listAdapterProvider.provideCategoryNameListViewAdapter(context,layoutInflater);
-        this.categoryDailyPlansRecyclerViewAdapter = listAdapterProvider.provideCategoryDailyPlansListViewAdapter(context,layoutInflater);
-        if(setupCategoriesList)
-            this.setYearAndMonth(this.getSelectedYear(), this.getSelectedMonth());
+        this.summaryCalculator = summaryCalculator;
     }
 
     @Override
-    public void setYearAndMonth(int year, Month month) {
+    public MonthlyGoalsViewModel getData() {
+        return this.data;
+    }
 
-        this.categoryNamesRecyclerViewAdapter.updateMonthlyPlans(null);
-        this.categoryDailyPlansRecyclerViewAdapter.updateMonthlyPlans(null);
-        UnitOfWork uow = persistenceContext.createUnitOfWork();
-
-        MonthlyPlansModel model = uow.getMonthlyPlansRepository().findForMonth(year, month);
-
-        if(model == null)
+    @Override
+    public void setData(MonthlyGoalsViewModel data) {
+        if(this.data != data)
         {
-            model = new MonthlyPlansModel();
-            // todo: find good way to assign ids
-            model.setId(year ^ month.getNumValue());
-            model.setYear(year);
-            model.setMonth(month);
-            uow.getMonthlyPlansRepository().add(model);
+            this.data = data;
+            this.activityView.onDataSet(data);
         }
-
-        uow.complete();
-
-        this.selectedMonthlyPlans = model;
-        this.categoryNamesRecyclerViewAdapter.updateMonthlyPlans(selectedMonthlyPlans);
-        this.categoryDailyPlansRecyclerViewAdapter.updateMonthlyPlans(selectedMonthlyPlans);
     }
 
     @Override
-    public CategoryNameRecyclerViewAdapter getCategoryNamesRecyclerViewAdapter() {
-        return categoryNamesRecyclerViewAdapter;
+    public void initializeWithView(MonthlyGoalsActivityContract.ActivityView view) {
+        this.activityView = view;
+        if(this.data == null)
+            this.setData(new MonthlyGoalsViewModel(applicationContext, persistenceContext, summaryCalculator, categoryChangeRequestListener));
     }
 
     @Override
-    public CategoryDailyPlansRecyclerViewAdapter getCategoryDailyPlansRecyclerViewAdapter() {
-        return this.categoryDailyPlansRecyclerViewAdapter;
-    }
-
-    @Override
-    public boolean isEmptyCategoriesList()
+    public boolean isPreviousMonthWithCategoriesAvailable()
     {
-        return this.selectedMonthlyPlans == null
-            || this.selectedMonthlyPlans.getCategories() == null
-            || this.selectedMonthlyPlans.getCategories().isEmpty();
+        return this.findPreviousMonthlyPlansModelWithCategories() != null;
     }
 
     @Override
-    public boolean canCopyCategoriesFromPreviousMonth()
-    {
-        return this.isEmptyCategoriesList()
-                && this.findPreviousMonthlyPlansModelWithCategories() != null;
-    }
-
-    @Override
-    public int getSelectedYear()
-    {
-        if(this.selectedMonthlyPlans == null)
-        {
-            return DateTimeHelper.getCurrentYear();
-        }
-
-        return this.selectedMonthlyPlans.getYear() > 0 ?
-                this.selectedMonthlyPlans.getYear()
-                : DateTimeHelper.getCurrentYear();
-    }
-
-    @Override
-    public Month getSelectedMonth()
-    {
-        if(this.selectedMonthlyPlans == null)
-        {
-            return Month.getCurrentMonth();
-        }
-
-        return this.selectedMonthlyPlans.getMonth();
-    }
-
-    @Override
-    public String getCategoryNameOnPosition(int categoryPosition)
-    {
-        CategoryModel categoryModel = this.categoryNamesRecyclerViewAdapter.getItem(categoryPosition);
-        return categoryModel == null ? null : categoryModel.getName();
-    }
-
-    @Override
-    public void copyCategoriesFromPreviousMonth()
-    {
+    public void copyCategoriesFromPreviousMonth(View view) {
         MonthlyPlansModel previousMonthModel = findPreviousMonthlyPlansModelWithCategories();
         if(previousMonthModel == null || previousMonthModel.getCategories() == null)
             return;
 
-        int year = this.selectedMonthlyPlans.getYear();
-        Month currentMonth = this.selectedMonthlyPlans.getMonth();
+        int year = this.data.getYear();
+        Month currentMonth = this.data.getMonth();
         for(CategoryModel category : previousMonthModel.getCategories())
         {
             CategoryModel newCategory = new CategoryModel(
@@ -156,53 +97,73 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
                     category.getFrequencyValue());
             newCategory.setDailyPlans(ModelHelper.createListOfDailyPlansForMonth(year, currentMonth));
 
-            this.categoryNamesRecyclerViewAdapter.addOrUpdateItem(newCategory);
-            this.categoryDailyPlansRecyclerViewAdapter.addOrUpdateItem(newCategory);
+            this.data.getMonthlyPlans().getCategoryPlansList()
+                    .add(this.createCategoryPlansViewModel(category));
         }
     }
 
     @Override
-    public AddEditCategoryDialog createAddEditCategoryDialog(int categoryPosition)
+    public void goToNextYear(View view) {
+        this.data.setYear(this.data.getYear() + 1);
+    }
+
+    @Override
+    public void goToPreviousYear(View view) {
+        this.data.setYear(this.data.getYear() - 1);
+    }
+
+    @Override
+    public void goToNextMonth(View view) {
+        this.data.setMonth(Month.getNextMonth(this.data.getMonth()));
+    }
+
+    @Override
+    public void goToPreviousMonth(View view) {
+        this.data.setMonth(Month.getPreviousMonth(this.data.getMonth()));
+    }
+
+    @Override
+    public void showAddNewCategoryDialog(View view) {
+       this.showAddOrEditCategoryDialog(null);
+    }
+
+    private void showAddOrEditCategoryDialog(CategoryPlansViewModel viewModel)
     {
-        final CategoryModel model = categoryPosition >= 0 ?
-                this.categoryNamesRecyclerViewAdapter.getItem(categoryPosition)
-                : null;
-        final AddEditCategoryDialog dialog = new AddEditCategoryDialog();
-        dialog.setYearAndMonth(this.getSelectedYear(), this.getSelectedMonth());
-        dialog.setModel(model);
-        dialog.setDialogStateChangedListener(new AddEditCategoryDialog.DialogStateChangedListener() {
+        final AddEditCategoryViewModelDialog dialog = new AddEditCategoryViewModelDialog();
+        final MonthlyPlanningCategoryListViewModel monthlyPlans = this.data.getMonthlyPlans();
+        dialog.setModel(viewModel);
+        dialog.setMonthViewModel(this.data.getMonthlyPlans().getMonthData());
+        dialog.setPlansSummaryCalculator(this.summaryCalculator);
+        dialog.setDialogStateChangedListener(new AddEditDialog.DialogStateChangedListener() {
             @Override
             public void onDialogClosed(boolean confirmed) {
                 if(confirmed)
                 {
-                    CategoryModel newCategory = dialog.getModel();
-                    if(!selectedMonthlyPlans.getCategories().contains(newCategory))
-                        selectedMonthlyPlans.getCategories().add(newCategory);
-                    categoryNamesRecyclerViewAdapter.addOrUpdateItem(newCategory);
-                    categoryDailyPlansRecyclerViewAdapter.addOrUpdateItem(newCategory);
+                    CategoryPlansViewModel newCategory = dialog.getModel();
+                    if(!monthlyPlans.getCategoryPlansList().contains(newCategory)) {
+                        newCategory.addSourceChangeRequestListener(new CategoryPlansViewModelChangeRequestListener());
+                        monthlyPlans.getCategoryPlansList().add(newCategory);
+                    }
                 }
             }
         });
 
-        return dialog;
+        this.activityView.showDialog(dialog);
     }
 
-    @Override
-    public AlertDialog createDeleteCategoryDialog(int categoryPosition)
+    private void showDeleteCategoryDialog(final CategoryPlansViewModel viewModel)
     {
-        final CategoryModel model = this.categoryNamesRecyclerViewAdapter.getItem(categoryPosition);
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this.context);
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder((Activity)this.activityView);
 
         dialogBuilder
                 .setTitle(R.string.confirm_delete_category_dialog_header)
-                .setMessage(model.getName())
+                .setMessage(viewModel.getName())
                 .setPositiveButton(R.string.button_yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        selectedMonthlyPlans.getCategories().remove(model);
-                        categoryNamesRecyclerViewAdapter.removeItem(model);
-                        categoryDailyPlansRecyclerViewAdapter.removeItem(model);
+                        data.getMonthlyPlans().getCategoryPlansList().remove(viewModel);
                         dialogInterface.dismiss();
+                        data.getMonthlyPlans().notifyPropertyChanged(BR.plansSummaryPercentage);
                     }
                 })
                 .setNegativeButton(R.string.button_no, new DialogInterface.OnClickListener() {
@@ -213,7 +174,15 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
                     }
                 });
 
-        return dialogBuilder.create();
+        AlertDialog dialog = dialogBuilder.create();
+        dialog.show();
+    }
+
+    private CategoryPlansViewModel createCategoryPlansViewModel(CategoryModel categoryModel)
+    {
+        CategoryPlansViewModel viewModel = new CategoryPlansViewModel(this.data.getMonthlyPlans().getMonthData(), categoryModel, this.summaryCalculator);
+        viewModel.addSourceChangeRequestListener(this.categoryChangeRequestListener);
+        return viewModel;
     }
 
     private MonthlyPlansModel findPreviousMonthlyPlansModelWithCategories()
@@ -233,5 +202,20 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
         uow.complete(false);
 
         return previousMonthWithCategories;
+    }
+
+    private class CategoryPlansViewModelChangeRequestListener implements SourceChangeRequestNotifier.SourceChangeRequestListener<CategoryPlansViewModel>
+    {
+        @Override
+        public void sourceChangeRequested(CategoryPlansViewModel sender, SourceChangeRequestNotifier.SourceChangeRequest request) {
+            switch(request.getId()) {
+                case CategoryPlansViewModel.REQUEST_REMOVE_ITEM:
+                    showDeleteCategoryDialog(sender);
+                    break;
+                case CategoryPlansViewModel.REQUEST_MODIFY_ITEM:
+                    showAddOrEditCategoryDialog(sender);
+                    break;
+            }
+        }
     }
 }

@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
@@ -13,6 +12,9 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+    }
+    dataBinding{
+        enabled = true;
     }
     buildTypes {
         release {
@@ -47,8 +49,9 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile "org.mockito:mockito-core:2.0.57-beta"
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
-    apt 'com.google.dagger:dagger-compiler:2.4'
-    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    provided 'com.android.databinding:compiler:1.0-rc1'
+    compile 'com.google.dagger:dagger-compiler:2.4'
+    compile 'com.jakewharton:butterknife-compiler:8.4.0'
     provided 'javax.annotation:jsr250-api:1.0'
-    testApt 'com.google.dagger:dagger-compiler:2.4'
+    testCompile 'com.google.dagger:dagger-compiler:2.4'
 }

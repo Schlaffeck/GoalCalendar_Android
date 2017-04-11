@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            android:id="@+id/binding_view_model_variable_id"
+            name="vm"
+            type="com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel"/>
+    </data>
+<LinearLayout android:layout_width="match_parent"
+    android:id="@+id/monthly_goals_summary_content_layout"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/activity_horizontal_margin">
+
+    <TextView
+        android:id="@+id/monthly_goals_summary_generalProgress_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{String.format(@string/monthly_plans_summary_generalPercentage, vm.monthlyPlans.plansSummaryPercentage)}"
+        android:textSize="16sp"
+        android:textAllCaps="false"
+        android:padding="@dimen/default_padding"/>
+    <TextView
+        android:id="@+id/monthly_goals_summary_daysLeft_textView"
+        android:layout_below="@id/monthly_goals_summary_generalProgress_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{String.format(@string/monthly_plans_summary_noOfDaysLeft, vm.monthlyPlans.noOfDaysLeft)}"
+        android:textSize="16sp"
+        android:textAllCaps="false"
+        android:padding="@dimen/default_padding"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/monthly_goals_summary_categories_recyclerView"
+        android:layout_below="@id/monthly_goals_summary_daysLeft_textView"
+        android:orientation="vertical"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        bind:categorySummarySource="@{vm.monthlyPlans.categoryPlansList}">
+
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>
+</layout>

@@ -5,6 +5,8 @@
     <string name="context_menu_delete_item">Delete</string>
     <string name="button_yes">Yes</string>
     <string name="button_no">No</string>
+    <string name="button_less">Less</string>
+    <string name="button_more">More</string>
 
     <!-- monthly goals view -->
     <string name="add_category_dialog_header">Add category</string>
@@ -21,6 +23,8 @@
     <string name="monthly_goals_category_dialog_Validation_name_edittext_error_empty">
         Category name is required
     </string>
+
+    <string name="monthly_goals_category_frequencyFormat_textView" formatted="false">%d x %s</string>
 
     <!-- frequency period -->
     <string name="frequency_period_month">Month</string>
@@ -40,12 +44,34 @@
     <string name="month_november">November</string>
     <string name="month_december">December</string>
 
+    <string-array name="months_array">
+        <item name="month_january_item">January</item>
+        <item name="month_february_item">February</item>
+        <item name="month_march_item">March</item>
+        <item name="month_april_item">April</item>
+        <item name="month_may_item">May</item>
+        <item name="month_june_item">June</item>
+        <item name="month_july_item">July</item>
+        <item name="month_august_item">August</item>
+        <item name="month_september_item">September</item>
+        <item name="month_october_item">October</item>
+        <item name="month_november_item">November</item>
+        <item name="month_december_item">December</item>
+    </string-array>
+
     <!-- empty view -->
     <string name="monthly_plans_empty_view_copyLastUsedCategories_button_text">Copy categories</string>
     <string name="monthly_plans_empty_view_header_text">No categories</string>
     <string name="monthly_plans_empty_view_content_text">Add new category using \'+\' button or copy categories from last used month</string>
     <string name="monthly_plans_empty_view_simplyAdd_content_text">Add new category using \'+\' button</string>
     <string name="monthly_plans_empty_view_categories_copied_toast_text">Categories copied successfully</string>
+
+
+    <!-- summary view -->
+    <string name="monthly_plans_summary_generalPercentage">Monthly progress: %.2f%%</string>
+    <string name="monthly_plans_summary_details">Description of the summary of progress in this month</string>
+    <string name="plans_summary_percentageFormat">%.2f%%</string>
+    <string name="monthly_plans_summary_noOfDaysLeft">Days left: %d</string>
 
     <!-- notification -->
     <string name="notification_plannedForToday_title">Planned for today</string>

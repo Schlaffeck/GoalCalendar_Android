@@ -10,6 +10,7 @@ import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.PlanStatus;
 
 import org.apache.commons.collections4.IterableUtils;
+import org.apache.commons.collections4.Predicate;
 
 import java.util.Collection;
 import java.util.List;
@@ -51,6 +52,20 @@ public class InMemoryCategoriesRepository extends InMemoryRepositoryBase<Categor
             }
         });
         return monthlyPlansModel != null ? monthlyPlansModel.getCategories() : CollectionUtils.<CategoryModel>emptyList();
+    }
+
+    @Override
+    public  List<CategoryModel> findForMonthWithName(int year, Month month, final String name) {
+        Iterable<CategoryModel> result = this.findForMonth(year, month);
+
+        result = IterableUtils.filteredIterable(result, new Predicate<CategoryModel>() {
+            @Override
+            public boolean evaluate(CategoryModel object) {
+                return object != null && object.getName() == name;
+            }
+        });
+
+        return IterableUtils.toList(result);
     }
 
     @Override

@@ -25,15 +25,9 @@ import dagger.Provides;
 @Module
 public class ServiceDagger2Module {
 
-    private final ApplicationContext context;
-
-    public ServiceDagger2Module(ApplicationContext context)
-    {
-        this.context = context;
-    }
-
     @Provides
     public Map<String, NotificationProvider> getNotificationProvidersMap(
+            ApplicationContext applicationContext,
             PersistenceContext persistenceContext,
             AppSettingsManager settingsManager,
             Logger logger)
@@ -43,10 +37,10 @@ public class ServiceDagger2Module {
         HashMap<String, NotificationProvider> providerHashMap = new HashMap<>();
 
         providerHashMap.put(PlannedForTodayNotificationProvider.class.getName(),
-                new PlannedForTodayNotificationProvider(this.context, persistenceContext, settingsManager, logger));
+                new PlannedForTodayNotificationProvider(applicationContext, persistenceContext, settingsManager, logger));
 
         providerHashMap.put(EndOfDayNotificationProvider.class.getName(),
-                new EndOfDayNotificationProvider(this.context, settingsManager, logger));
+                new EndOfDayNotificationProvider(applicationContext, settingsManager, logger));
 
         return providerHashMap;
     }
@@ -60,8 +54,10 @@ public class ServiceDagger2Module {
 
     @Provides
     @Singleton
-    public AutoMarkTasksCommand provideAutoMarkTasksCommand(PersistenceContext persistenceContext, AppSettingsManager settingsManager)
+    public AutoMarkTasksCommand provideAutoMarkTasksCommand(ApplicationContext applicationContext,
+                                                            PersistenceContext persistenceContext,
+                                                            AppSettingsManager settingsManager)
     {
-        return new SnackbarShowUpAutoMarkTasksCommand(this.context, persistenceContext, settingsManager);
+        return new SnackbarShowUpAutoMarkTasksCommand(applicationContext, persistenceContext, settingsManager);
     }
 }

@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="vm"
+            type="com.slamcode.goalcalendar.viewmodels.DailyPlansViewModel"/>
+    </data>
+<LinearLayout android:orientation="horizontal"
     android:layout_width="@dimen/monthly_goals_table_day_plan_column_width"
     android:layout_height="@dimen/monthly_goals_table_day_plan_height"
     android:minWidth="@dimen/monthly_goals_table_day_plan_column_width"
@@ -12,6 +18,8 @@
         android:layout_height="@dimen/planning_state_button_height"
         android:layout_margin="@dimen/planning_state_button_margin"
         android:layout_gravity="center"
-        android:padding="@dimen/default_padding">
+        android:padding="@dimen/default_padding"
+        app:status="@{vm.status}">
     </com.slamcode.goalcalendar.view.controls.GoalPlanStatusButton>
 </LinearLayout>
+</layout>
