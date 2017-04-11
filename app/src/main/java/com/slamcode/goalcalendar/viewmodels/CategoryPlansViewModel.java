@@ -171,7 +171,9 @@ public class CategoryPlansViewModel extends BaseObservable implements Comparable
 
             Collator usCollator = Collator.getInstance(Locale.getDefault());
             usCollator.setStrength(Collator.PRIMARY);
-            return usCollator.compare(this.getName(), other.getName());
+            String name = this.getName();
+            String otherName = other.getName();
+            return usCollator.compare(name, otherName);
     }
 
     @Override

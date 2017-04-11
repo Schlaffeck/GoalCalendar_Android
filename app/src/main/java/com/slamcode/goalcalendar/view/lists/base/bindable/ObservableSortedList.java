@@ -130,12 +130,26 @@ public class ObservableSortedList<Item extends Observable> extends SortedList<It
 
     private void notifyItemMoved(Item item)
     {
-        int oldPosition = indexOf(item);
+        int oldPosition = findItemIndex(item);
         if(oldPosition != -1)
         {
             recalculatePositionOfItemAt(oldPosition);
         }
-        else add(item);
+        else
+        {
+            add(item);
+        }
+    }
+
+    private int findItemIndex(Item item)
+    {
+        for(int i = 0; i < this.size(); i++)
+        {
+            if(this.get(i) == item)
+                return i;
+        }
+
+        return -1;
     }
 
     public SortedListCallbackSet<Item> getCallbackSet() {
