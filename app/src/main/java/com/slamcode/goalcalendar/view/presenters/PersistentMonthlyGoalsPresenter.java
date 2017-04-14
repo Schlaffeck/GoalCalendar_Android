@@ -72,6 +72,11 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
         this.activityView = view;
         if(this.data == null)
             this.setData(new MonthlyGoalsViewModel(applicationContext, persistenceContext, summaryCalculator, categoryChangeRequestListener));
+        else this.resetData();
+    }
+
+    private void resetData() {
+        this.activityView.onDataSet(this.data);
     }
 
     @Override

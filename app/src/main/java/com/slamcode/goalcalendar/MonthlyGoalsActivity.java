@@ -187,9 +187,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     }
 
     private void setupPresenter() {
-        if(this.presenter != null)
-            return;
-
         this.presenter = this.presentersSource.getMonthlyGoalsPresenter(this);
         this.presenter.initializeWithView(this);
     }
