@@ -80,12 +80,6 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
     }
 
     @Override
-    public boolean isPreviousMonthWithCategoriesAvailable()
-    {
-        return this.findPreviousMonthlyPlansModelWithCategories() != null;
-    }
-
-    @Override
     public void copyCategoriesFromPreviousMonth(View view) {
         MonthlyPlansModel previousMonthModel = findPreviousMonthlyPlansModelWithCategories();
         if(previousMonthModel == null || previousMonthModel.getCategories() == null)
@@ -103,7 +97,7 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
             newCategory.setDailyPlans(ModelHelper.createListOfDailyPlansForMonth(year, currentMonth));
 
             this.data.getMonthlyPlans().getCategoryPlansList()
-                    .add(this.createCategoryPlansViewModel(category));
+                    .add(this.createCategoryPlansViewModel(newCategory));
         }
     }
 

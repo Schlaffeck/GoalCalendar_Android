@@ -87,6 +87,10 @@ public class CategoryDailyPlansRecyclerViewAdapter extends BindableRecyclerViewD
         return new CategoryDailyPlansViewHolder(convertView);
     }
 
+    public void setYearMonthPair(YearMonthPair yearMonthPair) {
+        this.yearMonthPair = yearMonthPair;
+    }
+
     public class CategoryDailyPlansViewHolder extends BindableViewHolderBase<CategoryPlansViewModel>
     {
         @BindView(R.id.monthly_goals_list_item_days_list)

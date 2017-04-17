@@ -22,8 +22,6 @@ public interface MonthlyGoalsActivityContract {
 
         void initializeWithView(ActivityView view);
 
-        boolean isPreviousMonthWithCategoriesAvailable();
-
         void copyCategoriesFromPreviousMonth(View view);
 
         void goToNextYear(View view);

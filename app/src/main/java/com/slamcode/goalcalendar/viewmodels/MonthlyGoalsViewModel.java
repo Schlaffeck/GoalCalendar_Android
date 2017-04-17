@@ -3,6 +3,7 @@ package com.slamcode.goalcalendar.viewmodels;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
+import com.android.internal.util.Predicate;
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.BR;
 import com.slamcode.goalcalendar.data.PersistenceContext;
@@ -100,6 +101,7 @@ public class MonthlyGoalsViewModel extends BaseObservable {
 
             this.monthlyPlansViewModel = this.viewModelMap.get(yearMonthPair);
             this.notifyPropertyChanged(BR.monthlyPlans);
+            this.notifyPropertyChanged(BR.previousMonthWithCategoriesAvailable);
             if(notifyMonthChanged) {
                 this.notifyPropertyChanged(BR.month);
                 this.notifyPropertyChanged(BR.monthString);
@@ -108,6 +110,31 @@ public class MonthlyGoalsViewModel extends BaseObservable {
             if(notifyYearChanged)
                 this.notifyPropertyChanged(BR.year);
         }
+    }
+
+    @Bindable
+    public boolean isPreviousMonthWithCategoriesAvailable()
+    {
+        return this.findPreviousMonthlyPlansModelWithCategories() != null;
+    }
+
+    private MonthlyPlansModel findPreviousMonthlyPlansModelWithCategories()
+    {
+        UnitOfWork uow = this.persistenceContext.createUnitOfWork();
+        MonthlyPlansModel previousMonthWithCategories = uow.getMonthlyPlansRepository().findLast(new Predicate<MonthlyPlansModel>() {
+            @Override
+            public boolean apply(MonthlyPlansModel monthlyPlansModel) {
+                if(monthlyPlansModel.getMonth().getNumValue() < monthlyPlansModel.getMonth().getNumValue())
+                {
+                    return false;
+                }
+
+                return !monthlyPlansModel.getCategories().isEmpty();
+            }
+        });
+        uow.complete(false);
+
+        return previousMonthWithCategories;
     }
 
     private MonthlyPlansModel getMonthlyPlans(YearMonthPair yearMonthPair)
