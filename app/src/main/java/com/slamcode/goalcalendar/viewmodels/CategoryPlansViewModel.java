@@ -147,6 +147,11 @@ public class CategoryPlansViewModel extends BaseObservable implements Comparable
         return this.plansSummary.getNoOfSuccessfulTasks();
     }
 
+    void updatePlansSummary()
+    {
+        this.countPlansSummary(true);
+    }
+
     private void countPlansSummary(boolean notify)
     {
         this.plansSummary = this.plansSummaryCalculator
