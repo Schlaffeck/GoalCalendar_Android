@@ -6,6 +6,7 @@ import android.databinding.ObservableList;
 import com.android.databinding.library.baseAdapters.BR;
 import com.slamcode.collections.ElementSelector;
 import com.slamcode.goalcalendar.ApplicationContext;
+import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.view.charts.data.ChartViewDataBinder;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 
@@ -110,7 +111,7 @@ public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartVi
             doneSliceValue.setValue(doneValue);
             doneSliceValue.setColor(color);
         }
-        doneSliceValue.setLabel(String.format("%s, DONE: %d tasks", category.getName(), (successfulTasks <= expectedTasks ? successfulTasks : expectedTasks)));
+        doneSliceValue.setLabel(String.format(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_generalPieChart_done_sliceLabel), category.getName(), (successfulTasks <= expectedTasks ? successfulTasks : expectedTasks)));
 
             if(updateOnly)
             {
@@ -120,7 +121,7 @@ public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartVi
                 toDoSliceValue.setValue(todoValue);
                 toDoSliceValue.setColor(lightColor);
             }
-        toDoSliceValue.setLabel(String.format("%s, TODO: %d tasks", category.getName(), expectedTasks - successfulTasks));
+        toDoSliceValue.setLabel(String.format(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_generalPieChart_todo_sliceLabel), category.getName(), expectedTasks - successfulTasks));
 
             if(updateOnly)
             {
@@ -130,7 +131,7 @@ public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartVi
                 exceededSliceValue.setValue(exceededValue);
                 exceededSliceValue.setColor(ChartUtils.darkenColor(color));
             }
-            exceededSliceValue.setLabel(String.format("%s, OVERDONE: %d tasks", category.getName(), successfulTasks - expectedTasks));
+            exceededSliceValue.setLabel(String.format(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_generalPieChart_overdone_sliceLabel), category.getName(), successfulTasks - expectedTasks));
     }
 
     class CategoryPropertyChangedCallback extends Observable.OnPropertyChangedCallback{
