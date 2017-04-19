@@ -6,7 +6,7 @@ import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
  * Created by schlaffeck on 18.04.2017.
  */
 
-public interface ChartDataViewTransformer<PieChartViewData> {
+public interface ChartViewDataBinder<PieChartViewType> {
 
-    PieChartViewData providePieChartViewData(Iterable<CategoryPlansViewModel> categories);
+    void setupPieChartViewData(PieChartViewType pieChartView, Iterable<CategoryPlansViewModel> categories);
 }
