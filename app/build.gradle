@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.jakewharton.butterknife'
 
 android {
     compileSdkVersion 25
@@ -13,6 +12,9 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled = true
+    }
+    dexOptions {
+        javaMaxHeapSize "4g"
     }
     dataBinding{
         enabled = true;
@@ -28,7 +30,6 @@ android {
 ext {
     JUNIT_VERSION = '4.12'
     ANDROID_SUPPORT_VERSION = '25.3.1'
-    BUTTERKNIFE_VERSION = '8.4.0'
 }
 
 dependencies {
@@ -42,17 +43,15 @@ dependencies {
     compile "com.android.support:design:$ANDROID_SUPPORT_VERSION"
     compile "com.android.support:support-v4:$ANDROID_SUPPORT_VERSION"
     compile "com.android.support:support-vector-drawable:$ANDROID_SUPPORT_VERSION"
+    compile 'com.android.support:multidex:1.0.0'
     compile 'org.apache.commons:commons-collections4:4.1'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.google.dagger:dagger:2.4'
     compile 'org.apache.commons:commons-lang3:3.5'
     compile 'javax.inject:javax.inject:1'
-    compile "com.jakewharton:butterknife:$BUTTERKNIFE_VERSION"
-    compile "com.jakewharton:butterknife-compiler:$BUTTERKNIFE_VERSION"
     compile 'com.github.lecho:hellocharts-library:1.5.8@aar'
     testCompile 'junit:junit:4.12'
     testCompile "org.mockito:mockito-core:2.0.57-beta"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$BUTTERKNIFE_VERSION"
     provided 'com.android.databinding:compiler:1.0-rc1'
     compile 'com.google.dagger:dagger-compiler:2.4'
     provided 'javax.annotation:jsr250-api:1.0'

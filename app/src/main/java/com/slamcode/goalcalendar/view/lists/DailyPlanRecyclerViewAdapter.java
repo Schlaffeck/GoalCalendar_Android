@@ -15,12 +15,12 @@ import com.slamcode.goalcalendar.view.lists.base.ComparatorSortedListCallback;
 import com.slamcode.goalcalendar.view.lists.base.DefaultComparator;
 import com.slamcode.goalcalendar.view.lists.base.RecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableViewHolderBase;
+import com.slamcode.goalcalendar.view.utils.ViewReference;
 import com.slamcode.goalcalendar.view.utils.ColorsHelper;
 import com.slamcode.goalcalendar.viewmodels.DailyPlansViewModel;
 
 import java.util.Collection;
 
-import butterknife.BindView;
 
 /**
  * Created by moriasla on 06.02.2017.
@@ -65,7 +65,7 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
      */
     public class DailyPlanViewHolder extends BindableViewHolderBase<DailyPlansViewModel> {
 
-        @BindView(R.id.plan_status_list_item_view_button)
+        @ViewReference(R.id.plan_status_list_item_view_button)
         GoalPlanStatusButton statusButton;
 
         public DailyPlanViewHolder(View view) {
