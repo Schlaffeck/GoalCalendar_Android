@@ -1,1 +1,1 @@
-include ':app', ':async', ':async', ':collections'
+include ':app', ':collections'
