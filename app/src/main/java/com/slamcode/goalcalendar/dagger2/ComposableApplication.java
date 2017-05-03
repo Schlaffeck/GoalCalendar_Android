@@ -1,16 +1,14 @@
 package com.slamcode.goalcalendar.dagger2;
 
-import android.app.Application;
-
-import com.slamcode.goalcalendar.data.dagger2.*;
-import com.slamcode.goalcalendar.service.dagger2.ServiceDagger2Module;
-import com.slamcode.goalcalendar.view.dagger2.ViewDagger2Module;
+import android.content.Context;
+import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 
 /**
  * Created by moriasla on 04.01.2017.
  */
 
-public final class ComposableApplication extends Application {
+public final class ComposableApplication extends MultiDexApplication {
 
     private ApplicationDagger2Component applicationComponent;
 
@@ -25,4 +23,11 @@ public final class ComposableApplication extends Application {
     {
         return this.applicationComponent;
     }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+
 }
