@@ -9,7 +9,6 @@ import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 
 import javax.inject.Inject;
 
-import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.view.PieChartView;
 
 /**
@@ -23,7 +22,7 @@ public class ChartsBindings {
     {
         ChartsBindings.Dagger2InjectData injectData = new ChartsBindings.Dagger2InjectData();
         Dagger2ComponentContainer.getApplicationDagger2Component().inject(injectData);
-        injectData.helloChartsViewDataTransformer.setupPieChartViewData(pieChartView, itemsSource);
+        injectData.helloChartsViewDataTransformer.setupCategoriesSummaryPieChartViewData(pieChartView, itemsSource);
     }
 
     public static class Dagger2InjectData{
