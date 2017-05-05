@@ -70,8 +70,12 @@
     <!-- summary view -->
     <string name="monthly_plans_summary_generalPercentage">Monthly progress: %.2f%%</string>
     <string name="monthly_plans_summary_details">Description of the summary of progress in this month</string>
-    <string name="plans_summary_percentageFormat">%.2f%%</string>
+    <string name="plans_summary_percentageFormat" formatted="false">%s%.2f%%</string>
     <string name="monthly_plans_summary_noOfDaysLeft">Days left: %d</string>
+
+    <string name="monthly_plans_summary_generalPieChart_todo_sliceLabel" formatted="false">%s, to do %d tasks</string>
+    <string name="monthly_plans_summary_generalPieChart_done_sliceLabel" formatted="false">%s, done %d tasks</string>
+    <string name="monthly_plans_summary_generalPieChart_overdone_sliceLabel" formatted="false">%s, overdone %d tasks</string>
 
     <!-- notification -->
     <string name="notification_plannedForToday_title">Planned for today</string>

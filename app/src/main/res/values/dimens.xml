@@ -54,4 +54,7 @@
     <dimen name="symbol_font_size">12dp</dimen>
     <dimen name="symbol_font_size_medium">20dp</dimen>
     <dimen name="symbol_font_size_large">30dp</dimen>
+
+    <!-- summary bottom -->
+    <dimen name="monthly_goals_summary_pieChart_minHeight">300dp</dimen>
 </resources>

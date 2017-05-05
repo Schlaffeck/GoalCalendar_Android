@@ -32,6 +32,16 @@
         android:textAllCaps="false"
         android:padding="@dimen/default_padding"/>
 
+    <lecho.lib.hellocharts.view.PieChartView
+        android:id="@+id/monthly_goals_summary_general_pieChart"
+        android:minHeight="@dimen/monthly_goals_summary_pieChart_minHeight"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        bind:pieChartCategoryPlansSource="@{vm.monthlyPlans.categoryPlansList}">
+
+    </lecho.lib.hellocharts.view.PieChartView>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/monthly_goals_summary_categories_recyclerView"
         android:layout_below="@id/monthly_goals_summary_daysLeft_textView"
@@ -39,6 +49,7 @@
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/monthly_goals_table_category_name_height"
         bind:categorySummarySource="@{vm.monthlyPlans.categoryPlansList}">
 
     </android.support.v7.widget.RecyclerView>

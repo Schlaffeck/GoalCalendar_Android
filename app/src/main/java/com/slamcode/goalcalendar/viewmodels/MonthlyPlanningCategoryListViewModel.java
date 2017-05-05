@@ -133,12 +133,15 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
                 model.getCategories().add(vm.getModel());
             }
 
+            countPlansSummary(false);
             notifyPropertyChanged(BR.plansSummaryPercentage);
         }
 
         @Override
         public void onItemRangeChanged(ObservableList<CategoryPlansViewModel> categoryPlansViewModels, int positionStart, int itemCount) {
 
+            countPlansSummary(false);
+            notifyPropertyChanged(BR.plansSummaryPercentage);
         }
 
         @Override
@@ -151,8 +154,10 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
                 CategoryPlansViewModel itemVm = categoryPlansViewModels.get(i);
                 itemVm.addOnPropertyChangedCallback(categoryPropertyChangedListener);
                 model.getCategories().add(itemVm.getModel());
+                itemVm.updatePlansSummary();
             }
 
+            countPlansSummary(false);
             notifyPropertyChanged(BR.empty);
             notifyPropertyChanged(BR.plansSummaryPercentage);
         }
@@ -172,6 +177,7 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
                 model.getCategories().remove(i);
             }
 
+            countPlansSummary(false);
             notifyPropertyChanged(BR.empty);
             notifyPropertyChanged(BR.plansSummaryPercentage);
         }

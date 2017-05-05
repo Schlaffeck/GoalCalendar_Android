@@ -9,6 +9,7 @@ import com.slamcode.goalcalendar.service.dagger2.ServiceDagger2Module;
 import com.slamcode.goalcalendar.service.notification.NotificationPublisher;
 import com.slamcode.goalcalendar.service.notification.NotificationScheduler;
 import com.slamcode.goalcalendar.settings.dagger2.SettingsDagger2Module;
+import com.slamcode.goalcalendar.view.charts.ChartsBindings;
 import com.slamcode.goalcalendar.view.dagger2.ViewDagger2Module;
 import com.slamcode.goalcalendar.view.Bindings;
 import com.slamcode.goalcalendar.view.presenters.CachedApplicationPresentersSource;
@@ -42,4 +43,6 @@ public interface ApplicationDagger2Component {
     void inject(CachedApplicationPresentersSource cachedApplicationPresentersSource);
 
     void inject(Bindings.Dagger2InjectData listsBindingsInjectData);
+
+    void inject(ChartsBindings.Dagger2InjectData listsBindingsInjectData);
 }

@@ -70,6 +70,10 @@
     <string name="monthly_plans_summary_details">Dokładny opis postepów dokonanych w obecnym miesiącu</string>
     <string name="monthly_plans_summary_noOfDaysLeft">Pozostało dni: %d</string>
 
+    <string name="monthly_plans_summary_generalPieChart_todo_sliceLabel" formatted="false">%s, %d pozostałe</string>
+    <string name="monthly_plans_summary_generalPieChart_done_sliceLabel" formatted="false">%s, %d wykonane </string>
+    <string name="monthly_plans_summary_generalPieChart_overdone_sliceLabel" formatted="false">%s, %d ponad plan</string>
+
     <!-- notification -->
     <string name="notification_plannedForToday_title">Na dziś</string>
     <string name="notification_plannedForToday_content">Masz %d rzeczy zaplanowane na dzisiaj</string>
