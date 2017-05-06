@@ -54,7 +54,7 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
             return false;
 
         int dayNumber = dailyPlanModel.getDayNumber();
-        return DateTimeHelper.isCurrentDate(
+        return DateTimeHelper.isTodayDate(
                 this.yearMonthPair.getYear(),
                 this.yearMonthPair.getMonth(),
                 dayNumber);

@@ -2,6 +2,8 @@ package com.slamcode.goalcalendar.settings;
 
 import com.slamcode.goalcalendar.planning.HourMinuteTime;
 
+import java.util.Date;
+
 /**
  * Created by moriasla on 23.01.2017.
  */

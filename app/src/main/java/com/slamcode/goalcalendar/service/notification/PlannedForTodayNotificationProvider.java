@@ -18,6 +18,7 @@ import com.slamcode.goalcalendar.planning.PlanStatus;
 import com.slamcode.goalcalendar.settings.AppSettingsManager;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by moriasla on 18.01.2017.
@@ -25,22 +26,27 @@ import java.util.Calendar;
 
 public final class PlannedForTodayNotificationProvider implements NotificationProvider {
 
+    public final static String NOTIFICATION_ID_STRING = "PlannedForToday";
+
     private static final int NOTIFICATION_ID = 1;
     private static final String LOG_TAG = "GOAL_PlannedNotPrv";
 
     private final ApplicationContext context;
     private final PersistenceContext persistenceContext;
     private final AppSettingsManager settingsManager;
+    private final NotificationHistory notificationHistory;
     private final Logger logger;
 
     public PlannedForTodayNotificationProvider(ApplicationContext context,
                                                PersistenceContext persistenceContext,
                                                AppSettingsManager settingsManager,
+                                               NotificationHistory notificationHistory,
                                                Logger logger)
     {
         this.context = context;
         this.persistenceContext = persistenceContext;
         this.settingsManager = settingsManager;
+        this.notificationHistory = notificationHistory;
         this.logger = logger;
     }
 
@@ -50,9 +56,21 @@ public final class PlannedForTodayNotificationProvider implements NotificationPr
     }
 
     @Override
+    public String getNotificationIdString() {
+        return NOTIFICATION_ID_STRING;
+    }
+
+    @Override
     public Notification provideNotification() {
         if(!this.settingsManager.getShowStartupNotification())
             return null;
+
+        Date lastTimePublished = this.notificationHistory.getLastTimeNotificationWasPublished(NOTIFICATION_ID_STRING);
+        if(lastTimePublished != null
+                && DateTimeHelper.isTodayDate(lastTimePublished))
+        {
+            return null;
+        }
 
         Notification result = null;
         UnitOfWork uow = this.persistenceContext.createUnitOfWork();

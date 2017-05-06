@@ -26,7 +26,7 @@ public final class DateTimeHelper {
         return Month.getCurrentMonth();
     }
 
-    public static boolean isCurrentDate(int year, int month, int day)
+    public static boolean isTodayDate(int year, int month, int day)
     {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
@@ -49,7 +49,7 @@ public final class DateTimeHelper {
         return true;
     }
 
-    public static boolean isCurrentDate(int year, Month month, int day)
+    public static boolean isTodayDate(int year, Month month, int day)
     {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
@@ -70,6 +70,16 @@ public final class DateTimeHelper {
         }
 
         return true;
+    }
+
+    public static boolean isTodayDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return isTodayDate(calendar);
+    }
+
+    public static boolean isTodayDate(Calendar calendar) {
+        return isTodayDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
     }
 
     public static String getWeekDayNameShort(int year, int month, int day) {

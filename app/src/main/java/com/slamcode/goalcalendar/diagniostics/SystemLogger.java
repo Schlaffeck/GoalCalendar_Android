@@ -16,4 +16,7 @@ public class SystemLogger implements Logger {
     public void v(String logTag, String message) {
         Log.d(logTag, message);
     }
+
+    @Override
+    public void e(String logTag, String message) { Log.e(logTag, message); }
 }
