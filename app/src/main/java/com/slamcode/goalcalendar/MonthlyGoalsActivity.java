@@ -213,7 +213,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         this.setSupportActionBar((Toolbar)this.findViewById(R.id.toolbar));
         this.setupPresenter();
         this.setupRecyclerViews();
-        this.setupSwipeListener();
         this.setupBottomSheetBehavior();
         this.runStartupCommands();
     }
@@ -244,23 +243,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         capp.getApplicationComponent().inject(this);
     }
 
-    private void setupSwipeListener()
-    {
-        this.gestureDetector = new GestureDetectorCompat(this, new HorizontalFlingGestureListener());
-        this.categoryNamesRecyclerView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return gestureDetector.onTouchEvent(event);
-            }
-        });
-        this.emptyContentHorizontalScrollView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return gestureDetector.onTouchEvent(event);
-            }
-        });
-    }
-
     private void scrollToCurrentDate()
     {
         if(this.activityViewModel.getMonth() != DateTimeHelper.getCurrentMonth()
@@ -272,52 +254,5 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         dayToScrollTo = (dayToScrollTo > 0 ? dayToScrollTo : 0);
         int width = (int) this.getResources().getDimension(R.dimen.monthly_goals_table_day_plan_column_width);
         daysPlanScrollView.smoothScrollTo(dayToScrollTo * width, 0);
-    }
-
-    private class HorizontalFlingGestureListener extends GestureDetector.SimpleOnGestureListener{
-
-        private static final String LOG_TAG = "GOAL_GestDet";
-
-        private static final int SWIPE_MIN_DISTANCE = 120;
-        private static final int SWIPE_MAX_OFF_PATH = 250;
-        private static final int SWIPE_THRESHOLD_VELOCITY = 200;
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            Log.d(LOG_TAG, "onFling: " + e1 +"; "+ e2.toString());
-            return this.checkOnSwipe(e1, e2, velocityX, velocityY);
-        }
-
-        public boolean checkOnSwipe(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
-        {
-            try {
-                if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH){
-                    return false;
-                }
-                // right to left swipe
-                if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
-                        && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                    onLeftSwipe();
-                }
-                // left to right swipe
-                else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
-                        && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                    onRightSwipe();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return false;
-        }
-
-        private void onRightSwipe() {
-            Log.d(LOG_TAG, "Right swipe");
-            presenter.goToPreviousMonth(null);
-        }
-
-        private void onLeftSwipe() {
-            Log.d(LOG_TAG, "Left swipe");
-            presenter.goToNextMonth(null);
-        }
     }
 }
