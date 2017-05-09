@@ -40,8 +40,9 @@ public class SharedPreferencesNotificationHistory implements NotificationHistory
         if(this.sharedPreferences.contains(key))
         {
             SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_STRING);
+            String dateRead = this.sharedPreferences.getString(key, "");
             try {
-                result = format.parse(this.sharedPreferences.getString(key, ""));
+                result = format.parse(dateRead);
             } catch (ParseException e) {
                 e.printStackTrace();
                 logger.e(LOG_TAG,  e.getMessage());
@@ -60,7 +61,8 @@ public class SharedPreferencesNotificationHistory implements NotificationHistory
         String key = notificationId + NOTIFICATION_PUB_DATE_SUFFIX;
 
         SharedPreferences.Editor editor = this.sharedPreferences.edit();
-        editor.putString(key, formatter.format(dateNow));
-        editor.commit();
+        String dateFormatted = formatter.format(dateNow);
+        editor.putString(key, dateFormatted);
+        editor.apply();
     }
 }

@@ -36,7 +36,7 @@ public final class DateTimeHelper {
             return false;
         }
 
-        if((cal.get(Calendar.MONTH)) != month-1)
+        if((cal.get(Calendar.MONTH)) != month)
         {
             return false;
         }
