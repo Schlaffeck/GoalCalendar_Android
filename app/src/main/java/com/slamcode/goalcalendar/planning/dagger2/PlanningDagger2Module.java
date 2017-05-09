@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.planning.dagger2;
 
 import com.slamcode.goalcalendar.data.PersistenceContext;
+import com.slamcode.goalcalendar.planning.DateTimeChangeListenersRegistry;
 import com.slamcode.goalcalendar.planning.summary.DataBasedPlansSummaryCalculator;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 
@@ -20,5 +21,12 @@ public final class PlanningDagger2Module {
     PlansSummaryCalculator providePlansSummaryCalculator(PersistenceContext persistenceContext)
     {
         return new DataBasedPlansSummaryCalculator(persistenceContext.createUnitOfWork().getCategoriesRepository());
+    }
+
+    @Provides
+    @Singleton
+    DateTimeChangeListenersRegistry provideDateTimeChangeListenersRegistry()
+    {
+        return new DateTimeChangeListenersRegistry();
     }
 }

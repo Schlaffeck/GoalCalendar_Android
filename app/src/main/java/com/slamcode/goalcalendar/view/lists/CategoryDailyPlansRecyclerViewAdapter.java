@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.slamcode.goalcalendar.R;
+import com.slamcode.goalcalendar.planning.DateTimeChangeListenersRegistry;
 import com.slamcode.goalcalendar.planning.YearMonthPair;
 import com.slamcode.goalcalendar.view.lists.base.ComparatorSortedListCallback;
 import com.slamcode.goalcalendar.view.lists.base.DefaultComparator;
@@ -28,13 +29,18 @@ import java.util.Comparator;
 
 public class CategoryDailyPlansRecyclerViewAdapter extends BindableRecyclerViewDataAdapter<CategoryPlansViewModel, CategoryDailyPlansRecyclerViewAdapter.CategoryDailyPlansViewHolder> {
 
+    private final DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry;
     private YearMonthPair yearMonthPair;
     private SortedListAdapterCallback<CategoryPlansViewModel> recyclerViewCallback;
 
-    public CategoryDailyPlansRecyclerViewAdapter(Context context, LayoutInflater layoutInflater, YearMonthPair yearMonthPair, ObservableList<CategoryPlansViewModel> items)
+    public CategoryDailyPlansRecyclerViewAdapter(Context context, LayoutInflater layoutInflater,
+                                                 DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry,
+                                                 YearMonthPair yearMonthPair,
+                                                 ObservableList<CategoryPlansViewModel> items)
     {
         super(context, layoutInflater, new ObservableSortedList<>(items, CategoryPlansViewModel.class,
                 new SortedListCallbackSet<>(new DefaultComparator<CategoryPlansViewModel>())));
+        this.dateTimeChangeListenersRegistry = dateTimeChangeListenersRegistry;
 
         this.yearMonthPair = yearMonthPair;
         this.getSourceList().getCallbackSet().addCallback(new ComparatorSortedListCallback<>(new DefaultComparator<CategoryPlansViewModel>()));
@@ -106,6 +112,7 @@ public class CategoryDailyPlansRecyclerViewAdapter extends BindableRecyclerViewD
             DailyPlanRecyclerViewAdapter adapter = new DailyPlanRecyclerViewAdapter(
                     getView().getContext(),
                     getLayoutInflater(),
+                    dateTimeChangeListenersRegistry,
                     yearMonthPair,
                     modelObject.getDailyPlansList());
 
