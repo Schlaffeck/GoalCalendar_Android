@@ -1,8 +1,8 @@
 package com.slamcode.goalcalendar;
 
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
@@ -13,19 +13,16 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.slamcode.goalcalendar.planning.schedule.DateTimeChangedService;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract;
 import com.slamcode.goalcalendar.dagger2.ComposableApplication;
@@ -80,6 +77,9 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
     @Inject
     PresentersSource presentersSource;
+
+    @Inject
+    DateTimeChangedService dateTimeChangedService;
 
     private GestureDetectorCompat gestureDetector;
 
@@ -139,12 +139,16 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     @Override
     protected void onStart() {
         super.onStart();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_DATE_CHANGED);
+        this.registerReceiver(this.dateTimeChangedService, intentFilter);
     }
 
     @Override
     protected void onStop() {
         if(this.persistenceContext != null)
             this.persistenceContext.persistData();
+        this.unregisterReceiver(this.dateTimeChangedService);
         super.onStop();
     }
 

@@ -14,7 +14,7 @@ import android.widget.Spinner;
 
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.dagger2.Dagger2ComponentContainer;
-import com.slamcode.goalcalendar.planning.DateTimeChangeListenersRegistry;
+import com.slamcode.goalcalendar.planning.schedule.DateTimeChangeListenersRegistry;
 import com.slamcode.goalcalendar.planning.YearMonthPair;
 import com.slamcode.goalcalendar.view.lists.CategoryDailyPlansRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.CategoryNameRecyclerViewAdapter;

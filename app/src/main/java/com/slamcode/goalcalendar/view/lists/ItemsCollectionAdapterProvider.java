@@ -4,7 +4,7 @@ import android.content.Context;
 import android.databinding.ObservableList;
 import android.view.LayoutInflater;
 
-import com.slamcode.goalcalendar.planning.DateTimeChangeListenersRegistry;
+import com.slamcode.goalcalendar.planning.schedule.DateTimeChangeListenersRegistry;
 import com.slamcode.goalcalendar.planning.YearMonthPair;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 

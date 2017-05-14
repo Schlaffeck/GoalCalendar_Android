@@ -1,4 +1,4 @@
-package com.slamcode.goalcalendar.planning;
+package com.slamcode.goalcalendar.planning.schedule;
 
 /**
  * Interface for all components listening to changes to system date and time
@@ -6,5 +6,5 @@ package com.slamcode.goalcalendar.planning;
 
 public interface DateTimeChangeListener {
 
-    void onDayChanged();
+    void onDateChanged();
 }

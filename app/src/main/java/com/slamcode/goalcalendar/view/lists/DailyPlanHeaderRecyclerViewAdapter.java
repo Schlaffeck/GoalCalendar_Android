@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.slamcode.goalcalendar.R;
-import com.slamcode.goalcalendar.planning.DateTimeChangeListener;
-import com.slamcode.goalcalendar.planning.DateTimeChangeListenersRegistry;
+import com.slamcode.goalcalendar.planning.schedule.DateTimeChangeListener;
+import com.slamcode.goalcalendar.planning.schedule.DateTimeChangeListenersRegistry;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.YearMonthPair;
 import com.slamcode.goalcalendar.view.lists.base.ComparatorSortedListCallback;
@@ -82,7 +82,7 @@ public class DailyPlanHeaderRecyclerViewAdapter extends BindableRecyclerViewData
         }
 
         @Override
-        public void onDayChanged() {
+        public void onDateChanged() {
 
             if(isCurrentDate(this.getModelObject()))
                 ColorsHelper.setSecondAccentBackgroundColor(this.getView());

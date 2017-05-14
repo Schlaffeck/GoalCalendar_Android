@@ -1,8 +1,7 @@
-package com.slamcode.goalcalendar.planning;
+package com.slamcode.goalcalendar.planning.schedule;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.List;
 
 /**
@@ -11,7 +10,7 @@ import java.util.List;
 
 public class DateTimeChangeListenersRegistry {
 
-    List<DateTimeChangeListener> listenersList = new ArrayList<>();
+    private List<DateTimeChangeListener> listenersList = new ArrayList<>();
 
     public Collection<DateTimeChangeListener> getListeners()
     {
@@ -27,4 +26,5 @@ public class DateTimeChangeListenersRegistry {
     {
         this.listenersList.remove(listener);
     }
+
 }
