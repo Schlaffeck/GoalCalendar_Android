@@ -65,7 +65,7 @@ public final class PlannedForTodayNotificationProvider implements NotificationPr
         if(!this.settingsManager.getShowStartupNotification())
             return null;
 
-        Date lastTimePublished = this.notificationHistory.getLastTimeNotificationWasPublished(NOTIFICATION_ID_STRING);
+        Date lastTimePublished = this.notificationHistory.getLastTimeNotificationWasPublished(this.getNotificationIdString());
         if(lastTimePublished != null
                 && DateTimeHelper.isTodayDate(lastTimePublished))
         {

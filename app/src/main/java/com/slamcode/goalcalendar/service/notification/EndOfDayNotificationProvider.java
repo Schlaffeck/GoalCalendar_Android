@@ -58,7 +58,7 @@ public final class EndOfDayNotificationProvider implements NotificationProvider 
         if(!this.settingsManager.getShowEndOfDayNotification())
             return null;
 
-        Date lastTimePublished = this.notificationHistory.getLastTimeNotificationWasPublished(NOTIFICATION_ID_STRING);
+        Date lastTimePublished = this.notificationHistory.getLastTimeNotificationWasPublished(this.getNotificationIdString());
         if(lastTimePublished != null
                 && DateTimeHelper.isTodayDate(lastTimePublished))
         {
