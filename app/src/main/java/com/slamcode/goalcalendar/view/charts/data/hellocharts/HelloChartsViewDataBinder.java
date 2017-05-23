@@ -121,7 +121,7 @@ public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartVi
                 toDoSliceValue.setValue(todoValue);
                 toDoSliceValue.setColor(lightColor);
             }
-        toDoSliceValue.setLabel(String.format(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_generalPieChart_todo_sliceLabel), category.getName(), expectedTasks - successfulTasks));
+        toDoSliceValue.setLabel(String.format(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_generalPieChart_todo_sliceLabel), category.getName(), expectedTasks > successfulTasks ? expectedTasks - successfulTasks : 0));
 
             if(updateOnly)
             {
@@ -131,7 +131,7 @@ public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartVi
                 exceededSliceValue.setValue(exceededValue);
                 exceededSliceValue.setColor(ChartUtils.darkenColor(color));
             }
-            exceededSliceValue.setLabel(String.format(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_generalPieChart_overdone_sliceLabel), category.getName(), successfulTasks - expectedTasks));
+            exceededSliceValue.setLabel(String.format(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_generalPieChart_overdone_sliceLabel), category.getName(), successfulTasks > expectedTasks ? successfulTasks - expectedTasks : 0));
     }
 
     class CategoryPropertyChangedCallback extends Observable.OnPropertyChangedCallback{
