@@ -9,6 +9,8 @@ import lecho.lib.hellocharts.model.SliceValue;
 
 public class ProgressSliceValue extends SliceValue {
 
+    private float progressValue;
+
     private float thresholdValue;
 
     public float getThresholdValue() {
@@ -17,5 +19,13 @@ public class ProgressSliceValue extends SliceValue {
 
     public void setThresholdValue(float thresholdValue) {
         this.thresholdValue = thresholdValue;
+    }
+
+    public float getProgressValue() {
+        return progressValue;
+    }
+
+    public void setProgressValue(float progressValue) {
+        this.progressValue = progressValue;
     }
 }
