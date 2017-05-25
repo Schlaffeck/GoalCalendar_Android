@@ -107,14 +107,14 @@ public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartVi
         }
         else
         {
-            sliceValue.setLabel(
-                    String.format(
-                            this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_generalPieChart_simple_sliceLabel),
-                            category.getName(),
-                            category.getNoOfSuccessfulTasks(),
-                            category.getNoOfExpectedTasks()));
             sliceValue.setValue(targetValue);
         }
+        sliceValue.setLabel(
+                String.format(
+                        this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_generalPieChart_simple_sliceLabel),
+                        category.getName(),
+                        category.getNoOfSuccessfulTasks(),
+                        category.getNoOfExpectedTasks()));
     }
 
     private int getNextColor()
