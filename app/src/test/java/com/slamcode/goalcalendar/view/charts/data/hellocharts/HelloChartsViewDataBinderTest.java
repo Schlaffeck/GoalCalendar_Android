@@ -1,5 +1,7 @@
 package com.slamcode.goalcalendar.view.charts.data.hellocharts;
 
+import android.view.View;
+
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
@@ -24,6 +26,7 @@ import lecho.lib.hellocharts.view.PieChartView;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -35,7 +38,7 @@ import static org.mockito.Mockito.when;
 public class HelloChartsViewDataBinderTest {
 
     @Test
-    public void setupPieChartViewData_emptyData_test()
+    public void setupCategoriesSummaryPieChartViewData_emptyData_test()
     {
         // create
         PieChartView pieChartViewMock = mock(PieChartView.class);
@@ -47,20 +50,15 @@ public class HelloChartsViewDataBinderTest {
         List<CategoryPlansViewModel> modelList = new ArrayList<>();
 
         // act
-        binder.setupPieChartViewData(pieChartViewMock, modelList);
+        binder.setupCategoriesSummaryPieChartViewData(pieChartViewMock, modelList);
 
         // capture
-        ArgumentCaptor<PieChartData> dataCaptor = ArgumentCaptor.forClass(PieChartData.class);
-        verify(pieChartViewMock).setPieChartData(dataCaptor.capture());
-
-        //assert
-        PieChartData data = dataCaptor.getValue();
-        assertDefaultData(data);
-        assertEquals(0, data.getValues().size());
+        verify(pieChartViewMock, times(0)).setPieChartData(any(PieChartData.class));
+        verify(pieChartViewMock).setVisibility(View.GONE);
     }
 
     @Test
-    public void setupPieChartViewData_notStartedCategories_test()
+    public void setupCategoriesSummaryPieChartViewData_notStartedCategories_test()
     {
         // mocks
         PieChartView pieChartViewMock = mock(PieChartView.class);
@@ -79,39 +77,32 @@ public class HelloChartsViewDataBinderTest {
                 plansSummaries);
 
         // act
-        binder.setupPieChartViewData(pieChartViewMock, modelList);
+        binder.setupCategoriesSummaryPieChartViewData(pieChartViewMock, modelList);
 
         // capture
         ArgumentCaptor<PieChartData> dataCaptor = ArgumentCaptor.forClass(PieChartData.class);
         verify(pieChartViewMock).setPieChartData(dataCaptor.capture());
+        verify(pieChartViewMock).setVisibility(View.VISIBLE);
 
         //assert
         PieChartData data = dataCaptor.getValue();
         assertDefaultData(data);
 
         // slices
-        assertEquals(6, data.getValues().size());
+        assertEquals(2, data.getValues().size());
 
         // cat 1
-        assertEquals(0f, data.getValues().get(0).getValue(), 0f);
-        assertEquals("Category 1, done 0 tasks", new String(data.getValues().get(0).getLabelAsChars()));
-        assertEquals(0.5f, data.getValues().get(1).getValue(), 0f);
-        assertEquals("Category 1, to do 2 tasks", new String(data.getValues().get(1).getLabelAsChars()));
-        assertEquals(0f, data.getValues().get(2).getValue(), 0f);
-        assertEquals("Category 1, overdone 0 tasks", new String(data.getValues().get(2).getLabelAsChars()));
+        assertEquals(0.5f, data.getValues().get(0).getValue(), 0f);
+        assertEquals("Category 1, to do 2 tasks", new String(data.getValues().get(0).getLabelAsChars()));
 
         // cat 2
-        assertEquals(0f, data.getValues().get(3).getValue(), 0f);
-        assertEquals("Category 2, done 0 tasks", new String(data.getValues().get(3).getLabelAsChars()));
-        assertEquals(0.5f, data.getValues().get(4).getValue(), 0f);
-        assertEquals("Category 2, to do 2 tasks", new String(data.getValues().get(4).getLabelAsChars()));
-        assertEquals(0f, data.getValues().get(5).getValue(), 0f);
-        assertEquals("Category 2, overdone 0 tasks", new String(data.getValues().get(5).getLabelAsChars()));
+        assertEquals(0.5f, data.getValues().get(1).getValue(), 0f);
+        assertEquals("Category 2, to do 2 tasks", new String(data.getValues().get(1).getLabelAsChars()));
     }
 
 
     @Test
-    public void setupPieChartViewData_partiallyDoneCategories_test()
+    public void setupCategoriesSummaryPieChartViewData_partiallyDoneCategories_test()
     {
         // mocks
         PieChartView pieChartViewMock = mock(PieChartView.class);
@@ -130,38 +121,35 @@ public class HelloChartsViewDataBinderTest {
                 plansSummaries);
 
         // act
-        binder.setupPieChartViewData(pieChartViewMock, modelList);
+        binder.setupCategoriesSummaryPieChartViewData(pieChartViewMock, modelList);
 
         // capture
         ArgumentCaptor<PieChartData> dataCaptor = ArgumentCaptor.forClass(PieChartData.class);
         verify(pieChartViewMock).setPieChartData(dataCaptor.capture());
+        verify(pieChartViewMock).setVisibility(View.VISIBLE);
 
         //assert
         PieChartData data = dataCaptor.getValue();
         assertDefaultData(data);
 
         // slices
-        assertEquals(6, data.getValues().size());
+        assertEquals(4, data.getValues().size());
 
         // cat 1
         assertEquals(0.2f, data.getValues().get(0).getValue(), 0f);
         assertEquals("Category 1, done 2 tasks", new String(data.getValues().get(0).getLabelAsChars()));
         assertEquals(0.3f, data.getValues().get(1).getValue(), 0f);
         assertEquals("Category 1, to do 3 tasks", new String(data.getValues().get(1).getLabelAsChars()));
-        assertEquals(0f, data.getValues().get(2).getValue(), 0f);
-        assertEquals("Category 1, overdone 0 tasks", new String(data.getValues().get(2).getLabelAsChars()));
 
         // cat 2
-        assertEquals(0.3f, data.getValues().get(3).getValue(), 0f);
-        assertEquals("Category 2, done 3 tasks", new String(data.getValues().get(3).getLabelAsChars()));
-        assertEquals(0.2f, data.getValues().get(4).getValue(), 0f);
-        assertEquals("Category 2, to do 2 tasks", new String(data.getValues().get(4).getLabelAsChars()));
-        assertEquals(0f, data.getValues().get(5).getValue(), 0f);
-        assertEquals("Category 2, overdone 0 tasks", new String(data.getValues().get(5).getLabelAsChars()));
+        assertEquals(0.3f, data.getValues().get(2).getValue(), 0f);
+        assertEquals("Category 2, done 3 tasks", new String(data.getValues().get(2).getLabelAsChars()));
+        assertEquals(0.2f, data.getValues().get(3).getValue(), 0f);
+        assertEquals("Category 2, to do 2 tasks", new String(data.getValues().get(3).getLabelAsChars()));
     }
 
     @Test
-    public void setupPieChartViewData_doneNotDoneCategories_test()
+    public void setupCategoriesSummaryPieChartViewData_doneNotDoneCategories_test()
     {
         // mocks
         PieChartView pieChartViewMock = mock(PieChartView.class);
@@ -181,46 +169,39 @@ public class HelloChartsViewDataBinderTest {
                 plansSummaries);
 
         // act
-        binder.setupPieChartViewData(pieChartViewMock, modelList);
+        binder.setupCategoriesSummaryPieChartViewData(pieChartViewMock, modelList);
 
         // capture
         ArgumentCaptor<PieChartData> dataCaptor = ArgumentCaptor.forClass(PieChartData.class);
         verify(pieChartViewMock).setPieChartData(dataCaptor.capture());
+        verify(pieChartViewMock).setVisibility(View.VISIBLE);
 
         //assert
         PieChartData data = dataCaptor.getValue();
         assertDefaultData(data);
 
         // slices
-        assertEquals(9, data.getValues().size());
+        assertEquals(5, data.getValues().size());
 
         // cat 1
         assertEquals(0.2f, data.getValues().get(0).getValue(), 0f);
         assertEquals("Category 1, done 2 tasks", new String(data.getValues().get(0).getLabelAsChars()));
         assertEquals(0.1f, data.getValues().get(1).getValue(), 0f);
         assertEquals("Category 1, to do 1 tasks", new String(data.getValues().get(1).getLabelAsChars()));
-        assertEquals(0f, data.getValues().get(2).getValue(), 0f);
-        assertEquals("Category 1, overdone 0 tasks", new String(data.getValues().get(2).getLabelAsChars()));
 
         // cat 2
-        assertEquals(0.3f, data.getValues().get(3).getValue(), 0f);
-        assertEquals("Category 2, done 3 tasks", new String(data.getValues().get(3).getLabelAsChars()));
-        assertEquals(0.0f, data.getValues().get(4).getValue(), 0f);
-        assertEquals("Category 2, to do 0 tasks", new String(data.getValues().get(4).getLabelAsChars()));
-        assertEquals(0f, data.getValues().get(5).getValue(), 0f);
-        assertEquals("Category 2, overdone 0 tasks", new String(data.getValues().get(5).getLabelAsChars()));
+        assertEquals(0.3f, data.getValues().get(2).getValue(), 0f);
+        assertEquals("Category 2, done 3 tasks", new String(data.getValues().get(2).getLabelAsChars()));
 
         // cat 3
-        assertEquals(0.3f, data.getValues().get(6).getValue(), 0f);
-        assertEquals("Category 3, done 3 tasks", new String(data.getValues().get(6).getLabelAsChars()));
-        assertEquals(0.1f, data.getValues().get(7).getValue(), 0f);
-        assertEquals("Category 3, to do 1 tasks", new String(data.getValues().get(7).getLabelAsChars()));
-        assertEquals(0f, data.getValues().get(8).getValue(), 0f);
-        assertEquals("Category 3, overdone 0 tasks", new String(data.getValues().get(8).getLabelAsChars()));
+        assertEquals(0.3f, data.getValues().get(3).getValue(), 0f);
+        assertEquals("Category 3, done 3 tasks", new String(data.getValues().get(3).getLabelAsChars()));
+        assertEquals(0.1f, data.getValues().get(4).getValue(), 0f);
+        assertEquals("Category 3, to do 1 tasks", new String(data.getValues().get(4).getLabelAsChars()));
     }
 
     @Test
-    public void setupPieChartViewData_doneOverdoneCategories_test()
+    public void setupCategoriesSummaryPieChartViewData_doneOverdoneCategories_test()
     {
         // mocks
         PieChartView pieChartViewMock = mock(PieChartView.class);
@@ -240,46 +221,39 @@ public class HelloChartsViewDataBinderTest {
                 plansSummaries);
 
         // act
-        binder.setupPieChartViewData(pieChartViewMock, modelList);
+        binder.setupCategoriesSummaryPieChartViewData(pieChartViewMock, modelList);
 
         // capture
         ArgumentCaptor<PieChartData> dataCaptor = ArgumentCaptor.forClass(PieChartData.class);
         verify(pieChartViewMock).setPieChartData(dataCaptor.capture());
+        verify(pieChartViewMock).setVisibility(View.VISIBLE);
 
         //assert
         PieChartData data = dataCaptor.getValue();
         assertDefaultData(data);
 
         // slices
-        assertEquals(9, data.getValues().size());
+        assertEquals(5, data.getValues().size());
 
         // cat 1
         assertEquals(0.222f, data.getValues().get(0).getValue(), 0.001f);
         assertEquals("Category 1, done 2 tasks", new String(data.getValues().get(0).getLabelAsChars()));
-        assertEquals(0.0f, data.getValues().get(1).getValue(), 0f);
-        assertEquals("Category 1, to do 0 tasks", new String(data.getValues().get(1).getLabelAsChars()));
-        assertEquals(0.1111f, data.getValues().get(2).getValue(), 0.001f);
-        assertEquals("Category 1, overdone 1 tasks", new String(data.getValues().get(2).getLabelAsChars()));
+        assertEquals(0.1111f, data.getValues().get(1).getValue(), 0.001f);
+        assertEquals("Category 1, overdone 1 tasks", new String(data.getValues().get(1).getLabelAsChars()));
 
         // cat 2
-        assertEquals(0.3333f, data.getValues().get(3).getValue(), 0.001f);
-        assertEquals("Category 2, done 3 tasks", new String(data.getValues().get(3).getLabelAsChars()));
-        assertEquals(0.0f, data.getValues().get(4).getValue(), 0f);
-        assertEquals("Category 2, to do 0 tasks", new String(data.getValues().get(4).getLabelAsChars()));
-        assertEquals(0f, data.getValues().get(5).getValue(), 0f);
-        assertEquals("Category 2, overdone 0 tasks", new String(data.getValues().get(5).getLabelAsChars()));
+        assertEquals(0.3333f, data.getValues().get(2).getValue(), 0.001f);
+        assertEquals("Category 2, done 3 tasks", new String(data.getValues().get(2).getLabelAsChars()));
 
         // cat 3
-        assertEquals(0.3333f, data.getValues().get(6).getValue(), 0.001f);
-        assertEquals("Category 3, done 3 tasks", new String(data.getValues().get(6).getLabelAsChars()));
-        assertEquals(0.1111f, data.getValues().get(7).getValue(), 0.001f);
-        assertEquals("Category 3, to do 1 tasks", new String(data.getValues().get(7).getLabelAsChars()));
-        assertEquals(0f, data.getValues().get(8).getValue(), 0f);
-        assertEquals("Category 3, overdone 0 tasks", new String(data.getValues().get(8).getLabelAsChars()));
+        assertEquals(0.3333f, data.getValues().get(3).getValue(), 0.001f);
+        assertEquals("Category 3, done 3 tasks", new String(data.getValues().get(3).getLabelAsChars()));
+        assertEquals(0.1111f, data.getValues().get(4).getValue(), 0.001f);
+        assertEquals("Category 3, to do 1 tasks", new String(data.getValues().get(4).getLabelAsChars()));
     }
 
     @Test
-    public void setupPieChartViewData_updateSlicesValue_test()
+    public void setupCategoriesSummaryPieChartViewData_updateSlicesValue_test()
     {
         // mocks
         PieChartView pieChartViewMock = mock(PieChartView.class);
@@ -302,19 +276,18 @@ public class HelloChartsViewDataBinderTest {
                 calculatorMock);
 
         // act
-        binder.setupPieChartViewData(pieChartViewMock, Arrays.asList(categoryPlansViewModel));
+        binder.setupCategoriesSummaryPieChartViewData(pieChartViewMock, Arrays.asList(categoryPlansViewModel));
 
         // capture
         ArgumentCaptor<PieChartData> dataCaptor = ArgumentCaptor.forClass(PieChartData.class);
         verify(pieChartViewMock).setPieChartData(dataCaptor.capture());
+        verify(pieChartViewMock).setVisibility(View.VISIBLE);
 
         PieChartData data = dataCaptor.getValue();
 
         // assert before
-        assertEquals(3, data.getValues().size());
-        assertEquals(0f, data.getValues().get(0).getValue(), 0f);
-        assertEquals(1f, data.getValues().get(1).getValue(), 0f);
-        assertEquals(0f, data.getValues().get(2).getValue(), 0f);
+        assertEquals(1, data.getValues().size());
+        assertEquals(1f, data.getValues().get(0).getValue(), 0f);
 
         // mock
         when(calculatorMock.calculatePlansSummaryForMonthInCategory(2017, Month.MAY, "Category 1"))
@@ -330,10 +303,9 @@ public class HelloChartsViewDataBinderTest {
         data.finish();
 
         // assert after
-        assertEquals(3, data.getValues().size());
+        assertEquals(2, data.getValues().size());
         assertEquals(0.1f, data.getValues().get(0).getValue(), 0f);
         assertEquals(0.9f, data.getValues().get(1).getValue(), 0f);
-        assertEquals(0f, data.getValues().get(2).getValue(), 0f);
     }
 
     private ApplicationContext getApplicationContextMock()
@@ -383,7 +355,7 @@ public class HelloChartsViewDataBinderTest {
         assertNotNull(data);
         assertEquals(true, data.hasLabelsOnlyForSelected());
         assertEquals(false, data.hasLabels());
-        assertEquals(2, data.getSlicesSpacing());
+        assertEquals(0, data.getSlicesSpacing());
         assertEquals(false, data.hasLabelsOutside());
         assertEquals(false, data.hasCenterCircle());
     }
