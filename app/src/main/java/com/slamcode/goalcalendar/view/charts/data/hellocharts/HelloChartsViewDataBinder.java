@@ -26,8 +26,6 @@ import lecho.lib.hellocharts.view.PieChartView;
 
 public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartView> {
 
-    private final static float SLICE_MINIMAL_VALUE = 0.0f;
-
     private final ApplicationContext applicationContext;
     private int lastColor = ChartUtils.DEFAULT_COLOR;
 
@@ -59,11 +57,13 @@ public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartVi
             for (CategoryPlansViewModel category : itemsSource) {
                 if (!this.categoryCallbacksMap.containsKey(category)) {
 
+                    ProgressSliceValue sliceValue = new ProgressSliceValue();
+                    sliceValue.setColor(this.getNextColor());
                     CategoryPropertyChangedCallback categoryChangedCallback =
                             new CategoryPropertyChangedCallback(
                                     pieChartView,
                                     itemsSource,
-                                    new ProgressSliceValue());
+                                    sliceValue);
                     category.addOnPropertyChangedCallback(categoryChangedCallback);
                     this.categoryCallbacksMap.put(category, categoryChangedCallback);
                 }
