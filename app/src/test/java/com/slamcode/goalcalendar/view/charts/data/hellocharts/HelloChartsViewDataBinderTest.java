@@ -1,5 +1,7 @@
 package com.slamcode.goalcalendar.view.charts.data.hellocharts;
 
+import android.view.View;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
@@ -32,6 +34,7 @@ import lecho.lib.hellocharts.view.PieChartView;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -43,7 +46,7 @@ import static org.mockito.Mockito.when;
 public class HelloChartsViewDataBinderTest {
 
     @Test
-    public void setupPieChartViewData_emptyData_test()
+    public void setupCategoriesSummaryPieChartViewData_emptyData_test()
     {
         // create
         PieChartView pieChartViewMock = mock(PieChartView.class);
@@ -55,21 +58,15 @@ public class HelloChartsViewDataBinderTest {
         List<CategoryPlansViewModel> modelList = new ArrayList<>();
 
         // act
-        binder.setupPieChartViewData(pieChartViewMock, modelList);
+        binder.setupCategoriesSummaryPieChartViewData(pieChartViewMock, modelList);
 
         // capture
-        ArgumentCaptor<PieChartData> dataCaptor = ArgumentCaptor.forClass(PieChartData.class);
-        verify(pieChartViewMock).setPieChartData(dataCaptor.capture());
-        verify(pieChartViewMock).setChartRenderer(Matchers.notNull(ProgressPieChartRenderer.class));
-
-        //assert
-        PieChartData data = dataCaptor.getValue();
-        assertDefaultData(data);
-        assertEquals(0, data.getValues().size());
+        verify(pieChartViewMock, times(0)).setPieChartData(any(PieChartData.class));
+        verify(pieChartViewMock).setVisibility(View.GONE);
     }
 
     @Test
-    public void setupPieChartViewData_notStartedCategories_test()
+    public void setupCategoriesSummaryPieChartViewData_notStartedCategories_test()
     {
         // mocks
         PieChartView pieChartViewMock = mock(PieChartView.class);
@@ -88,11 +85,12 @@ public class HelloChartsViewDataBinderTest {
                 plansSummaries);
 
         // act
-        binder.setupPieChartViewData(pieChartViewMock, modelList);
+        binder.setupCategoriesSummaryPieChartViewData(pieChartViewMock, modelList);
 
         // capture
         ArgumentCaptor<PieChartData> dataCaptor = ArgumentCaptor.forClass(PieChartData.class);
         verify(pieChartViewMock).setPieChartData(dataCaptor.capture());
+        verify(pieChartViewMock).setVisibility(View.VISIBLE);
 
         //assert
         PieChartData data = dataCaptor.getValue();
@@ -121,7 +119,7 @@ public class HelloChartsViewDataBinderTest {
 
 
     @Test
-    public void setupPieChartViewData_partiallyDoneCategories_test()
+    public void setupCategoriesSummaryPieChartViewData_partiallyDoneCategories_test()
     {
         // mocks
         PieChartView pieChartViewMock = mock(PieChartView.class);
@@ -140,11 +138,12 @@ public class HelloChartsViewDataBinderTest {
                 plansSummaries);
 
         // act
-        binder.setupPieChartViewData(pieChartViewMock, modelList);
+        binder.setupCategoriesSummaryPieChartViewData(pieChartViewMock, modelList);
 
         // capture
         ArgumentCaptor<PieChartData> dataCaptor = ArgumentCaptor.forClass(PieChartData.class);
         verify(pieChartViewMock).setPieChartData(dataCaptor.capture());
+        verify(pieChartViewMock).setVisibility(View.VISIBLE);
 
         //assert
         PieChartData data = dataCaptor.getValue();
@@ -172,7 +171,7 @@ public class HelloChartsViewDataBinderTest {
     }
 
     @Test
-    public void setupPieChartViewData_doneNotDoneCategories_test()
+    public void setupCategoriesSummaryPieChartViewData_doneNotDoneCategories_test()
     {
         // mocks
         PieChartView pieChartViewMock = mock(PieChartView.class);
@@ -192,11 +191,12 @@ public class HelloChartsViewDataBinderTest {
                 plansSummaries);
 
         // act
-        binder.setupPieChartViewData(pieChartViewMock, modelList);
+        binder.setupCategoriesSummaryPieChartViewData(pieChartViewMock, modelList);
 
         // capture
         ArgumentCaptor<PieChartData> dataCaptor = ArgumentCaptor.forClass(PieChartData.class);
         verify(pieChartViewMock).setPieChartData(dataCaptor.capture());
+        verify(pieChartViewMock).setVisibility(View.VISIBLE);
 
         //assert
         PieChartData data = dataCaptor.getValue();
@@ -232,7 +232,7 @@ public class HelloChartsViewDataBinderTest {
     }
 
     @Test
-    public void setupPieChartViewData_doneOverdoneCategories_test()
+    public void setupCategoriesSummaryPieChartViewData_doneOverdoneCategories_test()
     {
         // mocks
         PieChartView pieChartViewMock = mock(PieChartView.class);
@@ -252,11 +252,12 @@ public class HelloChartsViewDataBinderTest {
                 plansSummaries);
 
         // act
-        binder.setupPieChartViewData(pieChartViewMock, modelList);
+        binder.setupCategoriesSummaryPieChartViewData(pieChartViewMock, modelList);
 
         // capture
         ArgumentCaptor<PieChartData> dataCaptor = ArgumentCaptor.forClass(PieChartData.class);
         verify(pieChartViewMock).setPieChartData(dataCaptor.capture());
+        verify(pieChartViewMock).setVisibility(View.VISIBLE);
 
         //assert
         PieChartData data = dataCaptor.getValue();
@@ -315,7 +316,7 @@ public class HelloChartsViewDataBinderTest {
                 calculatorMock);
 
         // act
-        binder.setupPieChartViewData(pieChartViewMock, Arrays.asList(categoryPlansViewModel));
+        binder.setupCategoriesSummaryPieChartViewData(pieChartViewMock, Arrays.asList(categoryPlansViewModel));
 
         // capture
         ArgumentCaptor<PieChartData> dataCaptor = ArgumentCaptor.forClass(PieChartData.class);
@@ -493,7 +494,7 @@ public class HelloChartsViewDataBinderTest {
         assertNotNull(data);
         assertEquals(true, data.hasLabelsOnlyForSelected());
         assertEquals(false, data.hasLabels());
-        assertEquals(2, data.getSlicesSpacing());
+        assertEquals(0, data.getSlicesSpacing());
         assertEquals(false, data.hasLabelsOutside());
         assertEquals(false, data.hasCenterCircle());
     }

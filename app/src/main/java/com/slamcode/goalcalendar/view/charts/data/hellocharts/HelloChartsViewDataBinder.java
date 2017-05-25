@@ -25,7 +25,10 @@ import lecho.lib.hellocharts.view.PieChartView;
 
 public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartView> {
 
+    private final static float SLICE_MINIMAL_VALUE = 0.0f;
+
     private final ApplicationContext applicationContext;
+    private int lastColor = ChartUtils.DEFAULT_COLOR;
 
     private Map<CategoryPlansViewModel, CategoryPropertyChangedCallback> categoryCallbacksMap;
 
@@ -36,7 +39,7 @@ public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartVi
     }
 
     @Override
-    public void setupPieChartViewData(PieChartView pieChartView, Iterable<CategoryPlansViewModel> categories) {
+    public void setupCategoriesSummaryPieChartViewData(PieChartView pieChartView, Iterable<CategoryPlansViewModel> categories) {
         this.setupPieChartViewDataInternal(pieChartView, categories);
     }
 
@@ -46,10 +49,11 @@ public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartVi
 
         int summarizedNoOfTasks = this.countAllExpectedTasks(itemsSource);
 
-        for(CategoryPlansViewModel category : itemsSource)
-        {
-            if(!this.categoryCallbacksMap.containsKey(category)) {
+        if(summarizedNoOfTasks == 0)
+            pieChartView.setVisibility(View.GONE);
+        else {
 
+            pieChartView.setVisibility(View.VISIBLE);
                 CategoryPropertyChangedCallback categoryChangedCallback =
                         new CategoryPropertyChangedCallback(
                                 pieChartView,
@@ -57,11 +61,49 @@ public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartVi
                                 new ProgressSliceValue());
                 category.addOnPropertyChangedCallback(categoryChangedCallback);
                 this.categoryCallbacksMap.put(category, categoryChangedCallback);
+
+            for (CategoryPlansViewModel category : itemsSource) {
+                if (!this.categoryCallbacksMap.containsKey(category)) {
+
+                    int lightColor = this.getNextColor();
+                    int color =  ChartUtils.darkenColor(lightColor);
+                    int darkenColor = ChartUtils.darkenColor(color);
+
+                    CategoryPropertyChangedCallback categoryChangedCallback =
+                            new CategoryPropertyChangedCallback(
+                                    pieChartView,
+                                    itemsSource,
+                                    slices,
+                                    new SliceValue(0f, color),
+                                    new SliceValue(0f, lightColor),
+                                    new SliceValue(0f, darkenColor));
+                    category.addOnPropertyChangedCallback(categoryChangedCallback);
+                    this.categoryCallbacksMap.put(category, categoryChangedCallback);
+                }
+
+                SliceValue doneSliceValue = this.categoryCallbacksMap.get(category).doneSliceValue;
+                SliceValue toDoSliceValue = this.categoryCallbacksMap.get(category).todoSliceValue;
+                SliceValue exceededSliceValue = this.categoryCallbacksMap.get(category).exceededSliceValue;
+                this.setupSlicesValues(slices, summarizedNoOfTasks, category, doneSliceValue, toDoSliceValue, exceededSliceValue, false);
+                if(doneSliceValue.getValue() > 0)
+                    slices.add(doneSliceValue);
+
+                if(toDoSliceValue.getValue() > 0)
+                    slices.add(toDoSliceValue);
+
+                if(exceededSliceValue.getValue() > 0)
+                    slices.add(exceededSliceValue);
             }
 
             ProgressSliceValue sliceValue = this.categoryCallbacksMap.get(category).todoSliceValue;
             this.setupSlicesValues(summarizedNoOfTasks, category, sliceValue, false);
             slices.add(sliceValue);
+            PieChartData data = new PieChartData(slices);
+            data.setHasLabelsOnlyForSelected(true);
+            data.setSlicesSpacing(0);
+
+            pieChartView.setChartRotationEnabled(false);
+            pieChartView.setPieChartData(data);
         }
 
         PieChartData data = new PieChartData(slices);
@@ -80,7 +122,7 @@ public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartVi
         });
     }
 
-    private void setupSlicesValues(int summarizedNoOfTasks,
+    private void setupSlicesValues(List<SliceValue> slices, int summarizedNoOfTasks,
                                    CategoryPlansViewModel category,
                                    ProgressSliceValue sliceValue,
                                    boolean updateOnly)
@@ -93,8 +135,16 @@ public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartVi
         if(updateOnly)
         {
             sliceValue.setTarget(targetValue);
+            if(!slices.contains(doneSliceValue) && doneValue > 0)
+            {
+                // add missing slice to list
+                slices.add(slices.indexOf(toDoSliceValue), doneSliceValue);
+            }
+            else if(doneValue == 0 && slices.contains(doneSliceValue))
+                slices.remove(doneSliceValue);
         }
-        else {
+        else
+        {
             sliceValue.setLabel(
                     String.format(
                             this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_generalPieChart_simple_sliceLabel),
@@ -103,6 +153,26 @@ public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartVi
                             category.getNoOfExpectedTasks()));
             sliceValue.setValue(targetValue);
         }
+    }
+
+    private int getNextColor()
+    {
+        int color = this.lastColor;
+        if(this.lastColor == ChartUtils.COLOR_BLUE)
+                color = ChartUtils.COLOR_GREEN;
+
+        else if(this.lastColor == ChartUtils.COLOR_GREEN)
+            color = ChartUtils.COLOR_ORANGE;
+
+        else if(this.lastColor == ChartUtils.COLOR_ORANGE)
+            color = ChartUtils.COLOR_RED;
+
+        else if(this.lastColor == ChartUtils.COLOR_RED)
+            color = ChartUtils.COLOR_VIOLET;
+
+        else color = ChartUtils.COLOR_BLUE;
+
+        return this.lastColor = color;
     }
 
     class CategoryPropertyChangedCallback extends Observable.OnPropertyChangedCallback{
@@ -117,6 +187,7 @@ public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartVi
         {
             this.pieChartView = pieChartView;
             this.categories = categories;
+            this.slices = slices;
             this.todoSliceValue = todoSliceValue;
         }
 
