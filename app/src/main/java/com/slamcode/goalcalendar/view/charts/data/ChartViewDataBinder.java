@@ -8,5 +8,5 @@ import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 
 public interface ChartViewDataBinder<PieChartViewType> {
 
-    void setupPieChartViewData(PieChartViewType pieChartView, Iterable<CategoryPlansViewModel> categories);
+    void setupCategoriesSummaryPieChartViewData(PieChartViewType pieChartView, Iterable<CategoryPlansViewModel> categories);
 }
