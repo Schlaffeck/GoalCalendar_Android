@@ -28,6 +28,7 @@ public class MonthlyGoalsViewModel extends BaseObservable {
     private final PersistenceContext persistenceContext;
     private final PlansSummaryCalculator plansSummaryCalculator;
     private final SourceChangeRequestNotifier.SourceChangeRequestListener<CategoryPlansViewModel> categoryChangeRequestListener;
+    private final SourceChangeRequestNotifier.SourceChangeRequestListener<DailyPlansViewModel> dailyPlansChangeRequestListener;
     private MonthlyPlanningCategoryListViewModel monthlyPlansViewModel;
 
     Map<YearMonthPair, MonthlyPlanningCategoryListViewModel> viewModelMap = new HashMap<>();
@@ -35,12 +36,14 @@ public class MonthlyGoalsViewModel extends BaseObservable {
     public MonthlyGoalsViewModel(ApplicationContext applicationContext,
                                  PersistenceContext persistenceContext,
                                  PlansSummaryCalculator plansSummaryCalculator,
-                                 SourceChangeRequestNotifier.SourceChangeRequestListener<CategoryPlansViewModel> categoryChangeRequestListener)
+                                 SourceChangeRequestNotifier.SourceChangeRequestListener<CategoryPlansViewModel> categoryChangeRequestListener,
+                                 SourceChangeRequestNotifier.SourceChangeRequestListener<DailyPlansViewModel> dailyPlansChangeRequestListener)
     {
         this.applicationContext = applicationContext;
         this.persistenceContext = persistenceContext;
         this.plansSummaryCalculator = plansSummaryCalculator;
         this.categoryChangeRequestListener = categoryChangeRequestListener;
+        this.dailyPlansChangeRequestListener = dailyPlansChangeRequestListener;
         this.setYearAndMonth(DateTimeHelper.getCurrentYear(), DateTimeHelper.getCurrentMonth());
     }
 
@@ -96,7 +99,12 @@ public class MonthlyGoalsViewModel extends BaseObservable {
             if(!this.viewModelMap.containsKey(yearMonthPair))
             {
                 MonthlyPlansModel model = this.getMonthlyPlans(yearMonthPair);
-                this.viewModelMap.put(yearMonthPair, new MonthlyPlanningCategoryListViewModel(model, this.plansSummaryCalculator, this.categoryChangeRequestListener));
+                this.viewModelMap.put(yearMonthPair,
+                        new MonthlyPlanningCategoryListViewModel(
+                                model,
+                                this.plansSummaryCalculator,
+                                this.categoryChangeRequestListener,
+                                this.dailyPlansChangeRequestListener));
             }
 
             this.monthlyPlansViewModel = this.viewModelMap.get(yearMonthPair);

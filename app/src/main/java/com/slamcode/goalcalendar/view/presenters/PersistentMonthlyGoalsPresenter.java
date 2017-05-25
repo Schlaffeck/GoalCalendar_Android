@@ -15,13 +15,17 @@ import com.slamcode.goalcalendar.data.UnitOfWork;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.ModelHelper;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
+import com.slamcode.goalcalendar.planning.DateTime;
+import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 import com.slamcode.goalcalendar.view.SourceChangeRequestNotifier;
 import com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract;
 import com.slamcode.goalcalendar.view.dialogs.AddEditCategoryViewModelDialog;
+import com.slamcode.goalcalendar.view.dialogs.EditDailyPlansViewModelDialog;
 import com.slamcode.goalcalendar.view.dialogs.base.AddEditDialog;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
+import com.slamcode.goalcalendar.viewmodels.DailyPlansViewModel;
 import com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel;
 import com.slamcode.goalcalendar.viewmodels.MonthlyPlanningCategoryListViewModel;
 
@@ -42,6 +46,7 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
     private MonthlyGoalsActivityContract.ActivityView activityView;
 
     private CategoryPlansViewModelChangeRequestListener categoryChangeRequestListener = new CategoryPlansViewModelChangeRequestListener();
+    private DailyPlansViewModelChangeRequestListener dailyPlansChangeRequestListener = new DailyPlansViewModelChangeRequestListener();
 
     public PersistentMonthlyGoalsPresenter(
             ApplicationContext applicationContext,
@@ -71,7 +76,12 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
     public void initializeWithView(MonthlyGoalsActivityContract.ActivityView view) {
         this.activityView = view;
         if(this.data == null)
-            this.setData(new MonthlyGoalsViewModel(applicationContext, persistenceContext, summaryCalculator, categoryChangeRequestListener));
+            this.setData(new MonthlyGoalsViewModel(
+                    applicationContext,
+                    persistenceContext,
+                    summaryCalculator,
+                    categoryChangeRequestListener,
+                    dailyPlansChangeRequestListener));
         else this.resetData();
     }
 
@@ -177,10 +187,39 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
         dialog.show();
     }
 
+    private void showEditDailyPlansDialog(DailyPlansViewModel viewModel)
+    {
+        final EditDailyPlansViewModelDialog dialog = new EditDailyPlansViewModelDialog();
+
+        CategoryPlansViewModel category = this.findCategoryWithDailyPlans(viewModel);
+
+        EditDailyPlansViewModelDialog.DailyPlansDialogData dialogModel
+                = new EditDailyPlansViewModelDialog.DailyPlansDialogData(
+                        category != null ? category.getName() : "",
+                        DateTimeHelper.getCalendar(this.data.getYear(), this.data.getMonth(), viewModel.getDayNumber()).getTime(),
+                        viewModel);
+        dialog.setModel(dialogModel);
+
+        this.activityView.showDialog(dialog);
+    }
+
+    private CategoryPlansViewModel findCategoryWithDailyPlans(DailyPlansViewModel dailyPlansViewModel) {
+
+        for(CategoryPlansViewModel category : this.data.getMonthlyPlans().getCategoryPlansList())
+        {
+            if(category.getDailyPlansList().contains(dailyPlansViewModel))
+                return category;
+        }
+
+        return null;
+    }
+
     private CategoryPlansViewModel createCategoryPlansViewModel(CategoryModel categoryModel)
     {
         CategoryPlansViewModel viewModel = new CategoryPlansViewModel(this.data.getMonthlyPlans().getMonthData(), categoryModel, this.summaryCalculator);
         viewModel.addSourceChangeRequestListener(this.categoryChangeRequestListener);
+        for(DailyPlansViewModel dailyPlansViewModel : viewModel.getDailyPlansList())
+            dailyPlansViewModel.addSourceChangeRequestListener(this.dailyPlansChangeRequestListener);
         return viewModel;
     }
 
@@ -213,6 +252,19 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
                     break;
                 case CategoryPlansViewModel.REQUEST_MODIFY_ITEM:
                     showAddOrEditCategoryDialog(sender);
+                    break;
+            }
+        }
+    }
+
+    private class DailyPlansViewModelChangeRequestListener implements SourceChangeRequestNotifier.SourceChangeRequestListener<DailyPlansViewModel>{
+
+        @Override
+        public void sourceChangeRequested(DailyPlansViewModel sender, SourceChangeRequestNotifier.SourceChangeRequest request) {
+            switch (request.getId())
+            {
+                case DailyPlansViewModel.REQUEST_EDIT_DAILY_PLANS:
+                    showEditDailyPlansDialog(sender);
                     break;
             }
         }

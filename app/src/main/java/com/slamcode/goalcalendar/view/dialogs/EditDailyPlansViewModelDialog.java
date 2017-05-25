@@ -61,7 +61,7 @@ public class EditDailyPlansViewModelDialog extends AddEditDialog<EditDailyPlansV
         super.cancelChanges();
     }
 
-    public class DailyPlansDialogData
+    public static class DailyPlansDialogData
     {
         private final String categoryName;
         private final DailyPlansViewModel dailyPlansViewModel;

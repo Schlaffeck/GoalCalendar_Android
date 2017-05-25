@@ -101,6 +101,11 @@ public final class DateTimeHelper {
         return calendar;
     }
 
+    public static DateTime getDateTime(int year, Month month, int day)
+    {
+        return new DateTime(getCalendar(year, month, day));
+    }
+
     public static DateTime getYesterdayDateTime() {
         return new DateTime(getYesterdayCalendar());
     }
@@ -131,6 +136,16 @@ public final class DateTimeHelper {
     public static long getDiffTimeMillis(Calendar fromTime, Calendar toTime)
     {
         return toTime.getTimeInMillis() - fromTime.getTimeInMillis();
+    }
+
+    public static Calendar getCalendar(int year, Month month, int day)
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month.getNumValue() -1);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+
+        return calendar;
     }
 
     public static int getDaysCount(int year, Month month) {
