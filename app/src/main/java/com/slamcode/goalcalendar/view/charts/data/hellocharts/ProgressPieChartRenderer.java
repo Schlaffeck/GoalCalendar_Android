@@ -58,6 +58,8 @@ public class ProgressPieChartRenderer extends PieChartRenderer {
         Rect contentRect = computator.getContentRectMinusAllMargins();
 
         float progressValue = 1.0f * sliceValue.getProgressValue() / sliceValue.getThresholdValue();
+        if(progressValue > 1f)
+            progressValue = 1.01f;
         final float circleRadius = Math.min(contentRect.width() / 2f, contentRect.height() / 2f) * progressValue;
 
         final float centerX = contentRect.centerX();

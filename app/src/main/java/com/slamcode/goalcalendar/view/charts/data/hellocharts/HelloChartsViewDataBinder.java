@@ -17,6 +17,7 @@ import java.util.Map;
 
 import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
+import lecho.lib.hellocharts.renderer.ChartRenderer;
 import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.PieChartView;
 
@@ -76,7 +77,6 @@ public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartVi
             PieChartData data = new PieChartData(slices);
             data.setHasLabelsOnlyForSelected(true);
             data.setSlicesSpacing(0);
-            pieChartView.setChartRenderer(new ProgressPieChartRenderer(this.applicationContext.getDefaultContext(), pieChartView, pieChartView));
             pieChartView.setPieChartData(data);
         }
     }

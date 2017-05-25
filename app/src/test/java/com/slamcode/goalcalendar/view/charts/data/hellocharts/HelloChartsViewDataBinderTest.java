@@ -95,7 +95,6 @@ public class HelloChartsViewDataBinderTest {
         //assert
         PieChartData data = dataCaptor.getValue();
         assertDefaultData(data);
-        verify(pieChartViewMock).setChartRenderer(Matchers.notNull(ProgressPieChartRenderer.class));
 
         // slices
         assertEquals(2, data.getValues().size());
@@ -148,7 +147,6 @@ public class HelloChartsViewDataBinderTest {
         //assert
         PieChartData data = dataCaptor.getValue();
         assertDefaultData(data);
-        verify(pieChartViewMock).setChartRenderer(Matchers.notNull(ProgressPieChartRenderer.class));
 
         // slices
         assertEquals(2, data.getValues().size());
@@ -201,7 +199,6 @@ public class HelloChartsViewDataBinderTest {
         //assert
         PieChartData data = dataCaptor.getValue();
         assertDefaultData(data);
-        verify(pieChartViewMock).setChartRenderer(Matchers.notNull(ProgressPieChartRenderer.class));
 
         // slices
         assertEquals(3, data.getValues().size());
@@ -262,7 +259,6 @@ public class HelloChartsViewDataBinderTest {
         //assert
         PieChartData data = dataCaptor.getValue();
         assertDefaultData(data);
-        verify(pieChartViewMock).setChartRenderer(Matchers.notNull(ProgressPieChartRenderer.class));
 
         // slices
         assertEquals(3, data.getValues().size());
@@ -321,7 +317,6 @@ public class HelloChartsViewDataBinderTest {
         // capture
         ArgumentCaptor<PieChartData> dataCaptor = ArgumentCaptor.forClass(PieChartData.class);
         verify(pieChartViewMock).setPieChartData(dataCaptor.capture());
-        verify(pieChartViewMock).setChartRenderer(Matchers.notNull(ProgressPieChartRenderer.class));
 
         PieChartData data = dataCaptor.getValue();
 
@@ -395,7 +390,6 @@ public class HelloChartsViewDataBinderTest {
         // capture
         ArgumentCaptor<PieChartData> dataCaptor = ArgumentCaptor.forClass(PieChartData.class);
         verify(pieChartViewMock).setPieChartData(dataCaptor.capture());
-        verify(pieChartViewMock).setChartRenderer(Matchers.notNull(ProgressPieChartRenderer.class));
 
         PieChartData data = dataCaptor.getValue();
 
