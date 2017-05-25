@@ -41,6 +41,11 @@ public class DailyPlansViewModel extends BaseObservable implements Comparable<Da
         return this.model.getDayNumber();
     }
 
+    @Bindable
+    public String getDescription() {
+        return this.model.getDescription();
+    }
+
     public void changeStatus(Object param)
     {
         this.setStatus(this.getStatus().nextStatus());
@@ -54,5 +59,12 @@ public class DailyPlansViewModel extends BaseObservable implements Comparable<Da
 
         return this.getDayNumber() > o.getDayNumber() ? 1
                 : this.getDayNumber() < o.getDayNumber() ? -1 : 0;
+    }
+
+    public void setDescription(String description) {
+        if(description != this.getDescription()) {
+            this.model.setDescription(description);
+            this.notifyPropertyChanged(BR.description);
+        }
     }
 }

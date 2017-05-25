@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content" android:layout_height="wrap_content">
+
+    <!-- dialog header -->
+    <TextView
+        android:id="@+id/edit_dailyPlans_dialog_header_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="@dimen/dialog_header_text_size"
+        android:text="@string/edit_dailyPlans_dialog_description_header"/>
+    <!-- edit/add category form -->
+    <EditText
+        android:id="@+id/edit_dailyPlans_dialog_description_edittext"
+        android:layout_below="@id/edit_dailyPlans_dialog_header_textview"
+        android:hint="@string/edit_dailyPlans_dialog_description_editText_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"/>
+    <!-- buttons -->
+    <Button
+        android:layout_below="@id/edit_dailyPlans_dialog_description_edittext"
+        android:id="@+id/edit_dailyPlans_dialog_cancel_button"
+        android:text="@string/monthly_goals_dailyPlans_dialog_cancel_button_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <Button
+        android:layout_toRightOf="@id/edit_dailyPlans_dialog_cancel_button"
+        android:layout_below="@id/edit_dailyPlans_dialog_description_edittext"
+        android:id="@+id/edit_dailyPlans_dialog_confirm_button"
+        android:text="@string/monthly_goals_dailyPlans_dialog_confirm_button_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>
