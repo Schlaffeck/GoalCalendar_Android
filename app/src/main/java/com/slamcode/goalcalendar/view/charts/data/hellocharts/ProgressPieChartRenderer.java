@@ -2,6 +2,7 @@ package com.slamcode.goalcalendar.view.charts.data.hellocharts;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -36,22 +37,43 @@ public class ProgressPieChartRenderer extends PieChartRenderer {
         final PieChartData data = dataProvider.getPieChartData();
         final float sliceScale = 360f / this.calculateSlicesSum();
         float lastAngle = getChartRotation();
+        int sliceIndex = 0;
         for (SliceValue sliceValue : data.getValues()) {
             final float angle = Math.abs(sliceValue.getValue()) * sliceScale;
             if(sliceValue instanceof ProgressSliceValue) {
-                this.drawProgressOnSlice(canvas, (ProgressSliceValue) sliceValue, lastAngle, angle);
+                this.drawProgressOnSlice(canvas, (ProgressSliceValue) sliceValue, sliceIndex, lastAngle, angle);
             }
             lastAngle += angle;
+            sliceIndex++;
         }
         super.drawLabels(canvas);
     }
 
-    private void drawProgressOnSlice(Canvas canvas, ProgressSliceValue sliceValue, float lastAngle, float angle) {
+    private void drawProgressOnSlice(Canvas canvas, ProgressSliceValue sliceValue, int sliceIndex, float lastAngle, float angle) {
 
         RectF drawCircleOval = calculateProgressSliceCircleOval(sliceValue);
         Paint slicePaint = new Paint();
-        slicePaint.setColor(sliceValue.getDarkenColor());
+        if(isTouched() && selectedValue.getFirstIndex() == sliceIndex)
+        {
+            slicePaint.setColor(sliceValue.getDarkenColor());
+        }
+        else {
+            slicePaint.setColor(this.getLightenedColor(sliceValue.getColor()));
+        }
         canvas.drawArc(drawCircleOval, lastAngle, angle, true, slicePaint);
+    }
+
+    private int getLightenedColor(int color) {
+        float[] hsv = new float[3];
+        int alpha = Color.alpha(color);
+        Color.colorToHSV(color, hsv);
+
+        final float LIGHTEN_SATURATION = 0.9f;
+        final float LIGHTEN_INTENSITY = 1.1f;
+        hsv[1] = Math.min(hsv[1] * LIGHTEN_SATURATION, 1.0f);
+        hsv[2] = hsv[2] * LIGHTEN_INTENSITY;
+        int tempColor = Color.HSVToColor(hsv);
+        return Color.argb(alpha, Color.red(tempColor), Color.green(tempColor), Color.blue(tempColor));
     }
 
     private RectF calculateProgressSliceCircleOval(ProgressSliceValue sliceValue)
