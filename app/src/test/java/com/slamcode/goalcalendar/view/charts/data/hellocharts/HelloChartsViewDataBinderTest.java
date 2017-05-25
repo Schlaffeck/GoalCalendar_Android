@@ -390,7 +390,7 @@ public class HelloChartsViewDataBinderTest {
                 calculatorMock);
 
         // act
-        binder.setupPieChartViewData(pieChartViewMock, Arrays.asList(categoryPlansViewModel1, categoryPlansViewModel2));
+        binder.setupCategoriesSummaryPieChartViewData(pieChartViewMock, Arrays.asList(categoryPlansViewModel1, categoryPlansViewModel2));
 
         // capture
         ArgumentCaptor<PieChartData> dataCaptor = ArgumentCaptor.forClass(PieChartData.class);
