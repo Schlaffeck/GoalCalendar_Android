@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GoalCalendar.iml" filepath="$PROJECT_DIR$/GoalCalendar.iml" />
       <module fileurl="file://$PROJECT_DIR$/GoalCalendar_Android.iml" filepath="$PROJECT_DIR$/GoalCalendar_Android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/GoalCalendar_Android.iml" filepath="$PROJECT_DIR$/GoalCalendar_Android.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/async/async.iml" filepath="$PROJECT_DIR$/async/async.iml" />
       <module fileurl="file://$PROJECT_DIR$/collections/collections.iml" filepath="$PROJECT_DIR$/collections/collections.iml" />
