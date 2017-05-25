@@ -4,6 +4,7 @@ import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
+import com.slamcode.goalcalendar.view.charts.data.hellocharts.HelloChartsViewDataBinder;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
 import com.slamcode.goalcalendar.view.lists.AppContextBasedViewAdapterProvider;
 import com.slamcode.goalcalendar.view.presenters.CachedApplicationPresentersSource;
@@ -45,4 +46,12 @@ public final class ViewDagger2Module {
     {
         return new CachedApplicationPresentersSource(applicationContext, persistenceContext, listAdapterProvider, plansSummaryCalculator);
     }
+
+    @Provides
+    @Singleton
+    public HelloChartsViewDataBinder provideChartViewDataTransformer(ApplicationContext applicationContext)
+    {
+        return new HelloChartsViewDataBinder(applicationContext);
+    }
+
 }

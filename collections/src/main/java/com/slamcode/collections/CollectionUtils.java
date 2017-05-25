@@ -55,4 +55,16 @@ public class CollectionUtils {
 
         return result;
     }
+
+    public static <ParentType> int sum(Iterable<ParentType> iterable, ElementSelector<ParentType, Integer> summableSelector) {
+        int result = 0;
+
+        for (ParentType item : iterable) {
+            Integer selected = summableSelector.select(item);
+
+                result += selected;
+        }
+
+        return result;
+    }
 }

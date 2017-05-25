@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar;
 
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
@@ -12,12 +13,14 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
@@ -32,33 +35,34 @@ import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
 import com.slamcode.goalcalendar.view.lists.utils.ScrollableViewHelper;
 import com.slamcode.goalcalendar.view.presenters.PresentersSource;
+import com.slamcode.goalcalendar.view.utils.ViewReference;
+import com.slamcode.goalcalendar.view.utils.ViewBinder;
 import com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel;
 
 import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGoalsActivityContract.ActivityView{
 
     final String ACTIVITY_ID = MonthlyGoalsActivity.class.getName();
 
-    @BindView(R.id.monthly_goals_activity_main_coordinator_layout)
+    View mainLayout;
+
+    @ViewReference(R.id.monthly_goals_activity_main_coordinator_layout)
     CoordinatorLayout monthlyGoalsActivityLayout;
 
-    @BindView(R.id.monthly_goals_listview)
+    @ViewReference(R.id.monthly_goals_listview)
     RecyclerView categoryNamesRecyclerView;
 
-    @BindView(R.id.monthly_goals_dailyplans_listview)
+    @ViewReference(R.id.monthly_goals_dailyplans_listview)
     RecyclerView categoryPlansRecyclerView;
 
-    @BindView(R.id.content_monthly_goals)
+    @ViewReference(R.id.content_monthly_goals)
     RelativeLayout monthlyPlansGridContentLayout;
 
-    @BindView(R.id.monthly_goals_emptyContent_horizontallScrollView)
+    @ViewReference(R.id.monthly_goals_emptyContent_horizontallScrollView)
     HorizontalScrollView emptyContentHorizontalScrollView;
 
-    @BindView(R.id.monthly_goals_summary_content_layout)
+    @ViewReference(R.id.monthly_goals_summary_content_layout)
     LinearLayout summaryContentLayout;
 
     // dependencies
@@ -92,15 +96,18 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         super.onCreate(savedInstanceState);
         setContentView(com.slamcode.goalcalendar.R.layout.monthly_goals_activity);
 
+        this.mainLayout = this.findViewById(android.R.id.content);
         this.injectDependencies();
-        ButterKnife.bind(this);
 
-        this.setSupportActionBar((Toolbar)this.findViewById(R.id.toolbar));
-        this.setupPresenter();
-        this.setupRecyclerViews();
-        this.setupSwipeListener();
-        this.setupBottomSheetBehavior();
-        this.runStartupCommands();
+        this.mainLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                View v = mainLayout;
+                v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                onCreateGlobalLayoutAvailable();
+            }
+        });
     }
 
     @Override
@@ -143,7 +150,17 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
     @Override
     public void onDataSet(MonthlyGoalsViewModel data) {
+
+        if(data == null)
+            throw new IllegalArgumentException("Data is null");
+
         this.activityViewModel = data;
+
+        if(this.monthlyGoalsActivityLayout == null) {
+            if(this.monthlyGoalsActivityLayout == null)
+                throw new IllegalArgumentException("monthlyGoalsActivityLayout is null");
+        }
+
         if(this.mainActivityContentBinding == null)
             this.mainActivityContentBinding =  DataBindingUtil.bind(this.monthlyGoalsActivityLayout);
 
@@ -168,6 +185,9 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
         final RecyclerView dailyPlansRecyclerView = (RecyclerView) this.findViewById(R.id.monthly_goals_header_list_item_days_list);
 
+        if(dailyPlansRecyclerView == null)
+            throw new IllegalArgumentException("dailyPlansRecyclerView is null");
+
         dailyPlansRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -186,10 +206,19 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         dialogFragment.show(this.getFragmentManager(), null);
     }
 
-    private void setupPresenter() {
-        if(this.presenter != null)
-            return;
+    private void onCreateGlobalLayoutAvailable()
+    {
+        ViewBinder.bindViews(this);
 
+        this.setSupportActionBar((Toolbar)this.findViewById(R.id.toolbar));
+        this.setupPresenter();
+        this.setupRecyclerViews();
+        this.setupSwipeListener();
+        this.setupBottomSheetBehavior();
+        this.runStartupCommands();
+    }
+
+    private void setupPresenter() {
         this.presenter = this.presentersSource.getMonthlyGoalsPresenter(this);
         this.presenter.initializeWithView(this);
     }
