@@ -77,6 +77,7 @@ public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartVi
             PieChartData data = new PieChartData(slices);
             data.setHasLabelsOnlyForSelected(true);
             data.setSlicesSpacing(0);
+            pieChartView.setChartRotationEnabled(false);
             pieChartView.setPieChartData(data);
         }
     }
