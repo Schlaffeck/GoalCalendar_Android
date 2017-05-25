@@ -43,6 +43,7 @@ public class ProgressPieChartRenderer extends PieChartRenderer {
             }
             lastAngle += angle;
         }
+        super.drawLabels(canvas);
     }
 
     private void drawProgressOnSlice(Canvas canvas, ProgressSliceValue sliceValue, float lastAngle, float angle) {
