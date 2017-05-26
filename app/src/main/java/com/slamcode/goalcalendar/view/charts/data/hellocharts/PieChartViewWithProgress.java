@@ -18,6 +18,7 @@ import lecho.lib.hellocharts.view.PieChartView;
 
 public class PieChartViewWithProgress extends PieChartView {
 
+    private final ProgressPieChartRenderer progressPieChartRenderer;
     private int selectedIndex = -1;
 
     private List<SelectedIndexChangedListener> selectedIndexChangedListeners = new ArrayList<>();
@@ -32,25 +33,20 @@ public class PieChartViewWithProgress extends PieChartView {
 
     public PieChartViewWithProgress(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        super.pieChartRenderer = new ProgressPieChartRenderer(context, this, this);
+        super.pieChartRenderer = this.progressPieChartRenderer = new ProgressPieChartRenderer(context, this, this);
+
         setChartRenderer(super.pieChartRenderer);
     }
 
     public void setSelectedValueToggleEnabled(boolean selectedValueToggleEnabled)
     {
-        if(!(pieChartRenderer instanceof ProgressPieChartRenderer))
-            return;
-
-        ((ProgressPieChartRenderer)pieChartRenderer).setSlicesToggleEnabled(selectedValueToggleEnabled);
+        this.progressPieChartRenderer.setSlicesToggleEnabled(selectedValueToggleEnabled);
         ViewCompat.postInvalidateOnAnimation(this);
     }
 
     public boolean isSelectedValueToggleEnabled()
     {
-        if(!(pieChartRenderer instanceof ProgressPieChartRenderer))
-            return false;
-
-        return((ProgressPieChartRenderer)pieChartRenderer).isSlicesToggleEnabled();
+        return this.progressPieChartRenderer.isSlicesToggleEnabled();
     }
 
     @Override
@@ -77,6 +73,9 @@ public class PieChartViewWithProgress extends PieChartView {
     }
 
     public void setSelectedIndex(int selectedIndex) {
+        if(selectedIndex != this.selectedIndex)
+            return;
+
         int oldIndex = this.selectedIndex;
         this.selectedIndex = selectedIndex;
         onIndexChanged(oldIndex, this.selectedIndex);
