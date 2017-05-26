@@ -2,6 +2,10 @@ package com.slamcode.goalcalendar.view.charts.data.hellocharts;
 
 import android.view.View;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.util.DisplayMetrics;
+
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
@@ -16,6 +20,9 @@ import com.slamcode.goalcalendar.viewmodels.MonthViewModel;
 
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Matchers;
+import org.mockito.MockSettings;
+import org.mockito.internal.creation.MockSettingsImpl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +33,7 @@ import lecho.lib.hellocharts.view.PieChartView;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -42,7 +50,7 @@ public class HelloChartsViewDataBinderTest {
     {
         // create
         PieChartView pieChartViewMock = mock(PieChartView.class);
-        ApplicationContext applicationContextMock = mock(ApplicationContext.class);
+        ApplicationContext applicationContextMock = getApplicationContextMock();
 
         HelloChartsViewDataBinder binder = new HelloChartsViewDataBinder(applicationContextMock);
 
@@ -92,12 +100,20 @@ public class HelloChartsViewDataBinderTest {
         assertEquals(2, data.getValues().size());
 
         // cat 1
-        assertEquals(0.5f, data.getValues().get(0).getValue(), 0f);
-        assertEquals("Category 1, to do 2 tasks", new String(data.getValues().get(0).getLabelAsChars()));
+        assertTrue(data.getValues().get(0) instanceof ProgressSliceValue);
+        ProgressSliceValue progressSliceValue = (ProgressSliceValue) data.getValues().get(0);
+        assertEquals(0.5f, progressSliceValue.getValue(), 0f);
+        assertEquals(2f, progressSliceValue.getThresholdValue(), 0f);
+        assertEquals(0f, progressSliceValue.getProgressValue(), 0f);
+        assertEquals("Category 1, 0/2", new String(progressSliceValue.getLabelAsChars()));
 
         // cat 2
-        assertEquals(0.5f, data.getValues().get(1).getValue(), 0f);
-        assertEquals("Category 2, to do 2 tasks", new String(data.getValues().get(1).getLabelAsChars()));
+        assertTrue(data.getValues().get(1) instanceof ProgressSliceValue);
+        progressSliceValue = (ProgressSliceValue) data.getValues().get(1);
+        assertEquals(0.5f, progressSliceValue.getValue(), 0f);
+        assertEquals(2f, progressSliceValue.getThresholdValue(), 0f);
+        assertEquals(0f, progressSliceValue.getProgressValue(), 0f);
+        assertEquals("Category 2, 0/2", new String(progressSliceValue.getLabelAsChars()));
     }
 
 
@@ -133,19 +149,23 @@ public class HelloChartsViewDataBinderTest {
         assertDefaultData(data);
 
         // slices
-        assertEquals(4, data.getValues().size());
+        assertEquals(2, data.getValues().size());
 
         // cat 1
-        assertEquals(0.2f, data.getValues().get(0).getValue(), 0f);
-        assertEquals("Category 1, done 2 tasks", new String(data.getValues().get(0).getLabelAsChars()));
-        assertEquals(0.3f, data.getValues().get(1).getValue(), 0f);
-        assertEquals("Category 1, to do 3 tasks", new String(data.getValues().get(1).getLabelAsChars()));
+        assertTrue(data.getValues().get(0) instanceof ProgressSliceValue);
+        ProgressSliceValue progressSliceValue = (ProgressSliceValue) data.getValues().get(0);
+        assertEquals(0.5f, progressSliceValue.getValue(), 0f);
+        assertEquals(5f, progressSliceValue.getThresholdValue(), 0f);
+        assertEquals(2f, progressSliceValue.getProgressValue(), 0f);
+        assertEquals("Category 1, 2/5", new String(progressSliceValue.getLabelAsChars()));
 
         // cat 2
-        assertEquals(0.3f, data.getValues().get(2).getValue(), 0f);
-        assertEquals("Category 2, done 3 tasks", new String(data.getValues().get(2).getLabelAsChars()));
-        assertEquals(0.2f, data.getValues().get(3).getValue(), 0f);
-        assertEquals("Category 2, to do 2 tasks", new String(data.getValues().get(3).getLabelAsChars()));
+        assertTrue(data.getValues().get(1) instanceof ProgressSliceValue);
+        progressSliceValue = (ProgressSliceValue) data.getValues().get(1);
+        assertEquals(0.5f, progressSliceValue.getValue(), 0f);
+        assertEquals(5f, progressSliceValue.getThresholdValue(), 0f);
+        assertEquals(3f, progressSliceValue.getProgressValue(), 0f);
+        assertEquals("Category 2, 3/5", new String(progressSliceValue.getLabelAsChars()));
     }
 
     @Test
@@ -181,23 +201,31 @@ public class HelloChartsViewDataBinderTest {
         assertDefaultData(data);
 
         // slices
-        assertEquals(5, data.getValues().size());
+        assertEquals(3, data.getValues().size());
 
         // cat 1
-        assertEquals(0.2f, data.getValues().get(0).getValue(), 0f);
-        assertEquals("Category 1, done 2 tasks", new String(data.getValues().get(0).getLabelAsChars()));
-        assertEquals(0.1f, data.getValues().get(1).getValue(), 0f);
-        assertEquals("Category 1, to do 1 tasks", new String(data.getValues().get(1).getLabelAsChars()));
+        assertTrue(data.getValues().get(0) instanceof ProgressSliceValue);
+        ProgressSliceValue progressSliceValue = (ProgressSliceValue) data.getValues().get(0);
+        assertEquals(0.3f, progressSliceValue.getValue(), 0f);
+        assertEquals(3f, progressSliceValue.getThresholdValue(), 0f);
+        assertEquals(2f, progressSliceValue.getProgressValue(), 0f);
+        assertEquals("Category 1, 2/3", new String(progressSliceValue.getLabelAsChars()));
 
         // cat 2
-        assertEquals(0.3f, data.getValues().get(2).getValue(), 0f);
-        assertEquals("Category 2, done 3 tasks", new String(data.getValues().get(2).getLabelAsChars()));
+        assertTrue(data.getValues().get(1) instanceof ProgressSliceValue);
+        progressSliceValue = (ProgressSliceValue) data.getValues().get(1);
+        assertEquals(0.3f, progressSliceValue.getValue(), 0f);
+        assertEquals(3f, progressSliceValue.getThresholdValue(), 0f);
+        assertEquals(3f, progressSliceValue.getProgressValue(), 0f);
+        assertEquals("Category 2, 3/3", new String(progressSliceValue.getLabelAsChars()));
 
         // cat 3
-        assertEquals(0.3f, data.getValues().get(3).getValue(), 0f);
-        assertEquals("Category 3, done 3 tasks", new String(data.getValues().get(3).getLabelAsChars()));
-        assertEquals(0.1f, data.getValues().get(4).getValue(), 0f);
-        assertEquals("Category 3, to do 1 tasks", new String(data.getValues().get(4).getLabelAsChars()));
+        assertTrue(data.getValues().get(2) instanceof ProgressSliceValue);
+        progressSliceValue = (ProgressSliceValue) data.getValues().get(2);
+        assertEquals(0.4f, progressSliceValue.getValue(), 0f);
+        assertEquals(4f, progressSliceValue.getThresholdValue(), 0f);
+        assertEquals(3f, progressSliceValue.getProgressValue(), 0f);
+        assertEquals("Category 3, 3/4", new String(progressSliceValue.getLabelAsChars()));
     }
 
     @Test
@@ -214,7 +242,7 @@ public class HelloChartsViewDataBinderTest {
         PlansSummaryCalculator.CategoryPlansSummary[] plansSummaries = {
                 PlansSummaryTestHelper.createCategoryPlansSummary(getCategoryName(1), 2, 3, 0),
                 PlansSummaryTestHelper.createCategoryPlansSummary(getCategoryName(2), 3, 3, 0),
-                PlansSummaryTestHelper.createCategoryPlansSummary(getCategoryName(3), 4, 3, 0)
+                PlansSummaryTestHelper.createCategoryPlansSummary(getCategoryName(3), 5, 3, 0)
         };
         List<CategoryPlansViewModel> modelList = this.createCategoryPlansViewModelList(
                 calculatorMock,
@@ -233,27 +261,35 @@ public class HelloChartsViewDataBinderTest {
         assertDefaultData(data);
 
         // slices
-        assertEquals(5, data.getValues().size());
+        assertEquals(3, data.getValues().size());
 
         // cat 1
-        assertEquals(0.222f, data.getValues().get(0).getValue(), 0.001f);
-        assertEquals("Category 1, done 2 tasks", new String(data.getValues().get(0).getLabelAsChars()));
-        assertEquals(0.1111f, data.getValues().get(1).getValue(), 0.001f);
-        assertEquals("Category 1, overdone 1 tasks", new String(data.getValues().get(1).getLabelAsChars()));
+        assertTrue(data.getValues().get(0) instanceof ProgressSliceValue);
+        ProgressSliceValue progressSliceValue = (ProgressSliceValue) data.getValues().get(0);
+        assertEquals(0.2f, progressSliceValue.getValue(), 0f);
+        assertEquals(2f, progressSliceValue.getThresholdValue(), 0f);
+        assertEquals(3f, progressSliceValue.getProgressValue(), 0f);
+        assertEquals("Category 1, 3/2", new String(progressSliceValue.getLabelAsChars()));
 
         // cat 2
-        assertEquals(0.3333f, data.getValues().get(2).getValue(), 0.001f);
-        assertEquals("Category 2, done 3 tasks", new String(data.getValues().get(2).getLabelAsChars()));
+        assertTrue(data.getValues().get(1) instanceof ProgressSliceValue);
+        progressSliceValue = (ProgressSliceValue) data.getValues().get(1);
+        assertEquals(0.3f, progressSliceValue.getValue(), 0f);
+        assertEquals(3f, progressSliceValue.getThresholdValue(), 0f);
+        assertEquals(3f, progressSliceValue.getProgressValue(), 0f);
+        assertEquals("Category 2, 3/3", new String(progressSliceValue.getLabelAsChars()));
 
         // cat 3
-        assertEquals(0.3333f, data.getValues().get(3).getValue(), 0.001f);
-        assertEquals("Category 3, done 3 tasks", new String(data.getValues().get(3).getLabelAsChars()));
-        assertEquals(0.1111f, data.getValues().get(4).getValue(), 0.001f);
-        assertEquals("Category 3, to do 1 tasks", new String(data.getValues().get(4).getLabelAsChars()));
+        assertTrue(data.getValues().get(2) instanceof ProgressSliceValue);
+        progressSliceValue = (ProgressSliceValue) data.getValues().get(2);
+        assertEquals(0.5f, progressSliceValue.getValue(), 0f);
+        assertEquals(5f, progressSliceValue.getThresholdValue(), 0f);
+        assertEquals(3f, progressSliceValue.getProgressValue(), 0f);
+        assertEquals("Category 3, 3/5", new String(progressSliceValue.getLabelAsChars()));
     }
 
     @Test
-    public void setupCategoriesSummaryPieChartViewData_updateSlicesValue_test()
+    public void setupPieChartViewData_updateSlicesProgressValue_test()
     {
         // mocks
         PieChartView pieChartViewMock = mock(PieChartView.class);
@@ -281,13 +317,16 @@ public class HelloChartsViewDataBinderTest {
         // capture
         ArgumentCaptor<PieChartData> dataCaptor = ArgumentCaptor.forClass(PieChartData.class);
         verify(pieChartViewMock).setPieChartData(dataCaptor.capture());
-        verify(pieChartViewMock).setVisibility(View.VISIBLE);
 
         PieChartData data = dataCaptor.getValue();
 
         // assert before
         assertEquals(1, data.getValues().size());
-        assertEquals(1f, data.getValues().get(0).getValue(), 0f);
+        assertTrue(data.getValues().get(0) instanceof ProgressSliceValue);
+        ProgressSliceValue progressSliceValue = (ProgressSliceValue) data.getValues().get(0);
+        assertEquals(1f, progressSliceValue.getValue(), 0f);
+        assertEquals(10f, progressSliceValue.getThresholdValue(), 0f);
+        assertEquals(0f, progressSliceValue.getProgressValue(), 0f);
 
         // mock
         when(calculatorMock.calculatePlansSummaryForMonthInCategory(2017, Month.MAY, "Category 1"))
@@ -303,20 +342,114 @@ public class HelloChartsViewDataBinderTest {
         data.finish();
 
         // assert after
+        assertEquals(1, data.getValues().size());
+        assertEquals(1f, progressSliceValue.getValue(), 0f);
+        assertEquals(1f, progressSliceValue.getProgressValue(), 0f);
+        assertEquals(10f, progressSliceValue.getThresholdValue(), 0f);
+    }
+
+    @Test
+    public void setupPieChartViewData_updateSlicesValue_test()
+    {
+        // mocks
+        PieChartView pieChartViewMock = mock(PieChartView.class);
+        ApplicationContext applicationContextMock = getApplicationContextMock();
+        PlansSummaryCalculator calculatorMock = mock(PlansSummaryCalculator.class);
+
+        HelloChartsViewDataBinder binder = new HelloChartsViewDataBinder(applicationContextMock);
+
+        // prepare data
+        // cat 1
+        PlansSummaryCalculator.CategoryPlansSummary categoryPlansSummary1
+                = PlansSummaryTestHelper.createCategoryPlansSummary(getCategoryName(1), 5, 0, 0);
+        when(calculatorMock.calculatePlansSummaryForMonthInCategory(2017, Month.MAY, "Category 1"))
+                .thenReturn(categoryPlansSummary1);
+        CategoryModel categoryModel1 = new CategoryModel(1, "Category 1", FrequencyPeriod.Month, 5);
+        categoryModel1.setDailyPlans(ModelHelper.createListOfDailyPlansForMonth(2017, Month.MAY));
+
+        CategoryPlansViewModel categoryPlansViewModel1 = new CategoryPlansViewModel(
+                new MonthViewModel(2017, Month.MAY),
+                categoryModel1,
+                calculatorMock);
+
+        PlansSummaryCalculator.CategoryPlansSummary categoryPlansSummary2
+                = PlansSummaryTestHelper.createCategoryPlansSummary(getCategoryName(1), 5, 0, 0);
+        when(calculatorMock.calculatePlansSummaryForMonthInCategory(2017, Month.MAY, "Category 2"))
+                .thenReturn(categoryPlansSummary2);
+        CategoryModel categoryModel2 = new CategoryModel(2, "Category 2", FrequencyPeriod.Month, 5);
+        categoryModel1.setDailyPlans(ModelHelper.createListOfDailyPlansForMonth(2017, Month.MAY));
+
+        CategoryPlansViewModel categoryPlansViewModel2 = new CategoryPlansViewModel(
+                new MonthViewModel(2017, Month.MAY),
+                categoryModel2,
+                calculatorMock);
+
+        // act
+        binder.setupCategoriesSummaryPieChartViewData(pieChartViewMock, Arrays.asList(categoryPlansViewModel1, categoryPlansViewModel2));
+
+        // capture
+        ArgumentCaptor<PieChartData> dataCaptor = ArgumentCaptor.forClass(PieChartData.class);
+        verify(pieChartViewMock).setPieChartData(dataCaptor.capture());
+
+        PieChartData data = dataCaptor.getValue();
+
+        // assert before
         assertEquals(2, data.getValues().size());
-        assertEquals(0.1f, data.getValues().get(0).getValue(), 0f);
-        assertEquals(0.9f, data.getValues().get(1).getValue(), 0f);
+        assertTrue(data.getValues().get(0) instanceof ProgressSliceValue);
+        ProgressSliceValue progressSliceValue = (ProgressSliceValue) data.getValues().get(0);
+        assertEquals(0.5f, progressSliceValue.getValue(), 0f);
+        assertEquals(5f, progressSliceValue.getThresholdValue(), 0f);
+        assertEquals(0f, progressSliceValue.getProgressValue(), 0f);
+
+        assertTrue(data.getValues().get(1) instanceof ProgressSliceValue);
+        progressSliceValue = (ProgressSliceValue) data.getValues().get(1);
+        assertEquals(0.5f, progressSliceValue.getValue(), 0f);
+        assertEquals(5f, progressSliceValue.getThresholdValue(), 0f);
+        assertEquals(0f, progressSliceValue.getProgressValue(), 0f);
+
+        // mock
+        when(calculatorMock.calculatePlansSummaryForMonthInCategory(2017, Month.MAY, "Category 1"))
+                .thenReturn(PlansSummaryTestHelper.createCategoryPlansSummary("Category 1", 15, 0, 0));
+
+        when(calculatorMock.calculatePlansSummaryForMonthInCategory(2017, Month.MAY, "Category 2"))
+                .thenReturn(PlansSummaryTestHelper.createCategoryPlansSummary("Category 2", 5, 0, 0));
+
+        // change value of category
+        categoryPlansViewModel1.setFrequencyValue(15);
+
+        // verify after
+        verify(pieChartViewMock).startDataAnimation();
+
+        // end animation explicitly
+        data.finish();
+
+        // assert after
+        assertEquals(2, data.getValues().size());
+        assertTrue(data.getValues().get(0) instanceof ProgressSliceValue);
+        progressSliceValue = (ProgressSliceValue) data.getValues().get(0);
+        assertEquals(0.75f, progressSliceValue.getValue(), 0f);
+        assertEquals(15f, progressSliceValue.getThresholdValue(), 0f);
+        assertEquals(0f, progressSliceValue.getProgressValue(), 0f);
+
+        assertTrue(data.getValues().get(1) instanceof ProgressSliceValue);
+        progressSliceValue = (ProgressSliceValue) data.getValues().get(1);
+        assertEquals(0.25f, progressSliceValue.getValue(), 0f);
+        assertEquals(5f, progressSliceValue.getThresholdValue(), 0f);
+        assertEquals(0f, progressSliceValue.getProgressValue(), 0f);
     }
 
     private ApplicationContext getApplicationContextMock()
     {
         ApplicationContext applicationContextMock = mock(ApplicationContext.class);
-        when(applicationContextMock.getStringFromResources(R.string.monthly_plans_summary_generalPieChart_todo_sliceLabel))
-                .thenReturn("%s, to do %d tasks");
-        when(applicationContextMock.getStringFromResources(R.string.monthly_plans_summary_generalPieChart_done_sliceLabel))
-                .thenReturn("%s, done %d tasks");
-        when(applicationContextMock.getStringFromResources(R.string.monthly_plans_summary_generalPieChart_overdone_sliceLabel))
-                .thenReturn("%s, overdone %d tasks");
+        when(applicationContextMock.getStringFromResources(R.string.monthly_plans_summary_generalPieChart_simple_sliceLabel))
+                .thenReturn("%s, %d/%d");
+
+        Context contextMock = mock(Context.class);
+        Resources resourcesMock = mock(Resources.class);
+        when(resourcesMock.getDisplayMetrics()).thenReturn(new DisplayMetrics());
+        when(contextMock.getResources()).thenReturn(resourcesMock);
+
+        when(applicationContextMock.getDefaultContext()).thenReturn(contextMock);
 
         return applicationContextMock;
     }

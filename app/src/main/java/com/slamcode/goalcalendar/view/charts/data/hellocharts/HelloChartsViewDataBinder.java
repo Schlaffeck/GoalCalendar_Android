@@ -17,6 +17,7 @@ import java.util.Map;
 
 import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
+import lecho.lib.hellocharts.renderer.ChartRenderer;
 import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.PieChartView;
 
@@ -26,18 +27,16 @@ import lecho.lib.hellocharts.view.PieChartView;
 
 public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartView> {
 
-    private final static float SLICE_MINIMAL_VALUE = 0.0f;
-
     private final ApplicationContext applicationContext;
     private int lastColor = ChartUtils.DEFAULT_COLOR;
+
+    private Map<CategoryPlansViewModel, CategoryPropertyChangedCallback> categoryCallbacksMap;
 
     public HelloChartsViewDataBinder(ApplicationContext applicationContext)
     {
         this.applicationContext = applicationContext;
         this.categoryCallbacksMap = new HashMap<>();
     }
-
-    private Map<CategoryPlansViewModel, CategoryPropertyChangedCallback> categoryCallbacksMap;
 
     @Override
     public void setupCategoriesSummaryPieChartViewData(PieChartView pieChartView, Iterable<CategoryPlansViewModel> categories) {
@@ -46,53 +45,38 @@ public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartVi
 
     private void setupPieChartViewDataInternal(PieChartView pieChartView, Iterable<CategoryPlansViewModel> itemsSource) {
 
-        List<SliceValue> slices = new ArrayList<>();
-
-        int summarizedNoOfTasks = this.countAllExpectedTasks(itemsSource);
-
-        if(summarizedNoOfTasks == 0)
+        if(!itemsSource.iterator().hasNext())
+        {
             pieChartView.setVisibility(View.GONE);
+        }
         else {
-
             pieChartView.setVisibility(View.VISIBLE);
+            List<SliceValue> slices = new ArrayList<>();
+
+            int summarizedNoOfTasks = this.countAllExpectedTasks(itemsSource);
 
             for (CategoryPlansViewModel category : itemsSource) {
                 if (!this.categoryCallbacksMap.containsKey(category)) {
 
-                    int lightColor = this.getNextColor();
-                    int color =  ChartUtils.darkenColor(lightColor);
-                    int darkenColor = ChartUtils.darkenColor(color);
-
+                    ProgressSliceValue sliceValue = new ProgressSliceValue();
+                    sliceValue.setColor(this.getNextColor());
                     CategoryPropertyChangedCallback categoryChangedCallback =
                             new CategoryPropertyChangedCallback(
                                     pieChartView,
                                     itemsSource,
-                                    slices,
-                                    new SliceValue(0f, color),
-                                    new SliceValue(0f, lightColor),
-                                    new SliceValue(0f, darkenColor));
+                                    sliceValue);
                     category.addOnPropertyChangedCallback(categoryChangedCallback);
                     this.categoryCallbacksMap.put(category, categoryChangedCallback);
                 }
 
-                SliceValue doneSliceValue = this.categoryCallbacksMap.get(category).doneSliceValue;
-                SliceValue toDoSliceValue = this.categoryCallbacksMap.get(category).todoSliceValue;
-                SliceValue exceededSliceValue = this.categoryCallbacksMap.get(category).exceededSliceValue;
-                this.setupSlicesValues(slices, summarizedNoOfTasks, category, doneSliceValue, toDoSliceValue, exceededSliceValue, false);
-                if(doneSliceValue.getValue() > 0)
-                    slices.add(doneSliceValue);
-
-                if(toDoSliceValue.getValue() > 0)
-                    slices.add(toDoSliceValue);
-
-                if(exceededSliceValue.getValue() > 0)
-                    slices.add(exceededSliceValue);
+                ProgressSliceValue sliceValue = this.categoryCallbacksMap.get(category).sliceValue;
+                this.setupSlicesValues(summarizedNoOfTasks, category, sliceValue, false);
+                slices.add(sliceValue);
             }
 
             PieChartData data = new PieChartData(slices);
             data.setHasLabelsOnlyForSelected(true);
             data.setSlicesSpacing(0);
-
             pieChartView.setChartRotationEnabled(false);
             pieChartView.setPieChartData(data);
         }
@@ -108,71 +92,30 @@ public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartVi
         });
     }
 
-    private void setupSlicesValues(List<SliceValue> slices, int summarizedNoOfTasks,
+    private void setupSlicesValues(int summarizedNoOfTasks,
                                    CategoryPlansViewModel category,
-                                   SliceValue doneSliceValue,
-                                   SliceValue toDoSliceValue,
-                                   SliceValue exceededSliceValue,
+                                   ProgressSliceValue sliceValue,
                                    boolean updateOnly)
     {
+        sliceValue.setProgressValue(category.getNoOfSuccessfulTasks());
+        sliceValue.setThresholdValue(category.getNoOfExpectedTasks());
 
-        int expectedTasks = category.getNoOfExpectedTasks();
-        int successfulTasks = category.getNoOfSuccessfulTasks();
-
-        float doneValue = (successfulTasks <= expectedTasks ? successfulTasks : expectedTasks) * 1.0f / summarizedNoOfTasks;
-        float todoValue = successfulTasks >= expectedTasks ? SLICE_MINIMAL_VALUE : (expectedTasks - successfulTasks) * 1.0f / summarizedNoOfTasks;
-        float exceededValue = successfulTasks <= expectedTasks ? SLICE_MINIMAL_VALUE : (successfulTasks - expectedTasks) * 1.0f / summarizedNoOfTasks;
+        float targetValue = category.getNoOfExpectedTasks() * 1.0f / summarizedNoOfTasks;
 
         if(updateOnly)
         {
-            doneSliceValue.setTarget(doneValue);
-            if(!slices.contains(doneSliceValue) && doneValue > 0)
-            {
-                // add missing slice to list
-                slices.add(slices.indexOf(toDoSliceValue), doneSliceValue);
-            }
-            else if(doneValue == 0 && slices.contains(doneSliceValue))
-                slices.remove(doneSliceValue);
+            sliceValue.setTarget(targetValue);
         }
         else
         {
-            doneSliceValue.setValue(doneValue);
+            sliceValue.setValue(targetValue);
         }
-        doneSliceValue.setLabel(String.format(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_generalPieChart_done_sliceLabel), category.getName(), (successfulTasks <= expectedTasks ? successfulTasks : expectedTasks)));
-
-            if(updateOnly)
-            {
-                toDoSliceValue.setTarget(todoValue);
-
-                if(!slices.contains(toDoSliceValue) && todoValue > 0)
-                {
-                    // add missing slice to list
-                    slices.add(slices.indexOf(doneSliceValue) +1, toDoSliceValue);
-                }
-                else if(todoValue == 0 && slices.contains(toDoSliceValue))
-                    slices.remove(toDoSliceValue);
-            }
-            else {
-                toDoSliceValue.setValue(todoValue);
-            }
-        toDoSliceValue.setLabel(String.format(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_generalPieChart_todo_sliceLabel), category.getName(), expectedTasks > successfulTasks ? expectedTasks - successfulTasks : 0));
-
-            if(updateOnly)
-            {
-                exceededSliceValue.setTarget(exceededValue);
-
-                if(!slices.contains(exceededSliceValue) && exceededValue > 0)
-                {
-                    // add missing slice to list
-                    slices.add(slices.indexOf(doneSliceValue) +1, exceededSliceValue);
-                }
-                else if(exceededValue == 0 && slices.contains(exceededSliceValue))
-                    slices.remove(exceededSliceValue);
-            }
-            else {
-                exceededSliceValue.setValue(exceededValue);
-            }
-            exceededSliceValue.setLabel(String.format(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_generalPieChart_overdone_sliceLabel), category.getName(), successfulTasks > expectedTasks ? successfulTasks - expectedTasks : 0));
+        sliceValue.setLabel(
+                String.format(
+                        this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_generalPieChart_simple_sliceLabel),
+                        category.getName(),
+                        category.getNoOfSuccessfulTasks(),
+                        category.getNoOfExpectedTasks()));
     }
 
     private int getNextColor()
@@ -199,24 +142,15 @@ public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartVi
 
         private final PieChartView pieChartView;
         private final Iterable<CategoryPlansViewModel> categories;
-        private final List<SliceValue> slices;
-        private final SliceValue todoSliceValue;
-        private final SliceValue doneSliceValue;
-        private final SliceValue exceededSliceValue;
+        private final ProgressSliceValue sliceValue;
 
         CategoryPropertyChangedCallback(PieChartView pieChartView,
                                         Iterable<CategoryPlansViewModel> categories,
-                                        List<SliceValue> slices,
-                                        SliceValue todoSliceValue,
-                                        SliceValue doneSliceValue,
-                                        SliceValue exceededSliceValue)
+                                        ProgressSliceValue sliceValue)
         {
             this.pieChartView = pieChartView;
             this.categories = categories;
-            this.slices = slices;
-            this.todoSliceValue = todoSliceValue;
-            this.doneSliceValue = doneSliceValue;
-            this.exceededSliceValue = exceededSliceValue;
+            this.sliceValue = sliceValue;
         }
 
         @Override
@@ -224,7 +158,10 @@ public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartVi
 
             if(propertyId == BR.progressPercentage)
             {
-                setupSlicesValues(this.slices, countAllExpectedTasks(this.categories), (CategoryPlansViewModel)observable, this.doneSliceValue, this.todoSliceValue, this.exceededSliceValue, true);
+                int expectedTasksCount = countAllExpectedTasks(this.categories);
+                for(Map.Entry<CategoryPlansViewModel, CategoryPropertyChangedCallback> item : categoryCallbacksMap.entrySet()) {
+                    setupSlicesValues(expectedTasksCount, item.getKey(), item.getValue().sliceValue, true);
+                }
                 this.pieChartView.startDataAnimation();
             }
         }

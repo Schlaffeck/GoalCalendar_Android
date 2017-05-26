@@ -76,6 +76,7 @@
     <string name="monthly_plans_summary_generalPieChart_todo_sliceLabel" formatted="false">%s, to do %d tasks</string>
     <string name="monthly_plans_summary_generalPieChart_done_sliceLabel" formatted="false">%s, done %d tasks</string>
     <string name="monthly_plans_summary_generalPieChart_overdone_sliceLabel" formatted="false">%s, overdone %d tasks</string>
+    <string name="monthly_plans_summary_generalPieChart_simple_sliceLabel" formatted="false">%s, %d/%d</string>
 
     <!-- notification -->
     <string name="notification_plannedForToday_title">Planned for today</string>
