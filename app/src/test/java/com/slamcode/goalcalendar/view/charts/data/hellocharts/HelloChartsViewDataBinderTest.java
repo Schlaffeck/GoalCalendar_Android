@@ -49,7 +49,7 @@ public class HelloChartsViewDataBinderTest {
     public void setupCategoriesSummaryPieChartViewData_emptyData_test()
     {
         // create
-        PieChartView pieChartViewMock = mock(PieChartView.class);
+        PieChartViewWithProgress pieChartViewMock = mock(PieChartViewWithProgress.class);
         ApplicationContext applicationContextMock = getApplicationContextMock();
 
         HelloChartsViewDataBinder binder = new HelloChartsViewDataBinder(applicationContextMock);
@@ -69,7 +69,7 @@ public class HelloChartsViewDataBinderTest {
     public void setupCategoriesSummaryPieChartViewData_notStartedCategories_test()
     {
         // mocks
-        PieChartView pieChartViewMock = mock(PieChartView.class);
+        PieChartViewWithProgress pieChartViewMock = mock(PieChartViewWithProgress.class);
         ApplicationContext applicationContextMock = getApplicationContextMock();
         PlansSummaryCalculator calculatorMock = mock(PlansSummaryCalculator.class);
 
@@ -121,7 +121,7 @@ public class HelloChartsViewDataBinderTest {
     public void setupCategoriesSummaryPieChartViewData_partiallyDoneCategories_test()
     {
         // mocks
-        PieChartView pieChartViewMock = mock(PieChartView.class);
+        PieChartViewWithProgress pieChartViewMock = mock(PieChartViewWithProgress.class);
         ApplicationContext applicationContextMock = getApplicationContextMock();
         PlansSummaryCalculator calculatorMock = mock(PlansSummaryCalculator.class);
 
@@ -172,7 +172,7 @@ public class HelloChartsViewDataBinderTest {
     public void setupCategoriesSummaryPieChartViewData_doneNotDoneCategories_test()
     {
         // mocks
-        PieChartView pieChartViewMock = mock(PieChartView.class);
+        PieChartViewWithProgress pieChartViewMock = mock(PieChartViewWithProgress.class);
         ApplicationContext applicationContextMock = getApplicationContextMock();
         PlansSummaryCalculator calculatorMock = mock(PlansSummaryCalculator.class);
 
@@ -232,7 +232,7 @@ public class HelloChartsViewDataBinderTest {
     public void setupCategoriesSummaryPieChartViewData_doneOverdoneCategories_test()
     {
         // mocks
-        PieChartView pieChartViewMock = mock(PieChartView.class);
+        PieChartViewWithProgress pieChartViewMock = mock(PieChartViewWithProgress.class);
         ApplicationContext applicationContextMock = getApplicationContextMock();
         PlansSummaryCalculator calculatorMock = mock(PlansSummaryCalculator.class);
 
@@ -292,7 +292,7 @@ public class HelloChartsViewDataBinderTest {
     public void setupPieChartViewData_updateSlicesProgressValue_test()
     {
         // mocks
-        PieChartView pieChartViewMock = mock(PieChartView.class);
+        PieChartViewWithProgress pieChartViewMock = mock(PieChartViewWithProgress.class);
         ApplicationContext applicationContextMock = getApplicationContextMock();
         PlansSummaryCalculator calculatorMock = mock(PlansSummaryCalculator.class);
 
@@ -352,7 +352,7 @@ public class HelloChartsViewDataBinderTest {
     public void setupPieChartViewData_updateSlicesValue_test()
     {
         // mocks
-        PieChartView pieChartViewMock = mock(PieChartView.class);
+        PieChartViewWithProgress pieChartViewMock = mock(PieChartViewWithProgress.class);
         ApplicationContext applicationContextMock = getApplicationContextMock();
         PlansSummaryCalculator calculatorMock = mock(PlansSummaryCalculator.class);
 
