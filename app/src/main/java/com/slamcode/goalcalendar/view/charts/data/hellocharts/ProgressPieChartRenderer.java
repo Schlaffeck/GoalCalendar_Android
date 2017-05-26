@@ -27,6 +27,18 @@ public class ProgressPieChartRenderer extends PieChartRenderer {
     }
 
     @Override
+    public void onChartSizeChanged() {
+        super.onChartSizeChanged();
+        this.calculateProgressSliceCircleOval(null);
+    }
+
+    @Override
+    public void setCircleFillRatio(float fillRatio) {
+        super.setCircleFillRatio(fillRatio);
+        this.calculateProgressSliceCircleOval(null);
+    }
+
+    @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
         // within currently drawn slices set the progress slices
@@ -80,7 +92,7 @@ public class ProgressPieChartRenderer extends PieChartRenderer {
     {
         Rect contentRect = computator.getContentRectMinusAllMargins();
 
-        float progressValue = 1.0f * sliceValue.getProgressValue() / sliceValue.getThresholdValue();
+        float progressValue = sliceValue != null ? 1.0f * sliceValue.getProgressValue() / sliceValue.getThresholdValue() : 1f;
         if(progressValue > 1f)
             progressValue = 1.01f;
         final float circleRadius = Math.min(contentRect.width() / 2f, contentRect.height() / 2f) * progressValue;
