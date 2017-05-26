@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.view.charts.data.hellocharts;
 
 import android.content.Context;
+import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 
 import lecho.lib.hellocharts.view.PieChartView;
@@ -23,5 +24,22 @@ public class PieChartViewWithProgress extends PieChartView {
         super(context, attrs, defStyle);
         super.pieChartRenderer = new ProgressPieChartRenderer(context, this, this);
         setChartRenderer(super.pieChartRenderer);
+    }
+
+    public void setSelectedValueToggleEnabled(boolean selectedValueToggleEnabled)
+    {
+        if(!(pieChartRenderer instanceof ProgressPieChartRenderer))
+            return;
+
+        ((ProgressPieChartRenderer)pieChartRenderer).setSlicesToggleEnabled(selectedValueToggleEnabled);
+        ViewCompat.postInvalidateOnAnimation(this);
+    }
+
+    public boolean isSelectedValueToggleEnabled()
+    {
+        if(!(pieChartRenderer instanceof ProgressPieChartRenderer))
+            return false;
+
+        return((ProgressPieChartRenderer)pieChartRenderer).isSlicesToggleEnabled();
     }
 }

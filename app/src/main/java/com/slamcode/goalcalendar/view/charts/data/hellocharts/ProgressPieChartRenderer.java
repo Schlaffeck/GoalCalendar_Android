@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 
 import lecho.lib.hellocharts.model.PieChartData;
+import lecho.lib.hellocharts.model.SelectedValue;
 import lecho.lib.hellocharts.model.SliceValue;
 import lecho.lib.hellocharts.provider.PieChartDataProvider;
 import lecho.lib.hellocharts.renderer.PieChartRenderer;
@@ -20,6 +21,7 @@ import lecho.lib.hellocharts.view.Chart;
 public class ProgressPieChartRenderer extends PieChartRenderer {
 
     private PieChartDataProvider dataProvider;
+    private boolean slicesToggleEnabled;
 
     public ProgressPieChartRenderer(Context context, Chart chart, PieChartDataProvider dataProvider) {
         super(context, chart, dataProvider);
@@ -36,6 +38,27 @@ public class ProgressPieChartRenderer extends PieChartRenderer {
     public void setCircleFillRatio(float fillRatio) {
         super.setCircleFillRatio(fillRatio);
         this.calculateProgressSliceCircleOval(null);
+    }
+
+    @Override
+    public boolean checkTouch(float touchX, float touchY) {
+        if(selectedValue.isSet() && slicesToggleEnabled)
+        {
+            SelectedValue selectedValueCache = selectedValue;
+            boolean wasTouched = super.checkTouch(touchX, touchY);
+            if(!wasTouched)
+            {
+                // keep cached selectedValue
+                selectValue(selectedValueCache);
+            }
+            else if(wasTouched && selectedValueCache.getFirstIndex() == selectedValue.getFirstIndex())
+            {
+                selectedValue.clear();
+            }
+            return wasTouched;
+        }
+
+        return super.checkTouch(touchX, touchY);
     }
 
     @Override
@@ -120,5 +143,13 @@ public class ProgressPieChartRenderer extends PieChartRenderer {
         }
 
         return maxSum;
+    }
+
+    public boolean isSlicesToggleEnabled() {
+        return slicesToggleEnabled;
+    }
+
+    public void setSlicesToggleEnabled(boolean slicesToggleEnabled) {
+        this.slicesToggleEnabled = slicesToggleEnabled;
     }
 }

@@ -25,7 +25,7 @@ import lecho.lib.hellocharts.view.PieChartView;
  * Created by schlaffeck on 18.04.2017.
  */
 
-public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartView> {
+public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartViewWithProgress> {
 
     private final ApplicationContext applicationContext;
     private int lastColor = ChartUtils.DEFAULT_COLOR;
@@ -39,11 +39,11 @@ public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartVi
     }
 
     @Override
-    public void setupCategoriesSummaryPieChartViewData(PieChartView pieChartView, Iterable<CategoryPlansViewModel> categories) {
+    public void setupCategoriesSummaryPieChartViewData(PieChartViewWithProgress pieChartView, Iterable<CategoryPlansViewModel> categories) {
         this.setupPieChartViewDataInternal(pieChartView, categories);
     }
 
-    private void setupPieChartViewDataInternal(PieChartView pieChartView, Iterable<CategoryPlansViewModel> itemsSource) {
+    private void setupPieChartViewDataInternal(PieChartViewWithProgress pieChartView, Iterable<CategoryPlansViewModel> itemsSource) {
 
         if(!itemsSource.iterator().hasNext())
         {
@@ -78,6 +78,7 @@ public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartVi
             data.setHasLabelsOnlyForSelected(true);
             data.setSlicesSpacing(0);
             pieChartView.setChartRotationEnabled(false);
+            pieChartView.setSelectedValueToggleEnabled(true);
             pieChartView.setPieChartData(data);
         }
     }
