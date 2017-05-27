@@ -5,6 +5,7 @@ import android.databinding.ObservableList;
 
 import com.slamcode.goalcalendar.dagger2.Dagger2ComponentContainer;
 import com.slamcode.goalcalendar.view.charts.data.hellocharts.HelloChartsViewDataBinder;
+import com.slamcode.goalcalendar.view.charts.data.hellocharts.PieChartViewWithProgress;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 
 import javax.inject.Inject;
@@ -18,7 +19,7 @@ import lecho.lib.hellocharts.view.PieChartView;
 public class ChartsBindings {
 
     @BindingAdapter("bind:pieChartCategoryPlansSource")
-    public static void setCategoryPlansSource(PieChartView pieChartView, ObservableList<CategoryPlansViewModel> itemsSource)
+    public static void setCategoryPlansSource(PieChartViewWithProgress pieChartView, ObservableList<CategoryPlansViewModel> itemsSource)
     {
         ChartsBindings.Dagger2InjectData injectData = new ChartsBindings.Dagger2InjectData();
         Dagger2ComponentContainer.getApplicationDagger2Component().inject(injectData);
