@@ -52,7 +52,7 @@ public class PieChartViewWithProgress extends PieChartView {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         boolean result = super.onTouchEvent(event);
-        if(result)
+        if(result && event.getAction() == MotionEvent.ACTION_DOWN)
         {
             if(getSelectedValue().isSet())
                 this.setSelectedIndex(getSelectedValue().getFirstIndex());

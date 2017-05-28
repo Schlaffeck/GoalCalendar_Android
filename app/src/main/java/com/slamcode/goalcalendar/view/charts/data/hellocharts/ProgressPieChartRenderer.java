@@ -51,12 +51,14 @@ public class ProgressPieChartRenderer extends PieChartRenderer {
             if(wasTouched && selectedValue.isSet()) {
                 if(lastTouchCoordinates.equals(touchX, touchY))
                 {
-                    lastTouchCoordinates = new PointF();
+                    //lastTouchCoordinates = new PointF();
                 }
                 else {
                     this.lastTouchCoordinates = new PointF(touchX, touchY);
-                    if (selectedValue.getFirstIndex() == this.lastSetValue.getFirstIndex())
+                    if (selectedValue.getFirstIndex() == this.lastSetValue.getFirstIndex()) {
                         this.lastSetValue.clear();
+                        this.selectedValue.clear();
+                    }
                     else
                         this.lastSetValue.set(selectedValue);
                 }
