@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
@@ -22,6 +23,8 @@ public class ProgressPieChartRenderer extends PieChartRenderer {
 
     private PieChartDataProvider dataProvider;
     private boolean slicesToggleEnabled;
+    private SelectedValue lastSetValue = new SelectedValue();
+    private PointF lastTouchCoordinates = new PointF();
 
     public ProgressPieChartRenderer(Context context, Chart chart, PieChartDataProvider dataProvider) {
         super(context, chart, dataProvider);
@@ -42,18 +45,21 @@ public class ProgressPieChartRenderer extends PieChartRenderer {
 
     @Override
     public boolean checkTouch(float touchX, float touchY) {
-        if(selectedValue.isSet() && slicesToggleEnabled)
+        if(slicesToggleEnabled)
         {
-            SelectedValue selectedValueCache = selectedValue;
             boolean wasTouched = super.checkTouch(touchX, touchY);
-            if(!wasTouched)
-            {
-                // keep cached selectedValue
-                selectValue(selectedValueCache);
-            }
-            else if(wasTouched && selectedValueCache.getFirstIndex() == selectedValue.getFirstIndex())
-            {
-                selectedValue.clear();
+            if(wasTouched && selectedValue.isSet()) {
+                if(lastTouchCoordinates.equals(touchX, touchY))
+                {
+                    lastTouchCoordinates = new PointF();
+                }
+                else {
+                    this.lastTouchCoordinates = new PointF(touchX, touchY);
+                    if (selectedValue.getFirstIndex() == this.lastSetValue.getFirstIndex())
+                        this.lastSetValue.clear();
+                    else
+                        this.lastSetValue.set(selectedValue);
+                }
             }
             return wasTouched;
         }
@@ -63,6 +69,9 @@ public class ProgressPieChartRenderer extends PieChartRenderer {
 
     @Override
     public void draw(Canvas canvas) {
+        if(slicesToggleEnabled
+                && !selectedValue.isSet())
+            selectedValue.set(lastSetValue);
         super.draw(canvas);
         // within currently drawn slices set the progress slices
         this.drawProgressOnSlices(canvas);
