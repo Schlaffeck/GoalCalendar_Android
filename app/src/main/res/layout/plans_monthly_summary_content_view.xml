@@ -38,6 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_margin="@dimen/activity_horizontal_margin"
+        bind:selectedSliceIndex="@={vm.monthlyPlans.selectedCategoryIndex}"
         bind:pieChartCategoryPlansSource="@{vm.monthlyPlans.categoryPlansList}">
 
     </com.slamcode.goalcalendar.view.charts.data.hellocharts.PieChartViewWithProgress>
