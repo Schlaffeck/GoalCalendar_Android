@@ -63,6 +63,12 @@ public class CategoryPlansViewModel extends BaseObservable implements Comparable
     }
 
     @Bindable
+    public String getSummaryDescription()
+    {
+        return null;
+    }
+
+    @Bindable
     public FrequencyPeriod getFrequencyPeriod()
     {
         return this.model.getPeriod();
@@ -164,6 +170,7 @@ public class CategoryPlansViewModel extends BaseObservable implements Comparable
             notifyPropertyChanged(BR.noOfExpectedTasks);
             notifyPropertyChanged(BR.noOfFailedTasks);
             notifyPropertyChanged(BR.noOfSuccessfulTasks);
+            notifyPropertyChanged(BR.summaryDescription);
         }
     }
 
