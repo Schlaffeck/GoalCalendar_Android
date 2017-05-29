@@ -29,6 +29,8 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
     private PlansSummaryCalculator.MonthPlansSummary monthPlansSummary;
     private OnPropertyChangedCallback categoryPropertyChangedListener;
 
+    private int selectedCategoryIndex = -1;
+
     public MonthlyPlanningCategoryListViewModel(MonthlyPlansModel model,
                                                 PlansSummaryCalculator plansSummaryCalculator,
                                                 SourceChangeRequestNotifier.SourceChangeRequestListener<CategoryPlansViewModel> categoryChangeRequestListener)
@@ -84,6 +86,29 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
     public boolean isEmpty()
     {
         return this.categoryPlansList == null || this.categoryPlansList.isEmpty();
+    }
+
+    @Bindable
+    public int getSelectedCategoryIndex() {
+        return selectedCategoryIndex;
+    }
+
+    public void setSelectedCategoryIndex(int selectedCategoryIndex) {
+        if(selectedCategoryIndex != this.selectedCategoryIndex) {
+            this.selectedCategoryIndex = selectedCategoryIndex;
+            this.notifyPropertyChanged(BR.selectedCategoryIndex);
+            this.notifyPropertyChanged(BR.selectedCategory);
+        }
+    }
+
+    @Bindable
+    public CategoryPlansViewModel getSelectedCategory()
+    {
+        if(selectedCategoryIndex < 0
+                || selectedCategoryIndex >= categoryPlansList.size())
+            return null;
+
+        return this.categoryPlansList.get(selectedCategoryIndex);
     }
 
     private void countPlansSummary(boolean notify)
