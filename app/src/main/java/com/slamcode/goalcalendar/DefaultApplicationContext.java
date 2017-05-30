@@ -11,6 +11,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
 import android.view.View;
 
+import com.slamcode.goalcalendar.planning.DateTime;
+import com.slamcode.goalcalendar.planning.DateTimeHelper;
+
 import static android.R.attr.id;
 
 /**
@@ -81,5 +84,10 @@ public final class DefaultApplicationContext implements ApplicationContext {
         snackbar.setAction(actionName, actionOnClickListener);
         snackbar.show();
         return snackbar;
+    }
+
+    @Override
+    public DateTime getDateTimeNow() {
+        return new DateTime(DateTimeHelper.getNowCalendar());
     }
 }

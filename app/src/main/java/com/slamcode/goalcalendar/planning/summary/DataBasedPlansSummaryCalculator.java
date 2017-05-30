@@ -6,6 +6,8 @@ import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.planning.Month;
 
+import java.util.List;
+
 /**
  * Summary calculator based on persisted model data
  */
@@ -13,16 +15,19 @@ import com.slamcode.goalcalendar.planning.Month;
 public class DataBasedPlansSummaryCalculator implements PlansSummaryCalculator {
 
     private final CategoriesRepository categoriesRepository;
+    private final PlansSummaryDescriptionProvider descriptionProvider;
 
-    public DataBasedPlansSummaryCalculator(CategoriesRepository categoriesRepository)
+    public DataBasedPlansSummaryCalculator(CategoriesRepository categoriesRepository, PlansSummaryDescriptionProvider descriptionProvider)
     {
         this.categoriesRepository = categoriesRepository;
+        this.descriptionProvider = descriptionProvider;
     }
 
     @Override
     public MonthPlansSummary calculatePlansSummaryForMonth(int year, Month month) {
         MonthPlansSummary plansSummary = new MonthPlansSummary(year, month);
         calculateMultipleCategoriesSummary(plansSummary, this.categoriesRepository.findForMonth(year, month));
+        plansSummary.description = descriptionProvider.provideDescriptionForMonth(year, month);
         return plansSummary;
     }
 
@@ -35,6 +40,7 @@ public class DataBasedPlansSummaryCalculator implements PlansSummaryCalculator {
     public CategoryPlansSummary calculatePlansSummaryForMonthInCategory(int year, Month month, String categoryName) {
         CategoryPlansSummary categoryPlansSummary = new CategoryPlansSummary(categoryName);
         calculateMultipleCategoriesSummary(categoryPlansSummary, this.categoriesRepository.findForMonthWithName(year, month, categoryName));
+        categoryPlansSummary.description = descriptionProvider.provideDescriptionMonthInCategory(year, month, categoryName);
         return categoryPlansSummary;
     }
 
