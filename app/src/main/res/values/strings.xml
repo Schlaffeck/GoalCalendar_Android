@@ -78,6 +78,17 @@
     <string name="monthly_plans_summary_generalPieChart_overdone_sliceLabel" formatted="false">%s, overdone %d tasks</string>
     <string name="monthly_plans_summary_generalPieChart_simple_sliceLabel" formatted="false">%s, %d/%d</string>
 
+    <!-- summary description -->
+    <string name="monthly_plans_summary_category_description_progressMonth_eq_progressCategory_neq_zero"></string>
+    <string name="monthly_plans_summary_category_description_progressMonth_eq_progressCategory_eq_zero">New month just began, start making a use of it.</string>
+    <string name="monthly_plans_summary_category_description_progressMonth_gt_progressCategory_neq_zero"></string>
+    <string name="monthly_plans_summary_category_description_progressMonth_gt_progressCategory_eq_zero"></string>
+    <string name="monthly_plans_summary_category_description_progressMonth_lt_progressCategory_neq_zero"></string>
+    <string name="monthly_plans_summary_category_description_progressCategory_doneBeforeEndOfMonth"></string>
+    <string name="monthly_plans_summary_category_description_progressCategory_done"></string>
+    <string name="monthly_plans_summary_category_description_progressCategory_overDone"></string>
+    <string name="monthly_plans_summary_category_description_progressCategory_overDoneBeforeEndOfMonth"></string>
+
     <!-- notification -->
     <string name="notification_plannedForToday_title">Planned for today</string>
     <string name="notification_plannedForToday_content">You have %d things planned for today</string>

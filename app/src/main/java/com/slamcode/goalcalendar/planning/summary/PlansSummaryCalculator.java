@@ -55,6 +55,8 @@ public interface PlansSummaryCalculator {
 
         protected Collection<PlansSummary> compositeSummaries = new ArrayList<>();
 
+        protected String description;
+
         public boolean getDataAvailable() {
             return this.dataAvailable;
         }
@@ -96,6 +98,11 @@ public interface PlansSummaryCalculator {
 
         public int getNoOfFailedTasks() {
             return this.noOfFailedTasks;
+        }
+
+        public String getDescription()
+        {
+            return this.description;
         }
     }
 

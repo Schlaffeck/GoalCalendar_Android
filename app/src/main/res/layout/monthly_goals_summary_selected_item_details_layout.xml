@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable android:id="@+id/binding_view_model_variable_id" name="vm"
+            type="com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel"/>
+    </data>
+<LinearLayout android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/plans_category_summary_item_view"/>
+
+    <LinearLayout
+        android:id="@+id/plans_category_summary_item_percentage_tasksSummary_layout"
+        android:gravity="right"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/planningStateButton_stateSuccess_foregroundColor"
+            android:textSize="@dimen/symbol_font_size"
+            android:text='@{String.format("● %d ", vm.noOfSuccessfulTasks)}'/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/planningStateButton_stateFailed_foregroundColor"
+            android:textSize="@dimen/symbol_font_size"
+            android:text='@{String.format("● %d ", vm.noOfFailedTasks)}'/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/planningStateButton_statePlanned_foregroundColor"
+            android:textSize="@dimen/symbol_font_size"
+            android:text='@{String.format("● %d ", vm.noOfExpectedTasks)}'/>
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{vm.summaryDescription}"/>
+</LinearLayout>
+    </layout>
