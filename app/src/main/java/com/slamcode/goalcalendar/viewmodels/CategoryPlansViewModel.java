@@ -74,7 +74,7 @@ public class CategoryPlansViewModel extends BaseObservable implements Comparable
         return this.model.getPeriod();
     }
 
-    public void setFrequencyPerion(FrequencyPeriod newFrequencyPeriod)
+    public void setFrequencyPeriod(FrequencyPeriod newFrequencyPeriod)
     {
         if(this.model.getPeriod() != newFrequencyPeriod)
         {
