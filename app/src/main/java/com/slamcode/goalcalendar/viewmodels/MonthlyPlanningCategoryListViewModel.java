@@ -98,6 +98,7 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
             this.selectedCategoryIndex = selectedCategoryIndex;
             this.notifyPropertyChanged(BR.selectedCategoryIndex);
             this.notifyPropertyChanged(BR.selectedCategory);
+            this.notifyPropertyChanged(BR.hasSelectedCategory);
         }
     }
 
@@ -109,6 +110,12 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
             return null;
 
         return this.categoryPlansList.get(selectedCategoryIndex);
+    }
+
+    @Bindable
+    public boolean isHasSelectedCategory()
+    {
+        return selectedCategoryIndex > -1;
     }
 
     private void countPlansSummary(boolean notify)

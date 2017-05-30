@@ -57,7 +57,7 @@ public class ChartsBindings {
             pieChartView.addSelectedIndexChangeListener(new PieChartViewWithProgress.SelectedIndexChangedListener() {
                 @Override
                 public void indexChanged(int oldIndex, int newIndex) {
-                    pieChartView.removeSelectedIndexChangeListener(this);
+                    //pieChartView.removeSelectedIndexChangeListener(this);
                     if(selectedIndexChangedListener != null)
                     {
                         selectedIndexChangedListener.indexChanged(oldIndex, newIndex);
