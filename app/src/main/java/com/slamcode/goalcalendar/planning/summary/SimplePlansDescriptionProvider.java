@@ -19,6 +19,8 @@ import java.util.List;
 public class SimplePlansDescriptionProvider implements PlansSummaryDescriptionProvider {
 
     private static final double MONTH_TO_CATEGORY_PROGRESS_THRESHOLD = 0.1;
+    private static final double MONTH_PROGRESS_THRESHOLD = 0.16;
+    private static final double END_OF_MONTH_THRESHOLD = 0.96;
 
     private final ApplicationContext applicationContext;
     private final CategoriesRepository categoriesRepository;
@@ -49,34 +51,60 @@ public class SimplePlansDescriptionProvider implements PlansSummaryDescriptionPr
 
         double monthToCategoryProgressDiff = monthProgress - (categoryProgress > 1 ? 1.0 : categoryProgress);
 
-        if(monthToCategoryProgressDiff > MONTH_TO_CATEGORY_PROGRESS_THRESHOLD)
+        boolean isBeginningOfMonth = monthProgress == 0.0;
+        boolean isLittleAfterBeginningOfMonth = monthProgress < MONTH_PROGRESS_THRESHOLD;
+        boolean isEndOfMonth = monthProgress > END_OF_MONTH_THRESHOLD;
+        boolean isAlmostEndOfMonth = 1.0 - monthProgress < MONTH_PROGRESS_THRESHOLD;
+
+        boolean isWorkDone = categoryProgress == 1.0;
+        boolean isWorkOverdone = categoryProgress > 1.0;
+
+        boolean isBehindInPlans = monthToCategoryProgressDiff > MONTH_TO_CATEGORY_PROGRESS_THRESHOLD;
+        boolean isAheadOfPlans = monthToCategoryProgressDiff < -MONTH_TO_CATEGORY_PROGRESS_THRESHOLD;
+
+        if(isBeginningOfMonth)
         {
-            if(categoryProgress > 0)
-                return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_gt_progressCategory_neq_zero);
+            return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_eq_progressCategory_eq_zero);
+        }
+        else if(isLittleAfterBeginningOfMonth)
+        {
+            if(categoryProgress == 0)
+                return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_gt_progressCategory_eq_zero);
 
+            return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_lt_progressCategory_eq_zero);
+        }
+        else if(isEndOfMonth)
+        {
+            if(isWorkDone)
+                return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_done);
+
+            if(isWorkOverdone)
+                return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_overDone);
+
+            return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_notDone);
+        }
+        else if(isAlmostEndOfMonth && !isWorkDone && !isWorkOverdone)
+        {
+            return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_notDoneBeforeEndOfMonth);
+        }
+
+        // middle of the month
+        if(categoryProgress == 0)
             return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_gt_progressCategory_eq_zero);
-        }
 
-        if(monthToCategoryProgressDiff < -MONTH_TO_CATEGORY_PROGRESS_THRESHOLD) {
-            if (categoryProgress == 1.0)
-                return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_doneBeforeEndOfMonth);
+        if(isWorkDone)
+            return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_doneBeforeEndOfMonth);
 
-            if(categoryProgress > 1)
-                return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_overDoneBeforeEndOfMonth);
+        if(isWorkOverdone)
+            return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_overDoneBeforeEndOfMonth);
 
-                return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_lt_progressCategory_neq_zero);
-        }
+        if(isAheadOfPlans)
+            return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_lt_progressCategory_neq_zero);
 
-        if(categoryProgress == 1.0)
-            return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_done);
+        if(isBehindInPlans)
+            return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_gt_progressCategory_neq_zero);
 
-        if(categoryProgress > 1)
-            return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_overDone);
-
-        if(categoryProgress > 0)
-            return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_eq_progressCategory_neq_zero);
-
-        return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_eq_progressCategory_eq_zero);
+        return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_eq_progressCategory_neq_zero);
     }
 
     private double calculateCategoryProgress(List<CategoryModel> categoryModels) {

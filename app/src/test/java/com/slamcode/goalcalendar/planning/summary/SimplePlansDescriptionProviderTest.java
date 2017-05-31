@@ -91,7 +91,7 @@ public class SimplePlansDescriptionProviderTest {
         ApplicationContext applicationContext = mock(ApplicationContext.class);
         when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, month, 4));
         // less than 10% of month passed
-        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_eq_progressCategory_eq_zero))
+        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_gt_progressCategory_eq_zero))
                 .thenReturn("PM=PC=0");
 
         SimplePlansDescriptionProvider provider = new SimplePlansDescriptionProvider(applicationContext, repository);
@@ -102,7 +102,7 @@ public class SimplePlansDescriptionProviderTest {
 
         verify(repository).findForMonthWithName(year, month, categoryName);
         verify(applicationContext).getDateTimeNow();
-        verify(applicationContext).getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_eq_progressCategory_eq_zero);
+        verify(applicationContext).getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_gt_progressCategory_eq_zero);
     }
 
     @Test
@@ -149,9 +149,9 @@ public class SimplePlansDescriptionProviderTest {
         when(repository.findForMonthWithName(year, month, categoryName)).thenReturn(Arrays.asList(categoryModel));
 
         ApplicationContext applicationContext = mock(ApplicationContext.class);
-        // ~17% of month passed -> ~17%-10% = 7% < 10% threshold
-        when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, month, 5));
-        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_eq_progressCategory_neq_zero))
+        // ~9% of month passed -> ~9% < 10% threshold
+        when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, month, 3));
+        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_lt_progressCategory_eq_zero))
                 .thenReturn("PM=PC<>0");
 
         SimplePlansDescriptionProvider provider = new SimplePlansDescriptionProvider(applicationContext, repository);
@@ -162,7 +162,7 @@ public class SimplePlansDescriptionProviderTest {
 
         verify(repository).findForMonthWithName(year, month, categoryName);
         verify(applicationContext).getDateTimeNow();
-        verify(applicationContext).getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_eq_progressCategory_neq_zero);
+        verify(applicationContext).getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_lt_progressCategory_eq_zero);
     }
 
     @Test
@@ -179,8 +179,8 @@ public class SimplePlansDescriptionProviderTest {
         when(repository.findForMonthWithName(year, month, categoryName)).thenReturn(Arrays.asList(categoryModel));
 
         ApplicationContext applicationContext = mock(ApplicationContext.class);
-        // ~17% of month passed -> 20%-17% = 3% < 10% threshold
-        when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, month, 5));
+        // ~16% of month passed -> 20%-16% = 4% < 10% threshold
+        when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, month, 6));
         when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_eq_progressCategory_neq_zero))
                 .thenReturn("PM=PC<>0");
 
@@ -286,7 +286,7 @@ public class SimplePlansDescriptionProviderTest {
     }
 
     @Test
-    public void provideDescriptionForMonthInCategory_overDone_moreThanThresholdTillEndOfMonth_test()
+    public void provideDescriptionForMonthInCategory_overDone_almostEndOfMonth_test()
     {
         int year = 2017;
         Month month = Month.MAY;
@@ -316,7 +316,7 @@ public class SimplePlansDescriptionProviderTest {
     }
 
     @Test
-    public void provideDescriptionForMonthInCategory_overDone_lessThanThresholdTillEndOfMonth_test()
+    public void provideDescriptionForMonthInCategory_overDone_endOfMonth_test()
     {
         int year = 2017;
         Month month = Month.MAY;
@@ -330,7 +330,7 @@ public class SimplePlansDescriptionProviderTest {
 
         ApplicationContext applicationContext = mock(ApplicationContext.class);
         // still 3/31 = ~9% till the end of week < 10% threshold
-        when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, month, 29));
+        when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, month, 31));
         when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_overDone))
                 .thenReturn("PM<PC>1");
 
@@ -343,6 +343,66 @@ public class SimplePlansDescriptionProviderTest {
         verify(repository).findForMonthWithName(year, month, categoryName);
         verify(applicationContext).getDateTimeNow();
         verify(applicationContext).getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_overDone);
+    }
+
+    @Test
+    public void provideDescriptionForMonthInCategory_notDone_endOfMonth_test()
+    {
+        int year = 2017;
+        Month month = Month.MAY;
+        String categoryName = "Cat 1";
+
+        CategoryModel categoryModel = createCategoryModel(year, month, categoryName, FrequencyPeriod.Month, 20, 17);
+        // 17 of 20 done (85%)
+
+        CategoriesRepository repository = mock(CategoriesRepository.class);
+        when(repository.findForMonthWithName(year, month, categoryName)).thenReturn(Arrays.asList(categoryModel));
+
+        ApplicationContext applicationContext = mock(ApplicationContext.class);
+        // still 3/31 = ~9% till the end of week < 10% threshold
+        when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, month, 31));
+        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_notDone))
+                .thenReturn("PM=PC<1");
+
+        SimplePlansDescriptionProvider provider = new SimplePlansDescriptionProvider(applicationContext, repository);
+
+        String actualDescription = provider.provideDescriptionMonthInCategory(year, month, categoryName);
+
+        assertEquals("PM=PC<1", actualDescription);
+
+        verify(repository).findForMonthWithName(year, month, categoryName);
+        verify(applicationContext).getDateTimeNow();
+        verify(applicationContext).getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_notDone);
+    }
+
+    @Test
+    public void provideDescriptionForMonthInCategory_notDone_almostEndOfMonth_test()
+    {
+        int year = 2017;
+        Month month = Month.MAY;
+        String categoryName = "Cat 1";
+
+        CategoryModel categoryModel = createCategoryModel(year, month, categoryName, FrequencyPeriod.Month, 20, 17);
+        // 17 of 20 done (85%)
+
+        CategoriesRepository repository = mock(CategoriesRepository.class);
+        when(repository.findForMonthWithName(year, month, categoryName)).thenReturn(Arrays.asList(categoryModel));
+
+        ApplicationContext applicationContext = mock(ApplicationContext.class);
+        // still 3/31 = ~9% till the end of week < 10% threshold
+        when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, month, 28));
+        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_notDoneBeforeEndOfMonth))
+                .thenReturn("PM>PC<1");
+
+        SimplePlansDescriptionProvider provider = new SimplePlansDescriptionProvider(applicationContext, repository);
+
+        String actualDescription = provider.provideDescriptionMonthInCategory(year, month, categoryName);
+
+        assertEquals("PM>PC<1", actualDescription);
+
+        verify(repository).findForMonthWithName(year, month, categoryName);
+        verify(applicationContext).getDateTimeNow();
+        verify(applicationContext).getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_notDoneBeforeEndOfMonth);
     }
 
     private CategoryModel createCategoryModel(int year, Month month, String categoryName)
