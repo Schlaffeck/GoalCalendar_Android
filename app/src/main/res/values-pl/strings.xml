@@ -75,6 +75,18 @@
     <string name="monthly_plans_summary_generalPieChart_overdone_sliceLabel" formatted="false">%s, %d ponad plan</string>
     <string name="monthly_plans_summary_generalPieChart_simple_sliceLabel" formatted="false">%s, %d/%d</string>
 
+    <!-- summary description -->
+    <string name="monthly_plans_summary_category_description_progressMonth_eq_progressCategory_neq_zero">Wszystko idzie zgodnie z planem. Dobra robota.</string>
+    <string name="monthly_plans_summary_category_description_progressMonth_eq_progressCategory_eq_zero">Rozpoczął się nowy miesiąc, czas go zaplanować.</string>
+    <string name="monthly_plans_summary_category_description_progressMonth_gt_progressCategory_neq_zero">Jesteś nieco do tyłu z planami w tej kategorii, spróbuj wykorzystać wolne chwile na poprawe wyników.</string>
+    <string name="monthly_plans_summary_category_description_progressMonth_gt_progressCategory_eq_zero">Miesiąc rozpoczął się jakiś czas temu, wykonaj pierwszy krok i zaplanuj coś w tej kategorii.</string>
+    <string name="monthly_plans_summary_category_description_progressMonth_lt_progressCategory_neq_zero">Jesteś do przodu z planami, to świetnie. Utrzymaj ten trend.</string>
+    <string name="monthly_plans_summary_category_description_progressCategory_doneBeforeEndOfMonth">Wszystkie plany na ten miesiąc zostały juz wykonane. TO moze być dobry czas na skupienie sie na innych kategoriach.</string>
+    <string name="monthly_plans_summary_category_description_progressCategory_done">Znakomicie, wszystko na ten miesiąc zostało wykonane.</string>
+    <string name="monthly_plans_summary_category_description_progressCategory_overDone">W tej kategorii wyrobiono ponad plan, może warto rozważyć zwiększenie liczby zadan na nastepny miesiąc.</string>
+    <string name="monthly_plans_summary_category_description_progressCategory_overDoneBeforeEndOfMonth">Wykonujesz więcej zadań w tej kategorii niż zaplanowane. To dobrze, upewnij się tylko, że nie zaniedbujesz innych kategorii.</string>
+
+
     <!-- notification -->
     <string name="notification_plannedForToday_title">Na dziś</string>
     <string name="notification_plannedForToday_content">Masz %d rzeczy zaplanowane na dzisiaj</string>
