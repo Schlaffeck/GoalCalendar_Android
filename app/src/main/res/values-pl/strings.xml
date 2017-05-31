@@ -70,10 +70,11 @@
     <string name="monthly_plans_summary_details">Dokładny opis postepów dokonanych w obecnym miesiącu</string>
     <string name="monthly_plans_summary_noOfDaysLeft">Pozostało dni: %d</string>
 
-    <string name="monthly_plans_summary_generalPieChart_todo_sliceLabel" formatted="false">%s, %d pozostałe</string>
-    <string name="monthly_plans_summary_generalPieChart_done_sliceLabel" formatted="false">%s, %d wykonane </string>
-    <string name="monthly_plans_summary_generalPieChart_overdone_sliceLabel" formatted="false">%s, %d ponad plan</string>
     <string name="monthly_plans_summary_generalPieChart_simple_sliceLabel" formatted="false">%s, %d/%d</string>
+
+    <string name="monthly_plans_summary_selectedCategory_done_tasks" formatted="false">● %d na %d wykonane</string>
+    <string name="monthly_plans_summary_selectedCategory_failed_tasks" formatted="false">● %d nieudane</string>
+    <string name="monthly_plans_summary_selectedCategory_planned_tasks" formatted="false">● %d wciąż zaplanowane</string>
 
     <!-- summary description -->
     <string name="monthly_plans_summary_category_description_progressMonth_eq_progressCategory_neq_zero">Wszystko idzie zgodnie z planem. Dobra robota.</string>

@@ -73,10 +73,11 @@
     <string name="plans_summary_percentageFormat" formatted="false">%s%.2f%%</string>
     <string name="monthly_plans_summary_noOfDaysLeft">Days left: %d</string>
 
-    <string name="monthly_plans_summary_generalPieChart_todo_sliceLabel" formatted="false">%s, to do %d tasks</string>
-    <string name="monthly_plans_summary_generalPieChart_done_sliceLabel" formatted="false">%s, done %d tasks</string>
-    <string name="monthly_plans_summary_generalPieChart_overdone_sliceLabel" formatted="false">%s, overdone %d tasks</string>
     <string name="monthly_plans_summary_generalPieChart_simple_sliceLabel" formatted="false">%s, %d/%d</string>
+
+    <string name="monthly_plans_summary_selectedCategory_done_tasks" formatted="false">● %d of %d done</string>
+    <string name="monthly_plans_summary_selectedCategory_failed_tasks" formatted="false">● %d failed</string>
+    <string name="monthly_plans_summary_selectedCategory_planned_tasks" formatted="false">● %d more planned</string>
 
     <!-- summary description -->
     <string name="monthly_plans_summary_category_description_progressMonth_eq_progressCategory_neq_zero">Everything goes as planned. Well done.</string>
