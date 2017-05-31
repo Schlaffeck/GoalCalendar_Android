@@ -57,6 +57,7 @@ public class DataBasedPlansSummaryCalculator implements PlansSummaryCalculator {
                 summary.noOfExpectedTasks += categorySummary.noOfExpectedTasks;
                 summary.noOfFailedTasks += categorySummary.noOfFailedTasks;
                 summary.noOfSuccessfulTasks += categorySummary.noOfSuccessfulTasks;
+                summary.noOfPlannedTasks += categorySummary.noOfPlannedTasks;
             }
         }
 
@@ -84,6 +85,9 @@ public class DataBasedPlansSummaryCalculator implements PlansSummaryCalculator {
                         break;
                     case Success:
                         categorySummary.noOfSuccessfulTasks++;
+                        break;
+                    case Planned:
+                        categorySummary.noOfPlannedTasks++;
                         break;
                 }
             }

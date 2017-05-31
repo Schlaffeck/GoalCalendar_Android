@@ -153,6 +153,12 @@ public class CategoryPlansViewModel extends BaseObservable implements Comparable
         return this.plansSummary.getNoOfSuccessfulTasks();
     }
 
+    @Bindable
+    public int getNoOfPlannedTasks()
+    {
+        return this.plansSummary.getNoOfPlannedTasks();
+    }
+
     void updatePlansSummary()
     {
         this.countPlansSummary(true);
@@ -170,6 +176,7 @@ public class CategoryPlansViewModel extends BaseObservable implements Comparable
             notifyPropertyChanged(BR.noOfExpectedTasks);
             notifyPropertyChanged(BR.noOfFailedTasks);
             notifyPropertyChanged(BR.noOfSuccessfulTasks);
+            notifyPropertyChanged(BR.noOfPlannedTasks);
             notifyPropertyChanged(BR.summaryDescription);
         }
     }

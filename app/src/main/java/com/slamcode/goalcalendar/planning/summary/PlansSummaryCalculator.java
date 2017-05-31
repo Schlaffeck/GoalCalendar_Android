@@ -53,6 +53,8 @@ public interface PlansSummaryCalculator {
 
         protected int noOfFailedTasks;
 
+        protected int noOfPlannedTasks;
+
         protected Collection<PlansSummary> compositeSummaries = new ArrayList<>();
 
         protected String description;
@@ -103,6 +105,10 @@ public interface PlansSummaryCalculator {
         public String getDescription()
         {
             return this.description;
+        }
+
+        public int getNoOfPlannedTasks() {
+            return this.noOfPlannedTasks;
         }
     }
 
