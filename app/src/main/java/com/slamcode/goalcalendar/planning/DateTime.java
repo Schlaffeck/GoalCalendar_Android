@@ -16,6 +16,13 @@ public class DateTime {
         this.calendar = calendar;
     }
 
+    public DateTime(int year, Month month, int day)
+    {
+        this.calendar = DateTimeHelper.getCalendar(year, month, day);
+
+    }
+
+
     public int getDay(){
         return this.calendar.get(Calendar.DAY_OF_MONTH);
     }

@@ -170,4 +170,17 @@ public final class DateTimeHelper {
     {
         return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
     }
+
+    public static Calendar getCalendar(int year, Month month, int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR,year);
+        calendar.set(Calendar.MONTH, month.getNumValue()-1);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        return calendar;
+    }
 }

@@ -73,7 +73,7 @@ public class PieChartViewWithProgress extends PieChartView {
     }
 
     public void setSelectedIndex(int selectedIndex) {
-        if(selectedIndex != this.selectedIndex)
+        if(selectedIndex == this.selectedIndex)
             return;
 
         int oldIndex = this.selectedIndex;

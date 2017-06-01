@@ -29,6 +29,8 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
     private PlansSummaryCalculator.MonthPlansSummary monthPlansSummary;
     private OnPropertyChangedCallback categoryPropertyChangedListener;
 
+    private int selectedCategoryIndex = -1;
+
     public MonthlyPlanningCategoryListViewModel(MonthlyPlansModel model,
                                                 PlansSummaryCalculator plansSummaryCalculator,
                                                 SourceChangeRequestNotifier.SourceChangeRequestListener<CategoryPlansViewModel> categoryChangeRequestListener)
@@ -86,6 +88,36 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
         return this.categoryPlansList == null || this.categoryPlansList.isEmpty();
     }
 
+    @Bindable
+    public int getSelectedCategoryIndex() {
+        return selectedCategoryIndex;
+    }
+
+    public void setSelectedCategoryIndex(int selectedCategoryIndex) {
+        if(selectedCategoryIndex != this.selectedCategoryIndex) {
+            this.selectedCategoryIndex = selectedCategoryIndex;
+            this.notifyPropertyChanged(BR.selectedCategoryIndex);
+            this.notifyPropertyChanged(BR.selectedCategory);
+            this.notifyPropertyChanged(BR.hasSelectedCategory);
+        }
+    }
+
+    @Bindable
+    public CategoryPlansViewModel getSelectedCategory()
+    {
+        if(selectedCategoryIndex < 0
+                || selectedCategoryIndex >= categoryPlansList.size())
+            return null;
+
+        return this.categoryPlansList.get(selectedCategoryIndex);
+    }
+
+    @Bindable
+    public boolean isHasSelectedCategory()
+    {
+        return selectedCategoryIndex > -1;
+    }
+
     private void countPlansSummary(boolean notify)
     {
         this.monthPlansSummary = this.plansSummaryCalculator.calculatePlansSummaryForMonth(this.monthViewModel.getYear(), this.monthViewModel.getMonth());
@@ -135,6 +167,7 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
 
             countPlansSummary(false);
             notifyPropertyChanged(BR.plansSummaryPercentage);
+            setSelectedCategoryIndex(-1);
         }
 
         @Override
@@ -149,6 +182,7 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
             if(itemCount == 0)
                 return;
 
+
             for(int i = positionStart; i < positionStart + itemCount; i++)
             {
                 CategoryPlansViewModel itemVm = categoryPlansViewModels.get(i);
@@ -160,11 +194,20 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
             countPlansSummary(false);
             notifyPropertyChanged(BR.empty);
             notifyPropertyChanged(BR.plansSummaryPercentage);
+
+            if(selectedCategoryIndex >= positionStart && selectedCategoryIndex < positionStart + itemCount) {
+                int selectedCategoryNewIndex = selectedCategoryIndex + itemCount;
+                setSelectedCategoryIndex(selectedCategoryNewIndex);
+            }
         }
 
         @Override
         public void onItemRangeMoved(ObservableList<CategoryPlansViewModel> categoryPlansViewModels, int fromPosition, int toPosition, int itemCount) {
 
+            if(selectedCategoryIndex >= fromPosition && selectedCategoryIndex < fromPosition + itemCount) {
+                int selectedCategoryNewIndex = toPosition + (selectedCategoryIndex - fromPosition);
+                setSelectedCategoryIndex(selectedCategoryNewIndex);
+            }
         }
 
         @Override
@@ -172,14 +215,23 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
             if(itemCount == 0)
                 return;
 
+            boolean needUpdateIndex = false;
+            int indexToUpdate = -1;
             for(int i = positionStart; i < positionStart + itemCount && i < model.getCategories().size(); i++)
             {
+                if(i == selectedCategoryIndex) {
+                    needUpdateIndex = true;
+                    indexToUpdate = -1;
+                }
+
                 model.getCategories().remove(i);
             }
 
             countPlansSummary(false);
             notifyPropertyChanged(BR.empty);
             notifyPropertyChanged(BR.plansSummaryPercentage);
+            if(needUpdateIndex)
+                setSelectedCategoryIndex(indexToUpdate);
         }
     }
 }

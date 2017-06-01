@@ -35,7 +35,5 @@ build/
 #NDK
 obj/
 obj/
-libraries
-/app/*.iml
 /app/*.iml
 libraries

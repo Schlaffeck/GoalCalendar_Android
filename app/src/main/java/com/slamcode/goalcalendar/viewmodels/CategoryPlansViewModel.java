@@ -63,12 +63,18 @@ public class CategoryPlansViewModel extends BaseObservable implements Comparable
     }
 
     @Bindable
+    public String getSummaryDescription()
+    {
+        return this.plansSummary.getDescription();
+    }
+
+    @Bindable
     public FrequencyPeriod getFrequencyPeriod()
     {
         return this.model.getPeriod();
     }
 
-    public void setFrequencyPerion(FrequencyPeriod newFrequencyPeriod)
+    public void setFrequencyPeriod(FrequencyPeriod newFrequencyPeriod)
     {
         if(this.model.getPeriod() != newFrequencyPeriod)
         {
@@ -147,6 +153,12 @@ public class CategoryPlansViewModel extends BaseObservable implements Comparable
         return this.plansSummary.getNoOfSuccessfulTasks();
     }
 
+    @Bindable
+    public int getNoOfPlannedTasks()
+    {
+        return this.plansSummary.getNoOfPlannedTasks();
+    }
+
     void updatePlansSummary()
     {
         this.countPlansSummary(true);
@@ -164,6 +176,8 @@ public class CategoryPlansViewModel extends BaseObservable implements Comparable
             notifyPropertyChanged(BR.noOfExpectedTasks);
             notifyPropertyChanged(BR.noOfFailedTasks);
             notifyPropertyChanged(BR.noOfSuccessfulTasks);
+            notifyPropertyChanged(BR.noOfPlannedTasks);
+            notifyPropertyChanged(BR.summaryDescription);
         }
     }
 

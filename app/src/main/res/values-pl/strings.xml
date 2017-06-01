@@ -70,10 +70,27 @@
     <string name="monthly_plans_summary_details">Dokładny opis postepów dokonanych w obecnym miesiącu</string>
     <string name="monthly_plans_summary_noOfDaysLeft">Pozostało dni: %d</string>
 
-    <string name="monthly_plans_summary_generalPieChart_todo_sliceLabel" formatted="false">%s, %d pozostałe</string>
-    <string name="monthly_plans_summary_generalPieChart_done_sliceLabel" formatted="false">%s, %d wykonane </string>
-    <string name="monthly_plans_summary_generalPieChart_overdone_sliceLabel" formatted="false">%s, %d ponad plan</string>
     <string name="monthly_plans_summary_generalPieChart_simple_sliceLabel" formatted="false">%s, %d/%d</string>
+
+    <string name="monthly_plans_summary_selectedCategory_done_tasks" formatted="false">● %d na %d wykonane</string>
+    <string name="monthly_plans_summary_selectedCategory_failed_tasks" formatted="false">● %d nieudane</string>
+    <string name="monthly_plans_summary_selectedCategory_planned_tasks" formatted="false">● %d zaplanowane</string>
+
+    <!-- summary description -->
+    <string name="monthly_plans_summary_category_description_progressMonth_eq_progressCategory_neq_zero">Wszystko idzie zgodnie z planem. Dobra robota.</string>
+    <string name="monthly_plans_summary_category_description_progressMonth_eq_progressCategory_eq_zero">Rozpoczął się nowy miesiąc, czas go zaplanować.</string>
+    <string name="monthly_plans_summary_category_description_progressMonth_lt_progressCategory_eq_zero">Jump start. Great, keep up the good work.</string>
+    <string name="monthly_plans_summary_category_description_progressMonth_gt_progressCategory_neq_zero">Jesteś nieco do tyłu z planami w tej kategorii, spróbuj wykorzystać wolne chwile na poprawe wyników.</string>
+    <string name="monthly_plans_summary_category_description_progressMonth_gt_progressCategory_eq_zero">Miesiąc rozpoczął się jakiś czas temu, wykonaj pierwszy krok i zaplanuj coś w tej kategorii.</string>
+    <string name="monthly_plans_summary_category_description_progressMonth_lt_progressCategory_neq_zero">Jesteś do przodu z planami, to świetnie. Utrzymaj ten trend.</string>
+    <string name="monthly_plans_summary_category_description_progressCategory_doneBeforeEndOfMonth">Wszystkie plany na ten miesiąc zostały juz wykonane. To może być dobry czas na skupienie sie na innych kategoriach.</string>
+    <string name="monthly_plans_summary_category_description_progressCategory_done">Znakomicie, wszystko na ten miesiąc zostało wykonane.</string>
+    <string name="monthly_plans_summary_category_description_progressCategory_overDone">W tej kategorii wyrobiono zadania ponad plan, może warto rozważyć zwiększenie ich liczby na nastepny miesiąc.</string>
+    <string name="monthly_plans_summary_category_description_progressCategory_overDoneBeforeEndOfMonth">Wykonujesz więcej zadań w tej kategorii niż zaplanowane, to dobrze. Upewnij się tylko, że nie zaniedbujesz innych kategorii.</string>
+    <string name="monthly_plans_summary_category_description_progressCategory_notDone">Nie udało sie wykonać wszystkiego, co zaplanowano. Sprawdź, czy wiecej czasu nie zabrały ci inne kategorie, oraz czy i dlaczego niektóre twoje plany się nie udały.</string>
+    <string name="monthly_plans_summary_category_description_progressCategory_notDoneBeforeEndOfMonth">Zostało jeszcze trochę do zrobienia w tej kategorii. Spróbuj wykorzystać te kilka dni, by dokończyć zaplanowane zadania.</string>
+    <string name="monthly_plans_summary_category_description_monthNotStartedYet">Miesiąc się jeszcze nie rozpoczął</string>
+    <string name="monthly_plans_summary_category_description_monthNotStartedYet_somethingDone">Miesiąc się jeszcze nie zaczął. Czy te wykonane już plany to nie pomyłka?</string>
 
     <!-- notification -->
     <string name="notification_plannedForToday_title">Na dziś</string>
