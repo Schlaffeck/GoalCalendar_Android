@@ -77,7 +77,7 @@
 
     <string name="monthly_plans_summary_selectedCategory_done_tasks" formatted="false">● %d of %d done</string>
     <string name="monthly_plans_summary_selectedCategory_failed_tasks" formatted="false">● %d failed</string>
-    <string name="monthly_plans_summary_selectedCategory_planned_tasks" formatted="false">● %d more planned</string>
+    <string name="monthly_plans_summary_selectedCategory_planned_tasks" formatted="false">● %d planned</string>
 
     <!-- summary description -->
     <string name="monthly_plans_summary_category_description_progressMonth_eq_progressCategory_neq_zero">Everything goes as planned. Well done.</string>
