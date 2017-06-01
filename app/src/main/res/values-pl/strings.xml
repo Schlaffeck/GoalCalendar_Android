@@ -89,6 +89,8 @@
     <string name="monthly_plans_summary_category_description_progressCategory_overDoneBeforeEndOfMonth">Wykonujesz więcej zadań w tej kategorii niż zaplanowane, to dobrze. Upewnij się tylko, że nie zaniedbujesz innych kategorii.</string>
     <string name="monthly_plans_summary_category_description_progressCategory_notDone">Nie udało sie wykonać wszystkiego, co zaplanowano. Sprawdź, czy wiecej czasu nie zabrały ci inne kategorie, oraz czy i dlaczego niektóre twoje plany się nie udały.</string>
     <string name="monthly_plans_summary_category_description_progressCategory_notDoneBeforeEndOfMonth">Zostało jeszcze trochę do zrobienia w tej kategorii. Spróbuj wykorzystać te kilka dni, by dokończyć zaplanowane zadania.</string>
+    <string name="monthly_plans_summary_category_description_monthNotStartedYet">Miesiąc się jeszcze nie rozpoczął</string>
+    <string name="monthly_plans_summary_category_description_monthNotStartedYet_somethingDone">Miesiąc się jeszcze nie zaczął. Czy te wykonane już plany to nie pomyłka?</string>
 
     <!-- notification -->
     <string name="notification_plannedForToday_title">Na dziś</string>

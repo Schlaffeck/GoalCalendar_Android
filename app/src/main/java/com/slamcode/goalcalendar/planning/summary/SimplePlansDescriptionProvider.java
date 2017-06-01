@@ -49,6 +49,12 @@ public class SimplePlansDescriptionProvider implements PlansSummaryDescriptionPr
 
     private String provideGeneralProgressDescription(double monthProgress, double categoryProgress) {
 
+        if(monthProgress < 0.0) {
+            if(categoryProgress > 0)
+                return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_monthNotStartedYet_somethingDone);
+
+            return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_monthNotStartedYet);
+        }
         double monthToCategoryProgressDiff = monthProgress - (categoryProgress > 1 ? 1.0 : categoryProgress);
 
         boolean isBeginningOfMonth = monthProgress == 0.0;
@@ -123,6 +129,14 @@ public class SimplePlansDescriptionProvider implements PlansSummaryDescriptionPr
     private double calculateMonthProgress(int year, Month month)
     {
         DateTime dateTimeNow = this.applicationContext.getDateTimeNow();
+        if(dateTimeNow.getYear() > year
+                || dateTimeNow.getYear() == year && dateTimeNow.getMonth().getNumValue() > month.getNumValue())
+            return 1.0;
+
+        if(dateTimeNow.getYear() < year
+                || dateTimeNow.getYear() == year && dateTimeNow.getMonth().getNumValue() < month.getNumValue())
+            return -1.0;
+
         double monthProgress = 1.0 * (dateTimeNow.getDay() -1) / DateTimeHelper.getDaysCount(year, month);
         return monthProgress;
     }

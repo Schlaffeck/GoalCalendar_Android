@@ -92,6 +92,8 @@
     <string name="monthly_plans_summary_category_description_progressCategory_overDoneBeforeEndOfMonth">You are doing more than planned, great. Just be sure not to neglect other categories.</string>
     <string name="monthly_plans_summary_category_description_progressCategory_notDone">Not everything planned was done. Check if you have not spent more time on other categories, or if and why your plans failed in this one.</string>
     <string name="monthly_plans_summary_category_description_progressCategory_notDoneBeforeEndOfMonth">Still some work to do here. There are couple of days left, so maybe focus on this category to keep up with plans.</string>
+    <string name="monthly_plans_summary_category_description_monthNotStartedYet">Month not started yet</string>
+    <string name="monthly_plans_summary_category_description_monthNotStartedYet_somethingDone">Month did not start yet. Have you maybe checked some fields by mistake?</string>
 
     <!-- notification -->
     <string name="notification_plannedForToday_title">Planned for today</string>

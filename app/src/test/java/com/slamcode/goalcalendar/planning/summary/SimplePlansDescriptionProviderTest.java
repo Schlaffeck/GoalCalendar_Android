@@ -61,8 +61,7 @@ public class SimplePlansDescriptionProviderTest {
 
         ApplicationContext applicationContext = mock(ApplicationContext.class);
         when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, month, 1));
-        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_eq_progressCategory_eq_zero))
-                .thenReturn("PM=PC=0");
+        this.mockApplicationContextReturningStrings(applicationContext);
 
         SimplePlansDescriptionProvider provider = new SimplePlansDescriptionProvider(applicationContext, repository);
 
@@ -91,14 +90,13 @@ public class SimplePlansDescriptionProviderTest {
         ApplicationContext applicationContext = mock(ApplicationContext.class);
         when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, month, 4));
         // less than 10% of month passed
-        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_gt_progressCategory_eq_zero))
-                .thenReturn("PM=PC=0");
+        this.mockApplicationContextReturningStrings(applicationContext);
 
         SimplePlansDescriptionProvider provider = new SimplePlansDescriptionProvider(applicationContext, repository);
 
         String actualDescription = provider.provideDescriptionMonthInCategory(year, month, categoryName);
 
-        assertEquals("PM=PC=0", actualDescription);
+        assertEquals("PM>PC=0", actualDescription);
 
         verify(repository).findForMonthWithName(year, month, categoryName);
         verify(applicationContext).getDateTimeNow();
@@ -121,8 +119,7 @@ public class SimplePlansDescriptionProviderTest {
         ApplicationContext applicationContext = mock(ApplicationContext.class);
         when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, month, 5));
         // more than 10% of month passed, nothing done still
-        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_gt_progressCategory_eq_zero))
-                .thenReturn("PM>PC=0");
+        this.mockApplicationContextReturningStrings(applicationContext);
 
         SimplePlansDescriptionProvider provider = new SimplePlansDescriptionProvider(applicationContext, repository);
 
@@ -151,8 +148,7 @@ public class SimplePlansDescriptionProviderTest {
         ApplicationContext applicationContext = mock(ApplicationContext.class);
         // ~9% of month passed -> ~9% < 10% threshold
         when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, month, 3));
-        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_lt_progressCategory_eq_zero))
-                .thenReturn("PM=PC<>0");
+        this.mockApplicationContextReturningStrings(applicationContext);
 
         SimplePlansDescriptionProvider provider = new SimplePlansDescriptionProvider(applicationContext, repository);
 
@@ -181,8 +177,7 @@ public class SimplePlansDescriptionProviderTest {
         ApplicationContext applicationContext = mock(ApplicationContext.class);
         // ~16% of month passed -> 20%-16% = 4% < 10% threshold
         when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, month, 6));
-        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_eq_progressCategory_neq_zero))
-                .thenReturn("PM=PC<>0");
+        this.mockApplicationContextReturningStrings(applicationContext);
 
         SimplePlansDescriptionProvider provider = new SimplePlansDescriptionProvider(applicationContext, repository);
 
@@ -211,8 +206,7 @@ public class SimplePlansDescriptionProviderTest {
         ApplicationContext applicationContext = mock(ApplicationContext.class);
         // ~22% of month passed -> 22% - 35% = -13% > -10% threshold
         when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, month, 7));
-        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_lt_progressCategory_neq_zero))
-                .thenReturn("PM<PC<>0");
+        this.mockApplicationContextReturningStrings(applicationContext);
 
         SimplePlansDescriptionProvider provider = new SimplePlansDescriptionProvider(applicationContext, repository);
 
@@ -241,8 +235,7 @@ public class SimplePlansDescriptionProviderTest {
         ApplicationContext applicationContext = mock(ApplicationContext.class);
         // month passed
         when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, month, 31));
-        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_done))
-                .thenReturn("PM=PC=1");
+        this.mockApplicationContextReturningStrings(applicationContext);
 
         SimplePlansDescriptionProvider provider = new SimplePlansDescriptionProvider(applicationContext, repository);
 
@@ -271,8 +264,7 @@ public class SimplePlansDescriptionProviderTest {
         ApplicationContext applicationContext = mock(ApplicationContext.class);
         // still 6/31 = ~19% till the eond of week > 10% threshold
         when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, month, 25));
-        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_doneBeforeEndOfMonth))
-                .thenReturn("PM<PC=1");
+        this.mockApplicationContextReturningStrings(applicationContext);
 
         SimplePlansDescriptionProvider provider = new SimplePlansDescriptionProvider(applicationContext, repository);
 
@@ -301,8 +293,7 @@ public class SimplePlansDescriptionProviderTest {
         ApplicationContext applicationContext = mock(ApplicationContext.class);
         // still 4/31 = ~12% till the end of week > 10% threshold
         when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, month, 28));
-        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_overDoneBeforeEndOfMonth))
-                .thenReturn("PM<PC>1");
+        this.mockApplicationContextReturningStrings(applicationContext);
 
         SimplePlansDescriptionProvider provider = new SimplePlansDescriptionProvider(applicationContext, repository);
 
@@ -331,8 +322,7 @@ public class SimplePlansDescriptionProviderTest {
         ApplicationContext applicationContext = mock(ApplicationContext.class);
         // still 3/31 = ~9% till the end of week < 10% threshold
         when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, month, 31));
-        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_overDone))
-                .thenReturn("PM<PC>1");
+        this.mockApplicationContextReturningStrings(applicationContext);
 
         SimplePlansDescriptionProvider provider = new SimplePlansDescriptionProvider(applicationContext, repository);
 
@@ -361,8 +351,7 @@ public class SimplePlansDescriptionProviderTest {
         ApplicationContext applicationContext = mock(ApplicationContext.class);
         // still 3/31 = ~9% till the end of week < 10% threshold
         when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, month, 31));
-        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_notDone))
-                .thenReturn("PM=PC<1");
+        this.mockApplicationContextReturningStrings(applicationContext);
 
         SimplePlansDescriptionProvider provider = new SimplePlansDescriptionProvider(applicationContext, repository);
 
@@ -391,8 +380,7 @@ public class SimplePlansDescriptionProviderTest {
         ApplicationContext applicationContext = mock(ApplicationContext.class);
         // still 3/31 = ~9% till the end of week < 10% threshold
         when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, month, 28));
-        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_notDoneBeforeEndOfMonth))
-                .thenReturn("PM>PC<1");
+        this.mockApplicationContextReturningStrings(applicationContext);
 
         SimplePlansDescriptionProvider provider = new SimplePlansDescriptionProvider(applicationContext, repository);
 
@@ -403,6 +391,181 @@ public class SimplePlansDescriptionProviderTest {
         verify(repository).findForMonthWithName(year, month, categoryName);
         verify(applicationContext).getDateTimeNow();
         verify(applicationContext).getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_notDoneBeforeEndOfMonth);
+    }
+
+    @Test
+    public void provideDescriptionForMonthInCategory_monthPassed_allDone_test()
+    {
+        int year = 2017;
+        Month month = Month.MAY;
+        String categoryName = "Cat 1";
+
+        CategoryModel categoryModel = createCategoryModel(year, month, categoryName, FrequencyPeriod.Month, 20, 20);
+        // 20 of 20 done (100%)
+
+        CategoriesRepository repository = mock(CategoriesRepository.class);
+        when(repository.findForMonthWithName(year, month, categoryName)).thenReturn(Arrays.asList(categoryModel));
+
+        ApplicationContext applicationContext = mock(ApplicationContext.class);
+        // month passed
+        when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, Month.JUNE, 1));
+        this.mockApplicationContextReturningStrings(applicationContext);
+
+        SimplePlansDescriptionProvider provider = new SimplePlansDescriptionProvider(applicationContext, repository);
+
+        String actualDescription = provider.provideDescriptionMonthInCategory(year, month, categoryName);
+
+        assertEquals("PM=PC=1", actualDescription);
+
+        verify(repository).findForMonthWithName(year, month, categoryName);
+        verify(applicationContext).getDateTimeNow();
+        verify(applicationContext).getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_done);
+    }
+
+    @Test
+    public void provideDescriptionForMonthInCategory_monthPassed_notDone_test()
+    {
+        int year = 2017;
+        Month month = Month.MAY;
+        String categoryName = "Cat 1";
+
+        CategoryModel categoryModel = createCategoryModel(year, month, categoryName, FrequencyPeriod.Month, 20, 12);
+        // 20 of 20 done (100%)
+
+        CategoriesRepository repository = mock(CategoriesRepository.class);
+        when(repository.findForMonthWithName(year, month, categoryName)).thenReturn(Arrays.asList(categoryModel));
+
+        ApplicationContext applicationContext = mock(ApplicationContext.class);
+        // month passed
+        when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, Month.JUNE, 1));
+        this.mockApplicationContextReturningStrings(applicationContext);
+
+        SimplePlansDescriptionProvider provider = new SimplePlansDescriptionProvider(applicationContext, repository);
+
+        String actualDescription = provider.provideDescriptionMonthInCategory(year, month, categoryName);
+
+        assertEquals("PM=PC<1", actualDescription);
+
+        verify(repository).findForMonthWithName(year, month, categoryName);
+        verify(applicationContext).getDateTimeNow();
+        verify(applicationContext).getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_notDone);
+    }
+
+    @Test
+    public void provideDescriptionForMonthInCategory_monthPassed_nothingDone_test()
+    {
+        int year = 2017;
+        Month month = Month.MAY;
+        String categoryName = "Cat 1";
+
+        CategoryModel categoryModel = createCategoryModel(year, month, categoryName, FrequencyPeriod.Month, 20, 0);
+        // 20 of 20 done (100%)
+
+        CategoriesRepository repository = mock(CategoriesRepository.class);
+        when(repository.findForMonthWithName(year, month, categoryName)).thenReturn(Arrays.asList(categoryModel));
+
+        ApplicationContext applicationContext = mock(ApplicationContext.class);
+        // month passed
+        when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, Month.JUNE, 1));
+        this.mockApplicationContextReturningStrings(applicationContext);
+
+        SimplePlansDescriptionProvider provider = new SimplePlansDescriptionProvider(applicationContext, repository);
+
+        String actualDescription = provider.provideDescriptionMonthInCategory(year, month, categoryName);
+
+        assertEquals("PM=PC<1", actualDescription);
+
+        verify(repository).findForMonthWithName(year, month, categoryName);
+        verify(applicationContext).getDateTimeNow();
+        verify(applicationContext).getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_notDone);
+    }
+
+    @Test
+    public void provideDescriptionForMonthInCategory_monthNotYetStarted_nothingDone_test()
+    {
+        int year = 2017;
+        Month month = Month.MAY;
+        String categoryName = "Cat 1";
+
+        CategoryModel categoryModel = createCategoryModel(year, month, categoryName, FrequencyPeriod.Month, 20, 0);
+        // 20 of 20 done (100%)
+
+        CategoriesRepository repository = mock(CategoriesRepository.class);
+        when(repository.findForMonthWithName(year, month, categoryName)).thenReturn(Arrays.asList(categoryModel));
+
+        ApplicationContext applicationContext = mock(ApplicationContext.class);
+        // month passed
+        when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, Month.APRIL, 28));
+        this.mockApplicationContextReturningStrings(applicationContext);
+
+        SimplePlansDescriptionProvider provider = new SimplePlansDescriptionProvider(applicationContext, repository);
+
+        String actualDescription = provider.provideDescriptionMonthInCategory(year, month, categoryName);
+
+        assertEquals("PM=PC=?", actualDescription);
+
+        verify(repository).findForMonthWithName(year, month, categoryName);
+        verify(applicationContext).getDateTimeNow();
+        verify(applicationContext).getStringFromResources(R.string.monthly_plans_summary_category_description_monthNotStartedYet);
+    }
+
+    @Test
+    public void provideDescriptionForMonthInCategory_monthNotYetStarted_somethingDone_test()
+    {
+        int year = 2017;
+        Month month = Month.MAY;
+        String categoryName = "Cat 1";
+
+        CategoryModel categoryModel = createCategoryModel(year, month, categoryName, FrequencyPeriod.Month, 20, 1);
+        // 20 of 20 done (100%)
+
+        CategoriesRepository repository = mock(CategoriesRepository.class);
+        when(repository.findForMonthWithName(year, month, categoryName)).thenReturn(Arrays.asList(categoryModel));
+
+        ApplicationContext applicationContext = mock(ApplicationContext.class);
+        // month passed
+        when(applicationContext.getDateTimeNow()).thenReturn(new DateTime(year, Month.APRIL, 28));
+        this.mockApplicationContextReturningStrings(applicationContext);
+
+        SimplePlansDescriptionProvider provider = new SimplePlansDescriptionProvider(applicationContext, repository);
+
+        String actualDescription = provider.provideDescriptionMonthInCategory(year, month, categoryName);
+
+        assertEquals("PM=PC=!", actualDescription);
+
+        verify(repository).findForMonthWithName(year, month, categoryName);
+        verify(applicationContext).getDateTimeNow();
+        verify(applicationContext).getStringFromResources(R.string.monthly_plans_summary_category_description_monthNotStartedYet_somethingDone);
+    }
+
+    private void mockApplicationContextReturningStrings(ApplicationContext applicationContext)
+    {
+        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_done))
+                .thenReturn("PM=PC=1");
+        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_notDoneBeforeEndOfMonth))
+                .thenReturn("PM>PC<1");
+        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_notDone))
+                .thenReturn("PM=PC<1");
+        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_overDone))
+                .thenReturn("PM<PC>1");
+        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_doneBeforeEndOfMonth))
+                .thenReturn("PM<PC=1");
+        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_lt_progressCategory_neq_zero))
+                .thenReturn("PM<PC<>0");
+        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_eq_progressCategory_neq_zero))
+                .thenReturn("PM=PC<>0");
+        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_gt_progressCategory_eq_zero))
+                .thenReturn("PM>PC=0");
+        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_eq_progressCategory_eq_zero))
+                .thenReturn("PM=PC=0");
+        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_overDoneBeforeEndOfMonth))
+                .thenReturn("PM<PC>1");
+        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_lt_progressCategory_eq_zero))
+                .thenReturn("PM=PC<>0");
+        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_monthNotStartedYet))
+                .thenReturn("PM=PC=?");
+        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_monthNotStartedYet_somethingDone))
+                .thenReturn("PM=PC=!");
     }
 
     private CategoryModel createCategoryModel(int year, Month month, String categoryName)
