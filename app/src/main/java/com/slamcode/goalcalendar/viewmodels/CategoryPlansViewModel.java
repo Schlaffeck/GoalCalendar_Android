@@ -65,7 +65,7 @@ public class CategoryPlansViewModel extends BaseObservable implements Comparable
     @Bindable
     public String getSummaryDescription()
     {
-        return null;
+        return this.plansSummary.getDescription();
     }
 
     @Bindable
