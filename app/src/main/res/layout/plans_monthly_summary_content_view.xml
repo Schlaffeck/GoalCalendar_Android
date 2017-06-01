@@ -45,7 +45,7 @@
     </com.slamcode.goalcalendar.view.charts.data.hellocharts.PieChartViewWithProgress>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="@{vm.monthlyPlans.hasSelectedCategory?View.VISIBLE:View.GONE}">
             <include layout="@layout/monthly_goals_summary_selected_item_details_layout"
