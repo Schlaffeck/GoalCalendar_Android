@@ -79,7 +79,7 @@
     <!-- summary description -->
     <string name="monthly_plans_summary_category_description_progressMonth_eq_progressCategory_neq_zero">Wszystko idzie zgodnie z planem. Dobra robota.</string>
     <string name="monthly_plans_summary_category_description_progressMonth_eq_progressCategory_eq_zero">Rozpoczął się nowy miesiąc, czas go zaplanować.</string>
-    <string name="monthly_plans_summary_category_description_progressMonth_lt_progressCategory_eq_zero">Jump start. Great, keep up the good work.</string>
+    <string name="monthly_plans_summary_category_description_progressMonth_lt_progressCategory_eq_zero">Szybki start, oby tak dalej.</string>
     <string name="monthly_plans_summary_category_description_progressMonth_gt_progressCategory_neq_zero">Jesteś nieco do tyłu z planami w tej kategorii, spróbuj wykorzystać wolne chwile na poprawe wyników.</string>
     <string name="monthly_plans_summary_category_description_progressMonth_gt_progressCategory_eq_zero">Miesiąc rozpoczął się jakiś czas temu, wykonaj pierwszy krok i zaplanuj coś w tej kategorii.</string>
     <string name="monthly_plans_summary_category_description_progressMonth_lt_progressCategory_neq_zero">Jesteś do przodu z planami, to świetnie. Utrzymaj ten trend.</string>
