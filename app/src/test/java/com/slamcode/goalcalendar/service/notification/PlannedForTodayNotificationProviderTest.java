@@ -46,7 +46,9 @@ public class PlannedForTodayNotificationProviderTest {
         PersistenceContext persistenceContextMock = Mockito.mock(PersistenceContext.class);
         AppSettingsManager appSettingsManagerMock = Mockito.mock(AppSettingsManager.class);
         Logger loggerMock = mock(Logger.class);
-        PlannedForTodayNotificationProvider provider = new PlannedForTodayNotificationProvider(contextMock, persistenceContextMock, appSettingsManagerMock, loggerMock);
+        NotificationHistory notificationHistoryMock = Mockito.mock(NotificationHistory.class);
+
+        PlannedForTodayNotificationProvider provider = new PlannedForTodayNotificationProvider(contextMock, persistenceContextMock, appSettingsManagerMock, notificationHistoryMock, loggerMock);
 
         assertEquals(1, provider.getNotificationId());
     }
@@ -66,8 +68,9 @@ public class PlannedForTodayNotificationProviderTest {
         when(appSettingsManagerMock.getShowStartupNotification()).thenReturn(false);
 
         // create provider
-        PlannedForTodayNotificationProvider provider = new PlannedForTodayNotificationProvider(contextMock, persistenceContextMock, appSettingsManagerMock, loggerMock);
+        NotificationHistory notificationHistoryMock = Mockito.mock(NotificationHistory.class);
 
+        PlannedForTodayNotificationProvider provider = new PlannedForTodayNotificationProvider(contextMock, persistenceContextMock, appSettingsManagerMock, notificationHistoryMock, loggerMock);
         // assert no notification as no plans for today
         assertNull(provider.provideNotification());
 
@@ -115,8 +118,9 @@ public class PlannedForTodayNotificationProviderTest {
                 .thenReturn(CollectionUtils.<CategoryModel>emptyList());
 
         // create provider
-        PlannedForTodayNotificationProvider provider = new PlannedForTodayNotificationProvider(contextMock, persistenceContextMock, appSettingsManagerMock, loggerMock);
+        NotificationHistory notificationHistoryMock = Mockito.mock(NotificationHistory.class);
 
+        PlannedForTodayNotificationProvider provider = new PlannedForTodayNotificationProvider(contextMock, persistenceContextMock, appSettingsManagerMock, notificationHistoryMock, loggerMock);
         // assert notification data
         Notification actual = provider.provideNotification();
         assertEquals(notificationMock, actual);
@@ -178,8 +182,9 @@ public class PlannedForTodayNotificationProviderTest {
                 .thenReturn(CollectionUtils.createList(new CategoryModel(1, "C1", FrequencyPeriod.Month, 2)));
 
         // create provider
-        PlannedForTodayNotificationProvider provider = new PlannedForTodayNotificationProvider(contextMock, persistenceContextMock, appSettingsManagerMock, loggerMock);
+        NotificationHistory notificationHistoryMock = Mockito.mock(NotificationHistory.class);
 
+        PlannedForTodayNotificationProvider provider = new PlannedForTodayNotificationProvider(contextMock, persistenceContextMock, appSettingsManagerMock, notificationHistoryMock, loggerMock);
         // assert notification data
         Notification actual = provider.provideNotification();
         assertEquals(notificationMock, actual);
@@ -244,8 +249,9 @@ public class PlannedForTodayNotificationProviderTest {
                         new CategoryModel(1, "C3", FrequencyPeriod.Month, 2)));
 
         // create provider
-        PlannedForTodayNotificationProvider provider = new PlannedForTodayNotificationProvider(contextMock, persistenceContextMock, appSettingsManagerMock, loggerMock);
+        NotificationHistory notificationHistoryMock = Mockito.mock(NotificationHistory.class);
 
+        PlannedForTodayNotificationProvider provider = new PlannedForTodayNotificationProvider(contextMock, persistenceContextMock, appSettingsManagerMock, notificationHistoryMock, loggerMock);
         // assert notification data
         Notification actual = provider.provideNotification();
         assertEquals(notificationMock, actual);
@@ -286,8 +292,9 @@ public class PlannedForTodayNotificationProviderTest {
         when(contextMock.getSystemService(Context.ALARM_SERVICE)).thenReturn(alarmManager);
 
         // create provider
-        PlannedForTodayNotificationProvider provider = new PlannedForTodayNotificationProvider(contextMock, persistenceContextMock, appSettingsManagerMock, loggerMock);
+        NotificationHistory notificationHistoryMock = Mockito.mock(NotificationHistory.class);
 
+        PlannedForTodayNotificationProvider provider = new PlannedForTodayNotificationProvider(contextMock, persistenceContextMock, appSettingsManagerMock, notificationHistoryMock, loggerMock);
         // run method
         provider.scheduleNotification();
 

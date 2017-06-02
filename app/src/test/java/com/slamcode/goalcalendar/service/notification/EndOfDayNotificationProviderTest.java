@@ -15,6 +15,7 @@ import com.slamcode.goalcalendar.planning.HourMinuteTime;
 import com.slamcode.goalcalendar.settings.AppSettingsManager;
 
 import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.Calendar;
@@ -36,9 +37,11 @@ public class EndOfDayNotificationProviderTest {
 
         ApplicationContext contextMock = Mockito.mock(ApplicationContext.class);
         AppSettingsManager appSettingsManagerMock = Mockito.mock(AppSettingsManager.class);
+        NotificationHistory notificationHistoryMock = Mockito.mock(NotificationHistory.class);
         Logger loggerMock = mock(Logger.class);
 
-        EndOfDayNotificationProvider provider = new EndOfDayNotificationProvider(contextMock,  appSettingsManagerMock, loggerMock);
+        EndOfDayNotificationProvider provider = new EndOfDayNotificationProvider(contextMock,
+                appSettingsManagerMock, notificationHistoryMock, loggerMock);
 
         assertEquals(2, provider.getNotificationId());
     }
@@ -60,9 +63,10 @@ public class EndOfDayNotificationProviderTest {
         when(contextMock.getBroadcast(2, intent, PendingIntent.FLAG_UPDATE_CURRENT)).thenReturn(pendingIntent);
         final AlarmManager alarmManager = mock(AlarmManager.class);
         when(contextMock.getSystemService(Context.ALARM_SERVICE)).thenReturn(alarmManager);
+        NotificationHistory notificationHistoryMock = Mockito.mock(NotificationHistory.class);
 
-        // create provider
-        EndOfDayNotificationProvider provider = new EndOfDayNotificationProvider(contextMock,  appSettingsManagerMock, loggerMock);
+        EndOfDayNotificationProvider provider = new EndOfDayNotificationProvider(contextMock,
+                appSettingsManagerMock, notificationHistoryMock, loggerMock);
 
         // run method
         provider.scheduleNotification();
@@ -81,8 +85,10 @@ public class EndOfDayNotificationProviderTest {
         Logger loggerMock = mock(Logger.class);
 
         when(appSettingsManagerMock.getShowEndOfDayNotification()).thenReturn(false);
+        NotificationHistory notificationHistoryMock = Mockito.mock(NotificationHistory.class);
 
-        EndOfDayNotificationProvider provider = new EndOfDayNotificationProvider(contextMock, appSettingsManagerMock, loggerMock);
+        EndOfDayNotificationProvider provider = new EndOfDayNotificationProvider(contextMock,
+                appSettingsManagerMock, notificationHistoryMock, loggerMock);
 
         assertNull(provider.provideNotification());
 
@@ -113,7 +119,10 @@ public class EndOfDayNotificationProviderTest {
         when(contextMock.buildNotification(R.drawable.ic_done_white_24dp, "Title", "Content", 55, pendingIntentMock))
                 .thenReturn(notificationMock);
 
-        EndOfDayNotificationProvider provider = new EndOfDayNotificationProvider(contextMock, appSettingsManagerMock, loggerMock);
+        NotificationHistory notificationHistoryMock = Mockito.mock(NotificationHistory.class);
+
+        EndOfDayNotificationProvider provider = new EndOfDayNotificationProvider(contextMock,
+                appSettingsManagerMock, notificationHistoryMock, loggerMock);
 
         assertEquals(notificationMock, provider.provideNotification());
 

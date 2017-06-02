@@ -15,6 +15,7 @@ import com.slamcode.goalcalendar.planning.HourMinuteTime;
 import com.slamcode.goalcalendar.settings.AppSettingsManager;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by moriasla on 19.01.2017.
@@ -25,15 +26,19 @@ public final class EndOfDayNotificationProvider implements NotificationProvider 
     private static final String LOG_TAG = "GOAL_EODNotPrv";
 
     private static final int NOTIFICATION_ID = 2;
+    private static final String NOTIFICATION_ID_STRING = "EndOfDayNotification";
 
     private final ApplicationContext context;
     private final AppSettingsManager settingsManager;
+    private final NotificationHistory notificationHistory;
     private final Logger logger;
 
-    public EndOfDayNotificationProvider(ApplicationContext context, AppSettingsManager settingsManager, Logger logger)
+    public EndOfDayNotificationProvider(ApplicationContext context, AppSettingsManager settingsManager,
+                                        NotificationHistory notificationHistory, Logger logger)
     {
         this.context = context;
         this.settingsManager = settingsManager;
+        this.notificationHistory = notificationHistory;
         this.logger = logger;
     }
 
@@ -43,11 +48,23 @@ public final class EndOfDayNotificationProvider implements NotificationProvider 
     }
 
     @Override
+    public String getNotificationIdString() {
+        return NOTIFICATION_ID_STRING;
+    }
+
+    @Override
     public Notification provideNotification() {
 
         if(!this.settingsManager.getShowEndOfDayNotification())
             return null;
 
+        Date lastTimePublished = this.notificationHistory.getLastTimeNotificationWasPublished(this.getNotificationIdString());
+        if(lastTimePublished != null
+                && DateTimeHelper.isTodayDate(lastTimePublished))
+        {
+            return null;
+        }
+        
             Intent resultIntent = this.context.createIntent(MonthlyGoalsActivity.class);
             resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             resultIntent.putExtra(NotificationScheduler.NOTIFICATION_ORIGINATED_FROM_FLAG, true);

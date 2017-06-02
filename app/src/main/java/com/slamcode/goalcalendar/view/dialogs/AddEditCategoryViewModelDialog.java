@@ -17,6 +17,9 @@ import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.PlanStatus;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 import com.slamcode.goalcalendar.view.dialogs.base.AddEditDialog;
+import com.slamcode.goalcalendar.view.utils.ViewReference;
+import com.slamcode.goalcalendar.view.utils.ViewOnClick;
+import com.slamcode.goalcalendar.view.utils.ViewBinder;
 import com.slamcode.goalcalendar.view.validation.CategoryNameTextValidator;
 import com.slamcode.goalcalendar.view.utils.ResourcesHelper;
 import com.slamcode.goalcalendar.view.utils.SpinnerHelper;
@@ -26,10 +29,6 @@ import com.slamcode.goalcalendar.viewmodels.MonthViewModel;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 /**
  * Created by moriasla on 06.03.2017.
  */
@@ -37,16 +36,16 @@ import butterknife.OnClick;
 public class AddEditCategoryViewModelDialog extends AddEditDialog<CategoryPlansViewModel> {
 
     // views
-    @BindView(R.id.monthly_goals_category_dialog_header_textview)
+    @ViewReference(R.id.monthly_goals_category_dialog_header_textview)
     TextView headerTextView;
 
-    @BindView(R.id.monthly_goals_category_dialog_name_edittext)
+    @ViewReference(R.id.monthly_goals_category_dialog_name_edittext)
     EditText categoryNameEditText;
 
-    @BindView(R.id.monthly_goals_category_dialog_period_spinner)
+    @ViewReference(R.id.monthly_goals_category_dialog_period_spinner)
     Spinner frequencyPeriodSpinner;
 
-    @BindView(R.id.monthly_goals_category_dialog_frequency_numberpicker)
+    @ViewReference(R.id.monthly_goals_category_dialog_frequency_numberpicker)
     NumberPicker frequencyValueNumberPicker;
 
     MonthViewModel monthViewModel;
@@ -67,7 +66,7 @@ public class AddEditCategoryViewModelDialog extends AddEditDialog<CategoryPlansV
     {
         View view = inflater.inflate(R.layout.monthly_goals_add_edit_category_dialog_layout, null);
 
-        ButterKnife.bind(this, view);
+        ViewBinder.bindViews(this, view);
 
         // setFrequencyPerion view data
         this.headerTextView.setText(
@@ -105,14 +104,14 @@ public class AddEditCategoryViewModelDialog extends AddEditDialog<CategoryPlansV
     }
 
     @Override
-    @OnClick(R.id.monthly_goals_category_dialog_cancel_button)
+    @ViewOnClick(R.id.monthly_goals_category_dialog_cancel_button)
     protected void cancelChanges()
     {
         super.cancelChanges();
     }
 
     @Override
-    @OnClick(R.id.monthly_goals_category_dialog_add_button)
+    @ViewOnClick(R.id.monthly_goals_category_dialog_add_button)
     protected void commitChanges()
     {
         if(!this.isAllValid())
@@ -141,7 +140,7 @@ public class AddEditCategoryViewModelDialog extends AddEditDialog<CategoryPlansV
         m.setFrequencyValue(this.frequencyValueNumberPicker.getValue());
 
         Object periodObject = this.frequencyPeriodSpinner.getSelectedItem();
-        m.setFrequencyPerion(ResourcesHelper.frequencyPeriodFromResourceString(
+        m.setFrequencyPeriod(ResourcesHelper.frequencyPeriodFromResourceString(
                 this.getActivity(),
                 periodObject.toString()));
         this.setConfirmed(true);

@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
-import butterknife.ButterKnife;
+import com.slamcode.goalcalendar.view.utils.ViewBinder;
 
 /**
  * Created by moriasla on 16.12.2016.
@@ -25,7 +25,7 @@ public class ViewHolderBase<Model> extends RecyclerView.ViewHolder {
     {
         super(view);
         this.view = view;
-        ButterKnife.bind(this, view);
+        ViewBinder.bindViews(this, view);
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {

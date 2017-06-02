@@ -41,4 +41,8 @@
     <!-- empty view -->
     <dimen name="monthly_goals_empty_view_header_textSize">24sp</dimen>
     <dimen name="monthly_goals_empty_view_layout_width">320dp</dimen>
+
+
+    <!-- summary bottom -->
+    <dimen name="monthly_goals_summary_pieChart_minHeight">400dp</dimen>
 </resources>

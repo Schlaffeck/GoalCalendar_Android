@@ -11,6 +11,8 @@ public interface NotificationProvider{
 
     int getNotificationId();
 
+    String getNotificationIdString();
+
     Notification provideNotification();
 
     void scheduleNotification();

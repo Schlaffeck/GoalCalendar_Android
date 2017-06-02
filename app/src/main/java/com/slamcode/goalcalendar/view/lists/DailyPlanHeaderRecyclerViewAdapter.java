@@ -2,12 +2,13 @@ package com.slamcode.goalcalendar.view.lists;
 
 import android.content.Context;
 import android.databinding.ObservableArrayList;
-import android.support.v7.util.SortedList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.slamcode.goalcalendar.R;
+import com.slamcode.goalcalendar.planning.schedule.DateTimeChangeListener;
+import com.slamcode.goalcalendar.planning.schedule.DateTimeChangeListenersRegistry;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.YearMonthPair;
 import com.slamcode.goalcalendar.view.lists.base.ComparatorSortedListCallback;
@@ -17,7 +18,6 @@ import com.slamcode.goalcalendar.view.lists.base.bindable.BindableRecyclerViewDa
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableViewHolderBase;
 import com.slamcode.goalcalendar.view.lists.base.bindable.ObservableSortedList;
 import com.slamcode.goalcalendar.view.utils.ColorsHelper;
-import com.slamcode.goalcalendar.viewmodels.DailyPlansViewModel;
 import com.slamcode.goalcalendar.viewmodels.DayInMonthViewModel;
 
 /**
@@ -27,20 +27,23 @@ import com.slamcode.goalcalendar.viewmodels.DayInMonthViewModel;
 public class DailyPlanHeaderRecyclerViewAdapter extends BindableRecyclerViewDataAdapter<DayInMonthViewModel, DailyPlanHeaderRecyclerViewAdapter.DailyPlanHeaderViewHolder> {
 
     private final YearMonthPair yearMonthPair;
+    private final DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry;
 
     protected DailyPlanHeaderRecyclerViewAdapter(Context context,
                                                  YearMonthPair yearMonthPair,
-                                                 LayoutInflater layoutInflater) {
+                                                 LayoutInflater layoutInflater,
+                                                 DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry) {
         this(context, yearMonthPair, layoutInflater, new ObservableSortedList<>(
                 new ObservableArrayList<DayInMonthViewModel>(),
                 DayInMonthViewModel.class,
-                new SortedListCallbackSet<>(new ComparatorSortedListCallback<>(new DefaultComparator<DayInMonthViewModel>()), new DefaultComparator<DayInMonthViewModel>())));
+                new SortedListCallbackSet<>(new ComparatorSortedListCallback<>(new DefaultComparator<DayInMonthViewModel>()), new DefaultComparator<DayInMonthViewModel>())), dateTimeChangeListenersRegistry);
     }
 
     protected DailyPlanHeaderRecyclerViewAdapter(Context context, YearMonthPair yearMonthPair,
-                                                 LayoutInflater layoutInflater, ObservableSortedList<DayInMonthViewModel> sourceList) {
+                                                 LayoutInflater layoutInflater, ObservableSortedList<DayInMonthViewModel> sourceList, DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry) {
         super(context, layoutInflater, sourceList);
         this.yearMonthPair = yearMonthPair;
+        this.dateTimeChangeListenersRegistry = dateTimeChangeListenersRegistry;
     }
 
     @Override
@@ -55,13 +58,14 @@ public class DailyPlanHeaderRecyclerViewAdapter extends BindableRecyclerViewData
             return false;
 
         int dayNumber = dailyPlanModel.getDayNumber();
-        return DateTimeHelper.isCurrentDate(
+        return DateTimeHelper.isTodayDate(
                 this.yearMonthPair.getYear(),
                 this.yearMonthPair.getMonth(),
                 dayNumber);
     }
 
     public class DailyPlanHeaderViewHolder extends BindableViewHolderBase<DayInMonthViewModel>
+        implements DateTimeChangeListener
     {
         public DailyPlanHeaderViewHolder(View view) {
             super(view);
@@ -73,6 +77,17 @@ public class DailyPlanHeaderRecyclerViewAdapter extends BindableRecyclerViewData
 
             if(isCurrentDate(modelObject))
                 ColorsHelper.setSecondAccentBackgroundColor(this.getView());
+
+            dateTimeChangeListenersRegistry.registerListener(this);
+        }
+
+        @Override
+        public void onDateChanged() {
+
+            if(isCurrentDate(this.getModelObject()))
+                ColorsHelper.setSecondAccentBackgroundColor(this.getView());
+            else
+                ColorsHelper.setListItemBackgroundColor(this.getView());
         }
     }
 }

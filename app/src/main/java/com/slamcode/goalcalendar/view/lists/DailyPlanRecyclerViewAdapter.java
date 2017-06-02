@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.slamcode.goalcalendar.R;
+import com.slamcode.goalcalendar.planning.schedule.DateTimeChangeListener;
+import com.slamcode.goalcalendar.planning.schedule.DateTimeChangeListenersRegistry;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.PlanStatus;
 import com.slamcode.goalcalendar.planning.YearMonthPair;
@@ -15,23 +17,25 @@ import com.slamcode.goalcalendar.view.lists.base.ComparatorSortedListCallback;
 import com.slamcode.goalcalendar.view.lists.base.DefaultComparator;
 import com.slamcode.goalcalendar.view.lists.base.RecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableViewHolderBase;
+import com.slamcode.goalcalendar.view.utils.ViewReference;
 import com.slamcode.goalcalendar.view.utils.ColorsHelper;
 import com.slamcode.goalcalendar.viewmodels.DailyPlansViewModel;
 
 import java.util.Collection;
 
-import butterknife.BindView;
 
 /**
  * Created by moriasla on 06.02.2017.
  */
 
-public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyPlansViewModel, DailyPlanRecyclerViewAdapter.DailyPlanViewHolder> {
+public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyPlansViewModel, DailyPlanRecyclerViewAdapter.DailyPlanViewHolder>{
 
     private final YearMonthPair yearMonthPair;
+    private final DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry;
 
     protected DailyPlanRecyclerViewAdapter(Context context,
                                            LayoutInflater layoutInflater,
+                                           DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry,
                                            YearMonthPair yearMonthPair,
                                            Collection<DailyPlansViewModel> sourceCollection) {
         super(context, layoutInflater,
@@ -39,6 +43,7 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
                         DailyPlansViewModel.class,
                         new ComparatorSortedListCallback<>(new DefaultComparator<DailyPlansViewModel>())));
         this.yearMonthPair = yearMonthPair;
+        this.dateTimeChangeListenersRegistry = dateTimeChangeListenersRegistry;
         this.updateSourceCollection(sourceCollection);
     }
 
@@ -54,7 +59,7 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
             return false;
 
         int dayNumber = dailyPlanModel.getDayNumber();
-        return DateTimeHelper.isCurrentDate(
+        return DateTimeHelper.isTodayDate(
                 this.yearMonthPair.getYear(),
                 this.yearMonthPair.getMonth(),
                 dayNumber);
@@ -63,9 +68,9 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
     /**
      * View holder for daily plan
      */
-    public class DailyPlanViewHolder extends BindableViewHolderBase<DailyPlansViewModel> {
+    public class DailyPlanViewHolder extends BindableViewHolderBase<DailyPlansViewModel> implements DateTimeChangeListener{
 
-        @BindView(R.id.plan_status_list_item_view_button)
+        @ViewReference(R.id.plan_status_list_item_view_button)
         GoalPlanStatusButton statusButton;
 
         public DailyPlanViewHolder(View view) {
@@ -86,6 +91,17 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
 
             if(isCurrentDate(modelObject))
                 ColorsHelper.setSecondAccentBackgroundColor(this.getView());
+
+            dateTimeChangeListenersRegistry.registerListener(this);
+        }
+
+        @Override
+        public void onDateChanged() {
+
+            if(isCurrentDate(this.getModelObject()))
+                ColorsHelper.setSecondAccentBackgroundColor(this.getView());
+            else
+                ColorsHelper.setListItemBackgroundColor(this.getView());
         }
     }
 }

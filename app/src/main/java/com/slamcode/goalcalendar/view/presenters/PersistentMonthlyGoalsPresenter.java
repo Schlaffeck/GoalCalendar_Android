@@ -72,12 +72,11 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
         this.activityView = view;
         if(this.data == null)
             this.setData(new MonthlyGoalsViewModel(applicationContext, persistenceContext, summaryCalculator, categoryChangeRequestListener));
+        else this.resetData();
     }
 
-    @Override
-    public boolean isPreviousMonthWithCategoriesAvailable()
-    {
-        return this.findPreviousMonthlyPlansModelWithCategories() != null;
+    private void resetData() {
+        this.activityView.onDataSet(this.data);
     }
 
     @Override
@@ -98,7 +97,7 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
             newCategory.setDailyPlans(ModelHelper.createListOfDailyPlansForMonth(year, currentMonth));
 
             this.data.getMonthlyPlans().getCategoryPlansList()
-                    .add(this.createCategoryPlansViewModel(category));
+                    .add(this.createCategoryPlansViewModel(newCategory));
         }
     }
 

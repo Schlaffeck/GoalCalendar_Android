@@ -2,7 +2,6 @@ package com.slamcode.goalcalendar.view.lists;
 
 import android.content.Context;
 import android.databinding.ObservableList;
-import android.support.v7.util.SortedList;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.util.SortedListAdapterCallback;
@@ -11,20 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.slamcode.goalcalendar.R;
+import com.slamcode.goalcalendar.planning.schedule.DateTimeChangeListenersRegistry;
 import com.slamcode.goalcalendar.planning.YearMonthPair;
 import com.slamcode.goalcalendar.view.lists.base.ComparatorSortedListCallback;
 import com.slamcode.goalcalendar.view.lists.base.DefaultComparator;
-import com.slamcode.goalcalendar.view.lists.base.RecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.base.SortedListCallbackSet;
-import com.slamcode.goalcalendar.view.lists.base.ViewHolderBase;
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableRecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableViewHolderBase;
 import com.slamcode.goalcalendar.view.lists.base.bindable.ObservableSortedList;
+import com.slamcode.goalcalendar.view.utils.ViewReference;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 
 import java.util.Comparator;
-
-import butterknife.BindView;
 
 /**
  * Created by moriasla on 15.12.2016.
@@ -32,13 +29,18 @@ import butterknife.BindView;
 
 public class CategoryDailyPlansRecyclerViewAdapter extends BindableRecyclerViewDataAdapter<CategoryPlansViewModel, CategoryDailyPlansRecyclerViewAdapter.CategoryDailyPlansViewHolder> {
 
+    private final DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry;
     private YearMonthPair yearMonthPair;
     private SortedListAdapterCallback<CategoryPlansViewModel> recyclerViewCallback;
 
-    public CategoryDailyPlansRecyclerViewAdapter(Context context, LayoutInflater layoutInflater, YearMonthPair yearMonthPair, ObservableList<CategoryPlansViewModel> items)
+    public CategoryDailyPlansRecyclerViewAdapter(Context context, LayoutInflater layoutInflater,
+                                                 DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry,
+                                                 YearMonthPair yearMonthPair,
+                                                 ObservableList<CategoryPlansViewModel> items)
     {
         super(context, layoutInflater, new ObservableSortedList<>(items, CategoryPlansViewModel.class,
                 new SortedListCallbackSet<>(new DefaultComparator<CategoryPlansViewModel>())));
+        this.dateTimeChangeListenersRegistry = dateTimeChangeListenersRegistry;
 
         this.yearMonthPair = yearMonthPair;
         this.getSourceList().getCallbackSet().addCallback(new ComparatorSortedListCallback<>(new DefaultComparator<CategoryPlansViewModel>()));
@@ -87,9 +89,13 @@ public class CategoryDailyPlansRecyclerViewAdapter extends BindableRecyclerViewD
         return new CategoryDailyPlansViewHolder(convertView);
     }
 
+    public void setYearMonthPair(YearMonthPair yearMonthPair) {
+        this.yearMonthPair = yearMonthPair;
+    }
+
     public class CategoryDailyPlansViewHolder extends BindableViewHolderBase<CategoryPlansViewModel>
     {
-        @BindView(R.id.monthly_goals_list_item_days_list)
+        @ViewReference(R.id.monthly_goals_list_item_days_list)
         RecyclerView daysListGridView;
 
         CategoryDailyPlansViewHolder(
@@ -106,6 +112,7 @@ public class CategoryDailyPlansRecyclerViewAdapter extends BindableRecyclerViewD
             DailyPlanRecyclerViewAdapter adapter = new DailyPlanRecyclerViewAdapter(
                     getView().getContext(),
                     getLayoutInflater(),
+                    dateTimeChangeListenersRegistry,
                     yearMonthPair,
                     modelObject.getDailyPlansList());
 

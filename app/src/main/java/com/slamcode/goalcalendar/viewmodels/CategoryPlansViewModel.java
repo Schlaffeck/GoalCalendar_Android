@@ -63,12 +63,18 @@ public class CategoryPlansViewModel extends BaseObservable implements Comparable
     }
 
     @Bindable
+    public String getSummaryDescription()
+    {
+        return this.plansSummary.getDescription();
+    }
+
+    @Bindable
     public FrequencyPeriod getFrequencyPeriod()
     {
         return this.model.getPeriod();
     }
 
-    public void setFrequencyPerion(FrequencyPeriod newFrequencyPeriod)
+    public void setFrequencyPeriod(FrequencyPeriod newFrequencyPeriod)
     {
         if(this.model.getPeriod() != newFrequencyPeriod)
         {
@@ -118,6 +124,18 @@ public class CategoryPlansViewModel extends BaseObservable implements Comparable
     }
 
     @Bindable
+    public int getProgressPercentageInteger()
+    {
+        return (int) this.getProgressPercentage();
+    }
+
+    @Bindable
+    public boolean isExceeded()
+    {
+        return this.getNoOfSuccessfulTasks() > this.getNoOfExpectedTasks();
+    }
+
+    @Bindable
     public int getNoOfExpectedTasks()
     {
         return this.plansSummary.getNoOfExpectedTasks();
@@ -135,6 +153,17 @@ public class CategoryPlansViewModel extends BaseObservable implements Comparable
         return this.plansSummary.getNoOfSuccessfulTasks();
     }
 
+    @Bindable
+    public int getNoOfPlannedTasks()
+    {
+        return this.plansSummary.getNoOfPlannedTasks();
+    }
+
+    void updatePlansSummary()
+    {
+        this.countPlansSummary(true);
+    }
+
     private void countPlansSummary(boolean notify)
     {
         this.plansSummary = this.plansSummaryCalculator
@@ -142,9 +171,13 @@ public class CategoryPlansViewModel extends BaseObservable implements Comparable
         if(notify) {
             notifyPropertyChanged(BR.dataAvailable);
             notifyPropertyChanged(BR.progressPercentage);
+            notifyPropertyChanged(BR.progressPercentageInteger);
+            notifyPropertyChanged(BR.exceeded);
             notifyPropertyChanged(BR.noOfExpectedTasks);
             notifyPropertyChanged(BR.noOfFailedTasks);
             notifyPropertyChanged(BR.noOfSuccessfulTasks);
+            notifyPropertyChanged(BR.noOfPlannedTasks);
+            notifyPropertyChanged(BR.summaryDescription);
         }
     }
 

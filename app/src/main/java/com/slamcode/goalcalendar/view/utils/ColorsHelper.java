@@ -16,4 +16,10 @@ public final class ColorsHelper {
         view.setBackgroundColor(ContextCompat.getColor(view.getContext(), R.color.listAccentColor));
         return view;
     }
+
+    public static View setListItemBackgroundColor(View view)
+    {
+        view.setBackgroundColor(ContextCompat.getColor(view.getContext(), R.color.listItemBackgroundColor));
+        return view;
+    }
 }
