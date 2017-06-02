@@ -81,8 +81,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     @Inject
     DateTimeChangedService dateTimeChangedService;
 
-    private GestureDetectorCompat gestureDetector;
-
     private BottomSheetBehavior bottomSheetBehavior;
 
     private MonthlyGoalsActivityContract.Presenter presenter;
@@ -128,12 +126,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        this.gestureDetector.onTouchEvent(event);
-        return super.onTouchEvent(event);
     }
 
     @Override
