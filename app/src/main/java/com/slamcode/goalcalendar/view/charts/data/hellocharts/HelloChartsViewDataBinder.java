@@ -75,12 +75,25 @@ public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartVi
             }
 
             PieChartData data = new PieChartData(slices);
+            this.assureDifferentSlicesColors(slices);
             data.setHasLabelsOnlyForSelected(true);
             data.setSlicesSpacing(0);
             pieChartView.setChartRotationEnabled(false);
             pieChartView.setSelectedValueToggleEnabled(true);
             pieChartView.setPieChartData(data);
         }
+    }
+
+    private void assureDifferentSlicesColors(List<SliceValue> slices) {
+        if(slices == null || slices.size() < 2)
+            return;
+
+        final int noOfColors = 5;
+        if(slices.size() % noOfColors != 1)
+            return;
+
+        SliceValue lastOne = slices.get(slices.size()-1);
+        lastOne.setColor(this.getNextColor(lastOne.getColor()));
     }
 
     private int countAllExpectedTasks(Iterable<CategoryPlansViewModel> itemsSource) {
@@ -119,24 +132,29 @@ public class HelloChartsViewDataBinder implements ChartViewDataBinder<PieChartVi
                         category.getNoOfExpectedTasks()));
     }
 
-    private int getNextColor()
+    private int getNextColor(int previousColor)
     {
-        int color = this.lastColor;
-        if(this.lastColor == ChartUtils.COLOR_BLUE)
-                color = ChartUtils.COLOR_GREEN;
+        int color = 0;
+        if(previousColor == ChartUtils.COLOR_BLUE)
+            color = ChartUtils.COLOR_GREEN;
 
-        else if(this.lastColor == ChartUtils.COLOR_GREEN)
+        else if(previousColor == ChartUtils.COLOR_GREEN)
             color = ChartUtils.COLOR_ORANGE;
 
-        else if(this.lastColor == ChartUtils.COLOR_ORANGE)
+        else if(previousColor == ChartUtils.COLOR_ORANGE)
             color = ChartUtils.COLOR_RED;
 
-        else if(this.lastColor == ChartUtils.COLOR_RED)
+        else if(previousColor == ChartUtils.COLOR_RED)
             color = ChartUtils.COLOR_VIOLET;
 
         else color = ChartUtils.COLOR_BLUE;
 
-        return this.lastColor = color;
+        return color;
+    }
+
+    private int getNextColor()
+    {
+        return this.lastColor = this.getNextColor(this.lastColor);
     }
 
     class CategoryPropertyChangedCallback extends Observable.OnPropertyChangedCallback{
