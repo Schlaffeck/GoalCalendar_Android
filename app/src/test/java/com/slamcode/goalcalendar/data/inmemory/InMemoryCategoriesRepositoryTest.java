@@ -8,6 +8,7 @@ import com.slamcode.collections.*;
 import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.data.model.ModelHelper;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
+import com.slamcode.goalcalendar.data.query.NumericalComparisonOperator;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.PlanStatus;
@@ -361,7 +362,7 @@ public class InMemoryCategoriesRepositoryTest {
         MonthlyPlansModel may = this.createMonthlyPlans(2, 2016, Month.MAY, "B1", "B2", "B3", "B4", "B5");
 
         CategoriesRepository repo = new InMemoryCategoriesRepository(CollectionUtils.createList(april, may));
-        // setFrequencyPerion daily plans statuses
+        // setFrequencyPeriod daily plans statuses
         int year = 2016;
         Month month = Month.APRIL;
         int day = 21;
@@ -418,6 +419,255 @@ public class InMemoryCategoriesRepositoryTest {
         assertEquals(0, actual.size());
     }
 
+    @Test
+    public void inMemoryCategoriesRepository_findNotDoneInMonth_test()
+    {
+        MonthlyPlansModel may = createMonthlyPlans(1, 2017, Month.MAY, "1", "2", "3", "4");
+        MonthlyPlansModel april = createMonthlyPlans(1, 2017, Month.APRIL, "1", "2", "3", "4");
+
+        CategoriesRepository repo = new InMemoryCategoriesRepository(CollectionUtils.createList(april, may));
+
+        // 1. nothing done
+        List<CategoryModel> modelList = repo.findNotDoneInMonth(2017, Month.MAY);
+
+        assertEquals(4, modelList.size());
+        assertEquals("1", modelList.get(0).getName());
+        assertEquals("2", modelList.get(1).getName());
+        assertEquals("3", modelList.get(2).getName());
+        assertEquals("4", modelList.get(3).getName());
+
+        // 2. done one task in one category
+        may.getCategories().get(0).getDailyPlans().get(0).setStatus(PlanStatus.Success);
+        modelList = repo.findNotDoneInMonth(2017, Month.MAY);
+
+        assertEquals(3, modelList.size());
+        assertEquals("2", modelList.get(0).getName());
+        assertEquals("3", modelList.get(1).getName());
+        assertEquals("4", modelList.get(2).getName());
+
+        // 3. done one task in three categories
+        may.getCategories().get(0).getDailyPlans().get(0).setStatus(PlanStatus.Success);
+        may.getCategories().get(1).getDailyPlans().get(0).setStatus(PlanStatus.Success);
+        may.getCategories().get(3).getDailyPlans().get(0).setStatus(PlanStatus.Success);
+        modelList = repo.findNotDoneInMonth(2017, Month.MAY);
+
+        assertEquals(1, modelList.size());
+        assertEquals("3", modelList.get(0).getName());
+
+        // 3. done one task in each category
+        may.getCategories().get(0).getDailyPlans().get(0).setStatus(PlanStatus.Success);
+        may.getCategories().get(1).getDailyPlans().get(0).setStatus(PlanStatus.Success);
+        may.getCategories().get(2).getDailyPlans().get(0).setStatus(PlanStatus.Success);
+        may.getCategories().get(3).getDailyPlans().get(0).setStatus(PlanStatus.Success);
+        modelList = repo.findNotDoneInMonth(2017, Month.MAY);
+
+        assertEquals(0, modelList.size());
+    }
+
+    @Test
+    public void inMemoryCategoriesRepository_findLessThan_progressValue_test()
+    {
+        MonthlyPlansModel may = createMonthlyPlans(1, 2017, Month.MAY, "1", "2", "3", "4");
+        MonthlyPlansModel april = createMonthlyPlans(1, 2017, Month.APRIL, "1", "2", "3", "4");
+
+        CategoriesRepository repo = new InMemoryCategoriesRepository(CollectionUtils.createList(april, may));
+
+        float progressWanted = 0.25f;
+        // 1. nothing done
+        List<CategoryModel> modelList = repo.findWithProgressInMonth(2017,  Month.MAY, NumericalComparisonOperator.LESS_THAN, progressWanted);
+
+        assertEquals(4, modelList.size());
+        assertEquals("1", modelList.get(0).getName());
+        assertEquals("2", modelList.get(1).getName());
+        assertEquals("3", modelList.get(2).getName());
+        assertEquals("4", modelList.get(3).getName());
+
+        // 2. one done in 20% only
+        this.setPercentageDaysDoneForCategory(may.getCategories().get(0), 0.2);
+        modelList = repo.findWithProgressInMonth(2017,  Month.MAY, NumericalComparisonOperator.LESS_THAN, progressWanted);
+
+        assertEquals(4, modelList.size());
+        assertEquals("1", modelList.get(0).getName());
+        assertEquals("2", modelList.get(1).getName());
+        assertEquals("3", modelList.get(2).getName());
+        assertEquals("4", modelList.get(3).getName());
+
+        // 3. another one done in exactly 25%
+        this.setPercentageDaysDoneForCategory(may.getCategories().get(1), 0.25);
+        modelList = repo.findWithProgressInMonth(2017,  Month.MAY, NumericalComparisonOperator.LESS_THAN, progressWanted);
+
+        assertEquals(3, modelList.size());
+        assertEquals("1", modelList.get(0).getName());
+        assertEquals("3", modelList.get(1).getName());
+        assertEquals("4", modelList.get(2).getName());
+
+        // 4. another one done in more than 25%
+        this.setPercentageDaysDoneForCategory(may.getCategories().get(2), 0.3);
+        modelList = repo.findWithProgressInMonth(2017,  Month.MAY, NumericalComparisonOperator.LESS_THAN, progressWanted);
+
+        assertEquals(2, modelList.size());
+        assertEquals("1", modelList.get(0).getName());
+        assertEquals("4", modelList.get(1).getName());
+    }
+
+    @Test
+    public void inMemoryCategoriesRepository_findLessOrEqualTo_progressValue_test()
+    {
+        MonthlyPlansModel may = createMonthlyPlans(1, 2017, Month.MAY, "1", "2", "3", "4");
+        MonthlyPlansModel april = createMonthlyPlans(1, 2017, Month.APRIL, "1", "2", "3", "4");
+
+        CategoriesRepository repo = new InMemoryCategoriesRepository(CollectionUtils.createList(april, may));
+
+        float progressWanted = 0.25f;
+        NumericalComparisonOperator operator = NumericalComparisonOperator.LESS_OR_EQUAL_TO;
+        // 1. nothing done
+        List<CategoryModel> modelList = repo.findWithProgressInMonth(2017,  Month.MAY, operator, progressWanted);
+
+        assertEquals(4, modelList.size());
+        assertEquals("1", modelList.get(0).getName());
+        assertEquals("2", modelList.get(1).getName());
+        assertEquals("3", modelList.get(2).getName());
+        assertEquals("4", modelList.get(3).getName());
+
+        // 2. one done in 20% only
+        this.setPercentageDaysDoneForCategory(may.getCategories().get(0), 0.2);
+        modelList = repo.findWithProgressInMonth(2017,  Month.MAY, operator, progressWanted);
+
+        assertEquals(4, modelList.size());
+        assertEquals("1", modelList.get(0).getName());
+        assertEquals("2", modelList.get(1).getName());
+        assertEquals("3", modelList.get(2).getName());
+        assertEquals("4", modelList.get(3).getName());
+
+        // 3. another one done in exactly 25%
+        this.setPercentageDaysDoneForCategory(may.getCategories().get(1), 0.25);
+        modelList = repo.findWithProgressInMonth(2017,  Month.MAY, operator, progressWanted);
+
+        assertEquals(4, modelList.size());
+        assertEquals("1", modelList.get(0).getName());
+        assertEquals("2", modelList.get(1).getName());
+        assertEquals("3", modelList.get(2).getName());
+        assertEquals("4", modelList.get(3).getName());
+
+        // 4. another one done in more than 25%
+        this.setPercentageDaysDoneForCategory(may.getCategories().get(2), 0.3);
+        modelList = repo.findWithProgressInMonth(2017,  Month.MAY, operator, progressWanted);
+
+        assertEquals(3, modelList.size());
+        assertEquals("1", modelList.get(0).getName());
+        assertEquals("2", modelList.get(1).getName());
+        assertEquals("4", modelList.get(2).getName());
+    }
+
+    @Test
+    public void inMemoryCategoriesRepository_findGreaterThan_progressValue_test()
+    {
+        MonthlyPlansModel may = createMonthlyPlans(1, 2017, Month.MAY, "1", "2", "3", "4");
+        MonthlyPlansModel april = createMonthlyPlans(1, 2017, Month.APRIL, "1", "2", "3", "4");
+
+        CategoriesRepository repo = new InMemoryCategoriesRepository(CollectionUtils.createList(april, may));
+
+        float progressWanted = 0.25f;
+        NumericalComparisonOperator operator = NumericalComparisonOperator.GREATER_THAN;
+        // 1. nothing done
+        List<CategoryModel> modelList = repo.findWithProgressInMonth(2017,  Month.MAY, operator, progressWanted);
+
+        assertEquals(0, modelList.size());
+
+        // 2. one done in 20% only
+        this.setPercentageDaysDoneForCategory(may.getCategories().get(0), 0.2);
+        modelList = repo.findWithProgressInMonth(2017,  Month.MAY, operator, progressWanted);
+
+        assertEquals(0, modelList.size());
+
+        // 3. another one done in exactly 25%
+        this.setPercentageDaysDoneForCategory(may.getCategories().get(1), 0.25);
+        modelList = repo.findWithProgressInMonth(2017,  Month.MAY, operator, progressWanted);
+
+        assertEquals(0, modelList.size());
+
+        // 4. another one done in more than 25%
+        this.setPercentageDaysDoneForCategory(may.getCategories().get(2), 0.3);
+        modelList = repo.findWithProgressInMonth(2017,  Month.MAY, operator, progressWanted);
+
+        assertEquals(1, modelList.size());
+        assertEquals("3", modelList.get(0).getName());
+    }
+
+    @Test
+    public void inMemoryCategoriesRepository_findGreaterThanOrEqualTo_progressValue_test()
+    {
+        MonthlyPlansModel may = createMonthlyPlans(1, 2017, Month.MAY, "1", "2", "3", "4");
+        MonthlyPlansModel april = createMonthlyPlans(1, 2017, Month.APRIL, "1", "2", "3", "4");
+
+        CategoriesRepository repo = new InMemoryCategoriesRepository(CollectionUtils.createList(april, may));
+
+        float progressWanted = 0.25f;
+        NumericalComparisonOperator operator = NumericalComparisonOperator.GREATER_OR_EQUAL_TO;
+
+        // 1. nothing done
+        List<CategoryModel> modelList = repo.findWithProgressInMonth(2017, Month.MAY, operator, progressWanted);
+
+        assertEquals(0, modelList.size());
+
+        // 2. one done in 20% only
+        this.setPercentageDaysDoneForCategory(may.getCategories().get(0), 0.2);
+        modelList = repo.findWithProgressInMonth(2017,  Month.MAY, operator, progressWanted);
+
+        assertEquals(0, modelList.size());
+
+        // 3. another one done in exactly 25%
+        this.setPercentageDaysDoneForCategory(may.getCategories().get(1), 0.25);
+        modelList = repo.findWithProgressInMonth(2017,  Month.MAY, operator, progressWanted);
+
+        assertEquals(1, modelList.size());
+        assertEquals("2", modelList.get(0).getName());
+
+        // 4. another one done in more than 25%
+        this.setPercentageDaysDoneForCategory(may.getCategories().get(2), 0.3);
+        modelList = repo.findWithProgressInMonth(2017,  Month.MAY, operator, progressWanted);
+
+        assertEquals(2, modelList.size());
+        assertEquals("2", modelList.get(0).getName());
+        assertEquals("3", modelList.get(1).getName());
+    }
+
+    @Test
+    public void inMemoryCategoriesRepository_findEqualTo_progressValue_test()
+    {
+        MonthlyPlansModel may = createMonthlyPlans(1, 2017, Month.MAY, "1", "2", "3", "4");
+        MonthlyPlansModel april = createMonthlyPlans(1, 2017, Month.APRIL, "1", "2", "3", "4");
+
+        CategoriesRepository repo = new InMemoryCategoriesRepository(CollectionUtils.createList(april, may));
+
+        float progressWanted = 0.25f;
+        NumericalComparisonOperator operator = NumericalComparisonOperator.EQUAL_TO;
+
+        // 1. nothing done
+        List<CategoryModel> modelList = repo.findWithProgressInMonth(2017, Month.MAY, operator, progressWanted);
+
+        assertEquals(0, modelList.size());
+
+        // 2. one done in 20% only
+        this.setPercentageDaysDoneForCategory(may.getCategories().get(0), 0.2);
+        modelList = repo.findWithProgressInMonth(2017,  Month.MAY, operator, progressWanted);
+
+        assertEquals(0, modelList.size());
+
+        // 3. another one done in exactly 25%
+        this.setPercentageDaysDoneForCategory(may.getCategories().get(1), 0.25);
+        modelList = repo.findWithProgressInMonth(2017,  Month.MAY, operator, progressWanted);
+
+        assertEquals(1, modelList.size());
+        assertEquals("2", modelList.get(0).getName());
+
+        // 4. another one done in more than 25%
+        this.setPercentageDaysDoneForCategory(may.getCategories().get(2), 0.3);
+        modelList = repo.findWithProgressInMonth(2017,  Month.MAY, operator, progressWanted);
+
+        assertEquals(1, modelList.size());
+        assertEquals("2", modelList.get(0).getName());
+    }
 
     private MonthlyPlansModel createMonthlyPlans(int id, int year, Month month, String... categoriesNames)
     {
@@ -430,6 +680,18 @@ public class InMemoryCategoriesRepositoryTest {
         }
 
         return vm;
+    }
+
+    private void setPercentageDaysDoneForCategory(CategoryModel category, double progress)
+    {
+        category.setFrequencyValue(20);
+        category.setPeriod(FrequencyPeriod.Month);
+        int successfulTasksToMark = (int) Math.ceil(20 * progress);
+
+        for(int i =0; i < successfulTasksToMark; i++)
+        {
+            category.getDailyPlans().get(i).setStatus(PlanStatus.Success);
+        }
     }
 
 }

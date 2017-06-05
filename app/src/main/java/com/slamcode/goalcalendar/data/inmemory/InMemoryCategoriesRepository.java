@@ -6,6 +6,7 @@ import com.slamcode.goalcalendar.data.*;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.ModelHelper;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
+import com.slamcode.goalcalendar.data.query.NumericalComparisonOperator;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.PlanStatus;
 
@@ -73,6 +74,20 @@ public class InMemoryCategoriesRepository extends InMemoryRepositoryBase<Categor
         Iterable<CategoryModel> result = this.findForMonth(year, month);
 
         result = IterableUtils.filteredIterable(result, ModelHelper.getCategoryOfStatusOnDayPredicate(planStatus, day));
+
+        return IterableUtils.toList(result);
+    }
+
+    @Override
+    public List<CategoryModel> findNotDoneInMonth(int year, Month month) {
+        return this.findWithProgressInMonth(year, month, NumericalComparisonOperator.EQUAL_TO, 0);
+    }
+
+    @Override
+    public List<CategoryModel> findWithProgressInMonth(int year, Month month, NumericalComparisonOperator operator, float progressValue) {
+        Iterable<CategoryModel> result = this.findForMonth(year, month);
+
+        result = IterableUtils.filteredIterable(result, ModelHelper.getCategoryOfProgressPredicate(operator, progressValue));
 
         return IterableUtils.toList(result);
     }

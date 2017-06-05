@@ -1,7 +1,7 @@
 package com.slamcode.goalcalendar.data;
 
 import com.slamcode.goalcalendar.data.model.CategoryModel;
-import com.slamcode.goalcalendar.data.model.DailyPlanModel;
+import com.slamcode.goalcalendar.data.query.NumericalComparisonOperator;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.PlanStatus;
 
@@ -18,4 +18,8 @@ public interface CategoriesRepository extends Repository<CategoryModel,  Integer
     List<CategoryModel> findForMonthWithName(int year, Month month, String name);
 
     List<CategoryModel> findForDateWithStatus(int year, Month month, int day, PlanStatus planStatus);
+
+    List<CategoryModel> findNotDoneInMonth(int year, Month month);
+
+    List<CategoryModel> findWithProgressInMonth(int year, Month month, NumericalComparisonOperator operator, float progressValue);
 }
