@@ -32,7 +32,7 @@ public class SimplePlansDescriptionProvider implements PlansSummaryDescriptionPr
     }
 
     @Override
-    public String provideDescriptionForMonth(int year, Month month) {
+    public PlansSummaryDescription provideDescriptionForMonth(int year, Month month) {
         return null;
     }
 

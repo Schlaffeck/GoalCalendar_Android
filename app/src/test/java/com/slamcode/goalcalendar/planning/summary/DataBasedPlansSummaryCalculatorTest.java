@@ -561,7 +561,7 @@ public class DataBasedPlansSummaryCalculatorTest {
         PlansSummaryDescriptionProvider descriptionProvider = mock(PlansSummaryDescriptionProvider.class);
 
         if(categories.length == 0)
-            when(descriptionProvider.provideDescriptionForMonth(year, month)).thenReturn(description);
+            when(descriptionProvider.provideDescriptionForMonth(year, month)).thenReturn(new PlansSummaryDescriptionProvider.PlansSummaryDescription(null, description));
         else {
             for(CategoryModel categoryModel : categories)
             when(descriptionProvider.provideDescriptionMonthInCategory(year, month, categoryModel.getName())).thenReturn(description);
@@ -575,7 +575,7 @@ public class DataBasedPlansSummaryCalculatorTest {
         PlansSummaryDescriptionProvider descriptionProvider = mock(PlansSummaryDescriptionProvider.class);
 
         if(categoryName == null)
-            when(descriptionProvider.provideDescriptionForMonth(year, month)).thenReturn(description);
+            when(descriptionProvider.provideDescriptionForMonth(year, month)).thenReturn(new PlansSummaryDescriptionProvider.PlansSummaryDescription(null, description));
         else
                 when(descriptionProvider.provideDescriptionMonthInCategory(year, month, categoryName)).thenReturn(description);
 

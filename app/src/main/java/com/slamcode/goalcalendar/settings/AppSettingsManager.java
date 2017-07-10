@@ -23,4 +23,8 @@ public interface AppSettingsManager {
     void setShowStartupNotification(boolean showStartupNotification);
 
     boolean getAutomaticallyMarkUncompletedTask();
+
+    boolean getShowPlansProgressNotification();
+
+    void setShowPlansProgressNotification(boolean showPlansProgressNotification);
 }
