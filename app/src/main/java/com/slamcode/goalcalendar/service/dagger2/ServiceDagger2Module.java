@@ -3,6 +3,7 @@ package com.slamcode.goalcalendar.service.dagger2;
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.diagniostics.Logger;
+import com.slamcode.goalcalendar.planning.summary.PlansSummaryDescriptionProvider;
 import com.slamcode.goalcalendar.service.commands.AutoMarkTasksCommand;
 import com.slamcode.goalcalendar.service.commands.SnackbarShowUpAutoMarkTasksCommand;
 import com.slamcode.goalcalendar.service.notification.NotificationHistory;
@@ -10,6 +11,7 @@ import com.slamcode.goalcalendar.service.notification.NotificationScheduler;
 import com.slamcode.goalcalendar.service.notification.EndOfDayNotificationProvider;
 import com.slamcode.goalcalendar.service.notification.NotificationProvider;
 import com.slamcode.goalcalendar.service.notification.PlannedForTodayNotificationProvider;
+import com.slamcode.goalcalendar.service.notification.PlansProgressNotificationProvider;
 import com.slamcode.goalcalendar.service.notification.SharedPreferencesNotificationHistory;
 import com.slamcode.goalcalendar.settings.AppSettingsManager;
 
@@ -33,10 +35,10 @@ public class ServiceDagger2Module {
             PersistenceContext persistenceContext,
             AppSettingsManager settingsManager,
             NotificationHistory notificationHistory,
+            PlansSummaryDescriptionProvider descriptionProvider,
             Logger logger)
     {
-
-        // todo: consider putting all providers dependencies into injectable proeprties rather tha constructors
+        // todo: consider putting all providers dependencies into injectable properties rather than constructors
         HashMap<String, NotificationProvider> providerHashMap = new HashMap<>();
 
         providerHashMap.put(PlannedForTodayNotificationProvider.class.getName(),
@@ -45,6 +47,9 @@ public class ServiceDagger2Module {
 
         providerHashMap.put(EndOfDayNotificationProvider.class.getName(),
                 new EndOfDayNotificationProvider(applicationContext, settingsManager, notificationHistory, logger));
+
+        providerHashMap.put(PlansProgressNotificationProvider.class.getName(),
+                new PlansProgressNotificationProvider(applicationContext, settingsManager, notificationHistory, logger, descriptionProvider));
 
         return providerHashMap;
     }
@@ -64,7 +69,6 @@ public class ServiceDagger2Module {
     {
         return new SnackbarShowUpAutoMarkTasksCommand(applicationContext, persistenceContext, settingsManager);
     }
-
 
     @Provides
     @Singleton

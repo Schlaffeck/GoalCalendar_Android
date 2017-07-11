@@ -16,7 +16,7 @@ import com.slamcode.goalcalendar.settings.AppSettingsManager;
  * Created by smoriak on 03/07/2017.
  */
 
-public class PlansProgressNotificationProvider implements NotificationProvider {
+public final class PlansProgressNotificationProvider implements NotificationProvider {
 
     public final static String NOTIFICATION_ID_STRING = "PlansProgress";
 
