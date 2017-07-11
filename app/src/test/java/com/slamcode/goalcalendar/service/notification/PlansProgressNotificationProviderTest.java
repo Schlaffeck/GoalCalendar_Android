@@ -1,14 +1,18 @@
 package com.slamcode.goalcalendar.service.notification;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.MonthlyGoalsActivity;
 import com.slamcode.goalcalendar.R;
+import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.diagniostics.Logger;
 import com.slamcode.goalcalendar.planning.DateTime;
+import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryDescriptionProvider;
 import com.slamcode.goalcalendar.settings.AppSettingsManager;
@@ -167,5 +171,34 @@ public class PlansProgressNotificationProviderTest {
         verify(descriptionProviderMock, times(1)).provideDescriptionForMonth(2017, Month.MAY);
         verify(contextMock, times(1)).getDateTimeNow();
         verifyNoMoreInteractions(contextMock);
+    }
+
+    @Test
+    public void plansProgressNotificationProvider_scheduleNotification_test() {
+
+        // orchestrate mocks
+        ApplicationContext contextMock = Mockito.mock(ApplicationContext.class);
+        AppSettingsManager appSettingsManagerMock = Mockito.mock(AppSettingsManager.class);
+        Logger loggerMock = mock(Logger.class);
+
+        Intent intent = mock(Intent.class);
+        when(contextMock.createIntent(NotificationPublisher.class)).thenReturn(intent);
+        PendingIntent pendingIntent = mock(PendingIntent.class);
+        when(contextMock.getBroadcast(3, intent, PendingIntent.FLAG_UPDATE_CURRENT)).thenReturn(pendingIntent);
+        final AlarmManager alarmManager = mock(AlarmManager.class);
+        when(contextMock.getSystemService(Context.ALARM_SERVICE)).thenReturn(alarmManager);
+
+        PlansSummaryDescriptionProvider descriptionProvider = mock(PlansSummaryDescriptionProvider.class);
+        // create provider
+        NotificationHistory notificationHistoryMock = Mockito.mock(NotificationHistory.class);
+
+        PlansProgressNotificationProvider provider = new PlansProgressNotificationProvider(contextMock, appSettingsManagerMock, notificationHistoryMock, loggerMock, descriptionProvider);
+        // run method
+        provider.scheduleNotification();
+
+        // verify mocks
+        java.util.Calendar calendar = DateTimeHelper.getTodayCalendar(16, 0, 0);
+        verify(intent, times(1)).putExtra(NotificationScheduler.NOTIFICATION_PROVIDER_NAME, PlansProgressNotificationProvider.class.getName());
+        verify(alarmManager, times(1)).set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 }

@@ -1,7 +1,9 @@
 package com.slamcode.goalcalendar.service.notification;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 
 import com.slamcode.goalcalendar.ApplicationContext;
@@ -9,8 +11,11 @@ import com.slamcode.goalcalendar.MonthlyGoalsActivity;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.diagniostics.Logger;
 import com.slamcode.goalcalendar.planning.DateTime;
+import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryDescriptionProvider;
 import com.slamcode.goalcalendar.settings.AppSettingsManager;
+
+import java.util.Calendar;
 
 /**
  * Created by smoriak on 03/07/2017.
@@ -78,6 +83,17 @@ public final class PlansProgressNotificationProvider implements NotificationProv
 
     @Override
     public void scheduleNotification() {
+        Calendar inTime = DateTimeHelper.getTodayCalendar(16, 0, 0);
 
+        Intent notificationIntent = this.applicationContext.createIntent(NotificationPublisher.class);
+        notificationIntent.putExtra(NotificationScheduler.NOTIFICATION_PROVIDER_NAME, PlansProgressNotificationProvider.class.getName());
+        PendingIntent pendingIntent = this.applicationContext.getBroadcast(PlansProgressNotificationProvider.NOTIFICATION_ID,
+                notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager)this.applicationContext.getSystemService(Context.ALARM_SERVICE);
+
+        this.logger.v(LOG_TAG, String.format("Scheduled middle day plans progress notification in time: %1$tb %1$td %1$tY at %1$tI:%1$tM %1$Tp", inTime));
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, inTime.getTimeInMillis(), pendingIntent);
     }
 }
