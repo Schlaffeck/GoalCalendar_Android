@@ -92,6 +92,24 @@
     <string name="monthly_plans_summary_category_description_monthNotStartedYet">Miesiąc się jeszcze nie rozpoczął</string>
     <string name="monthly_plans_summary_category_description_monthNotStartedYet_somethingDone">Miesiąc się jeszcze nie zaczął. Czy te wykonane już plany to nie pomyłka?</string>
 
+    <!-- month progress summary descriptions -->
+    <string name="monthly_plans_summary_progressMonth_noCategories_title">Brak kategorii</string>
+    <string name="monthly_plans_summary_progressMonth_noCategories_description">Zdefiniuj kategorie dla tego miesiąca</string>
+    <string name="monthly_plans_summary_progressMonth_monthJustStarted_title">Nowy miesiac rozpoczęty</string>
+    <string name="monthly_plans_summary_progressMonth_monthJustStarted_description">Zaplanuj swoje aktywności</string>
+    <string name="monthly_plans_summary_progressMonth_nothingDone_title">Jeszcze nic nie wykonano</string>
+    <string name="monthly_plans_summary_progressMonth_nothingDone_description">Zacznij realizować swoje plany</string>
+    <string name="monthly_plans_summary_progressMonth_oneCategoryNotStarted_title">Nie rozpoczęta kategoria</string>
+    <string name="monthly_plans_summary_progressMonth_oneCategoryNotStarted_description" formatted="false">Spróbuj wykponać dzis coś w kategorii %s</string>
+    <string name="monthly_plans_summary_progressMonth_someCategoriesNotStarted_title">Nie zapomnij o tych kategoriach</string>
+    <string name="monthly_plans_summary_progressMonth_someCategoriesNotStarted_description">%d kategorie wciąż czekają na rozpoczęcie</string>
+    <string name="monthly_plans_summary_progressMonth_progressSlower_title">Jesteś trochę do tyłu z planami</string>
+    <string name="monthly_plans_summary_progressMonth_progressSlower_description">Może uda Ci się dzisiaj zrobić coś dodatkowego</string>
+    <string name="monthly_plans_summary_progressMonth_progressRegular_title">Wszystko idzie zgodnie z planem</string>
+    <string name="monthly_plans_summary_progressMonth_progressRegular_description">Sprawdź, co możesz zrobić w kolejne dni</string>
+    <string name="monthly_plans_summary_progressMonth_progressFaster_title">Dobrze Ci idzie, oby tak dalej</string>
+    <string name="monthly_plans_summary_progressMonth_progressFaster_description">Wypełniasz kategorie szybciej niż zaplanowano</string>
+
     <!-- notification -->
     <string name="notification_plannedForToday_title">Na dziś</string>
     <string name="notification_plannedForToday_content">Masz %d rzeczy zaplanowane na dzisiaj</string>

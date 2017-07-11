@@ -67,4 +67,21 @@ public class CollectionUtils {
 
         return result;
     }
+
+    public static <ParentType> ParentType singleOrDefault(Iterable<ParentType> iterable, ElementSelector<ParentType, Boolean> elementPredicate)
+    {
+        ParentType result = null;
+        for(ParentType item : iterable)
+        {
+            if(elementPredicate.select(item))
+            {
+                if(result != null)
+                    return null;
+
+                result = item;
+            }
+        }
+
+        return result;
+    }
 }

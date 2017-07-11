@@ -79,7 +79,7 @@
     <string name="monthly_plans_summary_selectedCategory_failed_tasks" formatted="false">● %d failed</string>
     <string name="monthly_plans_summary_selectedCategory_planned_tasks" formatted="false">● %d planned</string>
 
-    <!-- summary description -->
+    <!-- category summary description -->
     <string name="monthly_plans_summary_category_description_progressMonth_eq_progressCategory_neq_zero">Everything goes as planned. Well done.</string>
     <string name="monthly_plans_summary_category_description_progressMonth_eq_progressCategory_eq_zero">New month just began, start making a use of it.</string>
     <string name="monthly_plans_summary_category_description_progressMonth_lt_progressCategory_eq_zero">Jump start. Great, keep up the good work.</string>
@@ -94,6 +94,23 @@
     <string name="monthly_plans_summary_category_description_progressCategory_notDoneBeforeEndOfMonth">Still some work to do here. There are couple of days left, so maybe focus on this category to keep up with plans.</string>
     <string name="monthly_plans_summary_category_description_monthNotStartedYet">Month not started yet</string>
     <string name="monthly_plans_summary_category_description_monthNotStartedYet_somethingDone">Month did not start yet. Have you maybe checked some fields by mistake?</string>
+
+    <!-- month progress summary descriptions -->
+    <string name="monthly_plans_summary_progressMonth_noCategories_title">No categories</string>
+    <string name="monthly_plans_summary_progressMonth_noCategories_description">Define categories for this month</string>
+    <string name="monthly_plans_summary_progressMonth_monthJustStarted_title">New month started</string>
+    <string name="monthly_plans_summary_progressMonth_monthJustStarted_description">Plan your activities</string>
+    <string name="monthly_plans_summary_progressMonth_nothingDone_title">Nothing done yet</string>
+    <string name="monthly_plans_summary_progressMonth_nothingDone_description">Start realising your plans</string>
+    <string name="monthly_plans_summary_progressMonth_oneCategoryNotStarted_title">Category not started yet</string>
+    <string name="monthly_plans_summary_progressMonth_someCategoriesNotStarted_title">Do not forget those categories</string>
+    <string name="monthly_plans_summary_progressMonth_someCategoriesNotStarted_description">You still have %d categories to progress in this month</string>
+    <string name="monthly_plans_summary_progressMonth_progressSlower_title">You are little behind with plans</string>
+    <string name="monthly_plans_summary_progressMonth_progressSlower_description">Maybe you can do something more this next days</string>
+    <string name="monthly_plans_summary_progressMonth_progressRegular_title">Everything goes as planned</string>
+    <string name="monthly_plans_summary_progressMonth_progressRegular_description">Check what can you do next days</string>
+    <string name="monthly_plans_summary_progressMonth_progressFaster_title">You are ahead in plans, keep on the good work</string>
+    <string name="monthly_plans_summary_progressMonth_progressFaster_description">You are progressing faster than planned</string>
 
     <!-- notification -->
     <string name="notification_plannedForToday_title">Planned for today</string>
