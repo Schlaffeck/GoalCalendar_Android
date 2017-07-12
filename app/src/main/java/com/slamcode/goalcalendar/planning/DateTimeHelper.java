@@ -82,6 +82,12 @@ public final class DateTimeHelper {
         return isTodayDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
     }
 
+    public static boolean isPassedDate(int year, Month month, int day) {
+        Calendar calendarNow = Calendar.getInstance();
+
+        return getCalendar(year, month, day).before(calendarNow);
+    }
+
     public static String getWeekDayNameShort(int year, int month, int day) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month-1, day);

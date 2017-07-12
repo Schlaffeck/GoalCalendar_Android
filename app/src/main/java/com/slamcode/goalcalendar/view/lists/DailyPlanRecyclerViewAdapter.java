@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.slamcode.goalcalendar.R;
+import com.slamcode.goalcalendar.planning.DateTime;
 import com.slamcode.goalcalendar.planning.schedule.DateTimeChangeListener;
 import com.slamcode.goalcalendar.planning.schedule.DateTimeChangeListenersRegistry;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
@@ -24,6 +25,7 @@ import com.slamcode.goalcalendar.view.utils.ColorsHelper;
 import com.slamcode.goalcalendar.viewmodels.DailyPlansViewModel;
 
 import java.util.Collection;
+import java.util.Date;
 
 
 /**
@@ -67,6 +69,13 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
                 dayNumber);
     }
 
+    private boolean isPassedDate(DailyPlansViewModel dailyPlansViewModel)
+    {
+        if(this.yearMonthPair == null)
+        return false;
+        return DateTimeHelper.isPassedDate(this.yearMonthPair.getYear(), this.yearMonthPair.getMonth(), dailyPlansViewModel.getDayNumber());
+    }
+
     /**
      * View holder for daily plan
      */
@@ -83,6 +92,9 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
         @Override
         public void bindToModel(final DailyPlansViewModel modelObject) {
             super.bindToModel(modelObject);
+
+            if(isPassedDate(modelObject))
+                this.statusButton.setOmittedStatuses(PlanStatus.Planned);
 
             this.statusButton.addOnStateChangedListener(new GoalPlanStatusButton.OnStateChangedListener() {
                 @Override
