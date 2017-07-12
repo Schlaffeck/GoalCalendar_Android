@@ -21,6 +21,9 @@ public final class NotificationPublisher extends BroadcastReceiver {
     @Inject
     Map<String, NotificationProvider> notificationProviderMap;
 
+    @Inject
+    NotificationHistory notificationHistory;
+
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -42,5 +45,6 @@ public final class NotificationPublisher extends BroadcastReceiver {
             return;
 
         notificationManager.notify(provider.getNotificationId(), notification);
+        this.notificationHistory.markNotificationWasPublished(provider.getNotificationIdString());
     }
 }

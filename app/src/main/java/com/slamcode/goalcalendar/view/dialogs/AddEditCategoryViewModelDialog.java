@@ -140,7 +140,7 @@ public class AddEditCategoryViewModelDialog extends AddEditDialog<CategoryPlansV
         m.setFrequencyValue(this.frequencyValueNumberPicker.getValue());
 
         Object periodObject = this.frequencyPeriodSpinner.getSelectedItem();
-        m.setFrequencyPerion(ResourcesHelper.frequencyPeriodFromResourceString(
+        m.setFrequencyPeriod(ResourcesHelper.frequencyPeriodFromResourceString(
                 this.getActivity(),
                 periodObject.toString()));
         this.setConfirmed(true);

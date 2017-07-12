@@ -50,10 +50,10 @@
     <dimen name="monthly_goals_empty_view_layout_width">300dp</dimen>
 
     <!-- symbol font -->
-    <dimen name="symbol_font_size_small">8dp</dimen>
-    <dimen name="symbol_font_size">12dp</dimen>
-    <dimen name="symbol_font_size_medium">20dp</dimen>
-    <dimen name="symbol_font_size_large">30dp</dimen>
+    <dimen name="symbol_font_size_small">8sp</dimen>
+    <dimen name="symbol_font_size">12sp</dimen>
+    <dimen name="symbol_font_size_medium">20sp</dimen>
+    <dimen name="symbol_font_size_large">30sp</dimen>
 
     <!-- summary bottom -->
     <dimen name="monthly_goals_summary_pieChart_minHeight">300dp</dimen>

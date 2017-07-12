@@ -27,8 +27,9 @@ public class DataBasedPlansSummaryCalculatorTest {
         int year = 2017;
         Month month = Month.MARCH;
         CategoriesRepository repository = mockRepositoryWithDataForMonth(year, month, null);
+        PlansSummaryDescriptionProvider descriptionProvider = mockDescriptionProviderWithDataForMonth(year, month, null);
 
-        DataBasedPlansSummaryCalculator calculator = new DataBasedPlansSummaryCalculator(repository);
+        DataBasedPlansSummaryCalculator calculator = new DataBasedPlansSummaryCalculator(repository, descriptionProvider);
 
         PlansSummaryCalculator.PlansSummary summary = calculator.calculatePlansSummaryForMonth(year, month);
         assertNotNull(summary);
@@ -45,8 +46,9 @@ public class DataBasedPlansSummaryCalculatorTest {
         Month month = Month.MARCH;
         CategoryModel c1 = new CategoryModel(1, "C1", FrequencyPeriod.Month, 0);
         CategoriesRepository repository = mockRepositoryWithDataForMonth(year, month, null, c1);
+        PlansSummaryDescriptionProvider descriptionProvider = mockDescriptionProviderWithDataForMonth(year, month, null);
 
-        DataBasedPlansSummaryCalculator calculator = new DataBasedPlansSummaryCalculator(repository);
+        DataBasedPlansSummaryCalculator calculator = new DataBasedPlansSummaryCalculator(repository, descriptionProvider);
 
         PlansSummaryCalculator.PlansSummary summary = calculator.calculatePlansSummaryForMonth(year, month);
         assertNotNull(summary);
@@ -64,8 +66,9 @@ public class DataBasedPlansSummaryCalculatorTest {
         CategoryModel c1 = new CategoryModel(1, "C1", FrequencyPeriod.Month, 0);
         CategoryModel c2 = new CategoryModel(2, "C2", FrequencyPeriod.Month, 0);
         CategoriesRepository repository = mockRepositoryWithDataForMonth(year, month, null, c1, c2);
+        PlansSummaryDescriptionProvider descriptionProvider = mockDescriptionProviderWithDataForMonth(year, month, null);
 
-        DataBasedPlansSummaryCalculator calculator = new DataBasedPlansSummaryCalculator(repository);
+        DataBasedPlansSummaryCalculator calculator = new DataBasedPlansSummaryCalculator(repository, descriptionProvider);
 
         PlansSummaryCalculator.PlansSummary summary = calculator.calculatePlansSummaryForMonth(year, month);
         assertNotNull(summary);
@@ -85,8 +88,9 @@ public class DataBasedPlansSummaryCalculatorTest {
         c1.setDailyPlans(ModelHelper.createListOfDailyPlansForMonth(year, month));
 
         CategoriesRepository repository = mockRepositoryWithDataForMonth(year, month, null, c1);
+        PlansSummaryDescriptionProvider descriptionProvider = mockDescriptionProviderWithDataForMonth(year, month, null);
 
-        DataBasedPlansSummaryCalculator calculator = new DataBasedPlansSummaryCalculator(repository);
+        DataBasedPlansSummaryCalculator calculator = new DataBasedPlansSummaryCalculator(repository, descriptionProvider);
 
         // 1 nothing done = 0%
         PlansSummaryCalculator.PlansSummary summary = calculator.calculatePlansSummaryForMonth(year, month);
@@ -178,8 +182,9 @@ public class DataBasedPlansSummaryCalculatorTest {
         c2.setDailyPlans(ModelHelper.createListOfDailyPlansForMonth(year, month));
 
         CategoriesRepository repository = mockRepositoryWithDataForMonth(year, month, null, c1, c2);
+        PlansSummaryDescriptionProvider descriptionProvider = mockDescriptionProviderWithDataForMonth(year, month, null, c1, c2);
 
-        DataBasedPlansSummaryCalculator calculator = new DataBasedPlansSummaryCalculator(repository);
+        DataBasedPlansSummaryCalculator calculator = new DataBasedPlansSummaryCalculator(repository, descriptionProvider);
 
         // 1. nothing done = 0%
         PlansSummaryCalculator.PlansSummary summary = calculator.calculatePlansSummaryForMonth(year, month);
@@ -259,8 +264,9 @@ public class DataBasedPlansSummaryCalculatorTest {
         String categoryName = "C1";
 
         CategoriesRepository repositoryMock =  mockRepositoryWithDataForMonth(year, month, categoryName);
+        PlansSummaryDescriptionProvider descriptionProvider = mockDescriptionProviderWithDataForMonth(year, month, null, categoryName);
 
-        DataBasedPlansSummaryCalculator calculator = new DataBasedPlansSummaryCalculator(repositoryMock);
+        DataBasedPlansSummaryCalculator calculator = new DataBasedPlansSummaryCalculator(repositoryMock, descriptionProvider);
 
         // no plans - data not available
         PlansSummaryCalculator.PlansSummary result = calculator.calculatePlansSummaryForMonthInCategory(year, month, categoryName);
@@ -282,8 +288,9 @@ public class DataBasedPlansSummaryCalculatorTest {
 
         CategoryModel categoryModel = new CategoryModel(1, categoryName, FrequencyPeriod.Month, 0);
         CategoriesRepository repositoryMock =  mockRepositoryWithDataForMonth(year, month, categoryName, categoryModel);
+        PlansSummaryDescriptionProvider descriptionProvider = mockDescriptionProviderWithDataForMonth(year, month, null, categoryName);
 
-        DataBasedPlansSummaryCalculator calculator = new DataBasedPlansSummaryCalculator(repositoryMock);
+        DataBasedPlansSummaryCalculator calculator = new DataBasedPlansSummaryCalculator(repositoryMock, descriptionProvider);
 
         // zero freq - data not available
         PlansSummaryCalculator.PlansSummary result = calculator.calculatePlansSummaryForMonthInCategory(year, month, categoryName);
@@ -306,8 +313,9 @@ public class DataBasedPlansSummaryCalculatorTest {
         CategoryModel c1 = new CategoryModel(1, categoryName, FrequencyPeriod.Month, 0);
         CategoryModel c2 = new CategoryModel(2, categoryName, FrequencyPeriod.Month, 0);
         CategoriesRepository repositoryMock =  mockRepositoryWithDataForMonth(year, month, categoryName, c1, c2);
+        PlansSummaryDescriptionProvider descriptionProvider = mockDescriptionProviderWithDataForMonth(year, month, null, c1, c2);
 
-        DataBasedPlansSummaryCalculator calculator = new DataBasedPlansSummaryCalculator(repositoryMock);
+        DataBasedPlansSummaryCalculator calculator = new DataBasedPlansSummaryCalculator(repositoryMock, descriptionProvider);
 
         // zero freq - data not available
         PlansSummaryCalculator.PlansSummary result = calculator.calculatePlansSummaryForMonthInCategory(year, month, categoryName);
@@ -330,8 +338,9 @@ public class DataBasedPlansSummaryCalculatorTest {
         CategoryModel categoryModel = new CategoryModel(1, categoryName, FrequencyPeriod.Month, 5);
         categoryModel.setDailyPlans(ModelHelper.createListOfDailyPlansForMonth(year, month));
         CategoriesRepository repositoryMock =  mockRepositoryWithDataForMonth(year, month, categoryName, categoryModel);
+        PlansSummaryDescriptionProvider descriptionProvider = mockDescriptionProviderWithDataForMonth(year, month, null, categoryName);
 
-        DataBasedPlansSummaryCalculator calculator = new DataBasedPlansSummaryCalculator(repositoryMock);
+        DataBasedPlansSummaryCalculator calculator = new DataBasedPlansSummaryCalculator(repositoryMock, descriptionProvider);
 
         // 1. nothing done - 0%
         PlansSummaryCalculator.PlansSummary result = calculator.calculatePlansSummaryForMonthInCategory(year, month, categoryName);
@@ -405,8 +414,9 @@ public class DataBasedPlansSummaryCalculatorTest {
         c2.setDailyPlans(ModelHelper.createListOfDailyPlansForMonth(year, month));
 
         CategoriesRepository repositoryMock =  mockRepositoryWithDataForMonth(year, month, categoryName, c1, c2);
+        PlansSummaryDescriptionProvider descriptionProvider = mockDescriptionProviderWithDataForMonth(year, month, null, c1, c2);
 
-        DataBasedPlansSummaryCalculator calculator = new DataBasedPlansSummaryCalculator(repositoryMock);
+        DataBasedPlansSummaryCalculator calculator = new DataBasedPlansSummaryCalculator(repositoryMock, descriptionProvider);
 
         // zero freq - data not available
         PlansSummaryCalculator.PlansSummary result = calculator.calculatePlansSummaryForMonthInCategory(year, month, categoryName);
@@ -432,8 +442,9 @@ public class DataBasedPlansSummaryCalculatorTest {
         c2.setDailyPlans(ModelHelper.createListOfDailyPlansForMonth(year, month));
 
         CategoriesRepository repositoryMock =  mockRepositoryWithDataForMonth(year, month, categoryName, c1, c2);
+        PlansSummaryDescriptionProvider descriptionProvider = mockDescriptionProviderWithDataForMonth(year, month, null, c1, c2);
 
-        DataBasedPlansSummaryCalculator calculator = new DataBasedPlansSummaryCalculator(repositoryMock);
+        DataBasedPlansSummaryCalculator calculator = new DataBasedPlansSummaryCalculator(repositoryMock, descriptionProvider);
 
         // 1. nothing done
         PlansSummaryCalculator.PlansSummary result = calculator.calculatePlansSummaryForMonthInCategory(year, month, categoryName);
@@ -543,6 +554,32 @@ public class DataBasedPlansSummaryCalculatorTest {
         assertEquals(10, result.noOfSuccessfulTasks);
 
         verifyRepositoryWithDataForMonth(repositoryMock, year, month, categoryName, 5);
+    }
+
+    private PlansSummaryDescriptionProvider mockDescriptionProviderWithDataForMonth(int year, Month month, String description, CategoryModel... categories)
+    {
+        PlansSummaryDescriptionProvider descriptionProvider = mock(PlansSummaryDescriptionProvider.class);
+
+        if(categories.length == 0)
+            when(descriptionProvider.provideDescriptionForMonth(year, month)).thenReturn(description);
+        else {
+            for(CategoryModel categoryModel : categories)
+            when(descriptionProvider.provideDescriptionMonthInCategory(year, month, categoryModel.getName())).thenReturn(description);
+        }
+
+        return descriptionProvider;
+    }
+
+    private PlansSummaryDescriptionProvider mockDescriptionProviderWithDataForMonth(int year, Month month, String description, String categoryName)
+    {
+        PlansSummaryDescriptionProvider descriptionProvider = mock(PlansSummaryDescriptionProvider.class);
+
+        if(categoryName == null)
+            when(descriptionProvider.provideDescriptionForMonth(year, month)).thenReturn(description);
+        else
+                when(descriptionProvider.provideDescriptionMonthInCategory(year, month, categoryName)).thenReturn(description);
+
+        return descriptionProvider;
     }
 
     private CategoriesRepository mockRepositoryWithDataForMonth(int year, Month month, String categoryName, CategoryModel... categories)

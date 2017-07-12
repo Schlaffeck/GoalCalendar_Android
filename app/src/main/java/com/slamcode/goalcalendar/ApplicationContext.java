@@ -10,6 +10,8 @@ import android.graphics.drawable.Drawable;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
+import com.slamcode.goalcalendar.planning.DateTime;
+
 /**
  * general application context interface introduced toe ase mocking and testing
  * most common usage of context across project
@@ -34,4 +36,6 @@ public interface ApplicationContext {
     Object getSystemService(String serviceId);
 
     Snackbar showSnackbar(View view, String message, int durationFlag, String actionName, View.OnClickListener actionOnClickListener);
+
+    DateTime getDateTimeNow();
 }

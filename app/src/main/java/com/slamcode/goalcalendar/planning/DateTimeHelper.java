@@ -26,7 +26,7 @@ public final class DateTimeHelper {
         return Month.getCurrentMonth();
     }
 
-    public static boolean isCurrentDate(int year, int month, int day)
+    public static boolean isTodayDate(int year, int month, int day)
     {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
@@ -36,7 +36,7 @@ public final class DateTimeHelper {
             return false;
         }
 
-        if((cal.get(Calendar.MONTH)) != month-1)
+        if((cal.get(Calendar.MONTH)) != month)
         {
             return false;
         }
@@ -49,7 +49,7 @@ public final class DateTimeHelper {
         return true;
     }
 
-    public static boolean isCurrentDate(int year, Month month, int day)
+    public static boolean isTodayDate(int year, Month month, int day)
     {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
@@ -70,6 +70,16 @@ public final class DateTimeHelper {
         }
 
         return true;
+    }
+
+    public static boolean isTodayDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return isTodayDate(calendar);
+    }
+
+    public static boolean isTodayDate(Calendar calendar) {
+        return isTodayDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
     }
 
     public static String getWeekDayNameShort(int year, int month, int day) {
@@ -174,5 +184,18 @@ public final class DateTimeHelper {
     public static boolean isLeapYear(int year)
     {
         return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
+    }
+
+    public static Calendar getCalendar(int year, Month month, int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR,year);
+        calendar.set(Calendar.MONTH, month.getNumValue()-1);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        return calendar;
     }
 }

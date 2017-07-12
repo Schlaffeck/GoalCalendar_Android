@@ -14,6 +14,7 @@ import android.widget.Spinner;
 
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.dagger2.Dagger2ComponentContainer;
+import com.slamcode.goalcalendar.planning.schedule.DateTimeChangeListenersRegistry;
 import com.slamcode.goalcalendar.planning.YearMonthPair;
 import com.slamcode.goalcalendar.view.lists.CategoryDailyPlansRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.CategoryNameRecyclerViewAdapter;
@@ -108,6 +109,7 @@ public class Bindings {
                     .provideCategoryDailyPlansListViewAdapter(
                             injectData.applicationContext.getDefaultContext(),
                             (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                            injectData.dateTimeChangeListenersRegistry,
                             new YearMonthPair(),
                             itemsSource);
             recyclerView.setAdapter(adapter);
@@ -140,7 +142,8 @@ public class Bindings {
                     .provideDailyPlanHeaderRecyclerViewAdapter(
                             injectData.applicationContext.getDefaultContext(),
                             new YearMonthPair(),
-                            (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE));
+                            (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                            injectData.dateTimeChangeListenersRegistry);
             recyclerView.setAdapter(adapter);
         }
 
@@ -184,5 +187,7 @@ public class Bindings {
         @Inject
         ApplicationContext applicationContext;
 
+        @Inject
+        DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry;
     }
 }

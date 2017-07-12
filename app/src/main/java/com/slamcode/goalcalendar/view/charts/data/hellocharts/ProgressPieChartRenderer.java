@@ -4,10 +4,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
 import lecho.lib.hellocharts.model.PieChartData;
+import lecho.lib.hellocharts.model.SelectedValue;
 import lecho.lib.hellocharts.model.SliceValue;
 import lecho.lib.hellocharts.provider.PieChartDataProvider;
 import lecho.lib.hellocharts.renderer.PieChartRenderer;
@@ -20,6 +22,9 @@ import lecho.lib.hellocharts.view.Chart;
 public class ProgressPieChartRenderer extends PieChartRenderer {
 
     private PieChartDataProvider dataProvider;
+    private boolean slicesToggleEnabled;
+    private SelectedValue lastSetValue = new SelectedValue();
+    private PointF lastTouchCoordinates = new PointF();
 
     public ProgressPieChartRenderer(Context context, Chart chart, PieChartDataProvider dataProvider) {
         super(context, chart, dataProvider);
@@ -27,7 +32,48 @@ public class ProgressPieChartRenderer extends PieChartRenderer {
     }
 
     @Override
+    public void onChartSizeChanged() {
+        super.onChartSizeChanged();
+        this.calculateProgressSliceCircleOval(null);
+    }
+
+    @Override
+    public void setCircleFillRatio(float fillRatio) {
+        super.setCircleFillRatio(fillRatio);
+        this.calculateProgressSliceCircleOval(null);
+    }
+
+    @Override
+    public boolean checkTouch(float touchX, float touchY) {
+        if(slicesToggleEnabled)
+        {
+            boolean wasTouched = super.checkTouch(touchX, touchY);
+            if(wasTouched && selectedValue.isSet()) {
+                if(lastTouchCoordinates.equals(touchX, touchY))
+                {
+                    //lastTouchCoordinates = new PointF();
+                }
+                else {
+                    this.lastTouchCoordinates = new PointF(touchX, touchY);
+                    if (selectedValue.getFirstIndex() == this.lastSetValue.getFirstIndex()) {
+                        this.lastSetValue.clear();
+                        this.selectedValue.clear();
+                    }
+                    else
+                        this.lastSetValue.set(selectedValue);
+                }
+            }
+            return wasTouched;
+        }
+
+        return super.checkTouch(touchX, touchY);
+    }
+
+    @Override
     public void draw(Canvas canvas) {
+        if(slicesToggleEnabled
+                && !selectedValue.isSet())
+            selectedValue.set(lastSetValue);
         super.draw(canvas);
         // within currently drawn slices set the progress slices
         this.drawProgressOnSlices(canvas);
@@ -80,7 +126,7 @@ public class ProgressPieChartRenderer extends PieChartRenderer {
     {
         Rect contentRect = computator.getContentRectMinusAllMargins();
 
-        float progressValue = 1.0f * sliceValue.getProgressValue() / sliceValue.getThresholdValue();
+        float progressValue = sliceValue != null ? 1.0f * sliceValue.getProgressValue() / sliceValue.getThresholdValue() : 1f;
         if(progressValue > 1f)
             progressValue = 1.01f;
         final float circleRadius = Math.min(contentRect.width() / 2f, contentRect.height() / 2f) * progressValue;
@@ -108,5 +154,13 @@ public class ProgressPieChartRenderer extends PieChartRenderer {
         }
 
         return maxSum;
+    }
+
+    public boolean isSlicesToggleEnabled() {
+        return slicesToggleEnabled;
+    }
+
+    public void setSlicesToggleEnabled(boolean slicesToggleEnabled) {
+        this.slicesToggleEnabled = slicesToggleEnabled;
     }
 }

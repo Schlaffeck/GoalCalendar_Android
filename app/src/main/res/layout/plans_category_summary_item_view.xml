@@ -25,8 +25,7 @@
             android:text="@{vm.name}"
             android:textColor="@color/colorPrimary"/>
         <ProgressBar
-            android:layout_alignParentLeft="true"
-            android:layout_alignBottom="@id/plans_category_summary_item_name_textView"        android:layout_height="wrap_content"
+            android:layout_height="wrap_content"
             android:indeterminate="false"
             android:progress="@{vm.progressPercentageInteger}"
             android:minWidth="200dp"
@@ -58,19 +57,19 @@
            android:layout_height="wrap_content"
            android:textColor="@color/planningStateButton_stateSuccess_foregroundColor"
            android:textSize="@dimen/symbol_font_size"
-           android:text='@{String.format("● %d ", vm.noOfSuccessfulTasks)}'/>
+           android:text='@{String.format("%d/%d ● ", vm.noOfSuccessfulTasks, vm.noOfExpectedTasks)}'/>
        <TextView
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:textColor="@color/planningStateButton_stateFailed_foregroundColor"
            android:textSize="@dimen/symbol_font_size"
-           android:text='@{String.format("● %d ", vm.noOfFailedTasks)}'/>
+           android:text='@{String.format("%d ● ", vm.noOfFailedTasks)}'/>
        <TextView
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:textColor="@color/planningStateButton_stateEmpty_foregroundColor"
+           android:textColor="@color/planningStateButton_statePlanned_foregroundColor"
            android:textSize="@dimen/symbol_font_size"
-           android:text='@{String.format("● %d ", vm.noOfExpectedTasks)}'/>
+           android:text='@{String.format("%d ● ", vm.noOfPlannedTasks)}'/>
     </LinearLayout>
 </RelativeLayout>
 </layout>

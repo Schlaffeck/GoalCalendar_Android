@@ -9,4 +9,6 @@ public interface Logger {
     void d(String logTag, String message);
 
     void v(String logTag, String message);
+
+    void e(String logTag, String message);
 }

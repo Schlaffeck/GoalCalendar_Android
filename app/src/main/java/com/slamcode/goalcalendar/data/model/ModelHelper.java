@@ -1,7 +1,9 @@
 package com.slamcode.goalcalendar.data.model;
 
 import com.slamcode.collections.ElementCreator;
+import com.slamcode.collections.ElementSelector;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
+import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.PlanStatus;
 
@@ -58,5 +60,20 @@ public class ModelHelper {
                 return dailyPlanModel != null;
             }
         };
+    }
+
+    public static int countNoOfExpectedTasks(CategoryModel categoryModel)
+    {
+        return categoryModel.getFrequencyValue() * (categoryModel.getPeriod() == FrequencyPeriod.Week ? 4 : 1);
+    }
+
+    public static int countNoOfTasksWithStatus(CategoryModel categoryModel, final PlanStatus status)
+    {
+        return com.slamcode.collections.CollectionUtils.sum(categoryModel.getDailyPlans(), new ElementSelector<DailyPlanModel, Integer>() {
+            @Override
+            public Integer select(DailyPlanModel parent) {
+                return parent == null || parent.getStatus() != status ? 0 : 1;
+            }
+        });
     }
 }

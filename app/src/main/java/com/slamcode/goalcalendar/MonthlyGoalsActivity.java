@@ -1,8 +1,8 @@
 package com.slamcode.goalcalendar;
 
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
@@ -13,19 +13,16 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.slamcode.goalcalendar.planning.schedule.DateTimeChangedService;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract;
 import com.slamcode.goalcalendar.dagger2.ComposableApplication;
@@ -81,7 +78,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     @Inject
     PresentersSource presentersSource;
 
-    private GestureDetectorCompat gestureDetector;
+    @Inject
+    DateTimeChangedService dateTimeChangedService;
 
     private BottomSheetBehavior bottomSheetBehavior;
 
@@ -131,20 +129,18 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        this.gestureDetector.onTouchEvent(event);
-        return super.onTouchEvent(event);
-    }
-
-    @Override
     protected void onStart() {
         super.onStart();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_DATE_CHANGED);
+        this.registerReceiver(this.dateTimeChangedService, intentFilter);
     }
 
     @Override
     protected void onStop() {
         if(this.persistenceContext != null)
             this.persistenceContext.persistData();
+        this.unregisterReceiver(this.dateTimeChangedService);
         super.onStop();
     }
 
@@ -213,7 +209,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         this.setSupportActionBar((Toolbar)this.findViewById(R.id.toolbar));
         this.setupPresenter();
         this.setupRecyclerViews();
-        this.setupSwipeListener();
         this.setupBottomSheetBehavior();
         this.runStartupCommands();
     }
@@ -244,23 +239,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         capp.getApplicationComponent().inject(this);
     }
 
-    private void setupSwipeListener()
-    {
-        this.gestureDetector = new GestureDetectorCompat(this, new HorizontalFlingGestureListener());
-        this.categoryNamesRecyclerView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return gestureDetector.onTouchEvent(event);
-            }
-        });
-        this.emptyContentHorizontalScrollView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return gestureDetector.onTouchEvent(event);
-            }
-        });
-    }
-
     private void scrollToCurrentDate()
     {
         if(this.activityViewModel.getMonth() != DateTimeHelper.getCurrentMonth()
@@ -272,52 +250,5 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         dayToScrollTo = (dayToScrollTo > 0 ? dayToScrollTo : 0);
         int width = (int) this.getResources().getDimension(R.dimen.monthly_goals_table_day_plan_column_width);
         daysPlanScrollView.smoothScrollTo(dayToScrollTo * width, 0);
-    }
-
-    private class HorizontalFlingGestureListener extends GestureDetector.SimpleOnGestureListener{
-
-        private static final String LOG_TAG = "GOAL_GestDet";
-
-        private static final int SWIPE_MIN_DISTANCE = 120;
-        private static final int SWIPE_MAX_OFF_PATH = 250;
-        private static final int SWIPE_THRESHOLD_VELOCITY = 200;
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            Log.d(LOG_TAG, "onFling: " + e1 +"; "+ e2.toString());
-            return this.checkOnSwipe(e1, e2, velocityX, velocityY);
-        }
-
-        public boolean checkOnSwipe(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
-        {
-            try {
-                if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH){
-                    return false;
-                }
-                // right to left swipe
-                if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
-                        && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                    onLeftSwipe();
-                }
-                // left to right swipe
-                else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
-                        && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                    onRightSwipe();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return false;
-        }
-
-        private void onRightSwipe() {
-            Log.d(LOG_TAG, "Right swipe");
-            presenter.goToPreviousMonth(null);
-        }
-
-        private void onLeftSwipe() {
-            Log.d(LOG_TAG, "Left swipe");
-            presenter.goToNextMonth(null);
-        }
     }
 }
