@@ -111,6 +111,11 @@ public final class DateTimeHelper {
         return calendar;
     }
 
+    public static DateTime getDateTime(int year, Month month, int day)
+    {
+        return new DateTime(getCalendar(year, month, day));
+    }
+
     public static DateTime getYesterdayDateTime() {
         return new DateTime(getYesterdayCalendar());
     }

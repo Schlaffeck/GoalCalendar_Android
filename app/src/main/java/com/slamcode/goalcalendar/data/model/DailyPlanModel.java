@@ -19,6 +19,8 @@ public class DailyPlanModel extends BaseObservable implements Identifiable<Integ
 
     private int dayNumber;
 
+    private String description;
+
     public DailyPlanModel()
     {
 
@@ -58,6 +60,14 @@ public class DailyPlanModel extends BaseObservable implements Identifiable<Integ
 
     public void setDayNumber(int dayNumber) {
         this.dayNumber = dayNumber;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+            this.description = description;
     }
 
     @Override

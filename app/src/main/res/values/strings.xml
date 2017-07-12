@@ -127,4 +127,9 @@
     <string name="notification_plannedForToday_noPlans_content">Maybe you want to plan something?</string>
     <string name="notification_plannedForToday_noPlans_title">No plans for today</string>
 
+    <!-- Edit daily plans description dialog -->
+    <string name="edit_dailyPlans_dialog_description_editText_hint">Description</string>
+    <string name="edit_dailyPlans_dialog_description_header" formatted="false">%1$s, %2$tEEE, %2$tb %2$te %2$Y</string>
+    <string name="monthly_goals_dailyPlans_dialog_cancel_button_text">Cancel</string>
+    <string name="monthly_goals_dailyPlans_dialog_confirm_button_text">Confirm</string>
 </resources>

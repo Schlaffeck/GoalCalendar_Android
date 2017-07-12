@@ -2,6 +2,7 @@ package com.slamcode.goalcalendar.view.lists;
 
 import android.content.Context;
 import android.support.v7.util.SortedList;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.slamcode.goalcalendar.planning.schedule.DateTimeChangeListenersRegist
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.PlanStatus;
 import com.slamcode.goalcalendar.planning.YearMonthPair;
+import com.slamcode.goalcalendar.view.BaseSourceChangeRequest;
 import com.slamcode.goalcalendar.view.controls.GoalPlanStatusButton;
 import com.slamcode.goalcalendar.view.lists.base.ComparatorSortedListCallback;
 import com.slamcode.goalcalendar.view.lists.base.DefaultComparator;
@@ -68,7 +70,7 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
     /**
      * View holder for daily plan
      */
-    public class DailyPlanViewHolder extends BindableViewHolderBase<DailyPlansViewModel> implements DateTimeChangeListener{
+    public class DailyPlanViewHolder extends BindableViewHolderBase<DailyPlansViewModel> implements DateTimeChangeListener, View.OnLongClickListener{
 
         @ViewReference(R.id.plan_status_list_item_view_button)
         GoalPlanStatusButton statusButton;
@@ -93,6 +95,12 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
                 ColorsHelper.setSecondAccentBackgroundColor(this.getView());
 
             dateTimeChangeListenersRegistry.registerListener(this);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            this.getModelObject().notifySourceChangeRequested(new BaseSourceChangeRequest(DailyPlansViewModel.REQUEST_EDIT_DAILY_PLANS));
+            return false;
         }
 
         @Override

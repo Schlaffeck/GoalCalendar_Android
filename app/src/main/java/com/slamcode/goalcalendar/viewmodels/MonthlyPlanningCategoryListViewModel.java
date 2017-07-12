@@ -25,6 +25,7 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
     private final MonthViewModel monthViewModel;
     private final PlansSummaryCalculator plansSummaryCalculator;
     private final SourceChangeRequestNotifier.SourceChangeRequestListener<CategoryPlansViewModel> categoryChangeRequestListener;
+    private final SourceChangeRequestNotifier.SourceChangeRequestListener<DailyPlansViewModel> dailyPlansChangerequestListener;
     private ObservableList<CategoryPlansViewModel> categoryPlansList;
     private PlansSummaryCalculator.MonthPlansSummary monthPlansSummary;
     private OnPropertyChangedCallback categoryPropertyChangedListener;
@@ -33,12 +34,14 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
 
     public MonthlyPlanningCategoryListViewModel(MonthlyPlansModel model,
                                                 PlansSummaryCalculator plansSummaryCalculator,
-                                                SourceChangeRequestNotifier.SourceChangeRequestListener<CategoryPlansViewModel> categoryChangeRequestListener)
+                                                SourceChangeRequestNotifier.SourceChangeRequestListener<CategoryPlansViewModel> categoryChangeRequestListener,
+                                                SourceChangeRequestNotifier.SourceChangeRequestListener<DailyPlansViewModel> dailyPlansChangerequestListener)
     {
         this.model = model;
         this.monthViewModel = new MonthViewModel(model.getYear(), model.getMonth());
         this.plansSummaryCalculator = plansSummaryCalculator;
         this.categoryChangeRequestListener = categoryChangeRequestListener;
+        this.dailyPlansChangerequestListener = dailyPlansChangerequestListener;
         this.categoryPropertyChangedListener = new CategoryPropertyChangeListener();
         this.initializeCategoryPlansList();
         this.countPlansSummary(false);
@@ -142,6 +145,9 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
         CategoryPlansViewModel vm = new CategoryPlansViewModel(this.monthViewModel, category, this.plansSummaryCalculator);
         vm.addOnPropertyChangedCallback(this.categoryPropertyChangedListener);
         vm.addSourceChangeRequestListener(this.categoryChangeRequestListener);
+        for(DailyPlansViewModel dailyPlansViewModel : vm.getDailyPlansList())
+            dailyPlansViewModel.addSourceChangeRequestListener(this.dailyPlansChangerequestListener);
+
         return vm;
     }
 
