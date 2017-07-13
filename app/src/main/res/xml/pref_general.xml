@@ -1,8 +1,0 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <SwitchPreference
-        android:defaultValue="true"
-        android:key="MARK_UNCOMPLETED_AS_FAILED"
-        android:title="@string/pref_title_markPlannedAsFailed_switch"
-        android:summary="@string/pref_title_markPlannedAsFailed_desctiption_checkbox"/>
-</PreferenceScreen>

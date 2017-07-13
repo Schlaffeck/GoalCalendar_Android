@@ -136,8 +136,8 @@
     <string name="pref_header_notifications">Notifications</string>
 
     <string name="pref_title_showStartupNotifications">Start of day notification</string>
-
-    <string name="pref_title_showEODNotification">End of day notification</string>
+    <string name="pref_title_plansProgressNotification">Plans progress notification</string>
+    <string name="pref_title_showEODNotification">End of day summary notification</string>
 
     <string name="pref_title_markPlannedAsFailed_desctiption_checkbox">Planned, not completed tasks will be automatically marked as failed next day</string>
     <string name="pref_title_markPlannedAsFailed_switch">Automatically mark tasks</string>

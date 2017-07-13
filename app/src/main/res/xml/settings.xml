@@ -1,0 +1,27 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/pref_header_general">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="MARK_UNCOMPLETED_AS_FAILED"
+            android:title="@string/pref_title_markPlannedAsFailed_switch"
+            android:summary="@string/pref_title_markPlannedAsFailed_desctiption_checkbox"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_header_notifications">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="SHOW_STARTUP_NOTIFICATIONS"
+            android:title="@string/pref_title_showStartupNotifications"/>
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="SHOW_PLANS_PROGRESS_NOTIFICATIONS"
+            android:title="@string/pref_title_plansProgressNotification"/>
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="SHOW_EOD_NOTIFICATIONS"
+            android:title="@string/pref_title_showEODNotification"/>
+
+    </PreferenceCategory>
+</PreferenceScreen>
