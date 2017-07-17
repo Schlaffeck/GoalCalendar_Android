@@ -204,11 +204,15 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
     @Override
     public void onBackPressed() {
+
         if(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
             this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
         else {
             super.onBackPressed();
+
+            if(this.persistenceContext != null)
+                this.persistenceContext.persistData();
         }
     }
 
