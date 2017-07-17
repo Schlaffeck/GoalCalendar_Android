@@ -120,11 +120,14 @@ public class GoalPlanStatusButton extends ImageButton implements View.OnClickLis
     private PlanStatus provideNextStatus() {
 
         PlanStatus result = this.currentPlanStatus;
+        PlanStatus next = this.currentPlanStatus;
         boolean found = false;
         while(!found) {
-            PlanStatus next = result.nextStatus();
-            if(this.omittedStatuses == null || this.omittedStatuses.indexOf(next) == -1)
+            next = next.nextStatus();
+            if(this.omittedStatuses == null || this.omittedStatuses.indexOf(next) == -1) {
                 found = true;
+                result = next;
+            }
         }
 
         return result;

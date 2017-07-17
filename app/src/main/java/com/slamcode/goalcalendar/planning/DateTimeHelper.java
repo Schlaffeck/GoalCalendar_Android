@@ -83,7 +83,7 @@ public final class DateTimeHelper {
     }
 
     public static boolean isPassedDate(int year, Month month, int day) {
-        Calendar calendarNow = Calendar.getInstance();
+        Calendar calendarNow = getTodayCalendar();
 
         return getCalendar(year, month, day).before(calendarNow);
     }
