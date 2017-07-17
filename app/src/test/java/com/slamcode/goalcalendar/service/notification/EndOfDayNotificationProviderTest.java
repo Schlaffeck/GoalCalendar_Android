@@ -116,7 +116,7 @@ public class EndOfDayNotificationProviderTest {
         when(contextMock.createPendingIntent(0, intentMock, PendingIntent.FLAG_UPDATE_CURRENT)).thenReturn(pendingIntentMock);
 
         Notification notificationMock = mock(Notification.class);
-        when(contextMock.buildNotification(R.drawable.ic_done_white_24dp, "Title", "Content", 55, pendingIntentMock))
+        when(contextMock.buildNotification(R.drawable.ic_calendar_check_white_24dp, "Title", "Content", 55, pendingIntentMock))
                 .thenReturn(notificationMock);
 
         NotificationHistory notificationHistoryMock = Mockito.mock(NotificationHistory.class);
@@ -135,7 +135,7 @@ public class EndOfDayNotificationProviderTest {
         verify(contextMock, times(1)).getStringFromResources(R.string.notification_endOfDay_content);
         verify(contextMock, times(1)).getColorArgbFromResources(R.color.planningStateButton_stateSuccess_backgroundColor);
         verify(contextMock, times(1)).createPendingIntent(0, intentMock, PendingIntent.FLAG_UPDATE_CURRENT);
-        verify(contextMock, times(1)).buildNotification(R.drawable.ic_done_white_24dp, "Title", "Content", 55, pendingIntentMock);
+        verify(contextMock, times(1)).buildNotification(R.drawable.ic_calendar_check_white_24dp, "Title", "Content", 55, pendingIntentMock);
     }
 
 }
