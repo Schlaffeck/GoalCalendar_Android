@@ -24,6 +24,9 @@
     <string name="monthly_goals_category_dialog_Validation_name_edittext_error_empty">
         Nazwa kategorii nie może byc pusta
     </string>
+    <string name="monthly_goals_category_dialog_Validation_name_edittext_error_tooLong">
+       Maksylanie 40 znaków
+    </string>
 
     <!-- frequency period -->
     <string name="frequency_period_month">Miesiąc</string>

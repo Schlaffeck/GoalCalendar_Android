@@ -63,6 +63,12 @@ public class ProgressPieChartRenderer extends PieChartRenderer {
                         this.lastSetValue.set(selectedValue);
                 }
             }
+            else if(!wasTouched)
+            {
+                this.lastTouchCoordinates = new PointF(touchX, touchY);
+                this.lastSetValue.clear();
+                this.selectedValue.clear();
+            }
             return wasTouched;
         }
 

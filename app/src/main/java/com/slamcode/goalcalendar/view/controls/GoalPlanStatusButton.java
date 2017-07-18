@@ -19,6 +19,7 @@ import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.planning.PlanStatus;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,8 @@ public class GoalPlanStatusButton extends ImageButton implements View.OnClickLis
     private boolean initialized;
 
     private List<OnStateChangedListener> onStateChangedListeners = new ArrayList<>();
+
+    private List<PlanStatus> omittedStatuses;
 
     static
     {
@@ -111,7 +114,30 @@ public class GoalPlanStatusButton extends ImageButton implements View.OnClickLis
             return;
         }
 
-        this.setStatus(this.currentPlanStatus.nextStatus());
+        this.setStatus(this.provideNextStatus());
+    }
+
+    private PlanStatus provideNextStatus() {
+
+        PlanStatus result = this.currentPlanStatus;
+        PlanStatus next = this.currentPlanStatus;
+        boolean found = false;
+        while(!found) {
+            next = next.nextStatus();
+            if(this.omittedStatuses == null || this.omittedStatuses.indexOf(next) == -1) {
+                found = true;
+                result = next;
+            }
+        }
+
+        return result;
+    }
+
+    public void setOmittedStatuses(PlanStatus... omittedStatuses) {
+        if(omittedStatuses == null)
+            this.omittedStatuses = null;
+
+        this.omittedStatuses = Arrays.asList(omittedStatuses);
     }
 
     public interface OnStateChangedListener{

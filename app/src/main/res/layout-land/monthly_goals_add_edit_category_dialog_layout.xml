@@ -26,6 +26,7 @@
             android:layout_gravity="center"
             android:gravity="center_vertical"
             android:maxLines="1"
+            android:maxLength="40"
             android:layout_marginRight="@dimen/activity_vertical_margin"
             android:id="@+id/monthly_goals_category_dialog_name_edittext"/>
         <NumberPicker
