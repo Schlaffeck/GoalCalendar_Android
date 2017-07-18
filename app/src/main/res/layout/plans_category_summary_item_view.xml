@@ -8,7 +8,8 @@
     android:layout_height="wrap_content"
     android:gravity="fill_horizontal"
     android:height="?android:attr/listPreferredItemHeight"
-    android:padding="@dimen/default_padding">
+    android:padding="@dimen/default_padding"
+    android:animateLayoutChanges="true">
     <LinearLayout
         android:id="@+id/plans_category_summary_leftSide_layout"
         android:orientation="vertical"
