@@ -26,6 +26,11 @@ public class CategoryNameTextValidator extends TextViewValidator {
             result.setValid(false);
             result.setValidationErrorMessageResourceId(R.string.monthly_goals_category_dialog_Validation_name_edittext_error_empty);
         }
+        if(StringUtils.length(textView.getText().toString()) > 40)
+        {
+            result.setValid(false);
+            result.setValidationErrorMessageResourceId(R.string.monthly_goals_category_dialog_Validation_name_edittext_error_tooLong);
+        }
         else
         {
             result.setValid(true);
