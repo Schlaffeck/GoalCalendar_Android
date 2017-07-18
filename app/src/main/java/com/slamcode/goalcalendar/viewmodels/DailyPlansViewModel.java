@@ -2,6 +2,7 @@ package com.slamcode.goalcalendar.viewmodels;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.databinding.Observable;
 import android.support.annotation.NonNull;
 import android.view.View;
 
@@ -24,10 +25,12 @@ public class DailyPlansViewModel extends BaseObservable implements Comparable<Da
     DailyPlanModel model;
 
     private List<SourceChangeRequestListener<DailyPlansViewModel>> sourceChangeRequestListeners = new ArrayList<>();
+    private OnPropertyChangedCallback modelPropertyChangedCallback;
 
     public DailyPlansViewModel(DailyPlanModel model)
     {
         this.model = model;
+        this.bindToModel();
     }
 
     @Bindable
@@ -97,5 +100,26 @@ public class DailyPlansViewModel extends BaseObservable implements Comparable<Da
         {
             listener.sourceChangeRequested(this, request);
         }
+    }
+
+    private void bindToModel()
+    {
+        if(this.modelPropertyChangedCallback == null)
+            this.modelPropertyChangedCallback = new OnPropertyChangedCallback() {
+                @Override
+                public void onPropertyChanged(Observable sender, int propertyId) {
+                    if(propertyId == BR.status)
+                        notifyPropertyChanged(BR.status);
+                    if(propertyId == BR.dayNumber)
+                        notifyPropertyChanged(BR.dayNumber);
+                    if(propertyId == BR.description)
+                        notifyPropertyChanged(BR.description);
+                }
+            };
+
+        if(this.model != null)
+            this.model.addOnPropertyChangedCallback(this.modelPropertyChangedCallback);
+        else
+            this.model.removeOnPropertyChangedCallback(this.modelPropertyChangedCallback);
     }
 }

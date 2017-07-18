@@ -110,6 +110,11 @@ public final class DateTimeHelper {
         return calendar;
     }
 
+    public static DateTime getTodayDateTime()
+    {
+        return new DateTime(getTodayCalendar());
+    }
+
     public static Calendar getYesterdayCalendar() {
         Calendar calendar = getTodayCalendar();
 
