@@ -80,8 +80,8 @@ public class AddEditCategoryViewModelDialog extends AddEditDialog<CategoryPlansV
         this.categoryNameEditText.addTextChangedListener(nameValidator);
 
         this.frequencyValueNumberPicker.setMaxValue(31);
-        this.frequencyValueNumberPicker.setValue(0);
-        this.frequencyValueNumberPicker.setMinValue(0);
+        this.frequencyValueNumberPicker.setValue(1);
+        this.frequencyValueNumberPicker.setMinValue(1);
 
         ArrayAdapter<String> periodStringsAdapter = new ArrayAdapter<String>(
                 this.getActivity(),
