@@ -336,7 +336,7 @@ public class HelloChartsViewDataBinderTest {
         categoryPlansViewModel.getDailyPlansList().get(0).setStatus(PlanStatus.Success);
 
         // verify after
-        verify(pieChartViewMock).startDataAnimation();
+        verify(pieChartViewMock, times(2)).startDataAnimation();
 
         // end animation explicitly
         data.finish();
