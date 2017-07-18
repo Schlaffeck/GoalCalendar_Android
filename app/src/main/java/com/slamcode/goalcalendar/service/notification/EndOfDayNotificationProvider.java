@@ -69,7 +69,7 @@ public final class EndOfDayNotificationProvider implements NotificationProvider 
             resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             resultIntent.putExtra(NotificationScheduler.NOTIFICATION_ORIGINATED_FROM_FLAG, true);
         Notification result = this.context.buildNotification(
-                R.drawable.ic_done_white_24dp,
+                R.drawable.ic_calendar_check_white_24dp,
                 this.context.getStringFromResources(R.string.notification_endOfDay_title),
                 this.context.getStringFromResources(R.string.notification_endOfDay_content),
                 this.context.getColorArgbFromResources(R.color.planningStateButton_stateSuccess_backgroundColor),

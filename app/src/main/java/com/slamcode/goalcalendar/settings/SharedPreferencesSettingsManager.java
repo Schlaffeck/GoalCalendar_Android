@@ -25,6 +25,8 @@ public class SharedPreferencesSettingsManager implements AppSettingsManager {
     private final static String SHOW_EOD_NOTIFICATIONS_SETTING_NAME = "SHOW_EOD_NOTIFICATIONS";
     private final static boolean SHOW_EOD_NOTIFICATIONS_DEFAULT_VALUE = true;
 
+    private final static String SHOW_PLANS_PROGRESS_NOTIFICATIONS_SETTING_NAME = "SHOW_PLANS_PROGRESS_NOTIFICATIONS";
+    private final static boolean SHOW_PLANS_PROGRESS_NOTIFICATIONS_DEFAULT_VALUE = true;
 
     private final static String MARK_UNCOMPLETED_AS_FAILED_NAME = "MARK_UNCOMPLETED_AS_FAILED";
     private final static boolean MARK_UNCOMPLETED_AS_FAILED_VALUE = true;
@@ -81,5 +83,17 @@ public class SharedPreferencesSettingsManager implements AppSettingsManager {
     @Override
     public boolean getAutomaticallyMarkUncompletedTask() {
         return this.sharedPreferences.getBoolean(MARK_UNCOMPLETED_AS_FAILED_NAME, MARK_UNCOMPLETED_AS_FAILED_VALUE);
+    }
+
+    @Override
+    public boolean getShowPlansProgressNotification() {
+        return this.sharedPreferences.getBoolean(SHOW_PLANS_PROGRESS_NOTIFICATIONS_SETTING_NAME, SHOW_PLANS_PROGRESS_NOTIFICATIONS_DEFAULT_VALUE);
+    }
+
+    @Override
+    public void setShowPlansProgressNotification(boolean showPlansProgressNotification) {
+        SharedPreferences.Editor editor = this.sharedPreferences.edit();
+        editor.putBoolean(SHOW_PLANS_PROGRESS_NOTIFICATIONS_SETTING_NAME, showPlansProgressNotification);
+        editor.commit();
     }
 }

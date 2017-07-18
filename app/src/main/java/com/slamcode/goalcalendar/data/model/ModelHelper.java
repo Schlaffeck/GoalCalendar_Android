@@ -2,6 +2,7 @@ package com.slamcode.goalcalendar.data.model;
 
 import com.slamcode.collections.ElementCreator;
 import com.slamcode.collections.ElementSelector;
+import com.slamcode.goalcalendar.data.query.NumericalComparisonOperator;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.planning.Month;
@@ -58,6 +59,37 @@ public class ModelHelper {
                         ModelHelper.getDailyPlanIsOfStatusPredicate(planStatus, dayNumber));
 
                 return dailyPlanModel != null;
+            }
+        };
+    }
+
+    public static Predicate<CategoryModel> getCategoryOfProgressPredicate(final NumericalComparisonOperator operator, final float progressValue)
+    {
+        return new Predicate<CategoryModel>() {
+            @Override
+            public boolean evaluate(CategoryModel categoryModel) {
+                if (categoryModel == null)
+                    return false;
+
+                if (categoryModel.getDailyPlans() == null
+                        || categoryModel.getDailyPlans().isEmpty())
+                    return operator == NumericalComparisonOperator.EQUAL_TO && progressValue == 0.0f
+                            || operator == NumericalComparisonOperator.LESS_OR_EQUAL_TO && progressValue == 0.0f;
+
+                final int expectedTasksCount = countNoOfExpectedTasks(categoryModel);
+                final int successfulTasksCount = countNoOfTasksWithStatus(categoryModel, PlanStatus.Success);
+
+                final float progress = 1.0f * successfulTasksCount / expectedTasksCount;
+
+                switch (operator)
+                {
+                    case EQUAL_TO: return progress == progressValue;
+                    case LESS_OR_EQUAL_TO: return progress <= progressValue;
+                    case LESS_THAN: return progress < progressValue;
+                    case GREATER_OR_EQUAL_TO: return progress >= progressValue;
+                    case GREATER_THAN: return progress > progressValue;
+                    default: return false;
+                }
             }
         };
     }

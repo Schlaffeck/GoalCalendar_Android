@@ -182,7 +182,8 @@ public class DataBasedPlansSummaryCalculatorTest {
         c2.setDailyPlans(ModelHelper.createListOfDailyPlansForMonth(year, month));
 
         CategoriesRepository repository = mockRepositoryWithDataForMonth(year, month, null, c1, c2);
-        PlansSummaryDescriptionProvider descriptionProvider = mockDescriptionProviderWithDataForMonth(year, month, null, c1, c2);
+        PlansSummaryDescriptionProvider descriptionProvider = mockDescriptionProviderWithDataForMonth(year, month, "description", c1, c2);
+
 
         DataBasedPlansSummaryCalculator calculator = new DataBasedPlansSummaryCalculator(repository, descriptionProvider);
 
@@ -560,12 +561,9 @@ public class DataBasedPlansSummaryCalculatorTest {
     {
         PlansSummaryDescriptionProvider descriptionProvider = mock(PlansSummaryDescriptionProvider.class);
 
-        if(categories.length == 0)
-            when(descriptionProvider.provideDescriptionForMonth(year, month)).thenReturn(description);
-        else {
+            when(descriptionProvider.provideDescriptionForMonth(year, month)).thenReturn(new PlansSummaryDescriptionProvider.PlansSummaryDescription(null, description));
             for(CategoryModel categoryModel : categories)
             when(descriptionProvider.provideDescriptionMonthInCategory(year, month, categoryModel.getName())).thenReturn(description);
-        }
 
         return descriptionProvider;
     }
@@ -575,7 +573,7 @@ public class DataBasedPlansSummaryCalculatorTest {
         PlansSummaryDescriptionProvider descriptionProvider = mock(PlansSummaryDescriptionProvider.class);
 
         if(categoryName == null)
-            when(descriptionProvider.provideDescriptionForMonth(year, month)).thenReturn(description);
+            when(descriptionProvider.provideDescriptionForMonth(year, month)).thenReturn(new PlansSummaryDescriptionProvider.PlansSummaryDescription(null, description));
         else
                 when(descriptionProvider.provideDescriptionMonthInCategory(year, month, categoryName)).thenReturn(description);
 

@@ -27,7 +27,7 @@ public class DataBasedPlansSummaryCalculator implements PlansSummaryCalculator {
     public MonthPlansSummary calculatePlansSummaryForMonth(int year, Month month) {
         MonthPlansSummary plansSummary = new MonthPlansSummary(year, month);
         calculateMultipleCategoriesSummary(plansSummary, this.categoriesRepository.findForMonth(year, month));
-        plansSummary.description = descriptionProvider.provideDescriptionForMonth(year, month);
+        plansSummary.description = descriptionProvider.provideDescriptionForMonth(year, month).getDetails();
         return plansSummary;
     }
 

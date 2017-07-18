@@ -1,5 +1,7 @@
 package com.slamcode.goalcalendar.planning.summary;
 
+import com.slamcode.collections.CollectionUtils;
+import com.slamcode.collections.ElementSelector;
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.data.CategoriesRepository;
@@ -10,7 +12,11 @@ import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.PlanStatus;
 
+import org.apache.commons.collections4.KeyValue;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by smoriak on 29/05/2017.
@@ -32,15 +38,97 @@ public class SimplePlansDescriptionProvider implements PlansSummaryDescriptionPr
     }
 
     @Override
-    public String provideDescriptionForMonth(int year, Month month) {
-        return null;
+    public PlansSummaryDescription provideDescriptionForMonth(int year, Month month) {
+        PlansSummaryDescription result = new PlansSummaryDescription();
+
+        List<CategoryModel> categories = categoriesRepository.findForMonth(year, month);
+        if(categories == null || categories.size() == 0) {
+            result.setTitle(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_noCategories_title));
+            result.setDetails(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_noCategories_description));
+        }
+        else
+        {
+            double monthPlansProgress = SummaryCalculatorUtils.calculateCategoryProgress(categories);
+            DateTime dateTimeNow = this.applicationContext.getDateTimeNow();
+            double monthProgress = SummaryCalculatorUtils.calculateMonthProgress(year, month, dateTimeNow);
+            if(monthPlansProgress == 0.0)
+            {
+                if(monthProgress > 0) {
+                    result.setTitle(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_nothingDone_title));
+                    result.setDetails(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_nothingDone_description));
+                }
+                else
+                {
+                    result.setTitle(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_monthJustStarted_title));
+                    result.setDetails(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_monthJustStarted_description));
+                }
+            }
+            else{
+                // calculate each category independently
+                Map<CategoryModel, Double> map = SummaryCalculatorUtils.calculateProgressForEachCategory(categories);
+
+                int notStartedCategories = CollectionUtils.sum(map.values(), new ElementSelector<Double, Integer>() {
+                    @Override
+                    public Integer select(Double parent) {
+                        return parent == 0 ? 1 : 0;
+                    }
+                });
+
+                if(notStartedCategories == 0)
+                {
+                    // all cats in progress
+                    if(monthPlansProgress >= monthProgress + MONTH_TO_CATEGORY_PROGRESS_THRESHOLD)
+                    {
+                        result.setTitle(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_progressFaster_title));
+                        result.setDetails(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_progressFaster_description));
+                    }
+                    else if(monthPlansProgress <= monthProgress - MONTH_TO_CATEGORY_PROGRESS_THRESHOLD)
+                    {
+                        result.setTitle(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_progressSlower_title));
+                        result.setDetails(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_progressSlower_description));
+                    }
+                    else
+                    {
+                        result.setTitle(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_progressRegular_title));
+                        result.setDetails(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_progressRegular_description));
+                    }
+                }
+                else if(notStartedCategories == 1)
+                {
+                    // single category left alone
+                    Map.Entry<CategoryModel, Double> notStarted = CollectionUtils.singleOrDefault(map.entrySet(), new ElementSelector<Map.Entry<CategoryModel, Double>, Boolean>() {
+                        @Override
+                        public Boolean select(Map.Entry<CategoryModel, Double> parent) {
+                            return parent.getValue() == 0;
+                        }
+                    });
+                    result.setTitle(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_oneCategoryNotStarted_title));
+                    result.setDetails(
+                            String.format(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_oneCategoryNotStarted_description), notStarted.getKey().getName()));
+                }
+                else
+                {
+                    // some in progress some not started
+                    if(notStartedCategories < dateTimeNow.getDay())
+                    {
+                        // more not done than days
+                        result.setTitle(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_someCategoriesNotStarted_title));
+                        result.setDetails(
+                                String.format(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_someCategoriesNotStarted_description), notStartedCategories));
+                    }
+                }
+
+            }
+
+        }
+        return result;
     }
 
     @Override
     public String provideDescriptionMonthInCategory(int year, Month month, String categoryName) {
         List<CategoryModel> categoryModels = categoriesRepository.findForMonthWithName(year, month, categoryName);
-        double monthProgress = calculateMonthProgress(year, month);
-        double categoryProgress = calculateCategoryProgress(categoryModels);
+        double monthProgress = SummaryCalculatorUtils.calculateMonthProgress(year, month, this.applicationContext.getDateTimeNow());
+        double categoryProgress = SummaryCalculatorUtils.calculateCategoryProgress(categoryModels);
 
         String generalProgressDescription = this.provideGeneralProgressDescription(monthProgress, categoryProgress);
 
@@ -111,33 +199,5 @@ public class SimplePlansDescriptionProvider implements PlansSummaryDescriptionPr
             return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_gt_progressCategory_neq_zero);
 
         return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_eq_progressCategory_neq_zero);
-    }
-
-    private double calculateCategoryProgress(List<CategoryModel> categoryModels) {
-
-        int sumOfTasks = 0;
-        int tasksDone = 0;
-        for (CategoryModel categoryModel : categoryModels)
-        {
-            sumOfTasks += ModelHelper.countNoOfExpectedTasks(categoryModel);
-            tasksDone += ModelHelper.countNoOfTasksWithStatus(categoryModel, PlanStatus.Success);
-        }
-
-        return 1.0 * tasksDone / sumOfTasks;
-    }
-
-    private double calculateMonthProgress(int year, Month month)
-    {
-        DateTime dateTimeNow = this.applicationContext.getDateTimeNow();
-        if(dateTimeNow.getYear() > year
-                || dateTimeNow.getYear() == year && dateTimeNow.getMonth().getNumValue() > month.getNumValue())
-            return 1.0;
-
-        if(dateTimeNow.getYear() < year
-                || dateTimeNow.getYear() == year && dateTimeNow.getMonth().getNumValue() < month.getNumValue())
-            return -1.0;
-
-        double monthProgress = 1.0 * (dateTimeNow.getDay() -1) / DateTimeHelper.getDaysCount(year, month);
-        return monthProgress;
     }
 }
