@@ -1,5 +1,8 @@
 package com.slamcode.goalcalendar.view;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.databinding.InverseBindingAdapter;
@@ -13,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.slamcode.goalcalendar.ApplicationContext;
+import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.dagger2.Dagger2ComponentContainer;
 import com.slamcode.goalcalendar.planning.schedule.DateTimeChangeListenersRegistry;
 import com.slamcode.goalcalendar.planning.YearMonthPair;
@@ -177,6 +181,60 @@ public class Bindings {
     @InverseBindingAdapter(attribute = "bind:selectedValue", event = "bind:selectedValueAttrChanged")
     public static String captureSelectedValue(Spinner pAppCompatSpinner) {
         return (String) pAppCompatSpinner.getSelectedItem();
+    }
+
+    @BindingAdapter("bind:animatedVisibility")
+    public static void setVisibility(final View view,
+                                     final int visibility) {
+        // Were we animating before? If so, what was the visibility?
+        Integer endAnimVisibility =
+                (Integer) view.getTag(R.id.finalVisibility);
+        int oldVisibility = endAnimVisibility == null
+                ? view.getVisibility()
+                : endAnimVisibility;
+
+        if (oldVisibility == visibility) {
+            // just let it finish any current animation.
+            return;
+        }
+
+        boolean isVisibile = oldVisibility == View.VISIBLE;
+        boolean willBeVisible = visibility == View.VISIBLE;
+
+        view.setVisibility(View.VISIBLE);
+        float startAlpha = isVisibile ? 1f : 0f;
+        if (endAnimVisibility != null) {
+            startAlpha = view.getAlpha();
+        }
+        float endAlpha = willBeVisible ? 1f : 0f;
+
+        // Now create an animator
+        ObjectAnimator alpha = ObjectAnimator.ofFloat(view,
+                View.ALPHA, startAlpha, endAlpha);
+
+        alpha.addListener(new AnimatorListenerAdapter() {
+            private boolean isCanceled;
+
+            @Override
+            public void onAnimationStart(Animator anim) {
+                view.setTag(R.id.finalVisibility, visibility);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator anim) {
+                isCanceled = true;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator anim) {
+                view.setTag(R.id.finalVisibility, null);
+                if (!isCanceled) {
+                    view.setAlpha(1f);
+                    view.setVisibility(visibility);
+                }
+            }
+        });
+        alpha.start();
     }
 
     public static class Dagger2InjectData{

@@ -13,8 +13,7 @@
     android:id="@+id/monthly_goals_summary_content_layout"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_margin="@dimen/activity_horizontal_margin"
-    android:animateLayoutChanges="true">
+    android:layout_margin="@dimen/activity_horizontal_margin">
 
     <TextView
         android:id="@+id/monthly_goals_summary_generalProgress_textView"
@@ -45,24 +44,24 @@
 
     </com.slamcode.goalcalendar.view.charts.data.hellocharts.PieChartViewWithProgress>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="@{vm.monthlyPlans.hasSelectedCategory?View.VISIBLE:View.GONE}">
-            <include layout="@layout/monthly_goals_summary_selected_item_details_layout"
-                app:vm="@{vm.monthlyPlans.selectedCategory}"/>
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            bind:animatedVisibility="@{vm.monthlyPlans.hasSelectedCategory?View.VISIBLE:View.GONE}">
+                <include layout="@layout/monthly_goals_summary_selected_item_details_layout"
+                    app:vm="@{vm.monthlyPlans.selectedCategory}"/>
+        </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/monthly_goals_summary_categories_recyclerView"
-        android:layout_below="@id/monthly_goals_summary_daysLeft_textView"
-        android:orientation="vertical"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/monthly_goals_table_category_name_height"
-        bind:categorySummarySource="@{vm.monthlyPlans.categoryPlansList}">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/monthly_goals_summary_categories_recyclerView"
+            android:layout_below="@id/monthly_goals_summary_daysLeft_textView"
+            android:orientation="vertical"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/monthly_goals_table_category_name_height"
+            bind:categorySummarySource="@{vm.monthlyPlans.categoryPlansList}">
 
-    </android.support.v7.widget.RecyclerView>
+        </android.support.v7.widget.RecyclerView>
 </LinearLayout>
 </layout>
