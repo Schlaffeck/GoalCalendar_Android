@@ -103,7 +103,7 @@
     <string name="monthly_plans_summary_progressMonth_nothingDone_title">Jeszcze nic nie wykonano</string>
     <string name="monthly_plans_summary_progressMonth_nothingDone_description">Zacznij realizować swoje plany</string>
     <string name="monthly_plans_summary_progressMonth_oneCategoryNotStarted_title">Nie rozpoczęta kategoria</string>
-    <string name="monthly_plans_summary_progressMonth_oneCategoryNotStarted_description" formatted="false">Spróbuj wykponać dzis coś w kategorii %s</string>
+    <string name="monthly_plans_summary_progressMonth_oneCategoryNotStarted_description" formatted="false">Spróbuj wykonać dzis coś w kategorii %s</string>
     <string name="monthly_plans_summary_progressMonth_someCategoriesNotStarted_title">Nie zapomnij o tych kategoriach</string>
     <string name="monthly_plans_summary_progressMonth_someCategoriesNotStarted_description">%d kategorie wciąż czekają na rozpoczęcie</string>
     <string name="monthly_plans_summary_progressMonth_progressSlower_title">Jesteś trochę do tyłu z planami</string>
@@ -137,7 +137,7 @@
     <string name="pref_header_notifications">Powiadomienia</string>
 
     <string name="pref_title_showStartupNotifications">Na początek dnia</string>
-    <string name="pref_title_plansProgressNotification">O postepach w planach</string>
+    <string name="pref_title_plansProgressNotification">Podczas dnia o postępach w planach</string>
     <string name="pref_title_showEODNotification">Podsumowanie na koniec dnia</string>
 
     <string name="pref_title_markPlannedAsFailed_switch">Automatyczne oznaczanie</string>

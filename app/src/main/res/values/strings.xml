@@ -105,6 +105,7 @@
     <string name="monthly_plans_summary_progressMonth_monthJustStarted_description">Plan your activities</string>
     <string name="monthly_plans_summary_progressMonth_nothingDone_title">Nothing done yet</string>
     <string name="monthly_plans_summary_progressMonth_nothingDone_description">Start realising your plans</string>
+    <string name="monthly_plans_summary_progressMonth_oneCategoryNotStarted_description" formatted="false">Try to do something in category %s today</string>
     <string name="monthly_plans_summary_progressMonth_oneCategoryNotStarted_title">Category not started yet</string>
     <string name="monthly_plans_summary_progressMonth_someCategoriesNotStarted_title">Do not forget those categories</string>
     <string name="monthly_plans_summary_progressMonth_someCategoriesNotStarted_description">You still have %d categories to progress in this month</string>
