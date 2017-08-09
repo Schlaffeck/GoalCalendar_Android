@@ -1,9 +1,7 @@
 package com.slamcode.goalcalendar.onboarding;
 
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,9 +14,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.slamcode.goalcalendar.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OnboardingActivity extends AppCompatActivity {
 
@@ -42,8 +44,6 @@ public class OnboardingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -51,7 +51,6 @@ public class OnboardingActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
     }
 
 
@@ -81,11 +80,10 @@ public class OnboardingActivity extends AppCompatActivity {
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        private static final String ARG_PAGE_TITLE = "page_title";
+        private static final String ARG_PAGE_DESCRIPTION = "page_description";
+        private static final String ARG_PAGE_IMAGE_RESOURCE_ID = "page_image_res_id";
 
         public PlaceholderFragment() {
         }
@@ -94,10 +92,12 @@ public class OnboardingActivity extends AppCompatActivity {
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
+        public static PlaceholderFragment newInstance(PageFragmentData data) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            args.putString(ARG_PAGE_DESCRIPTION, data.description);
+            args.putString(ARG_PAGE_TITLE, data.title);
+            args.putInt(ARG_PAGE_IMAGE_RESOURCE_ID, data.imageResourceId);
             fragment.setArguments(args);
             return fragment;
         }
@@ -105,9 +105,17 @@ public class OnboardingActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_onboarding, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            View rootView = inflater.inflate(R.layout.activity_onboarding_fragment, container, false);
+
+            TextView titleTextView = (TextView) rootView.findViewById(R.id.onboarding_fragment_title_label);
+            titleTextView.setText(this.getArguments().getString(ARG_PAGE_TITLE));
+
+            TextView descTextView = (TextView) rootView.findViewById(R.id.onboarding_fragment_description_label);
+            descTextView.setText(this.getArguments().getString(ARG_PAGE_DESCRIPTION));
+
+            ImageView imageView = (ImageView) rootView.findViewById(R.id.onboarding_fragment_image);
+            imageView.setImageResource(this.getArguments().getInt(ARG_PAGE_IMAGE_RESOURCE_ID));
+
             return rootView;
         }
     }
@@ -118,34 +126,53 @@ public class OnboardingActivity extends AppCompatActivity {
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+        private List<PageFragmentData> pagesDataList;
+
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+            this.initializePagesData();
         }
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            return PlaceholderFragment.newInstance(pagesDataList.get(position));
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            return this.pagesDataList.size();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "SECTION 1";
-                case 1:
-                    return "SECTION 2";
-                case 2:
-                    return "SECTION 3";
-            }
-            return null;
+            return this.pagesDataList.get(position).title;
+        }
+
+        private void initializePagesData()
+        {
+            this.pagesDataList = new ArrayList<>();
+
+            this.pagesDataList.add(new PageFragmentData("Page 1", "Description 1", R.drawable.calendar_check, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary)));
+            this.pagesDataList.add(new PageFragmentData("Page 2", "Description 2", R.drawable.calendar_range, ContextCompat.getColor(getApplicationContext(), R.color.colorAccent)));
+            this.pagesDataList.add(new PageFragmentData("Page 3", "Description 3", R.drawable.calendar_text, ContextCompat.getColor(getApplicationContext(), R.color.listAccentColor)));
+        }
+    }
+
+    private class PageFragmentData{
+
+        private int imageResourceId;
+
+        private String title;
+
+        private String description;
+
+        private int pageColorValue;
+
+        private PageFragmentData(String title, String description, int imageResourceId, int pageColorValue) {
+            this.title = title;
+            this.description = description;
+            this.imageResourceId = imageResourceId;
+            this.pageColorValue = pageColorValue;
         }
     }
 }
