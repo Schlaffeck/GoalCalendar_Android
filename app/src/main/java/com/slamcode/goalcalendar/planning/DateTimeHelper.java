@@ -88,6 +88,46 @@ public final class DateTimeHelper {
         return getCalendar(year, month, day).before(calendarNow);
     }
 
+    public static boolean isDateBefore(DateTime isThis, DateTime beforeThat) {
+
+        if(beforeThat.getYear() > isThis.getYear())
+            return true;
+
+        if(beforeThat.getYear() < isThis.getYear())
+            return false;
+
+        if(beforeThat.getMonth().getNumValue() > isThis.getMonth().getNumValue())
+            return true;
+
+        if(beforeThat.getMonth().getNumValue() < isThis.getMonth().getNumValue())
+            return false;
+
+        if(beforeThat.getDay() > isThis.getDay())
+            return true;
+
+        return false;
+    }
+
+    public static boolean isDateAfter(DateTime isThis, DateTime afterThat) {
+
+        if(afterThat.getYear() > isThis.getYear())
+            return false;
+
+        if(afterThat.getYear() < isThis.getYear())
+            return true;
+
+        if(afterThat.getMonth().getNumValue() > isThis.getMonth().getNumValue())
+            return false;
+
+        if(afterThat.getMonth().getNumValue() < isThis.getMonth().getNumValue())
+            return true;
+
+        if(afterThat.getDay() < isThis.getDay())
+            return true;
+
+        return false;
+    }
+
     public static String getWeekDayNameShort(int year, int month, int day) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month-1, day);

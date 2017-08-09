@@ -7,6 +7,7 @@ import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.databinding.InverseBindingAdapter;
 import android.databinding.InverseBindingListener;
+import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -96,11 +97,12 @@ public class Bindings {
     }
 
     @BindingAdapter("bind:categoryPlansSource")
-    public static void setCategoryPlansItemsSource(RecyclerView recyclerView, ObservableList<CategoryPlansViewModel> itemsSource)
+    public static void setCategoryPlansItemsSource(RecyclerView recyclerView, MonthlyPlanningCategoryListViewModel monthlyPlanningCategoryListViewModel)
     {
         if(recyclerView == null)
             return;
 
+        ObservableList<CategoryPlansViewModel> itemsSource = monthlyPlanningCategoryListViewModel.getCategoryPlansList();
         RecyclerView.Adapter adapter = recyclerView.getAdapter();
 
         boolean adapterUpToDate = false;
@@ -114,7 +116,7 @@ public class Bindings {
                             injectData.applicationContext.getDefaultContext(),
                             (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE),
                             injectData.dateTimeChangeListenersRegistry,
-                            new YearMonthPair(),
+                            new YearMonthPair(monthlyPlanningCategoryListViewModel.getMonthData().getYear(), monthlyPlanningCategoryListViewModel.getMonthData().getMonth()),
                             itemsSource);
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
@@ -123,6 +125,7 @@ public class Bindings {
         if(!adapterUpToDate && (adapter instanceof CategoryDailyPlansRecyclerViewAdapter))
         {
             CategoryDailyPlansRecyclerViewAdapter dataAdapter = (CategoryDailyPlansRecyclerViewAdapter) adapter;
+            dataAdapter.setYearMonthPair(new YearMonthPair(monthlyPlanningCategoryListViewModel.getMonthData().getYear(), monthlyPlanningCategoryListViewModel.getMonthData().getMonth()));
             dataAdapter.updateSourceCollection(itemsSource);
         }
     }
@@ -130,11 +133,12 @@ public class Bindings {
 
 
     @BindingAdapter("bind:daysListHeaderSource")
-    public static void setDaysListHeaderSource(RecyclerView recyclerView, Collection<DayInMonthViewModel> itemsSource)
+    public static void setDaysListHeaderSource(RecyclerView recyclerView, MonthViewModel monthViewModel)
     {
         if(recyclerView == null)
             return;
 
+        Collection<DayInMonthViewModel> itemsSource = monthViewModel.getDaysList();
         RecyclerView.Adapter adapter = recyclerView.getAdapter();
 
         if(adapter == null)
@@ -145,7 +149,7 @@ public class Bindings {
             adapter = injectData.itemsCollectionAdapterProvider
                     .provideDailyPlanHeaderRecyclerViewAdapter(
                             injectData.applicationContext.getDefaultContext(),
-                            new YearMonthPair(),
+                            new YearMonthPair(monthViewModel.getYear(), monthViewModel.getMonth()),
                             (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE),
                             injectData.dateTimeChangeListenersRegistry);
             recyclerView.setAdapter(adapter);
@@ -154,6 +158,7 @@ public class Bindings {
         if(adapter instanceof DailyPlanHeaderRecyclerViewAdapter)
         {
             DailyPlanHeaderRecyclerViewAdapter dataAdapter = (DailyPlanHeaderRecyclerViewAdapter) adapter;
+            dataAdapter.setYearMonthPair(new YearMonthPair(monthViewModel.getYear(), monthViewModel.getMonth()));
             dataAdapter.updateSourceCollection(itemsSource);
         }
     }

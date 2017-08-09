@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.planning;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Class representing easy accessible calendar with basic date time
@@ -10,41 +11,57 @@ import java.util.Calendar;
 public class DateTime {
 
     private final Calendar calendar;
+    private int day;
+    private Month month;
+    private int year;
+    private int hour;
+    private int minute;
+    private int second;
 
     public DateTime(Calendar calendar)
     {
         this.calendar = calendar;
+        this.day = this.calendar.get(Calendar.DAY_OF_MONTH);
+        this.month = Month.getMonthByNumber(this.calendar.get(Calendar.MONTH) +1);
+        this.year = this.calendar.get(Calendar.YEAR);
+        this.hour = this.calendar.get(Calendar.HOUR);
+        this.minute = this.calendar.get(Calendar.MINUTE);
+        this.second = this.calendar.get(Calendar.SECOND);
     }
 
     public DateTime(int year, Month month, int day)
     {
-        this.calendar = DateTimeHelper.getCalendar(year, month, day);
-
+        this(DateTimeHelper.getCalendar(year, month, day));
     }
 
-
     public int getDay(){
-        return this.calendar.get(Calendar.DAY_OF_MONTH);
+        return this.day;
     }
 
     public Month getMonth(){
-        return Month.getMonthByNumber(this.calendar.get(Calendar.MONTH) +1);
+        return this.month;
     }
 
     public int getYear()
     {
-        return this.calendar.get(Calendar.YEAR);
+        return this.year;
     }
 
     public int getHour(){
-        return this.calendar.get(Calendar.HOUR);
+        return this.hour;
     }
 
     public int getMinute(){
-        return this.calendar.get(Calendar.MINUTE);
+        return this.minute;
     }
 
     public int getSecond(){
-        return this.calendar.get(Calendar.SECOND);
+        return this.second;
+    }
+
+    @Override
+    public String toString() {
+
+        return String.format("%d-%d-%d %d:%d:%d", this.day, this.month.getNumValue(), this.year, this.hour, this.minute, this.second);
     }
 }
