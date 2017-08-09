@@ -19,8 +19,8 @@
 
     <!-- monthly goals view -->
     <!--  year bar -->
-    <dimen name="monthly_goals_yearTextView_textSize" >16sp</dimen>
-    <dimen name="monthly_goals_yearTextView_buttonSize" >24dp</dimen>
+    <dimen name="monthly_goals_yearTextView_textSize">16sp</dimen>
+    <dimen name="monthly_goals_yearTextView_buttonSize">24dp</dimen>
 
     <!--  list view -->
     <dimen name="monthly_goals_table_day_plan_column_width">55dp</dimen>
@@ -57,4 +57,5 @@
 
     <!-- summary bottom -->
     <dimen name="monthly_goals_summary_pieChart_minHeight">300dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
 </resources>
