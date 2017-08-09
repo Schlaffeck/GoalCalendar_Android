@@ -73,7 +73,9 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
     {
         if(this.yearMonthPair == null)
         return false;
-        return DateTimeHelper.isPassedDate(this.yearMonthPair.getYear(), this.yearMonthPair.getMonth(), dailyPlansViewModel.getDayNumber());
+        boolean isPassed = DateTimeHelper.isDateBefore(new DateTime(this.yearMonthPair.getYear(), this.yearMonthPair.getMonth(), dailyPlansViewModel.getDayNumber()), DateTimeHelper.getTodayDateTime());
+
+        return isPassed;
     }
 
     /**

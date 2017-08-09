@@ -59,4 +59,36 @@ public class DateTimeHelperTest {
         assertEquals(0, actual.get(Calendar.SECOND));
         assertEquals(0, actual.get(Calendar.MILLISECOND));
     }
+
+    @Test
+    public void dateTimeHelper_isDateBefore_test()
+    {
+        DateTime baseDate = new DateTime(2017, Month.AUGUST, 3);
+
+        assertTrue(DateTimeHelper.isDateBefore(new DateTime(2017, Month.AUGUST,  2), baseDate));
+        assertFalse(DateTimeHelper.isDateBefore(new DateTime(2017, Month.AUGUST,  4), baseDate));
+        assertFalse(DateTimeHelper.isDateBefore(new DateTime(2017, Month.AUGUST,  3), baseDate));
+
+        assertTrue(DateTimeHelper.isDateBefore(new DateTime(2017, Month.JULY,  3), baseDate));
+        assertFalse(DateTimeHelper.isDateBefore(new DateTime(2017, Month.SEPTEMBER, 3), baseDate));
+
+        assertTrue(DateTimeHelper.isDateBefore(new DateTime(2016, Month.AUGUST,  3), baseDate));
+        assertFalse(DateTimeHelper.isDateBefore(new DateTime(2018, Month.AUGUST,  3), baseDate));
+    }
+
+    @Test
+    public void dateTimeHelper_isDateAfter_test()
+    {
+        DateTime baseDate = new DateTime(2017, Month.AUGUST, 3);
+
+        assertFalse(DateTimeHelper.isDateAfter(new DateTime(2017, Month.AUGUST,  2), baseDate));
+        assertTrue(DateTimeHelper.isDateAfter(new DateTime(2017, Month.AUGUST,  4), baseDate));
+        assertFalse(DateTimeHelper.isDateAfter(new DateTime(2017, Month.AUGUST,  3), baseDate));
+
+        assertFalse(DateTimeHelper.isDateAfter(new DateTime(2017, Month.JULY,  3), baseDate));
+        assertTrue(DateTimeHelper.isDateAfter(new DateTime(2017, Month.SEPTEMBER, 3), baseDate));
+
+        assertFalse(DateTimeHelper.isDateAfter(new DateTime(2016, Month.AUGUST,  3), baseDate));
+        assertTrue(DateTimeHelper.isDateAfter(new DateTime(2018, Month.AUGUST,  3), baseDate));
+    }
 }

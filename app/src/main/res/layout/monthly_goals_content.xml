@@ -142,7 +142,7 @@
                     app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                     android:orientation="horizontal"
                     android:gravity="center"
-                    bind:daysListHeaderSource="@{vm.monthlyPlans.monthData.daysList}"></android.support.v7.widget.RecyclerView>
+                    bind:daysListHeaderSource="@{vm.monthlyPlans.monthData}"></android.support.v7.widget.RecyclerView>
             <!-- days in month list -->
             <!--<LinearLayout-->
                 <!--android:layout_height="@dimen/monthly_goals_table_header_height"-->
@@ -164,7 +164,7 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                 android:gravity="center"
-                bind:categoryPlansSource="@{vm.monthlyPlans.categoryPlansList}"></android.support.v7.widget.RecyclerView>
+                bind:categoryPlansSource="@{vm.monthlyPlans}"></android.support.v7.widget.RecyclerView>
             </LinearLayout>
         </HorizontalScrollView>
     </RelativeLayout>

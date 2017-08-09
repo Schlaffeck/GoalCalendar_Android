@@ -26,7 +26,7 @@ import com.slamcode.goalcalendar.viewmodels.DayInMonthViewModel;
 
 public class DailyPlanHeaderRecyclerViewAdapter extends BindableRecyclerViewDataAdapter<DayInMonthViewModel, DailyPlanHeaderRecyclerViewAdapter.DailyPlanHeaderViewHolder> {
 
-    private final YearMonthPair yearMonthPair;
+    private YearMonthPair yearMonthPair;
     private final DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry;
 
     protected DailyPlanHeaderRecyclerViewAdapter(Context context,
@@ -50,6 +50,16 @@ public class DailyPlanHeaderRecyclerViewAdapter extends BindableRecyclerViewData
     public DailyPlanHeaderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = this.getLayoutInflater().inflate(R.layout.monthly_goals_header_day_number_cell, null);
         return new DailyPlanHeaderViewHolder(view);
+    }
+
+    public YearMonthPair getYearMonthPair()
+    {
+        return this.yearMonthPair;
+    }
+
+    public void setYearMonthPair(YearMonthPair pair)
+    {
+        this.yearMonthPair = pair;
     }
 
     private boolean isCurrentDate(DayInMonthViewModel dailyPlanModel)
