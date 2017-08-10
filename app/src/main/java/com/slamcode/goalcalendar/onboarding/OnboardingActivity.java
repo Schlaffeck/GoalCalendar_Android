@@ -57,16 +57,22 @@ public class OnboardingActivity extends AppCompatActivity {
         this.initializePagesData();
         this.setupButtons();
 
-        pageChangeListener  = new PageChangeListener();
-
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.onboarding_view_pager);
+    }
+
+    @Override
+    protected void onStart() {
+
+        mViewPager.setCurrentItem(0);
+        pageChangeListener  = new PageChangeListener();
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(pageChangeListener);
+        super.onStart();
     }
 
     @Override
