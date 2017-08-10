@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.onboarding;
 
 import android.animation.ArgbEvaluator;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -16,10 +17,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.slamcode.goalcalendar.MonthlyGoalsActivity;
 import com.slamcode.goalcalendar.R;
 
 import java.util.ArrayList;
@@ -49,8 +53,9 @@ public class OnboardingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initializePagesData();
         setContentView(R.layout.activity_onboarding);
+        this.initializePagesData();
+        this.setupButtons();
 
         pageChangeListener  = new PageChangeListener();
 
@@ -59,7 +64,7 @@ public class OnboardingActivity extends AppCompatActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (ViewPager) findViewById(R.id.onboarding_view_pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(pageChangeListener);
     }
@@ -70,6 +75,45 @@ public class OnboardingActivity extends AppCompatActivity {
         super.onStop();
     }
 
+    private void setupButtons()
+    {
+        Button skipButton = (Button) this.findViewById(R.id.onboarding_skip_button);
+        skipButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishOnboarding();
+            }
+        });
+
+        final Button finishButton = (Button) this.findViewById(R.id.onboarding_finish_button);
+        finishButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishOnboarding();
+            }
+        });
+
+        ImageButton nextButton = (ImageButton) this.findViewById(R.id.onboarding_next_button);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                moveNextPage();
+            }
+        });
+    }
+
+    private void moveNextPage()
+    {
+        int curPosition = mViewPager.getCurrentItem();
+        if(curPosition < pagesDataList.size()-1)
+            mViewPager.setCurrentItem(curPosition + 1);
+    }
+
+    private void finishOnboarding()
+    {
+        Intent intent = new Intent(this, MonthlyGoalsActivity.class);
+        startActivity(intent);
+    }
 
     private void initializePagesData()
     {
@@ -192,6 +236,7 @@ public class OnboardingActivity extends AppCompatActivity {
         public void onPageSelected(int position) {
             mViewPager.setBackgroundColor(pagesDataList.get(position).pageColorValue);
             this.updateIndicators(position);
+            this.updateButtons(position);
         }
 
         @Override
@@ -211,5 +256,23 @@ public class OnboardingActivity extends AppCompatActivity {
                     indicatorView.setBackgroundResource(R.drawable.page_viewer_indicator_unselected);
             }
         }
+
+        private void updateButtons(int position) {
+
+            ImageButton nextButton = (ImageButton) findViewById(R.id.onboarding_next_button);
+            Button finishButton = (Button) findViewById(R.id.onboarding_finish_button);
+
+            if(position == pagesDataList.size()-1)
+            {
+                nextButton.setVisibility(View.GONE);
+                finishButton.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                nextButton.setVisibility(View.VISIBLE);
+                finishButton.setVisibility(View.GONE);
+            }
+        }
+
     }
 }
