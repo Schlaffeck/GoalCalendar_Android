@@ -1,5 +1,6 @@
 package com.slamcode.goalcalendar.onboarding;
 
+import android.animation.ArgbEvaluator;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
@@ -39,10 +40,17 @@ public class OnboardingActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
+    private PageChangeListener pageChangeListener;
+
+    private List<PageFragmentData> pagesDataList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initializePagesData();
         setContentView(R.layout.activity_onboarding);
+
+        pageChangeListener  = new PageChangeListener();
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -51,6 +59,23 @@ public class OnboardingActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.addOnPageChangeListener(pageChangeListener);
+    }
+
+    @Override
+    protected void onStop() {
+        mViewPager.removeOnPageChangeListener(pageChangeListener);
+        super.onStop();
+    }
+
+
+    private void initializePagesData()
+    {
+        this.pagesDataList = new ArrayList<>();
+
+        this.pagesDataList.add(new PageFragmentData("Page 1", "Description 1", R.drawable.ic_calendar_check_white_96dp, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary)));
+        this.pagesDataList.add(new PageFragmentData("Page 2", "Description 2", R.drawable.ic_calendar_range_white_48dp, ContextCompat.getColor(getApplicationContext(), R.color.colorAccent)));
+        this.pagesDataList.add(new PageFragmentData("Page 3", "Description 3", R.drawable.ic_calendar_text_white_48dp, ContextCompat.getColor(getApplicationContext(), R.color.listAccentColor)));
     }
 
     /**
@@ -103,11 +128,8 @@ public class OnboardingActivity extends AppCompatActivity {
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        private List<PageFragmentData> pagesDataList;
-
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
-            this.initializePagesData();
         }
 
         @Override
@@ -117,21 +139,12 @@ public class OnboardingActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return this.pagesDataList.size();
+            return pagesDataList.size();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return this.pagesDataList.get(position).title;
-        }
-
-        private void initializePagesData()
-        {
-            this.pagesDataList = new ArrayList<>();
-
-            this.pagesDataList.add(new PageFragmentData("Page 1", "Description 1", R.drawable.calendar_check, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary)));
-            this.pagesDataList.add(new PageFragmentData("Page 2", "Description 2", R.drawable.calendar_range, ContextCompat.getColor(getApplicationContext(), R.color.colorAccent)));
-            this.pagesDataList.add(new PageFragmentData("Page 3", "Description 3", R.drawable.calendar_text, ContextCompat.getColor(getApplicationContext(), R.color.listAccentColor)));
+            return pagesDataList.get(position).title;
         }
     }
 
@@ -150,6 +163,35 @@ public class OnboardingActivity extends AppCompatActivity {
             this.description = description;
             this.imageResourceId = imageResourceId;
             this.pageColorValue = pageColorValue;
+        }
+    }
+
+    private class PageChangeListener implements ViewPager.OnPageChangeListener
+    {
+        private ArgbEvaluator evaluator;
+
+        public PageChangeListener() {
+
+            this.evaluator = new ArgbEvaluator();
+        }
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            int colorToUpdate = (Integer) evaluator.evaluate(
+                    positionOffset,
+                    pagesDataList.get(position).pageColorValue,
+                    pagesDataList.get(position == pagesDataList.size() -1 ? position : position + 1).pageColorValue);
+            mViewPager.setBackgroundColor(colorToUpdate);
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            mViewPager.setBackgroundColor(pagesDataList.get(position).pageColorValue);
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
         }
     }
 }
