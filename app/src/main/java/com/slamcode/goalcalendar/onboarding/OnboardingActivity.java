@@ -4,6 +4,7 @@ import android.animation.ArgbEvaluator;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.app.Fragment;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 
 import com.slamcode.goalcalendar.MonthlyGoalsActivity;
 import com.slamcode.goalcalendar.R;
+import com.slamcode.goalcalendar.view.utils.ResourcesHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,9 +127,24 @@ public class OnboardingActivity extends AppCompatActivity {
     {
         this.pagesDataList = new ArrayList<>();
 
-        this.pagesDataList.add(new PageFragmentData("Page 1", "Description 1", R.drawable.ic_calendar_check_white_96dp, ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary)));
-        this.pagesDataList.add(new PageFragmentData("Page 2", "Description 2", R.drawable.ic_calendar_range_white_48dp, ContextCompat.getColor(getApplicationContext(), R.color.colorAccent)));
-        this.pagesDataList.add(new PageFragmentData("Page 3", "Description 3", R.drawable.ic_calendar_text_white_48dp, ContextCompat.getColor(getApplicationContext(), R.color.listAccentColor)));
+        this.pagesDataList.add(new PageFragmentData(getResources().getString(
+                R.string.onboarding_page_1_title),
+                getResources().getString(R.string.onboarding_page_1_description),
+                R.drawable.onboarding_screen_1_cropped_pl,
+                ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary),
+                ContextCompat.getColor(getApplicationContext(), android.R.color.white)));
+        this.pagesDataList.add(new PageFragmentData(getResources().getString(
+                R.string.onboarding_page_2_title),
+                getResources().getString(R.string.onboarding_page_2_description),
+                R.drawable.onboarding_screen_2_cropped_pl,
+                ContextCompat.getColor(getApplicationContext(), R.color.listAccentColor),
+                ContextCompat.getColor(getApplicationContext(), android.R.color.holo_green_light)));
+        this.pagesDataList.add(new PageFragmentData(getResources().getString(
+                R.string.onboarding_page_3_title),
+                getResources().getString(R.string.onboarding_page_3_description),
+                R.drawable.onboarding_screen_3_cropped_pl,
+                ContextCompat.getColor(getApplicationContext(), R.color.colorAccent),
+                ContextCompat.getColor(getApplicationContext(), android.R.color.holo_orange_light)));
     }
 
     /**
@@ -138,6 +155,7 @@ public class OnboardingActivity extends AppCompatActivity {
         private static final String ARG_PAGE_TITLE = "page_title";
         private static final String ARG_PAGE_DESCRIPTION = "page_description";
         private static final String ARG_PAGE_IMAGE_RESOURCE_ID = "page_image_res_id";
+        private static final String ARG_PAGE_TEXT_COLOR_VALUE_ID = "page_color_value_id";
 
         public PlaceholderFragment() {
         }
@@ -152,6 +170,7 @@ public class OnboardingActivity extends AppCompatActivity {
             args.putString(ARG_PAGE_DESCRIPTION, data.description);
             args.putString(ARG_PAGE_TITLE, data.title);
             args.putInt(ARG_PAGE_IMAGE_RESOURCE_ID, data.imageResourceId);
+            args.putInt(ARG_PAGE_TEXT_COLOR_VALUE_ID, data.textColorValue);
             fragment.setArguments(args);
             return fragment;
         }
@@ -159,13 +178,16 @@ public class OnboardingActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+
             View rootView = inflater.inflate(R.layout.activity_onboarding_fragment, container, false);
 
             TextView titleTextView = (TextView) rootView.findViewById(R.id.onboarding_fragment_title_label);
             titleTextView.setText(this.getArguments().getString(ARG_PAGE_TITLE));
+            titleTextView.setTextColor(this.getArguments().getInt(ARG_PAGE_TEXT_COLOR_VALUE_ID));
 
             TextView descTextView = (TextView) rootView.findViewById(R.id.onboarding_fragment_description_label);
             descTextView.setText(this.getArguments().getString(ARG_PAGE_DESCRIPTION));
+            descTextView.setTextColor(this.getArguments().getInt(ARG_PAGE_TEXT_COLOR_VALUE_ID));
 
             ImageView imageView = (ImageView) rootView.findViewById(R.id.onboarding_fragment_image);
             imageView.setImageResource(this.getArguments().getInt(ARG_PAGE_IMAGE_RESOURCE_ID));
@@ -210,11 +232,14 @@ public class OnboardingActivity extends AppCompatActivity {
 
         private int pageColorValue;
 
-        private PageFragmentData(String title, String description, int imageResourceId, int pageColorValue) {
+        private final int textColorValue;
+
+        private PageFragmentData(String title, String description, int imageResourceId, int pageColorValue, int textColorValue) {
             this.title = title;
             this.description = description;
             this.imageResourceId = imageResourceId;
             this.pageColorValue = pageColorValue;
+            this.textColorValue = textColorValue;
         }
     }
 
@@ -240,7 +265,8 @@ public class OnboardingActivity extends AppCompatActivity {
 
         @Override
         public void onPageSelected(int position) {
-            mViewPager.setBackgroundColor(pagesDataList.get(position).pageColorValue);
+            PageFragmentData fragmentData = pagesDataList.get(position);
+            mViewPager.setBackgroundColor(fragmentData.pageColorValue);
             this.updateIndicators(position);
             this.updateButtons(position);
         }

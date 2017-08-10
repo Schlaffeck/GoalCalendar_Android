@@ -7,16 +7,20 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:gravity="center"
     tools:context="com.slamcode.goalcalendar.onboarding.OnboardingActivity$PlaceholderFragment">
 
     <TextView
         android:id="@+id/onboarding_fragment_title_label"
+        android:textSize="@dimen/dialog_header_text_size"
+        android:textColor="@android:color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"/>
     <TextView
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:id="@+id/onboarding_fragment_description_label"
+        android:textColor="@android:color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"/>
@@ -26,6 +30,8 @@
         android:id="@+id/onboarding_fragment_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"/>
 
 </LinearLayout>
