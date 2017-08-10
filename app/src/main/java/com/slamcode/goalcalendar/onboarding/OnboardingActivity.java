@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.onboarding;
 
 import android.animation.ArgbEvaluator;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.slamcode.goalcalendar.R;
@@ -169,10 +171,12 @@ public class OnboardingActivity extends AppCompatActivity {
     private class PageChangeListener implements ViewPager.OnPageChangeListener
     {
         private ArgbEvaluator evaluator;
+        private LinearLayout indicatorsLayout;
 
         public PageChangeListener() {
 
             this.evaluator = new ArgbEvaluator();
+            this.updateIndicators(0);
         }
 
         @Override
@@ -187,11 +191,25 @@ public class OnboardingActivity extends AppCompatActivity {
         @Override
         public void onPageSelected(int position) {
             mViewPager.setBackgroundColor(pagesDataList.get(position).pageColorValue);
+            this.updateIndicators(position);
         }
 
         @Override
         public void onPageScrollStateChanged(int state) {
 
+        }
+
+        private void updateIndicators(int position) {
+            if(indicatorsLayout == null)
+                indicatorsLayout = (LinearLayout) findViewById(R.id.onboarding_indicators_layout);
+
+            for(int i =0; i < pagesDataList.size(); i++) {
+                ImageView indicatorView = (ImageView) indicatorsLayout.getChildAt(i);
+                if(i == position)
+                    indicatorView.setBackgroundResource(R.drawable.page_viewer_indicator_selected);
+                else
+                    indicatorView.setBackgroundResource(R.drawable.page_viewer_indicator_unselected);
+            }
         }
     }
 }
