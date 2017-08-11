@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.slamcode.goalcalendar.R;
@@ -28,6 +29,9 @@ public final class DailyProgressDialog extends ModelBasedDialog<PlansSummaryDesc
     @ViewReference(R.id.daily_progress_dialog_description_textView)
     TextView descriptionTextView;
 
+    @ViewReference(R.id.daily_progress_dialog_confirm_button)
+    Button confirmButton;
+
     @Override
     protected View initializeView(LayoutInflater inflater) {
         View view = inflater.inflate(R.layout.daily_plans_progress_dialog, null);
@@ -36,6 +40,12 @@ public final class DailyProgressDialog extends ModelBasedDialog<PlansSummaryDesc
 
         this.titleTextView.setText(this.getModel().getTitle());
         this.descriptionTextView.setText(this.getModel().getDetails());
+        this.confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commitChanges();
+            }
+        });
 
         return view;
     }
