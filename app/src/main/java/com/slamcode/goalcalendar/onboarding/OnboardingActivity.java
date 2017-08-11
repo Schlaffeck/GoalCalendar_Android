@@ -2,9 +2,13 @@ package com.slamcode.goalcalendar.onboarding;
 
 import android.animation.ArgbEvaluator;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.app.Fragment;
@@ -190,9 +194,18 @@ public class OnboardingActivity extends AppCompatActivity {
             descTextView.setTextColor(this.getArguments().getInt(ARG_PAGE_TEXT_COLOR_VALUE_ID));
 
             ImageView imageView = (ImageView) rootView.findViewById(R.id.onboarding_fragment_image);
-            imageView.setImageResource(this.getArguments().getInt(ARG_PAGE_IMAGE_RESOURCE_ID));
+            imageView.setImageDrawable(this.prepareDrawable());
 
             return rootView;
+        }
+
+        private Drawable prepareDrawable()
+        {
+            Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), this.getArguments().getInt(ARG_PAGE_IMAGE_RESOURCE_ID));
+
+            RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(this.getResources(), bitmap);
+            drawable.setCornerRadius(Math.max(bitmap.getWidth(), bitmap.getHeight()) / 2.0f);
+            return drawable;
         }
     }
 
