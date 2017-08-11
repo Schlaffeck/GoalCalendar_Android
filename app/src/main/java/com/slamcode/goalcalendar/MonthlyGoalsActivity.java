@@ -22,13 +22,17 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.slamcode.goalcalendar.planning.DateTime;
 import com.slamcode.goalcalendar.planning.schedule.DateTimeChangedService;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
+import com.slamcode.goalcalendar.planning.summary.PlansSummaryDescriptionProvider;
+import com.slamcode.goalcalendar.settings.AppSettingsManager;
 import com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract;
 import com.slamcode.goalcalendar.dagger2.ComposableApplication;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.service.commands.AutoMarkTasksCommand;
 import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
+import com.slamcode.goalcalendar.view.dialogs.DailyProgressDialog;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
 import com.slamcode.goalcalendar.view.lists.utils.ScrollableViewHelper;
 import com.slamcode.goalcalendar.view.presenters.PresentersSource;
@@ -81,6 +85,12 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     @Inject
     DateTimeChangedService dateTimeChangedService;
 
+    @Inject
+    AppSettingsManager settingsManager;
+
+    @Inject
+    PlansSummaryDescriptionProvider descriptionProvider;
+
     private BottomSheetBehavior bottomSheetBehavior;
 
     private MonthlyGoalsActivityContract.Presenter presenter;
@@ -131,6 +141,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     @Override
     protected void onStart() {
         super.onStart();
+        this.showDailyProgressDialog();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_DATE_CHANGED);
         this.registerReceiver(this.dateTimeChangedService, intentFilter);
@@ -216,6 +227,24 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         }
     }
 
+    private void showDailyProgressDialog() {
+        DateTime lastlaunchDateTime = this.settingsManager.getLastLaunchDateTime();
+
+        if(lastlaunchDateTime == null
+                || DateTimeHelper.isDateBefore(lastlaunchDateTime, DateTimeHelper.getTodayDateTime()))
+        {
+            PlansSummaryDescriptionProvider.PlansSummaryDescription description
+                    = this.descriptionProvider.provideDescriptionForMonth(DateTimeHelper.getCurrentYear(), DateTimeHelper.getCurrentMonth());
+            if(description != null) {
+                DailyProgressDialog dialog = new DailyProgressDialog();
+                dialog.setModel(description);
+                this.showDialog(dialog);
+            }
+        }
+
+        this.settingsManager.setLastLaunchDateTimeMillis(DateTimeHelper.getNowDateTime());
+    }
+
     private void onCreateGlobalLayoutAvailable()
     {
         ViewBinder.bindViews(this);
@@ -225,6 +254,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         this.setupRecyclerViews();
         this.setupBottomSheetBehavior();
         this.runStartupCommands();
+        this.showDailyProgressDialog();
     }
 
     private void setupPresenter() {
