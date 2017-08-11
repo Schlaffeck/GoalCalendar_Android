@@ -16,7 +16,7 @@ import java.util.List;
  * Created by moriasla on 23.12.2016.
  */
 
-public abstract class AddEditDialog<ModelType> extends DialogFragment {
+public abstract class ModelBasedDialog<ModelType> extends DialogFragment {
 
     private View associatedView;
 
@@ -26,7 +26,7 @@ public abstract class AddEditDialog<ModelType> extends DialogFragment {
 
     private List<ViewValidator<?>> viewValidatorList =  new ArrayList<>();
 
-    private AddEditDialog.DialogStateChangedListener dialogStateChangedListener;
+    private ModelBasedDialog.DialogStateChangedListener dialogStateChangedListener;
 
     public View getAssociatedView()
     {
@@ -54,7 +54,7 @@ public abstract class AddEditDialog<ModelType> extends DialogFragment {
         return viewValidatorList;
     }
 
-    public void setDialogStateChangedListener(AddEditDialog.DialogStateChangedListener dialogStateChangedListener) {
+    public void setDialogStateChangedListener(ModelBasedDialog.DialogStateChangedListener dialogStateChangedListener) {
         this.dialogStateChangedListener = dialogStateChangedListener;
     }
 
@@ -83,7 +83,12 @@ public abstract class AddEditDialog<ModelType> extends DialogFragment {
         this.onDialogClosed();
     }
 
-    protected abstract void commitChanges();
+    protected void commitChanges()
+    {
+        this.setConfirmed(true);
+        this.getDialog().dismiss();
+        this.onDialogClosed();
+    }
 
     protected boolean isAllValid()
     {
