@@ -1,5 +1,6 @@
 package com.slamcode.goalcalendar.settings;
 
+import com.slamcode.goalcalendar.planning.DateTime;
 import com.slamcode.goalcalendar.planning.HourMinuteTime;
 
 import java.util.Date;
@@ -27,4 +28,8 @@ public interface AppSettingsManager {
     boolean getShowPlansProgressNotification();
 
     void setShowPlansProgressNotification(boolean showPlansProgressNotification);
+
+    DateTime getLastLaunchDateTime();
+
+    void setLastLaunchDateTimeMillis(DateTime lastLaunchTime);
 }

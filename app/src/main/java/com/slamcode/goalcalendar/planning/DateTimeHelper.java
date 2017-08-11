@@ -239,4 +239,11 @@ public final class DateTimeHelper {
 
         return calendar;
     }
+
+    public static DateTime getDateTime(long timeMillis) {
+        Calendar instance = Calendar.getInstance();
+        instance.setTimeInMillis(timeMillis);
+
+        return new DateTime(instance);
+    }
 }

@@ -59,6 +59,11 @@ public class DateTime {
         return this.second;
     }
 
+    public long getTimeMillis()
+    {
+        return this.calendar.getTimeInMillis();
+    }
+
     @Override
     public String toString() {
 
