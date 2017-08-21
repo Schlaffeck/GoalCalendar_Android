@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
@@ -103,7 +104,11 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
             @Override
             public void onGlobalLayout() {
                 View v = mainLayout;
-                v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                if (Build.VERSION.SDK_INT > 16) {
+                    v.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                } else {
+                    v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
                 onCreateGlobalLayoutAvailable();
             }
         });
@@ -189,7 +194,13 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
             @Override
             public void onGlobalLayout() {
                 View v = dailyPlansRecyclerView;
-                v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+
+                if (Build.VERSION.SDK_INT > 16) {
+                    v.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                } else {
+                    v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
+
                 if(v.getMeasuredHeight() >0 && v.getMeasuredWidth() > 0)
                 {
                     scrollToCurrentDate();
