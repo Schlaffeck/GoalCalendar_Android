@@ -22,6 +22,7 @@ import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 import com.slamcode.goalcalendar.view.SourceChangeRequestNotifier;
+import com.slamcode.goalcalendar.view.ViewProcessingState;
 import com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract;
 import com.slamcode.goalcalendar.view.dialogs.AddEditCategoryViewModelDialog;
 import com.slamcode.goalcalendar.view.dialogs.EditDailyPlansViewModelDialog;
@@ -43,23 +44,29 @@ public class PersistentMonthlyGoalsPresenter extends BaseObservable implements M
 
     private PlansSummaryCalculator summaryCalculator;
 
+    private final ViewProcessingState viewProcessingState;
+
     private MonthlyGoalsViewModel data;
 
     private MonthlyGoalsActivityContract.ActivityView activityView;
 
     private CategoryPlansViewModelChangeRequestListener categoryChangeRequestListener = new CategoryPlansViewModelChangeRequestListener();
     private DailyPlansViewModelChangeRequestListener dailyPlansChangeRequestListener = new DailyPlansViewModelChangeRequestListener();
+    private GlobalViewStateChangeListener viewStateChangeListener = new GlobalViewStateChangeListener();
 
     private boolean isProcessingView;
 
     public PersistentMonthlyGoalsPresenter(
             ApplicationContext applicationContext,
             PersistenceContext persistenceContext,
-            PlansSummaryCalculator summaryCalculator)
+            PlansSummaryCalculator summaryCalculator,
+            ViewProcessingState viewProcessingState)
     {
         this.applicationContext = applicationContext;
         this.persistenceContext = persistenceContext;
         this.summaryCalculator = summaryCalculator;
+        this.viewProcessingState = viewProcessingState;
+        this.viewProcessingState.addChangeListener(this.viewStateChangeListener);
     }
 
     @Override
@@ -284,6 +291,19 @@ public class PersistentMonthlyGoalsPresenter extends BaseObservable implements M
                     showEditDailyPlansDialog(sender);
                     break;
             }
+        }
+    }
+
+    private class GlobalViewStateChangeListener implements ViewProcessingState.ChangeListener
+    {
+        @Override
+        public void onStartedProcessingViews() {
+            setIsProcessingView(true);
+        }
+
+        @Override
+        public void onStoppedProcessingAllViews() {
+            setIsProcessingView(false);
         }
     }
 }
