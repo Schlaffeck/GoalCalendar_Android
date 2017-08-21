@@ -154,4 +154,5 @@
     <string name="notification_plannedForToday_noPlans_title">Brak planów na dziś</string>
     <string name="skip">Pomiń</string>
     <string name="finish">Zakończ</string>
+    <string name="monthly_goals_overlay_loading">Jeszcze chwilka&#8230;</string>
 </resources>

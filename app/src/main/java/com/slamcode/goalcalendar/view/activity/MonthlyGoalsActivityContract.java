@@ -16,6 +16,8 @@ public interface MonthlyGoalsActivityContract {
      */
     interface Presenter {
 
+        boolean isProcessingView();
+
         MonthlyGoalsViewModel getData();
 
         void setData(MonthlyGoalsViewModel data);
@@ -33,6 +35,13 @@ public interface MonthlyGoalsActivityContract {
         void goToPreviousMonth(View view);
 
         void showAddNewCategoryDialog(View view);
+    }
+
+    interface ViewStatus{
+
+        void startProcessingView(String viewId);
+
+        void stopProcessingView(String viewId);
     }
 
     /**

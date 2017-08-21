@@ -31,6 +31,7 @@ import com.slamcode.goalcalendar.service.commands.AutoMarkTasksCommand;
 import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
 import com.slamcode.goalcalendar.view.lists.utils.ScrollableViewHelper;
+import com.slamcode.goalcalendar.view.presenters.MonthlyGoalsPresenter;
 import com.slamcode.goalcalendar.view.presenters.PresentersSource;
 import com.slamcode.goalcalendar.view.utils.ViewReference;
 import com.slamcode.goalcalendar.view.utils.ViewBinder;
@@ -83,7 +84,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
     private BottomSheetBehavior bottomSheetBehavior;
 
-    private MonthlyGoalsActivityContract.Presenter presenter;
+    private MonthlyGoalsPresenter presenter;
 
     private ViewDataBinding mainActivityContentBinding;
 

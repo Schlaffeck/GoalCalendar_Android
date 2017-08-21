@@ -87,9 +87,6 @@
                 android:id="@+id/monthly_goals_list_header_month_spinner"
                 android:layout_width="@dimen/monthly_goals_table_category_column_width"
                 android:layout_height="@dimen/monthly_goals_table_header_height"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignWithParentIfMissing="true"
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:layout_marginTop="@dimen/default_margin"
@@ -116,7 +113,7 @@
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                 android:gravity="left"
                 android:scrollbars="none"
-                bind:categoryNamesSource="@{vm.monthlyPlans.categoryPlansList}"></android.support.v7.widget.RecyclerView>
+                bind:categoryNamesSource="@{vm.monthlyPlans.categoryPlansList}"/>
         </LinearLayout>
 
         <HorizontalScrollView
@@ -142,16 +139,7 @@
                     app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                     android:orientation="horizontal"
                     android:gravity="center"
-                    bind:daysListHeaderSource="@{vm.monthlyPlans.monthData}"></android.support.v7.widget.RecyclerView>
-            <!-- days in month list -->
-            <!--<LinearLayout-->
-                <!--android:layout_height="@dimen/monthly_goals_table_header_height"-->
-                <!--android:orientation="horizontal"-->
-                <!--android:id="@+id/monthly_goals_header_list_item_days_list"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_marginTop="@dimen/default_margin"-->
-                <!--android:layout_marginBottom="@dimen/monthly_goals_table_header_bottomMargin">-->
-            <!--</LinearLayout>-->
+                    bind:daysListHeaderSource="@{vm.monthlyPlans.monthData}"/>
 
             <!-- categories daily plans -->
             <android.support.v7.widget.RecyclerView
@@ -164,7 +152,7 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                 android:gravity="center"
-                bind:categoryPlansSource="@{vm.monthlyPlans}"></android.support.v7.widget.RecyclerView>
+                bind:categoryPlansSource="@{vm.monthlyPlans}"/>
             </LinearLayout>
         </HorizontalScrollView>
     </RelativeLayout>

@@ -12,6 +12,7 @@ import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.*;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 import com.slamcode.goalcalendar.view.SourceChangeRequestNotifier;
+import com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract;
 import com.slamcode.goalcalendar.view.utils.ResourcesHelper;
 
 import java.util.HashMap;
@@ -88,36 +89,34 @@ public class MonthlyGoalsViewModel extends BaseObservable {
 
     private void setYearAndMonth(int year, Month month) {
 
-        boolean notifyMonthChanged = false;
-        boolean notifyYearChanged = false;
-        if(this.monthlyPlansViewModel == null
-                || this.monthlyPlansViewModel.getMonthData() != null
+            boolean notifyMonthChanged = false;
+            boolean notifyYearChanged = false;
+            if (this.monthlyPlansViewModel == null
+                    || this.monthlyPlansViewModel.getMonthData() != null
                     && ((notifyYearChanged = this.monthlyPlansViewModel.getMonthData().getYear() != year)
-                            || (notifyMonthChanged = this.monthlyPlansViewModel.getMonthData().getMonth() != month)))
-        {
-            YearMonthPair yearMonthPair = new YearMonthPair(year, month);
-            if(!this.viewModelMap.containsKey(yearMonthPair))
-            {
-                MonthlyPlansModel model = this.getMonthlyPlans(yearMonthPair);
-                this.viewModelMap.put(yearMonthPair,
-                        new MonthlyPlanningCategoryListViewModel(
-                                model,
-                                this.plansSummaryCalculator,
-                                this.categoryChangeRequestListener,
-                                this.dailyPlansChangeRequestListener));
-            }
+                    || (notifyMonthChanged = this.monthlyPlansViewModel.getMonthData().getMonth() != month))) {
+                YearMonthPair yearMonthPair = new YearMonthPair(year, month);
+                if (!this.viewModelMap.containsKey(yearMonthPair)) {
+                    MonthlyPlansModel model = this.getMonthlyPlans(yearMonthPair);
+                    this.viewModelMap.put(yearMonthPair,
+                            new MonthlyPlanningCategoryListViewModel(
+                                    model,
+                                    this.plansSummaryCalculator,
+                                    this.categoryChangeRequestListener,
+                                    this.dailyPlansChangeRequestListener));
+                }
 
-            this.monthlyPlansViewModel = this.viewModelMap.get(yearMonthPair);
-            this.notifyPropertyChanged(BR.monthlyPlans);
-            this.notifyPropertyChanged(BR.previousMonthWithCategoriesAvailable);
-            if(notifyMonthChanged) {
-                this.notifyPropertyChanged(BR.month);
-                this.notifyPropertyChanged(BR.monthString);
-            }
+                this.monthlyPlansViewModel = this.viewModelMap.get(yearMonthPair);
+                this.notifyPropertyChanged(BR.monthlyPlans);
+                this.notifyPropertyChanged(BR.previousMonthWithCategoriesAvailable);
+                if (notifyMonthChanged) {
+                    this.notifyPropertyChanged(BR.month);
+                    this.notifyPropertyChanged(BR.monthString);
+                }
 
-            if(notifyYearChanged)
-                this.notifyPropertyChanged(BR.year);
-        }
+                if (notifyYearChanged)
+                    this.notifyPropertyChanged(BR.year);
+            }
     }
 
     @Bindable

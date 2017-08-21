@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.view.View;
 
 import com.android.databinding.library.baseAdapters.BR;
@@ -33,7 +35,7 @@ import com.slamcode.goalcalendar.viewmodels.MonthlyPlanningCategoryListViewModel
  * Created by moriasla on 16.01.2017.
  */
 
-public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
+public class PersistentMonthlyGoalsPresenter extends BaseObservable implements MonthlyGoalsPresenter {
 
     private final ApplicationContext applicationContext;
 
@@ -47,6 +49,8 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
 
     private CategoryPlansViewModelChangeRequestListener categoryChangeRequestListener = new CategoryPlansViewModelChangeRequestListener();
     private DailyPlansViewModelChangeRequestListener dailyPlansChangeRequestListener = new DailyPlansViewModelChangeRequestListener();
+
+    private boolean isProcessingView;
 
     public PersistentMonthlyGoalsPresenter(
             ApplicationContext applicationContext,
@@ -91,6 +95,7 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
 
     @Override
     public void copyCategoriesFromPreviousMonth(View view) {
+
         MonthlyPlansModel previousMonthModel = findPreviousMonthlyPlansModelWithCategories();
         if(previousMonthModel == null || previousMonthModel.getCategories() == null)
             return;
@@ -240,6 +245,18 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
         uow.complete(false);
 
         return previousMonthWithCategories;
+    }
+
+    @Bindable
+    public boolean isProcessingView() {
+        return isProcessingView;
+    }
+
+    @Bindable
+    public void setIsProcessingView(boolean isProcessingView) {
+        if(this.isProcessingView != isProcessingView) {
+            this.isProcessingView = isProcessingView;
+        }
     }
 
     private class CategoryPlansViewModelChangeRequestListener implements SourceChangeRequestNotifier.SourceChangeRequestListener<CategoryPlansViewModel>
