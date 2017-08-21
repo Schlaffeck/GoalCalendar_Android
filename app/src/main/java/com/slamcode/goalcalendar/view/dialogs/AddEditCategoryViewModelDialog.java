@@ -16,7 +16,7 @@ import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.PlanStatus;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
-import com.slamcode.goalcalendar.view.dialogs.base.AddEditDialog;
+import com.slamcode.goalcalendar.view.dialogs.base.ModelBasedDialog;
 import com.slamcode.goalcalendar.view.utils.ViewReference;
 import com.slamcode.goalcalendar.view.utils.ViewOnClick;
 import com.slamcode.goalcalendar.view.utils.ViewBinder;
@@ -33,7 +33,7 @@ import java.util.List;
  * Created by moriasla on 06.03.2017.
  */
 
-public class AddEditCategoryViewModelDialog extends AddEditDialog<CategoryPlansViewModel> {
+public class AddEditCategoryViewModelDialog extends ModelBasedDialog<CategoryPlansViewModel> {
 
     // views
     @ViewReference(R.id.monthly_goals_category_dialog_header_textview)
@@ -68,7 +68,7 @@ public class AddEditCategoryViewModelDialog extends AddEditDialog<CategoryPlansV
 
         ViewBinder.bindViews(this, view);
 
-        // setFrequencyPerion view data
+        // setFrequencyPeriod view data
         this.headerTextView.setText(
                 this.getModel() == null ?
                         R.string.add_category_dialog_header
@@ -143,8 +143,6 @@ public class AddEditCategoryViewModelDialog extends AddEditDialog<CategoryPlansV
         m.setFrequencyPeriod(ResourcesHelper.frequencyPeriodFromResourceString(
                 this.getActivity(),
                 periodObject.toString()));
-        this.setConfirmed(true);
-        this.getDialog().dismiss();
-        this.onDialogClosed();
+       super.commitChanges();
     }
 }

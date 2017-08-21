@@ -34,4 +34,11 @@
     <color name="planningStateButton_stateFailed_foregroundColor">#C52F41</color>
     <color name="planningStateButton_stateFailed_backgroundColor">#FAA2AC</color>
 
+    <!-- dialog -->
+    <color name="dailyProgress_dialog_borderColor">#CCF7C1</color>
+    <color name="dailyProgress_dialog_button_tintColor">#CCF7C1</color>
+    <color name="dailyProgress_dialog_backgroundColor">#EBFDE7</color>
+    <color name="dailyProgress_dialog_header_textColor">#389686</color>
+    <color name="dailyProgress_dialog_description_textColor">#46AE2A</color>
+
 </resources>

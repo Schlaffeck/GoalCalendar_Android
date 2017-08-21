@@ -4,7 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.slamcode.goalcalendar.planning.DateTime;
+import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.HourMinuteTime;
+
+import java.util.Date;
 
 /**
  * Created by moriasla on 23.01.2017.
@@ -30,6 +34,9 @@ public class SharedPreferencesSettingsManager implements AppSettingsManager {
 
     private final static String MARK_UNCOMPLETED_AS_FAILED_NAME = "MARK_UNCOMPLETED_AS_FAILED";
     private final static boolean MARK_UNCOMPLETED_AS_FAILED_VALUE = true;
+
+    private final static String LAST_LAUNCH_DATETIME_MILLIS_NAME = "LAST_LAUNCH_DATETIME_MILLIS";
+    private final static long LAST_LAUNCH_DATETIME_MILLIS_VALUE = 0;
 
     private final Context context;
 
@@ -94,6 +101,24 @@ public class SharedPreferencesSettingsManager implements AppSettingsManager {
     public void setShowPlansProgressNotification(boolean showPlansProgressNotification) {
         SharedPreferences.Editor editor = this.sharedPreferences.edit();
         editor.putBoolean(SHOW_PLANS_PROGRESS_NOTIFICATIONS_SETTING_NAME, showPlansProgressNotification);
+        editor.commit();
+    }
+
+    @Override
+    public DateTime getLastLaunchDateTime()
+    {
+        long timeMillis = this.sharedPreferences.getLong(LAST_LAUNCH_DATETIME_MILLIS_NAME, LAST_LAUNCH_DATETIME_MILLIS_VALUE);
+
+        if(timeMillis == 0)
+            return null;
+
+        return DateTimeHelper.getDateTime(timeMillis);
+    }
+
+    @Override
+    public void setLastLaunchDateTimeMillis(DateTime lastLaunchTime) {
+        SharedPreferences.Editor editor = this.sharedPreferences.edit();
+        editor.putLong(LAST_LAUNCH_DATETIME_MILLIS_NAME, lastLaunchTime.getTimeMillis());
         editor.commit();
     }
 }

@@ -6,7 +6,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.slamcode.goalcalendar.R;
-import com.slamcode.goalcalendar.view.dialogs.base.AddEditDialog;
+import com.slamcode.goalcalendar.view.dialogs.base.ModelBasedDialog;
 import com.slamcode.goalcalendar.view.utils.ViewBinder;
 import com.slamcode.goalcalendar.view.utils.ViewOnClick;
 import com.slamcode.goalcalendar.view.utils.ViewReference;
@@ -18,7 +18,7 @@ import java.util.Date;
  * Created by smoriak on 25/05/2017.
  */
 
-public class EditDailyPlansViewModelDialog extends AddEditDialog<EditDailyPlansViewModelDialog.DailyPlansDialogData> {
+public class EditDailyPlansViewModelDialog extends ModelBasedDialog<EditDailyPlansViewModelDialog.DailyPlansDialogData> {
 
     @ViewReference(R.id.edit_dailyPlans_dialog_description_edittext)
     EditText descriptionEditText;
@@ -49,9 +49,7 @@ public class EditDailyPlansViewModelDialog extends AddEditDialog<EditDailyPlansV
     @ViewOnClick(R.id.edit_dailyPlans_dialog_confirm_button)
     protected void commitChanges() {
         this.getModel().dailyPlansViewModel.setDescription(this.descriptionEditText.getText().toString());
-        this.setConfirmed(true);
-        this.getDialog().dismiss();
-        this.onDialogClosed();
+        super.commitChanges();
     }
 
     @Override

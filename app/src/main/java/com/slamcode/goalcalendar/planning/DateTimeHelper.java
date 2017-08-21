@@ -167,6 +167,13 @@ public final class DateTimeHelper {
         return new DateTime(getCalendar(year, month, day));
     }
 
+    public static DateTime getDateTime(long timeMillis) {
+        Calendar instance = Calendar.getInstance();
+        instance.setTimeInMillis(timeMillis);
+
+        return new DateTime(instance);
+    }
+
     public static DateTime getYesterdayDateTime() {
         return new DateTime(getYesterdayCalendar());
     }
@@ -182,6 +189,10 @@ public final class DateTimeHelper {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         return calendar;
+    }
+
+    public static DateTime getNowDateTime() {
+        return new DateTime(getNowCalendar());
     }
 
     public static Calendar getTodayCalendar(int hour, int minute, int second) {

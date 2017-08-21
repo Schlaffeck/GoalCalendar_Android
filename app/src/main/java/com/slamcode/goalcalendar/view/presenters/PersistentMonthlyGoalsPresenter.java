@@ -2,7 +2,6 @@ package com.slamcode.goalcalendar.view.presenters;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.view.View;
 
@@ -15,7 +14,6 @@ import com.slamcode.goalcalendar.data.UnitOfWork;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.model.ModelHelper;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
-import com.slamcode.goalcalendar.planning.DateTime;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
@@ -23,7 +21,7 @@ import com.slamcode.goalcalendar.view.SourceChangeRequestNotifier;
 import com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract;
 import com.slamcode.goalcalendar.view.dialogs.AddEditCategoryViewModelDialog;
 import com.slamcode.goalcalendar.view.dialogs.EditDailyPlansViewModelDialog;
-import com.slamcode.goalcalendar.view.dialogs.base.AddEditDialog;
+import com.slamcode.goalcalendar.view.dialogs.base.ModelBasedDialog;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 import com.slamcode.goalcalendar.viewmodels.DailyPlansViewModel;
 import com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel;
@@ -143,7 +141,7 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
         dialog.setModel(viewModel);
         dialog.setMonthViewModel(this.data.getMonthlyPlans().getMonthData());
         dialog.setPlansSummaryCalculator(this.summaryCalculator);
-        dialog.setDialogStateChangedListener(new AddEditDialog.DialogStateChangedListener() {
+        dialog.setDialogStateChangedListener(new ModelBasedDialog.DialogStateChangedListener() {
             @Override
             public void onDialogClosed(boolean confirmed) {
                 if(confirmed)
