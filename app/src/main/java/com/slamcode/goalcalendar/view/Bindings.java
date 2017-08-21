@@ -74,11 +74,13 @@ public class Bindings {
 
         RecyclerView.Adapter adapter = recyclerView.getAdapter();
 
+        Dagger2InjectData injectData = new Dagger2InjectData();
+        Dagger2ComponentContainer.getApplicationDagger2Component().inject(injectData);
+        injectData.viewProcessingState.startProcessingView("bind:categoryNamesSource");
+
         boolean adapterUpToDate = false;
         if(adapter == null)
         {
-            Dagger2InjectData injectData = new Dagger2InjectData();
-            Dagger2ComponentContainer.getApplicationDagger2Component().inject(injectData);
 
             adapter = injectData.itemsCollectionAdapterProvider
                     .provideCategoryNameListViewAdapter(
@@ -94,6 +96,8 @@ public class Bindings {
             CategoryNameRecyclerViewAdapter dataAdapter = (CategoryNameRecyclerViewAdapter) adapter;
             dataAdapter.updateSourceCollection(itemsSource);
         }
+
+        injectData.viewProcessingState.stopProcessingView("bind:categoryNamesSource");
     }
 
     @BindingAdapter("bind:categoryPlansSource")
@@ -102,14 +106,16 @@ public class Bindings {
         if(recyclerView == null)
             return;
 
+        Dagger2InjectData injectData = new Dagger2InjectData();
+        Dagger2ComponentContainer.getApplicationDagger2Component().inject(injectData);
+        injectData.viewProcessingState.startProcessingView("bind:categoryPlansSource");
+
         ObservableList<CategoryPlansViewModel> itemsSource = monthlyPlanningCategoryListViewModel.getCategoryPlansList();
         RecyclerView.Adapter adapter = recyclerView.getAdapter();
 
         boolean adapterUpToDate = false;
         if(adapter == null)
         {
-            Dagger2InjectData injectData = new Dagger2InjectData();
-            Dagger2ComponentContainer.getApplicationDagger2Component().inject(injectData);
 
             adapter = injectData.itemsCollectionAdapterProvider
                     .provideCategoryDailyPlansListViewAdapter(
@@ -128,6 +134,8 @@ public class Bindings {
             dataAdapter.setYearMonthPair(new YearMonthPair(monthlyPlanningCategoryListViewModel.getMonthData().getYear(), monthlyPlanningCategoryListViewModel.getMonthData().getMonth()));
             dataAdapter.updateSourceCollection(itemsSource);
         }
+
+        injectData.viewProcessingState.stopProcessingView("bind:categoryPlansSource");
     }
 
 
@@ -141,10 +149,12 @@ public class Bindings {
         Collection<DayInMonthViewModel> itemsSource = monthViewModel.getDaysList();
         RecyclerView.Adapter adapter = recyclerView.getAdapter();
 
+        Dagger2InjectData injectData = new Dagger2InjectData();
+        Dagger2ComponentContainer.getApplicationDagger2Component().inject(injectData);
+        injectData.viewProcessingState.startProcessingView("bind:daysListHeaderSource");
+
         if(adapter == null)
         {
-            Dagger2InjectData injectData = new Dagger2InjectData();
-            Dagger2ComponentContainer.getApplicationDagger2Component().inject(injectData);
 
             adapter = injectData.itemsCollectionAdapterProvider
                     .provideDailyPlanHeaderRecyclerViewAdapter(
@@ -161,6 +171,8 @@ public class Bindings {
             dataAdapter.setYearMonthPair(new YearMonthPair(monthViewModel.getYear(), monthViewModel.getMonth()));
             dataAdapter.updateSourceCollection(itemsSource);
         }
+
+        injectData.viewProcessingState.stopProcessingView("bind:daysListHeaderSource");
     }
 
     @BindingAdapter(value = {"bind:selectedValue", "bind:selectedValueAttrChanged"}, requireAll = false)
@@ -252,5 +264,8 @@ public class Bindings {
 
         @Inject
         DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry;
+
+        @Inject
+        ViewProcessingState viewProcessingState;
     }
 }

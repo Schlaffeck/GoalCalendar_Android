@@ -263,6 +263,7 @@ public class PersistentMonthlyGoalsPresenter extends BaseObservable implements M
     public void setIsProcessingView(boolean isProcessingView) {
         if(this.isProcessingView != isProcessingView) {
             this.isProcessingView = isProcessingView;
+            this.notifyPropertyChanged(BR.processingView);
         }
     }
 

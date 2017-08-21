@@ -3,6 +3,7 @@ package com.slamcode.goalcalendar.view.presenters;
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
+import com.slamcode.goalcalendar.view.ViewProcessingState;
 import com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
 
@@ -21,16 +22,19 @@ public class CachedApplicationPresentersSource implements PresentersSource {
     private ItemsCollectionAdapterProvider listAdapterProvider;
 
     private PlansSummaryCalculator plansSummaryCalculator;
+    private final ViewProcessingState viewProcessingState;
 
     public CachedApplicationPresentersSource(ApplicationContext applicationContext,
-                                            PersistenceContext persistenceContext,
-                                            ItemsCollectionAdapterProvider listAdapterProvider,
-                                            PlansSummaryCalculator plansSummaryCalculator)
+                                             PersistenceContext persistenceContext,
+                                             ItemsCollectionAdapterProvider listAdapterProvider,
+                                             PlansSummaryCalculator plansSummaryCalculator,
+                                             ViewProcessingState viewProcessingState)
     {
         this.applicationContext = applicationContext;
         this.persistenceContext = persistenceContext;
         this.listAdapterProvider = listAdapterProvider;
         this.plansSummaryCalculator = plansSummaryCalculator;
+        this.viewProcessingState = viewProcessingState;
     }
 
     @Override
@@ -40,7 +44,8 @@ public class CachedApplicationPresentersSource implements PresentersSource {
             this.monthlyGoalsPresenter = new PersistentMonthlyGoalsPresenter(
                     this.applicationContext,
                     this.persistenceContext,
-                    this.plansSummaryCalculator);
+                    this.plansSummaryCalculator,
+                    this.viewProcessingState);
         }
         return this.monthlyGoalsPresenter;
     }

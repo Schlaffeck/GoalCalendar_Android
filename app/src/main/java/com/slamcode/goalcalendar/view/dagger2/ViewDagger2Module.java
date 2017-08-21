@@ -1,9 +1,12 @@
 package com.slamcode.goalcalendar.view.dagger2;
 
+import android.view.View;
+
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 import com.slamcode.goalcalendar.view.GlobalViewProcessingState;
+import com.slamcode.goalcalendar.view.ViewProcessingState;
 import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
 import com.slamcode.goalcalendar.view.charts.data.hellocharts.HelloChartsViewDataBinder;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
@@ -24,7 +27,7 @@ public final class ViewDagger2Module {
 
     @Provides
     @Singleton
-    public GlobalViewProcessingState provideObservableViewProcessingState()
+    public ViewProcessingState provideObservableViewProcessingState()
     {
         return new GlobalViewProcessingState();
     }
@@ -50,9 +53,10 @@ public final class ViewDagger2Module {
             ApplicationContext applicationContext,
             PersistenceContext persistenceContext,
             ItemsCollectionAdapterProvider listAdapterProvider,
-            PlansSummaryCalculator plansSummaryCalculator)
+            PlansSummaryCalculator plansSummaryCalculator,
+            ViewProcessingState viewProcessingState)
     {
-        return new CachedApplicationPresentersSource(applicationContext, persistenceContext, listAdapterProvider, plansSummaryCalculator);
+        return new CachedApplicationPresentersSource(applicationContext, persistenceContext, listAdapterProvider, plansSummaryCalculator, viewProcessingState);
     }
 
     @Provides
