@@ -123,8 +123,14 @@ public class OnboardingActivity extends AppCompatActivity {
 
     private void finishOnboarding()
     {
-        Intent intent = new Intent(this, MonthlyGoalsActivity.class);
-        startActivity(intent);
+        Intent intent = this.getIntent();
+        if(!intent.getBooleanExtra(MonthlyGoalsActivity.STARTED_FROM_PARENT_INTENT_PARAM, false)) {
+            Intent newIntent = new Intent(this, MonthlyGoalsActivity.class);
+            startActivity(newIntent);
+        }
+        else {
+            finish();
+        }
     }
 
     private void initializePagesData()

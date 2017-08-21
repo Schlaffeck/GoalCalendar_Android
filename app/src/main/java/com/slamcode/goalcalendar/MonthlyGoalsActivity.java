@@ -8,12 +8,10 @@ import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +20,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.slamcode.goalcalendar.onboarding.OnboardingActivity;
 import com.slamcode.goalcalendar.planning.DateTime;
 import com.slamcode.goalcalendar.planning.schedule.DateTimeChangedService;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
@@ -43,6 +42,8 @@ import com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel;
 import javax.inject.Inject;
 
 public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGoalsActivityContract.ActivityView{
+
+    public final static String STARTED_FROM_PARENT_INTENT_PARAM = "STARTED_FROM_PARENT";
 
     final String ACTIVITY_ID = MonthlyGoalsActivity.class.getName();
 
@@ -75,7 +76,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
     @Inject
     ItemsCollectionAdapterProvider adapterProvider;
-    
+
     @Inject
     AutoMarkTasksCommand autoMarkTasksCommand;
 
@@ -99,23 +100,16 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
     private MonthlyGoalsViewModel activityViewModel;
 
+    private boolean launchTimeSet;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(com.slamcode.goalcalendar.R.layout.monthly_goals_activity);
-
-        this.mainLayout = this.findViewById(android.R.id.content);
         this.injectDependencies();
+        if(!this.isFirstLaunch())
+            this.startOnBoardingActivity();
 
-        this.mainLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-            @Override
-            public void onGlobalLayout() {
-                View v = mainLayout;
-                v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                onCreateGlobalLayoutAvailable();
-            }
-        });
+        this.startMainActivity();
     }
 
     @Override
@@ -227,11 +221,48 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         }
     }
 
+    private boolean isFirstLaunch()
+    {
+        return this.settingsManager.getLastLaunchDateTime() == null;
+    }
+
+    private void setLaunchTime()
+    {
+        if(!this.launchTimeSet) {
+            this.settingsManager.setLastLaunchDateTimeMillis(DateTimeHelper.getNowDateTime());
+            this.launchTimeSet = true;
+        }
+    }
+
+    private void startOnBoardingActivity()
+    {
+        Intent intent = new Intent(this, OnboardingActivity.class);
+        intent.putExtra(STARTED_FROM_PARENT_INTENT_PARAM, true);
+        this.startActivity(intent);
+    }
+
+    private void startMainActivity()
+    {
+        setContentView(com.slamcode.goalcalendar.R.layout.monthly_goals_activity);
+
+        this.mainLayout = this.findViewById(android.R.id.content);
+
+        this.mainLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                View v = mainLayout;
+                v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                onCreateGlobalLayoutAvailable();
+            }
+        });
+    }
+
     private void showDailyProgressDialog() {
         DateTime lastlaunchDateTime = this.settingsManager.getLastLaunchDateTime();
 
-        if(lastlaunchDateTime == null
-                || DateTimeHelper.isDateBefore(lastlaunchDateTime, DateTimeHelper.getTodayDateTime()))
+        if(!this.isFirstLaunch()
+                && DateTimeHelper.isDateBefore(lastlaunchDateTime, DateTimeHelper.getTodayDateTime()))
         {
             PlansSummaryDescriptionProvider.PlansSummaryDescription description
                     = this.descriptionProvider.provideDescriptionForMonth(DateTimeHelper.getCurrentYear(), DateTimeHelper.getCurrentMonth());
@@ -241,8 +272,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
                 this.showDialog(dialog);
             }
         }
-
-        this.settingsManager.setLastLaunchDateTimeMillis(DateTimeHelper.getNowDateTime());
     }
 
     private void onCreateGlobalLayoutAvailable()
@@ -255,6 +284,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         this.setupBottomSheetBehavior();
         this.runStartupCommands();
         this.showDailyProgressDialog();
+        this.setLaunchTime();
     }
 
     private void setupPresenter() {

@@ -9,8 +9,10 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = new Intent(this, MonthlyGoalsActivity.class);
-        startActivity(intent);
-        finish();
+        if(!this.getIntent().getBooleanExtra(MonthlyGoalsActivity.STARTED_FROM_PARENT_INTENT_PARAM, false)) {
+            Intent newIntent = new Intent(this, MonthlyGoalsActivity.class);
+            startActivity(newIntent);
+        }
+            finish();
     }
 }
