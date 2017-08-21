@@ -37,13 +37,6 @@ public interface MonthlyGoalsActivityContract {
         void showAddNewCategoryDialog(View view);
     }
 
-    interface ViewStatus{
-
-        void startProcessingView(String viewId);
-
-        void stopProcessingView(String viewId);
-    }
-
     /**
      * View has simple logic of managing binding presenters actions and data to concrete controls
      */

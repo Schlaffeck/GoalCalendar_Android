@@ -3,6 +3,7 @@ package com.slamcode.goalcalendar.view.dagger2;
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
+import com.slamcode.goalcalendar.view.GlobalViewProcessingState;
 import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
 import com.slamcode.goalcalendar.view.charts.data.hellocharts.HelloChartsViewDataBinder;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
@@ -20,6 +21,13 @@ import dagger.Provides;
  */
 @Module
 public final class ViewDagger2Module {
+
+    @Provides
+    @Singleton
+    public GlobalViewProcessingState provideObservableViewProcessingState()
+    {
+        return new GlobalViewProcessingState();
+    }
 
     @Provides
     @Singleton
@@ -53,5 +61,4 @@ public final class ViewDagger2Module {
     {
         return new HelloChartsViewDataBinder(applicationContext);
     }
-
 }
