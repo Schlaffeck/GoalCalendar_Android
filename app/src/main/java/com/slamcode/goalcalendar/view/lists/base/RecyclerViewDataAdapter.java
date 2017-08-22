@@ -99,6 +99,23 @@ public abstract class RecyclerViewDataAdapter<Item, ViewHolder extends ViewHolde
         this.notifyDataSetChanged();
     }
 
+    public void updateSourceCollectionOneByOne(Collection<Item> newSourceCollection) {
+        if(newSourceCollection == null)
+            newSourceCollection = CollectionUtils.emptyList();
+
+        if(this.list == null)
+            return;
+
+        this.list.clear();
+        this.notifyDataSetChanged();
+        int i = 0;
+        for(Item item : newSourceCollection)
+        {
+            this.list.add(item);
+            this.notifyItemInserted(i++);
+        }
+    }
+
     private int getItemIndex(Item item)
     {
         int i = -1;

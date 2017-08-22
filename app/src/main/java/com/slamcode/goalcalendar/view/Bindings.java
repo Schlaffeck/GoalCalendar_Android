@@ -87,12 +87,13 @@ public class Bindings {
                             itemsSource);
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
+            adapterUpToDate = true;
         }
 
         if(!adapterUpToDate && (adapter instanceof CategoryNameRecyclerViewAdapter))
         {
             CategoryNameRecyclerViewAdapter dataAdapter = (CategoryNameRecyclerViewAdapter) adapter;
-            dataAdapter.updateSourceCollection(itemsSource);
+            dataAdapter.updateSourceCollectionOneByOne(itemsSource);
         }
     }
 
@@ -120,13 +121,14 @@ public class Bindings {
                             itemsSource);
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
+            adapterUpToDate = true;
         }
 
         if(!adapterUpToDate && (adapter instanceof CategoryDailyPlansRecyclerViewAdapter))
         {
             CategoryDailyPlansRecyclerViewAdapter dataAdapter = (CategoryDailyPlansRecyclerViewAdapter) adapter;
             dataAdapter.setYearMonthPair(new YearMonthPair(monthlyPlanningCategoryListViewModel.getMonthData().getYear(), monthlyPlanningCategoryListViewModel.getMonthData().getMonth()));
-            dataAdapter.updateSourceCollection(itemsSource);
+            dataAdapter.updateSourceCollectionOneByOne(itemsSource);
         }
     }
 
@@ -159,7 +161,7 @@ public class Bindings {
         {
             DailyPlanHeaderRecyclerViewAdapter dataAdapter = (DailyPlanHeaderRecyclerViewAdapter) adapter;
             dataAdapter.setYearMonthPair(new YearMonthPair(monthViewModel.getYear(), monthViewModel.getMonth()));
-            dataAdapter.updateSourceCollection(itemsSource);
+            dataAdapter.updateSourceCollectionOneByOne(itemsSource);
         }
     }
 
