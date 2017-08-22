@@ -153,4 +153,7 @@
     <string name="edit_dailyPlans_dialog_description_header" formatted="false">%1$s, %2$tEEE, %2$tb %2$te %2$Y</string>
     <string name="monthly_goals_dailyPlans_dialog_cancel_button_text">Cancel</string>
     <string name="monthly_goals_dailyPlans_dialog_confirm_button_text">Confirm</string>
+
+    <!-- other messages -->
+    <string name="exitApplication_confirm_toast_message">Press Back again to Exit.</string>
 </resources>

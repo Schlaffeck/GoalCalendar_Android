@@ -144,4 +144,7 @@
     <string name="pref_title_markPlannedAsFailed_desctiption_checkbox">Oznaczaj niezakończone zadania jako niepowodzenie następnego dnia</string>
     <string name="notification_plannedForToday_noPlans_content">Moze zaplanujesz coś na dziś?</string>
     <string name="notification_plannedForToday_noPlans_title">Brak planów na dziś</string>
+
+    <!-- other messages -->
+    <string name="exitApplication_confirm_toast_message">Wybierz jeszcze raz by zamknąć</string>
 </resources>

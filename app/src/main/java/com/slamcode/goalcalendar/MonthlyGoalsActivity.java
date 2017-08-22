@@ -6,6 +6,7 @@ import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.GestureDetectorCompat;
@@ -21,6 +22,7 @@ import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.slamcode.goalcalendar.planning.DateTime;
 import com.slamcode.goalcalendar.planning.schedule.DateTimeChangedService;
@@ -100,6 +102,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     private MonthlyGoalsViewModel activityViewModel;
 
     private NestedScrollView bottomSheetScrollView;
+
+    private boolean exitApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,10 +227,24 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
             this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
         else {
-            super.onBackPressed();
+            if(this.exitApplication)
+                this.finish();
+            else {
+                //super.onBackPressed();
 
-            if(this.persistenceContext != null)
-                this.persistenceContext.persistData();
+                if (this.persistenceContext != null)
+                    this.persistenceContext.persistData();
+                Toast.makeText(this,
+                        R.string.exitApplication_confirm_toast_message,
+                        Toast.LENGTH_SHORT).show();
+                this.exitApplication = true;
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        exitApplication = false;
+                    }
+                }, 3 * 1000);
+            }
         }
     }
 
