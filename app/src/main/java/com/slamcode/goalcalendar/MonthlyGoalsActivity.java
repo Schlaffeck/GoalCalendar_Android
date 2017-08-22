@@ -99,6 +99,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
     private MonthlyGoalsViewModel activityViewModel;
 
+    private NestedScrollView bottomSheetScrollView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -217,6 +219,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     public void onBackPressed() {
 
         if(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            this.bottomSheetScrollView.scrollTo(0, 0);
             this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
         else {
@@ -263,8 +266,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     }
 
     private void setupBottomSheetBehavior() {
-        NestedScrollView bottomSheetScrollView = (NestedScrollView) this.findViewById(R.id.monthly_goals_activity_bottom_sheet);
-        this.bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetScrollView);
+        this.bottomSheetScrollView = (NestedScrollView) this.findViewById(R.id.monthly_goals_activity_bottom_sheet);
+        this.bottomSheetBehavior = BottomSheetBehavior.from(this.bottomSheetScrollView);
         this.bottomSheetBehavior.setPeekHeight(150);
         this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
