@@ -20,7 +20,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.slamcode.goalcalendar.onboarding.OnboardingActivity;
+import com.slamcode.goalcalendar.onboarding.OnBoardingActivity;
 import com.slamcode.goalcalendar.planning.DateTime;
 import com.slamcode.goalcalendar.planning.schedule.DateTimeChangedService;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
@@ -106,7 +106,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.injectDependencies();
-        if(!this.isFirstLaunch())
+        if(this.isFirstLaunch())
             this.startOnBoardingActivity();
 
         this.startMainActivity();
@@ -236,7 +236,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
     private void startOnBoardingActivity()
     {
-        Intent intent = new Intent(this, OnboardingActivity.class);
+        Intent intent = new Intent(this, OnBoardingActivity.class);
         intent.putExtra(STARTED_FROM_PARENT_INTENT_PARAM, true);
         this.startActivity(intent);
     }

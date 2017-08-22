@@ -11,6 +11,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         if(!this.getIntent().getBooleanExtra(MonthlyGoalsActivity.STARTED_FROM_PARENT_INTENT_PARAM, false)) {
             Intent newIntent = new Intent(this, MonthlyGoalsActivity.class);
+            newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(newIntent);
         }
             finish();

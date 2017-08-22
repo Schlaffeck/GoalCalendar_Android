@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
@@ -17,8 +16,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -30,12 +27,11 @@ import android.widget.TextView;
 
 import com.slamcode.goalcalendar.MonthlyGoalsActivity;
 import com.slamcode.goalcalendar.R;
-import com.slamcode.goalcalendar.view.utils.ResourcesHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class OnboardingActivity extends AppCompatActivity {
+public class OnBoardingActivity extends AppCompatActivity {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -93,7 +89,7 @@ public class OnboardingActivity extends AppCompatActivity {
         skipButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finishOnboarding();
+                finishOnBoarding();
             }
         });
 
@@ -101,7 +97,7 @@ public class OnboardingActivity extends AppCompatActivity {
         finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finishOnboarding();
+                finishOnBoarding();
             }
         });
 
@@ -121,16 +117,15 @@ public class OnboardingActivity extends AppCompatActivity {
             mViewPager.setCurrentItem(curPosition + 1);
     }
 
-    private void finishOnboarding()
+    private void finishOnBoarding()
     {
         Intent intent = this.getIntent();
         if(!intent.getBooleanExtra(MonthlyGoalsActivity.STARTED_FROM_PARENT_INTENT_PARAM, false)) {
             Intent newIntent = new Intent(this, MonthlyGoalsActivity.class);
+            newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(newIntent);
         }
-        else {
-            finish();
-        }
+        this.finish();
     }
 
     private void initializePagesData()
