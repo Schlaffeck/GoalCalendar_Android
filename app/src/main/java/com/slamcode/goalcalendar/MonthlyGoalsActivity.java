@@ -259,10 +259,11 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     }
 
     private void showDailyProgressDialog() {
-        DateTime lastlaunchDateTime = this.settingsManager.getLastLaunchDateTime();
+        DateTime lastLaunchDateTime = this.settingsManager.getLastLaunchDateTime();
 
-        if(!this.isFirstLaunch()
-                && DateTimeHelper.isDateBefore(lastlaunchDateTime, DateTimeHelper.getTodayDateTime()))
+        if(!this.launchTimeSet
+               && !this.isFirstLaunch()
+                && DateTimeHelper.isDateBefore(lastLaunchDateTime, DateTimeHelper.getTodayDateTime()))
         {
             PlansSummaryDescriptionProvider.PlansSummaryDescription description
                     = this.descriptionProvider.provideDescriptionForMonth(DateTimeHelper.getCurrentYear(), DateTimeHelper.getCurrentMonth());
