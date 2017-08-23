@@ -14,6 +14,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
@@ -47,6 +48,8 @@ import javax.inject.Inject;
 public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGoalsActivityContract.ActivityView{
 
     final String ACTIVITY_ID = MonthlyGoalsActivity.class.getName();
+
+    private final static String LOG_TAG = "GC_MGoalsAct";
 
     View mainLayout;
 
@@ -107,11 +110,14 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "Monthly goals activity creating - START");
         super.onCreate(savedInstanceState);
         setContentView(com.slamcode.goalcalendar.R.layout.monthly_goals_activity);
+        Log.d(LOG_TAG, "Monthly goals activity view set");
 
         this.mainLayout = this.findViewById(android.R.id.content);
         this.injectDependencies();
+        Log.d(LOG_TAG, "Monthly goals dependencies injected");
 
         this.mainLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
@@ -120,8 +126,10 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
                 View v = mainLayout;
                 v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 onCreateGlobalLayoutAvailable();
+                Log.d(LOG_TAG, "Monthly goals activity view rendered");
             }
         });
+        Log.d(LOG_TAG, "Monthly goals activity creating - END");
     }
 
     @Override

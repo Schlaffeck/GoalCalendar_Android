@@ -164,7 +164,8 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                 android:gravity="center"
-                bind:categoryPlansSource="@{vm.monthlyPlans}"></android.support.v7.widget.RecyclerView>
+                bind:categoryPlansSource="@{vm.monthlyPlans}"
+                bind:onLayoutReady="@{presenter.onLayoutReadyCallback}"></android.support.v7.widget.RecyclerView>
             </LinearLayout>
         </HorizontalScrollView>
     </RelativeLayout>

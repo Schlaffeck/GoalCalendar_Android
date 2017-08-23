@@ -10,8 +10,10 @@ import android.databinding.InverseBindingListener;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -38,9 +40,12 @@ import javax.inject.Inject;
 
 public class Bindings {
 
+    private static final String LOG_TAG = "GC_Bindings";
+
     @BindingAdapter("bind:categorySummarySource")
     public static void setCategorySummariesItemsSource(RecyclerView recyclerView, ObservableList<CategoryPlansViewModel> itemsSource)
     {
+        Log.d(LOG_TAG, "Binding category summary source - START");
         if(recyclerView == null)
             return;
 
@@ -52,23 +57,29 @@ public class Bindings {
             Dagger2InjectData injectData = new Dagger2InjectData();
             Dagger2ComponentContainer.getApplicationDagger2Component().inject(injectData);
 
+            Log.d(LOG_TAG, "Binding category summary source - creating new adapter");
             adapter = injectData.itemsCollectionAdapterProvider
                     .providePlansSummaryForCategoriesRecyclerViewAdapter(
                             injectData.applicationContext.getDefaultContext(),
                             (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE));
             recyclerView.setAdapter(adapter);
+            adapterUpToDate = true;
         }
 
         if(!adapterUpToDate && (adapter instanceof CategoryPlansSummaryRecyclerViewAdapter))
         {
+            Log.d(LOG_TAG, "Binding category summary source - updating adapter source");
             CategoryPlansSummaryRecyclerViewAdapter dataAdapter = (CategoryPlansSummaryRecyclerViewAdapter) adapter;
             dataAdapter.updateSourceCollection(itemsSource);
         }
+
+        Log.d(LOG_TAG, "Binding category summary source - END");
     }
 
     @BindingAdapter("bind:categoryNamesSource")
     public static void setCategoryNamesItemsSource(RecyclerView recyclerView, ObservableList<CategoryPlansViewModel> itemsSource)
     {
+        Log.d(LOG_TAG, "Binding category names source - START");
         if(recyclerView == null)
             return;
 
@@ -77,9 +88,11 @@ public class Bindings {
         boolean adapterUpToDate = false;
         if(adapter == null)
         {
+            Log.d(LOG_TAG, "Binding category names source - injecting services");
             Dagger2InjectData injectData = new Dagger2InjectData();
             Dagger2ComponentContainer.getApplicationDagger2Component().inject(injectData);
 
+            Log.d(LOG_TAG, "Binding category names source - creating new adapter");
             adapter = injectData.itemsCollectionAdapterProvider
                     .provideCategoryNameListViewAdapter(
                             injectData.applicationContext.getDefaultContext(),
@@ -92,14 +105,18 @@ public class Bindings {
 
         if(!adapterUpToDate && (adapter instanceof CategoryNameRecyclerViewAdapter))
         {
+            Log.d(LOG_TAG, "Binding category names source - updating adapter source");
             CategoryNameRecyclerViewAdapter dataAdapter = (CategoryNameRecyclerViewAdapter) adapter;
             dataAdapter.updateSourceCollectionOneByOne(itemsSource);
         }
+
+        Log.d(LOG_TAG, "Binding category names source - END");
     }
 
     @BindingAdapter("bind:categoryPlansSource")
     public static void setCategoryPlansItemsSource(RecyclerView recyclerView, MonthlyPlanningCategoryListViewModel monthlyPlanningCategoryListViewModel)
     {
+        Log.d(LOG_TAG, "Binding category plans source - START");
         if(recyclerView == null)
             return;
 
@@ -109,9 +126,11 @@ public class Bindings {
         boolean adapterUpToDate = false;
         if(adapter == null)
         {
+            Log.d(LOG_TAG, "Binding category plans source - injecting services");
             Dagger2InjectData injectData = new Dagger2InjectData();
             Dagger2ComponentContainer.getApplicationDagger2Component().inject(injectData);
 
+            Log.d(LOG_TAG, "Binding category plans source - creating new adapter");
             adapter = injectData.itemsCollectionAdapterProvider
                     .provideCategoryDailyPlansListViewAdapter(
                             injectData.applicationContext.getDefaultContext(),
@@ -126,10 +145,12 @@ public class Bindings {
 
         if(!adapterUpToDate && (adapter instanceof CategoryDailyPlansRecyclerViewAdapter))
         {
+            Log.d(LOG_TAG, "Binding category plans source - updating adapter source");
             CategoryDailyPlansRecyclerViewAdapter dataAdapter = (CategoryDailyPlansRecyclerViewAdapter) adapter;
             dataAdapter.setYearMonthPair(new YearMonthPair(monthlyPlanningCategoryListViewModel.getMonthData().getYear(), monthlyPlanningCategoryListViewModel.getMonthData().getMonth()));
             dataAdapter.updateSourceCollectionOneByOne(itemsSource);
         }
+        Log.d(LOG_TAG, "Binding category plans source - END");
     }
 
 
@@ -242,6 +263,22 @@ public class Bindings {
             }
         });
         alpha.start();
+    }
+
+    @BindingAdapter("bind:onLayoutReady")
+    public static void setOnLayoutReadyCallback(final View view, final OnLayoutReadyCallback callback){
+        if(view == null)
+            return;
+
+        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (callback != null) {
+                    view.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    callback.onLayoutReady(view);
+                }
+            }
+        });
     }
 
     public static class Dagger2InjectData{

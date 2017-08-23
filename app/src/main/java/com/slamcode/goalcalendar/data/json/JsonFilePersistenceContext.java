@@ -2,6 +2,7 @@ package com.slamcode.goalcalendar.data.json;
 
 import android.content.Context;
 import android.databinding.Observable;
+import android.util.Log;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
@@ -31,6 +32,7 @@ import java.util.Set;
 public class JsonFilePersistenceContext implements PersistenceContext {
 
     public static final String DEFAULT_FILE_NAME = "data.json";
+    private static final String LOG_TAG = "GC_JsonPerCtx";
     private JsonDataBundle dataBundle;
     private final Context appContext;
     private final String fileName;
@@ -59,6 +61,7 @@ public class JsonFilePersistenceContext implements PersistenceContext {
 
         FileOutputStream fileStream;
         try{
+            Log.d(LOG_TAG, "Persisting json data file - START");
             Gson gson = new GsonBuilder()
                     .create();
             fileStream = this.appContext.openFileOutput(this.fileName, Context.MODE_PRIVATE);
@@ -66,10 +69,11 @@ public class JsonFilePersistenceContext implements PersistenceContext {
             fileStream.close();
 
             this.onContextDataPersisted();
+            Log.d(LOG_TAG, "Persisting json data file - END");
         }
         catch(Exception exception)
         {
-            exception.printStackTrace();
+            Log.e(LOG_TAG, "Persisting json data file - FAILURE", exception);
         }
     }
 
@@ -81,6 +85,7 @@ public class JsonFilePersistenceContext implements PersistenceContext {
     @Override
     public void initializePersistedData() {
         try {
+            Log.d(LOG_TAG, "Reading json data file - START");
             File bundleFile = new File(this.getFilePath());
             if(bundleFile.exists()) {
                 FileReader fileReader = new FileReader(this.getFilePath());
@@ -94,10 +99,11 @@ public class JsonFilePersistenceContext implements PersistenceContext {
             {
                 this.dataBundle = new JsonDataBundle();
             }
+            Log.d(LOG_TAG, "Reading json data file - END");
         }
         catch(Exception exception)
         {
-            exception.printStackTrace();
+            Log.e(LOG_TAG, "Reading json data file - FAILURE", exception);
         }
     }
 
