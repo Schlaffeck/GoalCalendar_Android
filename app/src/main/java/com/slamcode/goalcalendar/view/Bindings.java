@@ -51,7 +51,6 @@ public class Bindings {
 
         RecyclerView.Adapter adapter = recyclerView.getAdapter();
 
-        boolean adapterUpToDate = false;
         if(adapter == null)
         {
             Dagger2InjectData injectData = new Dagger2InjectData();
@@ -63,10 +62,9 @@ public class Bindings {
                             injectData.applicationContext.getDefaultContext(),
                             (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE));
             recyclerView.setAdapter(adapter);
-            adapterUpToDate = true;
         }
 
-        if(!adapterUpToDate && (adapter instanceof CategoryPlansSummaryRecyclerViewAdapter))
+        if((adapter instanceof CategoryPlansSummaryRecyclerViewAdapter))
         {
             Log.d(LOG_TAG, "Binding category summary source - updating adapter source");
             CategoryPlansSummaryRecyclerViewAdapter dataAdapter = (CategoryPlansSummaryRecyclerViewAdapter) adapter;
