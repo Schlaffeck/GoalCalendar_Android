@@ -36,7 +36,7 @@
     <dimen name="monthly_goals_table_category_name_height">30dp</dimen>
     <dimen name="monthly_goals_table_category_frequency_height">25dp</dimen>
 
-    <dimen name="monthly_goals_category_listView_lastItem_paddingBottom">50dp</dimen>
+    <dimen name="monthly_goals_category_listView_lastItem_paddingBottom">55dp</dimen>
 
     <!-- state cell -->
     <dimen name="planning_state_button_border_width">5dp</dimen>
@@ -57,4 +57,5 @@
 
     <!-- summary bottom -->
     <dimen name="monthly_goals_summary_pieChart_minHeight">300dp</dimen>
+    <dimen name="monthly_goals_summary_bottomSheet_peekHeight">50dp</dimen>
 </resources>

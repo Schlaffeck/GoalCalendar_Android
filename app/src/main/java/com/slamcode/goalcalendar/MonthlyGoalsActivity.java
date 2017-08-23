@@ -9,13 +9,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -294,7 +292,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     private void setupBottomSheetBehavior() {
         this.bottomSheetScrollView = (NestedScrollView) this.findViewById(R.id.monthly_goals_activity_bottom_sheet);
         this.bottomSheetBehavior = BottomSheetBehavior.from(this.bottomSheetScrollView);
-        this.bottomSheetBehavior.setPeekHeight(150);
+        this.bottomSheetBehavior.setPeekHeight(this.getResources().getDimensionPixelSize(R.dimen.monthly_goals_summary_bottomSheet_peekHeight));
         this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
