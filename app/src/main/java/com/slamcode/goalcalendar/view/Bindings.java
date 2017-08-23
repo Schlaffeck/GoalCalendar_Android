@@ -30,6 +30,7 @@ import com.slamcode.goalcalendar.view.lists.DailyPlanHeaderRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
 import com.slamcode.goalcalendar.viewmodels.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.inject.Inject;
@@ -75,7 +76,7 @@ public class Bindings {
     }
 
     @BindingAdapter("bind:categoryNamesSource")
-    public static void setCategoryNamesItemsSource(RecyclerView recyclerView, ObservableList<CategoryPlansViewModel> itemsSource)
+    public static void setCategoryNamesItemsSource(final RecyclerView recyclerView, final ObservableList<CategoryPlansViewModel> itemsSource)
     {
         Log.d(LOG_TAG, "Binding category names source - START");
         if(recyclerView == null)
@@ -83,7 +84,6 @@ public class Bindings {
 
         RecyclerView.Adapter adapter = recyclerView.getAdapter();
 
-        boolean adapterUpToDate = false;
         if(adapter == null)
         {
             Log.d(LOG_TAG, "Binding category names source - injecting services");
@@ -95,33 +95,39 @@ public class Bindings {
                     .provideCategoryNameListViewAdapter(
                             injectData.applicationContext.getDefaultContext(),
                             (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-                            itemsSource);
+                            new ObservableArrayList<CategoryPlansViewModel>());
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
-            adapterUpToDate = true;
         }
 
-        if(!adapterUpToDate && (adapter instanceof CategoryNameRecyclerViewAdapter))
+        if(adapter instanceof CategoryNameRecyclerViewAdapter)
         {
-            Log.d(LOG_TAG, "Binding category names source - updating adapter source");
-            CategoryNameRecyclerViewAdapter dataAdapter = (CategoryNameRecyclerViewAdapter) adapter;
-            dataAdapter.updateSourceCollectionOneByOne(itemsSource);
+            final RecyclerView.Adapter finalAdapter = adapter;
+            recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout()
+                {
+                    recyclerView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    Log.d(LOG_TAG, "Binding category names source - updating adapter source");
+                    CategoryNameRecyclerViewAdapter dataAdapter = (CategoryNameRecyclerViewAdapter) finalAdapter;
+                    dataAdapter.updateSourceCollectionOneByOne(itemsSource);
+                }
+            });
         }
 
         Log.d(LOG_TAG, "Binding category names source - END");
     }
 
     @BindingAdapter("bind:categoryPlansSource")
-    public static void setCategoryPlansItemsSource(RecyclerView recyclerView, MonthlyPlanningCategoryListViewModel monthlyPlanningCategoryListViewModel)
+    public static void setCategoryPlansItemsSource(final RecyclerView recyclerView, final MonthlyPlanningCategoryListViewModel monthlyPlanningCategoryListViewModel)
     {
         Log.d(LOG_TAG, "Binding category plans source - START");
         if(recyclerView == null)
             return;
 
-        ObservableList<CategoryPlansViewModel> itemsSource = monthlyPlanningCategoryListViewModel.getCategoryPlansList();
+        final ObservableList<CategoryPlansViewModel> itemsSource = monthlyPlanningCategoryListViewModel.getCategoryPlansList();
         RecyclerView.Adapter adapter = recyclerView.getAdapter();
 
-        boolean adapterUpToDate = false;
         if(adapter == null)
         {
             Log.d(LOG_TAG, "Binding category plans source - injecting services");
@@ -135,18 +141,27 @@ public class Bindings {
                             (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE),
                             injectData.dateTimeChangeListenersRegistry,
                             new YearMonthPair(monthlyPlanningCategoryListViewModel.getMonthData().getYear(), monthlyPlanningCategoryListViewModel.getMonthData().getMonth()),
-                            itemsSource);
+                            new ObservableArrayList<CategoryPlansViewModel>());
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
-            adapterUpToDate = true;
         }
 
-        if(!adapterUpToDate && (adapter instanceof CategoryDailyPlansRecyclerViewAdapter))
+        if(adapter instanceof CategoryDailyPlansRecyclerViewAdapter)
         {
-            Log.d(LOG_TAG, "Binding category plans source - updating adapter source");
-            CategoryDailyPlansRecyclerViewAdapter dataAdapter = (CategoryDailyPlansRecyclerViewAdapter) adapter;
-            dataAdapter.setYearMonthPair(new YearMonthPair(monthlyPlanningCategoryListViewModel.getMonthData().getYear(), monthlyPlanningCategoryListViewModel.getMonthData().getMonth()));
-            dataAdapter.updateSourceCollectionOneByOne(itemsSource);
+            final RecyclerView.Adapter finalAdapter = adapter;
+
+            recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+                @Override
+                public void onGlobalLayout()
+                {
+                    recyclerView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    Log.d(LOG_TAG, "Binding category plans source - updating adapter source");
+                    CategoryDailyPlansRecyclerViewAdapter dataAdapter = (CategoryDailyPlansRecyclerViewAdapter) finalAdapter;
+                    dataAdapter.setYearMonthPair(new YearMonthPair(monthlyPlanningCategoryListViewModel.getMonthData().getYear(), monthlyPlanningCategoryListViewModel.getMonthData().getMonth()));
+                    dataAdapter.updateSourceCollectionOneByOne(itemsSource);
+                }
+            });
         }
         Log.d(LOG_TAG, "Binding category plans source - END");
     }

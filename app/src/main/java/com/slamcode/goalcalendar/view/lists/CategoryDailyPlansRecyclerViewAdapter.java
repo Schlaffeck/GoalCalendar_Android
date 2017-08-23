@@ -8,6 +8,7 @@ import android.support.v7.widget.util.SortedListAdapterCallback;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.planning.schedule.DateTimeChangeListenersRegistry;
@@ -20,7 +21,9 @@ import com.slamcode.goalcalendar.view.lists.base.bindable.BindableViewHolderBase
 import com.slamcode.goalcalendar.view.lists.base.bindable.ObservableSortedList;
 import com.slamcode.goalcalendar.view.utils.ViewReference;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
+import com.slamcode.goalcalendar.viewmodels.DailyPlansViewModel;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 
 /**
@@ -106,18 +109,24 @@ public class CategoryDailyPlansRecyclerViewAdapter extends BindableRecyclerViewD
         }
 
         @Override
-        public void bindToModel(CategoryPlansViewModel modelObject) {
+        public void bindToModel(final CategoryPlansViewModel modelObject) {
             super.bindToModel(modelObject);
 
-            DailyPlanRecyclerViewAdapter adapter = new DailyPlanRecyclerViewAdapter(
+            final DailyPlanRecyclerViewAdapter adapter = new DailyPlanRecyclerViewAdapter(
                     getView().getContext(),
                     getLayoutInflater(),
                     dateTimeChangeListenersRegistry,
                     yearMonthPair,
-                    modelObject.getDailyPlansList());
+                    new ArrayList<DailyPlansViewModel>());
 
             this.daysListGridView.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
+            daysListGridView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    daysListGridView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    adapter.updateSourceCollectionOneByOne(modelObject.getDailyPlansList());
+                }
+            });
         }
     }
 

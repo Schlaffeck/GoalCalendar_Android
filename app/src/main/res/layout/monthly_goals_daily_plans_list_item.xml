@@ -1,27 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="vm"
             type="com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel"/>
     </data>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
-    android:id="@+id/monthly_goals_list_item_mainLayout"
-    android:layout_height="?android:attr/listPreferredItemHeight">
-
     <!-- days in month list -->
     <android.support.v7.widget.RecyclerView
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:background="@color/listItemBackgroundColor"
         android:id="@+id/monthly_goals_list_item_days_list"
         android:horizontalSpacing="@dimen/default_horizontal_spacing"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/listPreferredItemHeight"
         android:orientation="horizontal"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        android:layout_toRightOf="@id/monthly_goals_list_item_category_panel"></android.support.v7.widget.RecyclerView>
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
 
-</LinearLayout>
 </layout>
