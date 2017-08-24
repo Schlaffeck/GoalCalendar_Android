@@ -27,6 +27,8 @@ import com.slamcode.goalcalendar.planning.DateTime;
 import com.slamcode.goalcalendar.planning.schedule.DateTimeChangedService;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryDescriptionProvider;
+import com.slamcode.goalcalendar.service.notification.NotificationScheduler;
+import com.slamcode.goalcalendar.service.notification.NotificationServiceStarterReceiver;
 import com.slamcode.goalcalendar.settings.AppSettingsManager;
 import com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract;
 import com.slamcode.goalcalendar.dagger2.ComposableApplication;
@@ -157,6 +159,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_DATE_CHANGED);
         this.registerReceiver(this.dateTimeChangedService, intentFilter);
+
     }
 
     @Override
@@ -164,6 +167,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         if(this.persistenceContext != null)
             this.persistenceContext.persistData();
         this.unregisterReceiver(this.dateTimeChangedService);
+        //this.unregisterReceiver(this.notificationServiceStarterReceiver);
         super.onStop();
     }
 
@@ -277,6 +281,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         ViewBinder.bindViews(this);
 
         this.setSupportActionBar((Toolbar)this.findViewById(R.id.toolbar));
+        this.startServices();
         this.setupPresenter();
         this.setupRecyclerViews();
         this.setupBottomSheetBehavior();
@@ -303,6 +308,11 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
     private void runStartupCommands() {
         this.autoMarkTasksCommand.execute(this.findViewById(R.id.monthly_goals_activity_main_coordinator_layout));
+    }
+
+    private void startServices()
+    {
+        this.startService(new Intent(this, NotificationScheduler.class));
     }
 
     private void injectDependencies() {

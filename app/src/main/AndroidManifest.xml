@@ -10,7 +10,8 @@
         android:icon="@drawable/planner_96"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:enabled="true">
         <service
             android:name=".service.notification.NotificationScheduler"
             android:label="Notification Scheduler">
@@ -20,22 +21,21 @@
         </service>
 
         <receiver
-            android:name=".service.notification.NotificationServiceStarterReceiver"
-            android:label="BootCompletedReceiver"
-            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            android:name="com.slamcode.goalcalendar.service.notification.NotificationServiceStarterReceiver"
+            android:label="NotificationServiceStarterReceiver"
+            android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
                 <action android:name="android.intent.action.SCREEN_ON" />
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.intent.action.EXTERNAL_APPLICATIONS_AVAILABLE" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
         <receiver
             android:name=".service.notification.NotificationPublisher"
-            android:label="NotificationPublisher" />
+            android:label="NotificationPublisher"
+            android:enabled="true"/>
 
         <activity
             android:name=".MonthlyGoalsActivity"
