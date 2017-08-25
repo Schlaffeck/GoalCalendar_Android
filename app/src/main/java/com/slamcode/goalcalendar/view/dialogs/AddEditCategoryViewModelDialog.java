@@ -3,6 +3,7 @@ package com.slamcode.goalcalendar.view.dialogs;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
@@ -19,7 +20,7 @@ import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 import com.slamcode.goalcalendar.view.dialogs.base.ModelBasedDialog;
 import com.slamcode.goalcalendar.view.utils.ViewReference;
 import com.slamcode.goalcalendar.view.utils.ViewOnClick;
-import com.slamcode.goalcalendar.view.utils.ViewBinder;
+import static com.slamcode.goalcalendar.view.utils.ViewBinder.*;
 import com.slamcode.goalcalendar.view.validation.CategoryNameTextValidator;
 import com.slamcode.goalcalendar.view.utils.ResourcesHelper;
 import com.slamcode.goalcalendar.view.utils.SpinnerHelper;
@@ -48,6 +49,12 @@ public class AddEditCategoryViewModelDialog extends ModelBasedDialog<CategoryPla
     @ViewReference(R.id.monthly_goals_category_dialog_frequency_numberpicker)
     NumberPicker frequencyValueNumberPicker;
 
+    @ViewReference(R.id.monthly_goals_category_dialog_add_button)
+    Button addButton;
+
+    @ViewReference(R.id.monthly_goals_category_dialog_cancel_button)
+    Button cancelButton;
+
     MonthViewModel monthViewModel;
 
     private PlansSummaryCalculator plansSummaryCalculator;
@@ -65,10 +72,12 @@ public class AddEditCategoryViewModelDialog extends ModelBasedDialog<CategoryPla
     protected View initializeView(LayoutInflater inflater)
     {
         View view = inflater.inflate(R.layout.monthly_goals_add_edit_category_dialog_layout, null);
-        this.headerTextView = ViewBinder.findView(view, R.id.monthly_goals_category_dialog_header_textview);
-        this.categoryNameEditText = ViewBinder.findView(view, R.id.monthly_goals_category_dialog_name_edittext);
-        this.frequencyPeriodSpinner = ViewBinder.findView(view, R.id.monthly_goals_category_dialog_period_spinner);
-        this.frequencyValueNumberPicker = ViewBinder.findView(view, R.id.monthly_goals_category_dialog_frequency_numberpicker);
+        this.headerTextView = findView(view, R.id.monthly_goals_category_dialog_header_textview);
+        this.categoryNameEditText = findView(view, R.id.monthly_goals_category_dialog_name_edittext);
+        this.frequencyPeriodSpinner = findView(view, R.id.monthly_goals_category_dialog_period_spinner);
+        this.frequencyValueNumberPicker = findView(view, R.id.monthly_goals_category_dialog_frequency_numberpicker);
+        this.addButton = findView(view, R.id.monthly_goals_category_dialog_add_button);
+        this.cancelButton = findView(view, R.id.monthly_goals_category_dialog_cancel_button);
 
         // setFrequencyPeriod view data
         this.headerTextView.setText(
@@ -90,6 +99,20 @@ public class AddEditCategoryViewModelDialog extends ModelBasedDialog<CategoryPla
                 android.R.layout.simple_spinner_dropdown_item,
                 ResourcesHelper.frequencyPeriodResourceStrings(this.getActivity()));
         this.frequencyPeriodSpinner.setAdapter(periodStringsAdapter);
+
+        this.addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commitChanges();
+            }
+        });
+
+        this.cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancelChanges();
+            }
+        });
 
         // setFrequencyPeriod values
         if(this.getModel() != null)
