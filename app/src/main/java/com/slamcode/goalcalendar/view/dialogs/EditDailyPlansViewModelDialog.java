@@ -30,8 +30,8 @@ public class EditDailyPlansViewModelDialog extends ModelBasedDialog<EditDailyPla
     protected View initializeView(LayoutInflater inflater) {
 
         View view = inflater.inflate(R.layout.monthly_goals_edit_daily_plans_dialog_layout, null);
-
-        ViewBinder.bindViews(this, view);
+        this.descriptionEditText = ViewBinder.findView(view, R.id.edit_dailyPlans_dialog_description_edittext);
+        this.headerTextView = ViewBinder.findView(view, R.id.edit_dailyPlans_dialog_header_textview);
 
         this.headerTextView.setText(
                 String.format(

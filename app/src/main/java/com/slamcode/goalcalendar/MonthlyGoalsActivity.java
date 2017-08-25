@@ -71,6 +71,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     @ViewReference(R.id.monthly_goals_summary_content_layout)
     LinearLayout summaryContentLayout;
 
+    private NestedScrollView bottomSheetScrollView;
+
     // dependencies
     @Inject
     ActivityViewStateProvider viewStateProvider;
@@ -104,9 +106,9 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
     private MonthlyGoalsViewModel activityViewModel;
 
-    private NestedScrollView bottomSheetScrollView;
-
     private boolean exitApplication;
+
+    private boolean dataBindingsSetUp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +118,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         Log.d(LOG_TAG, "Monthly goals activity view set");
 
         this.mainLayout = this.findViewById(android.R.id.content);
+        this.findAllRelatedViews();
         this.injectDependencies();
         Log.d(LOG_TAG, "Monthly goals dependencies injected");
 
@@ -155,6 +158,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     @Override
     protected void onStart() {
         super.onStart();
+        this.setupDataBindings();
         this.showDailyProgressDialog();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_DATE_CHANGED);
@@ -179,9 +183,20 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
         this.activityViewModel = data;
 
+        this.setupDataBindings();
+    }
+
+    private void setupDataBindings()
+    {
+        if(dataBindingsSetUp
+                || this.activityViewModel == null)
+            return;
+        MonthlyGoalsViewModel data = this.activityViewModel;
         if(this.monthlyGoalsActivityLayout == null) {
+            this.findAllRelatedViews();
+
             if(this.monthlyGoalsActivityLayout == null)
-                throw new IllegalArgumentException("monthlyGoalsActivityLayout is null");
+                throw new IllegalArgumentException("monthlyGoalsActivityLayout is null and can not be found in activity view");
         }
 
         if(this.mainActivityContentBinding == null)
@@ -195,7 +210,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         monthlyPlansGridContentBinding.setVariable(BR.presenter, this.presenter);
         monthlyPlansGridContentBinding.setVariable(BR.vm, data);
 
-
         ViewDataBinding monthlyPlansSummaryContentBinding = DataBindingUtil.bind(this.summaryContentLayout);
 
         monthlyPlansSummaryContentBinding.setVariable(BR.presenter, this.presenter);
@@ -205,6 +219,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
         emptyContentBinding.setVariable(BR.presenter, this.presenter);
         emptyContentBinding.setVariable(BR.vm, data);
+
+        this.dataBindingsSetUp = true;
 
         final RecyclerView dailyPlansRecyclerView = (RecyclerView) this.findViewById(R.id.monthly_goals_header_list_item_days_list);
 
@@ -258,6 +274,17 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         }
     }
 
+    private void findAllRelatedViews()
+    {
+        this.monthlyGoalsActivityLayout = ViewBinder.findView(this, R.id.monthly_goals_activity_main_coordinator_layout);
+        this.categoryNamesRecyclerView = ViewBinder.findView(this, R.id.monthly_goals_listview);
+        this.categoryPlansRecyclerView = ViewBinder.findView(this, R.id.monthly_goals_dailyplans_listview);
+        this.monthlyPlansGridContentLayout = ViewBinder.findView(this, R.id.content_monthly_goals);
+        this.emptyContentHorizontalScrollView = ViewBinder.findView(this, R.id.monthly_goals_emptyContent_horizontallScrollView);
+        this.summaryContentLayout = ViewBinder.findView(this, R.id.monthly_goals_summary_content_layout);
+        this.bottomSheetScrollView = ViewBinder.findView(this, R.id.monthly_goals_activity_bottom_sheet);
+    }
+
     private void showDailyProgressDialog() {
         DateTime lastlaunchDateTime = this.settingsManager.getLastLaunchDateTime();
 
@@ -278,8 +305,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
     private void onCreateGlobalLayoutAvailable()
     {
-        ViewBinder.bindViews(this);
-
         this.setSupportActionBar((Toolbar)this.findViewById(R.id.toolbar));
         this.startServices();
         this.setupPresenter();

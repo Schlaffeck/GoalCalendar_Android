@@ -19,6 +19,7 @@ import com.slamcode.goalcalendar.view.lists.base.SortedListCallbackSet;
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableRecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableViewHolderBase;
 import com.slamcode.goalcalendar.view.lists.base.bindable.ObservableSortedList;
+import com.slamcode.goalcalendar.view.utils.ViewBinder;
 import com.slamcode.goalcalendar.view.utils.ViewReference;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 import com.slamcode.goalcalendar.viewmodels.DailyPlansViewModel;
@@ -105,6 +106,7 @@ public class CategoryDailyPlansRecyclerViewAdapter extends BindableRecyclerViewD
                 View view)
         {
             super(view);
+            this.daysListGridView = ViewBinder.findView(view, R.id.monthly_goals_list_item_days_list);
             this.daysListGridView.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
         }
 

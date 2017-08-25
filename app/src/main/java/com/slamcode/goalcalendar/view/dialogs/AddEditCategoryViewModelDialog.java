@@ -65,8 +65,10 @@ public class AddEditCategoryViewModelDialog extends ModelBasedDialog<CategoryPla
     protected View initializeView(LayoutInflater inflater)
     {
         View view = inflater.inflate(R.layout.monthly_goals_add_edit_category_dialog_layout, null);
-
-        ViewBinder.bindViews(this, view);
+        this.headerTextView = ViewBinder.findView(view, R.id.monthly_goals_category_dialog_header_textview);
+        this.categoryNameEditText = ViewBinder.findView(view, R.id.monthly_goals_category_dialog_name_edittext);
+        this.frequencyPeriodSpinner = ViewBinder.findView(view, R.id.monthly_goals_category_dialog_period_spinner);
+        this.frequencyValueNumberPicker = ViewBinder.findView(view, R.id.monthly_goals_category_dialog_frequency_numberpicker);
 
         // setFrequencyPeriod view data
         this.headerTextView.setText(

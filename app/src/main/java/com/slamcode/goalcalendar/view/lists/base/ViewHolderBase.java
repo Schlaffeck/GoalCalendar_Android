@@ -25,7 +25,6 @@ public class ViewHolderBase<Model> extends RecyclerView.ViewHolder {
     {
         super(view);
         this.view = view;
-        ViewBinder.bindViews(this, view);
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {

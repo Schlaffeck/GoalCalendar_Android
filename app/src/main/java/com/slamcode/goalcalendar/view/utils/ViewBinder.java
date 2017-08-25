@@ -16,39 +16,39 @@ import java.lang.reflect.Method;
 
 public class ViewBinder {
 
-    public static void bindViews(Activity activity) {
-
-        if(activity == null)
-            throw new IllegalArgumentException("activity is null");
-
-        bindViews(activity, activity.findViewById(android.R.id.content));
-
-//        for(Field fieldData : activity.getClass().getDeclaredFields())
-//        {
-//            ViewReference ann = fieldData.getAnnotation(ViewReference.class);
-//            if(ann != null)
-//            {
-//                View view = activity.findViewById(ann.value());
-//                if(view != null)
-//                {
-//                    try {
-//                        fieldData.set(activity, fieldData.getType().cast(view));
-//                    } catch (IllegalAccessException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        }
-    }
-
-    public static void bindViews(Object object, View mainView)
-    {
-        if(mainView == null)
-            throw new IllegalArgumentException("mainView is null");
-
-        bindFieldsToViews(object, mainView);
-        bindMethodsToListeners(object, mainView);
-    }
+//    public static void bindViews(Activity activity) {
+//
+//        if(activity == null)
+//            throw new IllegalArgumentException("activity is null");
+//
+//        bindViews(activity, activity.findViewById(android.R.id.content));
+//
+////        for(Field fieldData : activity.getClass().getDeclaredFields())
+////        {
+////            ViewReference ann = fieldData.getAnnotation(ViewReference.class);
+////            if(ann != null)
+////            {
+////                View view = activity.findViewById(ann.value());
+////                if(view != null)
+////                {
+////                    try {
+////                        fieldData.set(activity, fieldData.getType().cast(view));
+////                    } catch (IllegalAccessException e) {
+////                        e.printStackTrace();
+////                    }
+////                }
+////            }
+////        }
+//    }
+//
+//    public static void bindViews(Object object, View mainView)
+//    {
+//        if(mainView == null)
+//            throw new IllegalArgumentException("mainView is null");
+//
+//        bindFieldsToViews(object, mainView);
+//        bindMethodsToListeners(object, mainView);
+//    }
 
     private static void bindFieldsToViews(Object object, View mainView)
     {
@@ -97,8 +97,16 @@ public class ViewBinder {
         }
     }
 
-    public static<ViewType extends View> ViewType findView(MonthlyGoalsActivity activity, int viewId) {
+    public static<ViewType extends View> ViewType findView(Activity activity, int viewId) {
         View view = activity.findViewById(viewId);
+
+        if(view == null) return null;
+
+        return (ViewType) view;
+    }
+
+    public static<ViewType extends View> ViewType findView(View parentView, int viewId) {
+        View view = parentView.findViewById(viewId);
 
         if(view == null) return null;
 

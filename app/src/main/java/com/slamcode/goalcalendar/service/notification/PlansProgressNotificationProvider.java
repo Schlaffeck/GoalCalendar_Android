@@ -16,6 +16,7 @@ import com.slamcode.goalcalendar.planning.summary.PlansSummaryDescriptionProvide
 import com.slamcode.goalcalendar.settings.AppSettingsManager;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by smoriak on 03/07/2017.
@@ -65,6 +66,12 @@ public final class PlansProgressNotificationProvider implements NotificationProv
         if(!this.settingsManager.getShowPlansProgressNotification())
             return null;
 
+        Date lastTimePublished = this.notificationHistory.getLastTimeNotificationWasPublished(this.getNotificationIdString());
+        if(lastTimePublished != null
+                && DateTimeHelper.isTodayDate(lastTimePublished))
+        {
+            return null;
+        }
         DateTime dateTime = this.applicationContext.getDateTimeNow();
 
         PlansSummaryDescriptionProvider.PlansSummaryDescription description = descriptionProvider.provideDescriptionForMonth(dateTime.getYear(), dateTime.getMonth());
