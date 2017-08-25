@@ -23,7 +23,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.slamcode.goalcalendar.data.UnitOfWork;
+import com.slamcode.goalcalendar.data.model.CategoryModel;
+import com.slamcode.goalcalendar.data.query.NumericalComparisonOperator;
 import com.slamcode.goalcalendar.planning.DateTime;
+import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.schedule.DateTimeChangedService;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryDescriptionProvider;
@@ -42,6 +46,9 @@ import com.slamcode.goalcalendar.view.presenters.PresentersSource;
 import com.slamcode.goalcalendar.view.utils.ViewReference;
 import com.slamcode.goalcalendar.view.utils.ViewBinder;
 import com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel;
+
+import java.util.List;
+import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -291,8 +298,19 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         if(lastlaunchDateTime == null
                 || DateTimeHelper.isDateBefore(lastlaunchDateTime, DateTimeHelper.getTodayDateTime()))
         {
+            int year = DateTimeHelper.getCurrentYear();
+            Month month = DateTimeHelper.getCurrentMonth();
             PlansSummaryDescriptionProvider.PlansSummaryDescription description
-                    = this.descriptionProvider.provideDescriptionForMonth(DateTimeHelper.getCurrentYear(), DateTimeHelper.getCurrentMonth());
+                    = this.descriptionProvider.provideDescriptionForMonth(year, month);
+            List<CategoryModel> unfinishedCategories = this.getUnfinishedCategories(year, month);
+            if(unfinishedCategories.size() > 0) {
+                CategoryModel randomCat = unfinishedCategories.get((new Random()).nextInt(unfinishedCategories.size()));
+                String randomUnfinishedCatDescription = this.descriptionProvider.provideDescriptionMonthInCategory(year, month, randomCat.getName());
+
+                if(randomUnfinishedCatDescription != null)
+                    description.setDetails(String.format("%s %n%n%s - %s",  description.getDetails(), randomCat.getName(), randomUnfinishedCatDescription));
+            }
+
             if(description != null) {
                 DailyProgressDialog dialog = new DailyProgressDialog();
                 dialog.setModel(description);
@@ -301,6 +319,15 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         }
 
         this.settingsManager.setLastLaunchDateTimeMillis(DateTimeHelper.getNowDateTime());
+    }
+
+    private List<CategoryModel> getUnfinishedCategories(int year, Month month)
+    {
+        UnitOfWork uow = this.persistenceContext.createUnitOfWork();
+
+        List<CategoryModel> categoryModelList =  uow.getCategoriesRepository().findWithProgressInMonth(year, month, NumericalComparisonOperator.LESS_THAN, 1.0f);
+        uow.complete(true);
+        return categoryModelList;
     }
 
     private void onCreateGlobalLayoutAvailable()
