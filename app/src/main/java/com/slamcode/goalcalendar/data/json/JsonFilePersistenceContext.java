@@ -32,7 +32,7 @@ import java.util.Set;
 public class JsonFilePersistenceContext implements PersistenceContext {
 
     public static final String DEFAULT_FILE_NAME = "data.json";
-    private static final String LOG_TAG = "GC_JsonPerCtx";
+    private static final String LOG_TAG = "GOAL_JsonPerCtx";
     private JsonDataBundle dataBundle;
     private final Context appContext;
     private final String fileName;

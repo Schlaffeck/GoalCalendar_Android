@@ -7,7 +7,7 @@ import android.util.Log;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private final static String LOG_TAG = "GC_SplashAct";
+    private final static String LOG_TAG = "GOAL_SplashAct";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

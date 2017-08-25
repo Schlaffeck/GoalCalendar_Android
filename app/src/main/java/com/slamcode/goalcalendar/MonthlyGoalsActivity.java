@@ -49,7 +49,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
     final String ACTIVITY_ID = MonthlyGoalsActivity.class.getName();
 
-    private final static String LOG_TAG = "GC_MGoalsAct";
+    private final static String LOG_TAG = "GOAL_MGoalsAct";
 
     View mainLayout;
 

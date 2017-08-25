@@ -41,7 +41,7 @@ import javax.inject.Inject;
 
 public class Bindings {
 
-    private static final String LOG_TAG = "GC_Bindings";
+    private static final String LOG_TAG = "GOAL_Bindings";
 
     @BindingAdapter("bind:categorySummarySource")
     public static void setCategorySummariesItemsSource(RecyclerView recyclerView, ObservableList<CategoryPlansViewModel> itemsSource)
