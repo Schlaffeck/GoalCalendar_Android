@@ -10,7 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.android.databinding.library.baseAdapters.BR;
 import com.slamcode.goalcalendar.R;
+import com.slamcode.goalcalendar.view.BaseSourceChangeRequest;
 import com.slamcode.goalcalendar.view.lists.base.ComparatorSortedListCallback;
 import com.slamcode.goalcalendar.view.lists.base.DefaultComparator;
 import com.slamcode.goalcalendar.view.lists.base.SortedListCallbackSet;
@@ -117,48 +119,27 @@ public class CategoryNameRecyclerViewAdapter extends BindableRecyclerViewDataAda
 
     public class CategoryNameViewHolder extends BindableViewHolderBase<CategoryPlansViewModel>
     {
-        private ItemSwipeMenu swipeMenu;
-
         CategoryNameViewHolder(
                 View view,
                 CategoryPlansViewModel model)
         {
             super(view, model);
-            this.initializeSwipeMenu();
         }
 
-        public boolean isMenuShowing()
+        public void requestItemRemove()
         {
-            return this.swipeMenu.isShowing();
+            this.getModelObject().notifySourceChangeRequested(new BaseSourceChangeRequest(CategoryPlansViewModel.REQUEST_REMOVE_ITEM));
         }
 
-        public void showMenu()
+        public void requestItemModify()
         {
-            this.swipeMenu.showMenu();
+            this.getModelObject().notifySourceChangeRequested(new BaseSourceChangeRequest(CategoryPlansViewModel.REQUEST_MODIFY_ITEM));
         }
 
-        public void hideMenu()
-        {
-            this.swipeMenu.hideMenu();
-        }
-
-        private void initializeSwipeMenu()
-        {
-            this.swipeMenu = new ItemSwipeMenu(
-                    this.getView(),
-                    (LinearLayout)this.getView().findViewById(R.id.monthly_goals_list_item_category_menu),
-                    new SendRequestSwipeMenuOption(
-                            new ImageButtonSwipeMenuViewInflater(
-                                R.drawable.ic_delete_white_24dp,
-                                R.color.planningStateButton_stateFailed_foregroundColor),
-                            CategoryPlansViewModel.REQUEST_REMOVE_ITEM,
-                            this.getModelObject()),
-                    new SendRequestSwipeMenuOption(
-                            new ImageButtonSwipeMenuViewInflater(
-                                R.drawable.ic_mode_edit_white_24dp,
-                                R.color.colorPrimary),
-                            CategoryPlansViewModel.REQUEST_MODIFY_ITEM,
-                            this.getModelObject()));
+        @Override
+        public void bindToModel(CategoryPlansViewModel modelObject) {
+            super.bindToModel(modelObject);
+            this.getBinding().setVariable(BR.presenter,  this);
         }
     }
 

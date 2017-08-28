@@ -25,6 +25,11 @@ public class BindableViewHolderBase<Item extends Observable> extends ViewHolderB
         this.binding = DataBindingUtil.bind(view);
     }
 
+    protected ViewDataBinding getBinding()
+    {
+        return this.binding;
+    }
+
     @Override
     public void bindToModel(Item modelObject) {
         super.bindToModel(modelObject);

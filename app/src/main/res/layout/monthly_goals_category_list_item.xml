@@ -1,42 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="com.slamcode.goalcalendar.view.utils.ResourcesHelper"/>
         <variable
             name="vm"
             type="com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel"/>
+        <variable
+            name="presenter"
+            type="com.slamcode.goalcalendar.view.lists.CategoryNameRecyclerViewAdapter.CategoryNameViewHolder"/>
     </data>
-    <LinearLayout
-        android:id="@+id/monthly_goals_list_item_category_panel"
+    <com.chauthai.swipereveallayout.SwipeRevealLayout
         android:layout_width="@dimen/monthly_goals_table_category_column_width"
-    android:layout_height="?android:attr/listPreferredItemHeight"
-        android:orientation="vertical"
-        android:background="@color/listItemBackgroundColor">
-        <LinearLayout
-            android:id="@+id/monthly_goals_list_item_category_menu"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:visibility="gone"/>
-        <TextView
-            android:id="@+id/monthly_goals_list_item_category_name"
-            android:textColor="@android:color/tertiary_text_dark"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/monthly_goals_table_category_name_height"
-            android:gravity="center_vertical"
-            android:text="@{vm.name}"
-            android:maxLines="1"
-            android:textSize="@dimen/list_item_text_size"
-            android:ellipsize="marquee"/>
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        app:mode="same_level"
+        app:dragEdge="left">
 
-        <TextView
-            android:id="@+id/monthly_goals_list_item_frequency"
-            android:textColor="@android:color/tertiary_text_dark"
+        <!--  swipe menu buttons -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/monthly_goals_table_category_frequency_height"
-            android:ellipsize="marquee"
-            android:text="@{String.format(@string/monthly_goals_category_frequencyFormat_textView, vm.frequencyValue, ResourcesHelper.toResourceString(context, vm.frequencyPeriod))}"
-            android:maxLines="1"
-            android:textSize="@dimen/list_item_text_small_size" />
-    </LinearLayout>
+            android:layout_height="match_parent">
+            <ImageButton
+                android:layout_width="@dimen/monthly_goals_table_category_menu_button_width"
+                android:layout_height="match_parent"
+                android:background="@color/planningStateButton_stateFailed_backgroundColor"
+                android:src="@drawable/ic_delete_white_24dp"
+                android:scaleType="center"
+                android:contentDescription="@string/context_menu_delete_item"
+                android:onClick="@{(view) -> presenter.requestItemRemove()}"/>
+            <ImageButton
+                android:layout_width="@dimen/monthly_goals_table_category_menu_button_width"
+                android:layout_height="match_parent"
+                android:background="@color/planningStateButton_stateEmpty_backgroundColor"
+                android:src="@drawable/ic_mode_edit_white_24dp"
+                android:scaleType="center"
+                android:contentDescription="@string/context_menu_edit_item"
+                android:onClick="@{(view) -> presenter.requestItemModify()}"/>
+        </LinearLayout>
+
+        <!-- main layout -->
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:id="@+id/monthly_goals_list_item_category_panel"
+            android:orientation="vertical"
+            android:background="@color/listItemBackgroundColor">
+            <TextView
+                android:id="@+id/monthly_goals_list_item_category_name"
+                android:textColor="@android:color/tertiary_text_dark"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/monthly_goals_table_category_name_height"
+                android:gravity="center_vertical"
+                android:text="@{vm.name}"
+                android:maxLines="1"
+                android:textSize="@dimen/list_item_text_size"
+                android:ellipsize="marquee"/>
+
+            <TextView
+                android:id="@+id/monthly_goals_list_item_frequency"
+                android:textColor="@android:color/tertiary_text_dark"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/monthly_goals_table_category_frequency_height"
+                android:ellipsize="marquee"
+                android:text="@{String.format(@string/monthly_goals_category_frequencyFormat_textView, vm.frequencyValue, ResourcesHelper.toResourceString(context, vm.frequencyPeriod))}"
+                android:maxLines="1"
+                android:textSize="@dimen/list_item_text_small_size" />
+        </LinearLayout>
+    </com.chauthai.swipereveallayout.SwipeRevealLayout>
 </layout>
