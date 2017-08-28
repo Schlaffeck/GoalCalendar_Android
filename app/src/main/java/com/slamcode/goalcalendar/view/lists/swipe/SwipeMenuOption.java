@@ -29,7 +29,7 @@ public abstract class SwipeMenuOption {
         return null;
     }
 
-    interface ViewInflater
+    public interface ViewInflater
     {
         View inflateView(SwipeMenuOption menuOption, Context context, AttributeSet viewAttributes);
     }

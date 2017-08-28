@@ -14,8 +14,8 @@ public final class SendRequestSwipeMenuOption extends SwipeMenuOption {
     private int actionRequestId;
     private final SourceChangeRequestNotifier requestNotifier;
 
-    public SendRequestSwipeMenuOption(int drawableId, int drawableColorId, int actionRequestId, SourceChangeRequestNotifier requestNotifier) {
-        super(new ImageButtonSwipeMenuViewInflater(drawableId, drawableColorId));
+    public SendRequestSwipeMenuOption(SwipeMenuOption.ViewInflater viewInflater, int actionRequestId, SourceChangeRequestNotifier requestNotifier) {
+        super(viewInflater);
         this.actionRequestId = actionRequestId;
         this.requestNotifier = requestNotifier;
     }

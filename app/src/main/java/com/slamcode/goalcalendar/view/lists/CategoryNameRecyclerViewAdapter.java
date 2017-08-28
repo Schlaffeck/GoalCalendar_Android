@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.view.BaseSourceChangeRequest;
@@ -21,6 +22,9 @@ import com.slamcode.goalcalendar.view.lists.base.SortedListCallbackSet;
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableRecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableViewHolderBase;
 import com.slamcode.goalcalendar.view.lists.base.bindable.ObservableSortedList;
+import com.slamcode.goalcalendar.view.lists.swipe.ImageButtonSwipeMenuViewInflater;
+import com.slamcode.goalcalendar.view.lists.swipe.ItemSwipeMenu;
+import com.slamcode.goalcalendar.view.lists.swipe.options.SendRequestSwipeMenuOption;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 
 import java.util.Comparator;
@@ -30,9 +34,6 @@ import java.util.Comparator;
  */
 
 public class CategoryNameRecyclerViewAdapter extends BindableRecyclerViewDataAdapter<CategoryPlansViewModel, CategoryNameRecyclerViewAdapter.CategoryNameViewHolder> {
-
-    public static final int CONTEXT_MENU_DELETE_ITEM_ID = 222;
-    public static final int CONTEXT_MENU_EDIT_ITEM_ID = 221;
 
     private SortedList.Callback<CategoryPlansViewModel> recyclerViewCallback;
 
@@ -103,7 +104,6 @@ public class CategoryNameRecyclerViewAdapter extends BindableRecyclerViewDataAda
     @Override
     public CategoryNameViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View convertView = this.getLayoutInflater().inflate(R.layout.monthly_goals_category_list_item,null);
-        convertView.setLongClickable(true);
 
         convertView.setPadding(0, 0, 0,
                 viewType == ITEM_VIEM_TYPE_LAST_ITEM ?
@@ -113,39 +113,45 @@ public class CategoryNameRecyclerViewAdapter extends BindableRecyclerViewDataAda
         return new CategoryNameViewHolder(convertView, null);
     }
 
-    public class CategoryNameViewHolder extends BindableViewHolderBase<CategoryPlansViewModel> implements View.OnCreateContextMenuListener,
-            MenuItem.OnMenuItemClickListener
+    public class CategoryNameViewHolder extends BindableViewHolderBase<CategoryPlansViewModel>
     {
+        private ItemSwipeMenu swipeMenu;
+
         CategoryNameViewHolder(
                 View view,
                 CategoryPlansViewModel model)
         {
             super(view, model);
-            view.setOnCreateContextMenuListener(this);
+            this.initializeSwipeMenu();
         }
 
-        @Override
-        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-
-            menu.setHeaderTitle(this.getModelObject().getName());
-            menu.add(0, CONTEXT_MENU_EDIT_ITEM_ID, 0, R.string.context_menu_edit_item)
-                .setOnMenuItemClickListener(this);
-            menu.add(0, CONTEXT_MENU_DELETE_ITEM_ID, 0, R.string.context_menu_delete_item)
-                .setOnMenuItemClickListener(this);
+        public void showMenu()
+        {
+            this.swipeMenu.showMenu();
         }
 
-        @Override
-        public boolean onMenuItemClick(MenuItem item) {
-            switch(item.getItemId()) {
-                case CONTEXT_MENU_DELETE_ITEM_ID:
-                    this.getModelObject().notifySourceChangeRequested(new BaseSourceChangeRequest(CategoryPlansViewModel.REQUEST_REMOVE_ITEM));
-                    return true;
-                case CONTEXT_MENU_EDIT_ITEM_ID:
-                    this.getModelObject().notifySourceChangeRequested(new BaseSourceChangeRequest(CategoryPlansViewModel.REQUEST_MODIFY_ITEM));
-                    return true;
-                default:
-                    return false;
-            }
+        public void hideMenu()
+        {
+            this.swipeMenu.hideMenu();
+        }
+
+        private void initializeSwipeMenu()
+        {
+            this.swipeMenu = new ItemSwipeMenu(
+                    this.getView(),
+                    (LinearLayout)this.getView().findViewById(R.id.monthly_goals_list_item_category_menu),
+                    new SendRequestSwipeMenuOption(
+                            new ImageButtonSwipeMenuViewInflater(
+                                R.drawable.ic_delete_white_24dp,
+                                R.color.planningStateButton_stateFailed_foregroundColor),
+                            CategoryPlansViewModel.REQUEST_REMOVE_ITEM,
+                            this.getModelObject()),
+                    new SendRequestSwipeMenuOption(
+                            new ImageButtonSwipeMenuViewInflater(
+                                R.drawable.ic_mode_edit_white_24dp,
+                                R.color.colorPrimary),
+                            CategoryPlansViewModel.REQUEST_MODIFY_ITEM,
+                            this.getModelObject()));
         }
     }
 
