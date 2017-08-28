@@ -101,7 +101,7 @@ public class Bindings {
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
 
-            ItemTouchCallback callback = new ItemTouchCallback();
+            ItemTouchCallback callback = injectData.categoryListItemTouchCallback;
             callback.addOnItemTouchListener((CategoryNameRecyclerViewAdapter)adapter);
             ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
             itemTouchHelper.attachToRecyclerView(recyclerView);
@@ -151,6 +151,9 @@ public class Bindings {
                             new ObservableArrayList<CategoryPlansViewModel>());
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
+
+            ItemTouchCallback callback = injectData.categoryListItemTouchCallback;
+            callback.addOnItemTouchListener((CategoryDailyPlansRecyclerViewAdapter)adapter);
         }
 
         if(adapter instanceof CategoryDailyPlansRecyclerViewAdapter)
@@ -311,5 +314,8 @@ public class Bindings {
 
         @Inject
         DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry;
+
+        @Inject
+        ItemTouchCallback categoryListItemTouchCallback;
     }
 }

@@ -28,6 +28,7 @@ import com.slamcode.goalcalendar.view.lists.swipe.ItemTouchCallback;
 import com.slamcode.goalcalendar.view.lists.swipe.options.SendRequestSwipeMenuOption;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 
+import java.util.Collections;
 import java.util.Comparator;
 
 /**
@@ -117,7 +118,7 @@ public class CategoryNameRecyclerViewAdapter extends BindableRecyclerViewDataAda
 
     @Override
     public void onItemMoved(int fromPosition, int toPosition) {
-
+        notifyItemMoved(fromPosition, toPosition);
     }
 
     @Override

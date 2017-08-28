@@ -19,6 +19,7 @@ import com.slamcode.goalcalendar.view.lists.base.SortedListCallbackSet;
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableRecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableViewHolderBase;
 import com.slamcode.goalcalendar.view.lists.base.bindable.ObservableSortedList;
+import com.slamcode.goalcalendar.view.lists.swipe.ItemTouchCallback;
 import com.slamcode.goalcalendar.view.utils.ViewBinder;
 import com.slamcode.goalcalendar.view.utils.ViewReference;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
@@ -31,7 +32,8 @@ import java.util.Comparator;
  * Created by moriasla on 15.12.2016.
  */
 
-public class CategoryDailyPlansRecyclerViewAdapter extends BindableRecyclerViewDataAdapter<CategoryPlansViewModel, CategoryDailyPlansRecyclerViewAdapter.CategoryDailyPlansViewHolder> {
+public class CategoryDailyPlansRecyclerViewAdapter extends BindableRecyclerViewDataAdapter<CategoryPlansViewModel, CategoryDailyPlansRecyclerViewAdapter.CategoryDailyPlansViewHolder>
+        implements ItemTouchCallback.ItemTouchListener  {
 
     private final DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry;
     private YearMonthPair yearMonthPair;
@@ -95,6 +97,15 @@ public class CategoryDailyPlansRecyclerViewAdapter extends BindableRecyclerViewD
 
     public void setYearMonthPair(YearMonthPair yearMonthPair) {
         this.yearMonthPair = yearMonthPair;
+    }
+
+    @Override
+    public void onItemMoved(int fromPosition, int toPosition) {
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    @Override
+    public void onItemSwiped(int itemPosition) {
     }
 
     public class CategoryDailyPlansViewHolder extends BindableViewHolderBase<CategoryPlansViewModel>

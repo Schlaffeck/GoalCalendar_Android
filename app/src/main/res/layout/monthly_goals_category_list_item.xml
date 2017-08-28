@@ -6,15 +6,18 @@
             name="vm"
             type="com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel"/>
     </data>
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
     <LinearLayout
         android:id="@+id/monthly_goals_list_item_category_panel"
         android:layout_width="@dimen/monthly_goals_table_category_column_width"
     android:layout_height="?android:attr/listPreferredItemHeight"
         android:orientation="vertical"
         android:background="@color/listItemBackgroundColor">
+        <LinearLayout
+            android:id="@+id/monthly_goals_list_item_category_menu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:visibility="gone"/>
         <TextView
             android:id="@+id/monthly_goals_list_item_category_name"
             android:textColor="@android:color/tertiary_text_dark"
@@ -36,11 +39,4 @@
             android:maxLines="1"
             android:textSize="@dimen/list_item_text_small_size" />
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/monthly_goals_list_item_category_menu"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:visibility="gone"/>
-    </FrameLayout>
 </layout>
