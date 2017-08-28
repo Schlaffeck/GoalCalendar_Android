@@ -40,6 +40,7 @@
 
         <!-- main layout -->
         <LinearLayout
+            android:paddingLeft="@dimen/monthly_goals_table_category_column_item_left_padding"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:id="@+id/monthly_goals_list_item_category_panel"
