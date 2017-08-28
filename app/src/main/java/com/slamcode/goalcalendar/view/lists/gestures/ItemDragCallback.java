@@ -1,4 +1,4 @@
-package com.slamcode.goalcalendar.view.lists.swipe;
+package com.slamcode.goalcalendar.view.lists.gestures;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -6,14 +6,14 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemTouchCallback extends ItemTouchHelper.Callback {
+public class ItemDragCallback extends ItemTouchHelper.Callback {
 
-    private List<ItemTouchListener> touchListeners = new ArrayList<>();
+    private List<ItemDragMoveListener> itemDragMoveListeners = new ArrayList<>();
 
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-        int swipeFlags = ItemTouchHelper.END | ItemTouchHelper.START;
+        int swipeFlags = 0;
         return makeMovementFlags(dragFlags, swipeFlags);
     }
 
@@ -24,7 +24,7 @@ public class ItemTouchCallback extends ItemTouchHelper.Callback {
 
     @Override
     public boolean isItemViewSwipeEnabled() {
-        return true;
+        return false;
     }
 
     @Override
@@ -34,38 +34,38 @@ public class ItemTouchCallback extends ItemTouchHelper.Callback {
         if(fromPosition == toPosition)
             return false;
 
-        for(ItemTouchListener listener : this.touchListeners)
-            listener.onItemMoved(fromPosition, toPosition);
+        for(ItemDragMoveListener listener : this.itemDragMoveListeners)
+            listener.onItemDragMoved(fromPosition, toPosition);
 
         return true;
     }
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-        int itemPosition = viewHolder.getAdapterPosition();
-        for(ItemTouchListener listener : this.touchListeners)
-            listener.onItemSwiped(itemPosition);
     }
 
-    public void addOnItemTouchListener(ItemTouchListener listener)
+    public void addOnItemGestureListener(ItemDragMoveListener listener)
     {
-        this.touchListeners.add(listener);
+        this.itemDragMoveListeners.add(listener);
     }
 
-    public void removeOnItemTouchListener(ItemTouchListener listener)
+    public void removeOnItemGestureListener(ItemDragMoveListener listener)
     {
-        this.touchListeners.remove(listener);
+        this.itemDragMoveListeners.remove(listener);
     }
 
-    public void clearOnItemTouchListeners()
+    public void clearOnItemGestureListeners()
     {
-        this.touchListeners.clear();
+        this.itemDragMoveListeners.clear();
     }
 
-    public interface ItemTouchListener
-    {
-        void onItemMoved(int fromPosition, int toPosition);
+    /**
+     * Simple interface providing contract for all listeners wanting to know whether item in recycler view
+     * was dragged and moved to another position
+     */
 
-        void onItemSwiped(int itemPosition);
+    public interface ItemDragMoveListener {
+
+        void onItemDragMoved(int fromPosition, int toPosition);
     }
 }

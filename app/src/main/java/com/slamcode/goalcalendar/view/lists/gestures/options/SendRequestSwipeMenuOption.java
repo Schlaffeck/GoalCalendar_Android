@@ -1,9 +1,8 @@
-package com.slamcode.goalcalendar.view.lists.swipe.options;
+package com.slamcode.goalcalendar.view.lists.gestures.options;
 
 import com.slamcode.goalcalendar.view.BaseSourceChangeRequest;
 import com.slamcode.goalcalendar.view.SourceChangeRequestNotifier;
-import com.slamcode.goalcalendar.view.lists.swipe.ImageButtonSwipeMenuViewInflater;
-import com.slamcode.goalcalendar.view.lists.swipe.SwipeMenuOption;
+import com.slamcode.goalcalendar.view.lists.gestures.SwipeMenuOption;
 
 /**
  * This menu option simply sends id of request when selected

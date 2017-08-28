@@ -1,34 +1,28 @@
 package com.slamcode.goalcalendar.view.lists;
 
 import android.content.Context;
-import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.util.SortedListAdapterCallback;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.slamcode.goalcalendar.R;
-import com.slamcode.goalcalendar.view.BaseSourceChangeRequest;
 import com.slamcode.goalcalendar.view.lists.base.ComparatorSortedListCallback;
 import com.slamcode.goalcalendar.view.lists.base.DefaultComparator;
-import com.slamcode.goalcalendar.data.model.*;
 import com.slamcode.goalcalendar.view.lists.base.SortedListCallbackSet;
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableRecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableViewHolderBase;
 import com.slamcode.goalcalendar.view.lists.base.bindable.ObservableSortedList;
-import com.slamcode.goalcalendar.view.lists.swipe.ImageButtonSwipeMenuViewInflater;
-import com.slamcode.goalcalendar.view.lists.swipe.ItemSwipeMenu;
-import com.slamcode.goalcalendar.view.lists.swipe.ItemTouchCallback;
-import com.slamcode.goalcalendar.view.lists.swipe.options.SendRequestSwipeMenuOption;
+import com.slamcode.goalcalendar.view.lists.gestures.ImageButtonSwipeMenuViewInflater;
+import com.slamcode.goalcalendar.view.lists.gestures.ItemDragCallback;
+import com.slamcode.goalcalendar.view.lists.gestures.ItemSwipeMenu;
+import com.slamcode.goalcalendar.view.lists.gestures.options.SendRequestSwipeMenuOption;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 
-import java.util.Collections;
 import java.util.Comparator;
 
 /**
@@ -36,7 +30,7 @@ import java.util.Comparator;
  */
 
 public class CategoryNameRecyclerViewAdapter extends BindableRecyclerViewDataAdapter<CategoryPlansViewModel, CategoryNameRecyclerViewAdapter.CategoryNameViewHolder>
-                            implements ItemTouchCallback.ItemTouchListener {
+                            implements ItemDragCallback.ItemDragMoveListener {
 
     private SortedList.Callback<CategoryPlansViewModel> recyclerViewCallback;
 
@@ -117,20 +111,8 @@ public class CategoryNameRecyclerViewAdapter extends BindableRecyclerViewDataAda
     }
 
     @Override
-    public void onItemMoved(int fromPosition, int toPosition) {
+    public void onItemDragMoved(int fromPosition, int toPosition) {
         notifyItemMoved(fromPosition, toPosition);
-    }
-
-    @Override
-    public void onItemSwiped(int itemPosition) {
-        CategoryNameViewHolder viewHolder = this.getViewHolderForPosition(itemPosition);
-        if(viewHolder == null)
-            return;
-
-        if(viewHolder.isMenuShowing())
-            viewHolder.hideMenu();
-        else
-            viewHolder.showMenu();
     }
 
     public class CategoryNameViewHolder extends BindableViewHolderBase<CategoryPlansViewModel>

@@ -7,7 +7,7 @@ import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
 import com.slamcode.goalcalendar.view.charts.data.hellocharts.HelloChartsViewDataBinder;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
 import com.slamcode.goalcalendar.view.lists.AppContextBasedViewAdapterProvider;
-import com.slamcode.goalcalendar.view.lists.swipe.ItemTouchCallback;
+import com.slamcode.goalcalendar.view.lists.gestures.ItemDragCallback;
 import com.slamcode.goalcalendar.view.presenters.CachedApplicationPresentersSource;
 import com.slamcode.goalcalendar.view.presenters.PresentersSource;
 
@@ -57,8 +57,8 @@ public final class ViewDagger2Module {
 
     @Provides
     @Singleton
-    public ItemTouchCallback getCategoryListItemTouchCallback()
+    public ItemDragCallback getCategoryListItemDragCallback()
     {
-        return new ItemTouchCallback();
+        return new ItemDragCallback();
     }
 }

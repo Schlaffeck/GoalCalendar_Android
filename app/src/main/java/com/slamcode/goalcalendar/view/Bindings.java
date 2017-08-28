@@ -29,10 +29,9 @@ import com.slamcode.goalcalendar.view.lists.CategoryNameRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.CategoryPlansSummaryRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.DailyPlanHeaderRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
-import com.slamcode.goalcalendar.view.lists.swipe.ItemTouchCallback;
+import com.slamcode.goalcalendar.view.lists.gestures.ItemDragCallback;
 import com.slamcode.goalcalendar.viewmodels.*;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.inject.Inject;
@@ -101,8 +100,8 @@ public class Bindings {
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
 
-            ItemTouchCallback callback = injectData.categoryListItemTouchCallback;
-            callback.addOnItemTouchListener((CategoryNameRecyclerViewAdapter)adapter);
+            ItemDragCallback callback = injectData.categoryListItemDragCallback;
+            callback.addOnItemGestureListener((CategoryNameRecyclerViewAdapter)adapter);
             ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
             itemTouchHelper.attachToRecyclerView(recyclerView);
         }
@@ -152,8 +151,8 @@ public class Bindings {
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
 
-            ItemTouchCallback callback = injectData.categoryListItemTouchCallback;
-            callback.addOnItemTouchListener((CategoryDailyPlansRecyclerViewAdapter)adapter);
+            ItemDragCallback callback = injectData.categoryListItemDragCallback;
+            callback.addOnItemGestureListener((CategoryDailyPlansRecyclerViewAdapter)adapter);
         }
 
         if(adapter instanceof CategoryDailyPlansRecyclerViewAdapter)
@@ -316,6 +315,6 @@ public class Bindings {
         DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry;
 
         @Inject
-        ItemTouchCallback categoryListItemTouchCallback;
+        ItemDragCallback categoryListItemDragCallback;
     }
 }

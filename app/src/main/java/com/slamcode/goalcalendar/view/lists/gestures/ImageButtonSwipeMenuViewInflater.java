@@ -1,4 +1,4 @@
-package com.slamcode.goalcalendar.view.lists.swipe;
+package com.slamcode.goalcalendar.view.lists.gestures;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
