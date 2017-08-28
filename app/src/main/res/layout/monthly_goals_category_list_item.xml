@@ -17,9 +17,6 @@
             android:textColor="@android:color/tertiary_text_dark"
             android:layout_width="match_parent"
             android:layout_height="@dimen/monthly_goals_table_category_name_height"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignWithParentIfMissing="true"
             android:gravity="center_vertical"
             android:text="@{vm.name}"
             android:maxLines="1"
@@ -31,11 +28,15 @@
             android:textColor="@android:color/tertiary_text_dark"
             android:layout_width="match_parent"
             android:layout_height="@dimen/monthly_goals_table_category_frequency_height"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
             android:ellipsize="marquee"
             android:text="@{String.format(@string/monthly_goals_category_frequencyFormat_textView, vm.frequencyValue, ResourcesHelper.toResourceString(context, vm.frequencyPeriod))}"
             android:maxLines="1"
             android:textSize="@dimen/list_item_text_small_size" />
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/monthly_goals_list_item_category_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:visibility="gone"/>
 </layout>

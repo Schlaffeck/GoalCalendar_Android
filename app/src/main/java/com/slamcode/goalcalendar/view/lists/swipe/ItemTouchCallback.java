@@ -1,4 +1,4 @@
-package com.slamcode.goalcalendar.view.swipe;
+package com.slamcode.goalcalendar.view.lists.swipe;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
