@@ -10,6 +10,7 @@ import android.databinding.InverseBindingListener;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,7 @@ import com.slamcode.goalcalendar.view.lists.CategoryNameRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.CategoryPlansSummaryRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.DailyPlanHeaderRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
+import com.slamcode.goalcalendar.view.lists.swipe.ItemTouchCallback;
 import com.slamcode.goalcalendar.viewmodels.*;
 
 import java.util.ArrayList;
@@ -98,6 +100,11 @@ public class Bindings {
                             new ObservableArrayList<CategoryPlansViewModel>());
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
+
+            ItemTouchCallback callback = new ItemTouchCallback();
+            callback.addOnItemTouchListener((CategoryNameRecyclerViewAdapter)adapter);
+            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+            itemTouchHelper.attachToRecyclerView(recyclerView);
         }
 
         if(adapter instanceof CategoryNameRecyclerViewAdapter)

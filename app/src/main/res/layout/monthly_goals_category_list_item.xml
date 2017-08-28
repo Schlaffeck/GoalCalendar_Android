@@ -6,6 +6,9 @@
             name="vm"
             type="com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel"/>
     </data>
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
     <LinearLayout
         android:id="@+id/monthly_goals_list_item_category_panel"
         android:layout_width="@dimen/monthly_goals_table_category_column_width"
@@ -39,4 +42,5 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:visibility="gone"/>
+    </FrameLayout>
 </layout>

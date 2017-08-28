@@ -24,6 +24,7 @@ import com.slamcode.goalcalendar.view.lists.base.bindable.BindableViewHolderBase
 import com.slamcode.goalcalendar.view.lists.base.bindable.ObservableSortedList;
 import com.slamcode.goalcalendar.view.lists.swipe.ImageButtonSwipeMenuViewInflater;
 import com.slamcode.goalcalendar.view.lists.swipe.ItemSwipeMenu;
+import com.slamcode.goalcalendar.view.lists.swipe.ItemTouchCallback;
 import com.slamcode.goalcalendar.view.lists.swipe.options.SendRequestSwipeMenuOption;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 
@@ -33,7 +34,8 @@ import java.util.Comparator;
  * Created by moriasla on 15.12.2016.
  */
 
-public class CategoryNameRecyclerViewAdapter extends BindableRecyclerViewDataAdapter<CategoryPlansViewModel, CategoryNameRecyclerViewAdapter.CategoryNameViewHolder> {
+public class CategoryNameRecyclerViewAdapter extends BindableRecyclerViewDataAdapter<CategoryPlansViewModel, CategoryNameRecyclerViewAdapter.CategoryNameViewHolder>
+                            implements ItemTouchCallback.ItemTouchListener {
 
     private SortedList.Callback<CategoryPlansViewModel> recyclerViewCallback;
 
@@ -113,6 +115,23 @@ public class CategoryNameRecyclerViewAdapter extends BindableRecyclerViewDataAda
         return new CategoryNameViewHolder(convertView, null);
     }
 
+    @Override
+    public void onItemMoved(int fromPosition, int toPosition) {
+
+    }
+
+    @Override
+    public void onItemSwiped(int itemPosition) {
+        CategoryNameViewHolder viewHolder = this.getViewHolderForPosition(itemPosition);
+        if(viewHolder == null)
+            return;
+
+        if(viewHolder.isMenuShowing())
+            viewHolder.hideMenu();
+        else
+            viewHolder.showMenu();
+    }
+
     public class CategoryNameViewHolder extends BindableViewHolderBase<CategoryPlansViewModel>
     {
         private ItemSwipeMenu swipeMenu;
@@ -123,6 +142,11 @@ public class CategoryNameRecyclerViewAdapter extends BindableRecyclerViewDataAda
         {
             super(view, model);
             this.initializeSwipeMenu();
+        }
+
+        public boolean isMenuShowing()
+        {
+            return this.swipeMenu.isShowing();
         }
 
         public void showMenu()

@@ -17,13 +17,15 @@ public class ItemSwipeMenu {
     private List<SwipeMenuOption> menuOptions = new ArrayList<>();
 
     private View itemView;
+    private boolean showing;
+
+    private boolean layoutSetUp;
 
     public ItemSwipeMenu(View itemView, ViewGroup menuLayoutView, SwipeMenuOption... options) {
         this.itemView = itemView;
         this.menuLayoutView = menuLayoutView;
         for(SwipeMenuOption option : options)
             menuOptions.add(option);
-        this.setUpMenuLayout();
     }
 
     public void addMenuOption(SwipeMenuOption option)
@@ -35,22 +37,32 @@ public class ItemSwipeMenu {
     public void clearMenuOptions()
     {
         this.menuOptions.clear();
+        this.layoutSetUp = false;
         this.setUpMenuLayout();
     }
 
     public void showMenu()
     {
+        this.setUpMenuLayout();
         this.menuLayoutView.setVisibility(View.VISIBLE);
+        this.showing = true;
     }
 
     public void hideMenu()
     {
         this.menuLayoutView.setVisibility(View.GONE);
+        this.showing = false;
     }
 
     private void setUpMenuLayout()
     {
-        for(SwipeMenuOption option : menuOptions)
-            this.addMenuOption(option);
+        if(!this.layoutSetUp) {
+            for (SwipeMenuOption option : menuOptions)
+                this.addMenuOption(option);
+        }
+    }
+
+    public boolean isShowing() {
+        return showing;
     }
 }

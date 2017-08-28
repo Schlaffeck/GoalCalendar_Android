@@ -11,7 +11,9 @@ import com.slamcode.collections.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by moriasla on 16.12.2016.
@@ -26,12 +28,11 @@ public abstract class RecyclerViewDataAdapter<Item, ViewHolder extends ViewHolde
     private Context context;
     private LayoutInflater layoutInflater;
 
-    private List<Item> modifiedItems;
+    private Map<Item, ViewHolder> modelToViewHolderMap = new HashMap<>();
 
     protected RecyclerViewDataAdapter(Context context, LayoutInflater layoutInflater, SortedList<Item> sourceList)
     {
         this.list = sourceList;
-        this.modifiedItems = new ArrayList<>();
         this.context = context;
         this.layoutInflater = layoutInflater;
     }
@@ -66,7 +67,9 @@ public abstract class RecyclerViewDataAdapter<Item, ViewHolder extends ViewHolde
     @Override
     public void onBindViewHolder(ViewHolder holder, int position)
     {
-        holder.bindToModel(this.list.get(position));
+        Item item = this.list.get(position);
+        holder.bindToModel(item);
+        this.modelToViewHolderMap.put(item, holder);
     }
 
     @Override
@@ -123,5 +126,15 @@ public abstract class RecyclerViewDataAdapter<Item, ViewHolder extends ViewHolde
         while(!found && ++i < this.list.size())
             found = this.list.get(i) == item;
         return found ? i : -1;
+    }
+
+    public ViewHolder getViewHolderForPosition(int itemPosition)
+    {
+        Item item = this.getItem(itemPosition);
+
+        if(!modelToViewHolderMap.containsKey(item))
+            return null;
+
+        return modelToViewHolderMap.get(item);
     }
 }
