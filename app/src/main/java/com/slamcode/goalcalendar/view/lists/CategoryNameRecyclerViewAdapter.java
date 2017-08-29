@@ -8,7 +8,6 @@ import android.support.v7.widget.util.SortedListAdapterCallback;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.android.databinding.library.baseAdapters.BR;
 import com.slamcode.goalcalendar.R;
@@ -19,10 +18,7 @@ import com.slamcode.goalcalendar.view.lists.base.SortedListCallbackSet;
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableRecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableViewHolderBase;
 import com.slamcode.goalcalendar.view.lists.base.bindable.ObservableSortedList;
-import com.slamcode.goalcalendar.view.lists.gestures.ImageButtonSwipeMenuViewInflater;
 import com.slamcode.goalcalendar.view.lists.gestures.ItemDragCallback;
-import com.slamcode.goalcalendar.view.lists.gestures.ItemSwipeMenu;
-import com.slamcode.goalcalendar.view.lists.gestures.options.SendRequestSwipeMenuOption;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 
 import java.util.Comparator;
