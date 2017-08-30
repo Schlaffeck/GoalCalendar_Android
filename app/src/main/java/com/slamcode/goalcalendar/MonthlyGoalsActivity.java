@@ -66,9 +66,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     @ViewReference(R.id.monthly_goals_listview)
     RecyclerView categoryNamesRecyclerView;
 
-    @ViewReference(R.id.monthly_goals_dailyplans_listview)
-    RecyclerView categoryPlansRecyclerView;
-
     @ViewReference(R.id.content_monthly_goals)
     RelativeLayout monthlyPlansGridContentLayout;
 
@@ -228,23 +225,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         emptyContentBinding.setVariable(BR.vm, data);
 
         this.dataBindingsSetUp = true;
-
-        final RecyclerView dailyPlansRecyclerView = (RecyclerView) this.findViewById(R.id.monthly_goals_header_list_item_days_list);
-
-        if(dailyPlansRecyclerView == null)
-            throw new IllegalArgumentException("dailyPlansRecyclerView is null");
-
-        dailyPlansRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                View v = dailyPlansRecyclerView;
-                v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                if(v.getMeasuredHeight() >0 && v.getMeasuredWidth() > 0)
-                {
-                    scrollToCurrentDate();
-                }
-            }
-        });
     }
 
     @Override
@@ -285,7 +265,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     {
         this.monthlyGoalsActivityLayout = ViewBinder.findView(this, R.id.monthly_goals_activity_main_coordinator_layout);
         this.categoryNamesRecyclerView = ViewBinder.findView(this, R.id.monthly_goals_listview);
-        this.categoryPlansRecyclerView = ViewBinder.findView(this, R.id.monthly_goals_dailyplans_listview);
         this.monthlyPlansGridContentLayout = ViewBinder.findView(this, R.id.content_monthly_goals);
         this.emptyContentHorizontalScrollView = ViewBinder.findView(this, R.id.monthly_goals_emptyContent_horizontallScrollView);
         this.summaryContentLayout = ViewBinder.findView(this, R.id.monthly_goals_summary_content_layout);
@@ -335,7 +314,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         this.setSupportActionBar((Toolbar)this.findViewById(R.id.toolbar));
         this.startServices();
         this.setupPresenter();
-        this.setupRecyclerViews();
         this.setupBottomSheetBehavior();
         this.runStartupCommands();
         this.showDailyProgressDialog();
@@ -353,11 +331,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
-    private void setupRecyclerViews()
-    {
-        ScrollableViewHelper.setSimultaneousScrolling(this.categoryNamesRecyclerView, this.categoryPlansRecyclerView);
-    }
-
     private void runStartupCommands() {
         this.autoMarkTasksCommand.execute(this.findViewById(R.id.monthly_goals_activity_main_coordinator_layout));
     }
@@ -372,16 +345,16 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         capp.getApplicationComponent().inject(this);
     }
 
-    private void scrollToCurrentDate()
-    {
-        if(this.activityViewModel.getMonth() != DateTimeHelper.getCurrentMonth()
-                || this.activityViewModel.getYear() != DateTimeHelper.getCurrentYear())
-            return;
-
-        HorizontalScrollView daysPlanScrollView = (HorizontalScrollView) this.findViewById(R.id.monthly_goals_table_horizontalScrollView);
-        int dayToScrollTo = DateTimeHelper.currentDayNumber() - 3;
-        dayToScrollTo = (dayToScrollTo > 0 ? dayToScrollTo : 0);
-        int width = (int) this.getResources().getDimension(R.dimen.monthly_goals_table_day_plan_column_width);
-        daysPlanScrollView.smoothScrollTo(dayToScrollTo * width, 0);
-    }
+//    private void scrollToCurrentDate()
+//    {
+//        if(this.activityViewModel.getMonth() != DateTimeHelper.getCurrentMonth()
+//                || this.activityViewModel.getYear() != DateTimeHelper.getCurrentYear())
+//            return;
+//
+//        HorizontalScrollView daysPlanScrollView = (HorizontalScrollView) this.findViewById(R.id.monthly_goals_table_horizontalScrollView);
+//        int dayToScrollTo = DateTimeHelper.currentDayNumber() - 3;
+//        dayToScrollTo = (dayToScrollTo > 0 ? dayToScrollTo : 0);
+//        int width = (int) this.getResources().getDimension(R.dimen.monthly_goals_table_day_plan_column_width);
+//        daysPlanScrollView.smoothScrollTo(dayToScrollTo * width, 0);
+//    }
 }

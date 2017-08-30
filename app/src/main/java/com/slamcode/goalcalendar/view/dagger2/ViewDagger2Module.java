@@ -8,6 +8,7 @@ import com.slamcode.goalcalendar.view.charts.data.hellocharts.HelloChartsViewDat
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
 import com.slamcode.goalcalendar.view.lists.AppContextBasedViewAdapterProvider;
 import com.slamcode.goalcalendar.view.lists.gestures.ItemDragCallback;
+import com.slamcode.goalcalendar.view.lists.utils.RecyclerViewSimultaneousScrollingController;
 import com.slamcode.goalcalendar.view.presenters.CachedApplicationPresentersSource;
 import com.slamcode.goalcalendar.view.presenters.PresentersSource;
 
@@ -60,5 +61,12 @@ public final class ViewDagger2Module {
     public ItemDragCallback getCategoryListItemDragCallback()
     {
         return new ItemDragCallback();
+    }
+
+    @Provides
+    @Singleton
+    public RecyclerViewSimultaneousScrollingController provideCategoryPlansScrollingController()
+    {
+        return new RecyclerViewSimultaneousScrollingController();
     }
 }

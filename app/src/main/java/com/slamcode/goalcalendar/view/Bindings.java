@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.HorizontalScrollView;
 import android.widget.Spinner;
 
 import com.slamcode.goalcalendar.ApplicationContext;
@@ -26,10 +27,12 @@ import com.slamcode.goalcalendar.planning.schedule.DateTimeChangeListenersRegist
 import com.slamcode.goalcalendar.planning.YearMonthPair;
 import com.slamcode.goalcalendar.view.lists.CategoryDailyPlansRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.CategoryNameRecyclerViewAdapter;
+import com.slamcode.goalcalendar.view.lists.CategoryPlansRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.CategoryPlansSummaryRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.DailyPlanHeaderRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
 import com.slamcode.goalcalendar.view.lists.gestures.ItemDragCallback;
+import com.slamcode.goalcalendar.view.lists.utils.RecyclerViewSimultaneousScrollingController;
 import com.slamcode.goalcalendar.viewmodels.*;
 
 import java.util.Collection;
@@ -175,7 +178,56 @@ public class Bindings {
         Log.d(LOG_TAG, "Binding category plans source - END");
     }
 
+    @BindingAdapter("bind:monthlyPlansSource")
+    public static void setCategoriesMonthlyPlansSource(final RecyclerView recyclerView, final MonthlyPlanningCategoryListViewModel monthlyPlanningCategoryListViewModel)
+    {
+        Log.d(LOG_TAG, "Binding category plans source - START");
+        if(recyclerView == null)
+            return;
 
+        final ObservableList<CategoryPlansViewModel> itemsSource = monthlyPlanningCategoryListViewModel.getCategoryPlansList();
+        RecyclerView.Adapter adapter = recyclerView.getAdapter();
+
+        if(adapter == null)
+        {
+            Log.d(LOG_TAG, "Binding category plans source - injecting services");
+            Dagger2InjectData injectData = new Dagger2InjectData();
+            Dagger2ComponentContainer.getApplicationDagger2Component().inject(injectData);
+
+            Log.d(LOG_TAG, "Binding category plans source - creating new adapter");
+            adapter = injectData.itemsCollectionAdapterProvider
+                    .provideCategoryPlansRecyclerViewAdapter(
+                            injectData.applicationContext.getDefaultContext(),
+                            (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                            injectData.dateTimeChangeListenersRegistry,
+                            new YearMonthPair(monthlyPlanningCategoryListViewModel.getMonthData().getYear(), monthlyPlanningCategoryListViewModel.getMonthData().getMonth()),
+                            new ObservableArrayList<CategoryPlansViewModel>());
+            recyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+
+            ItemDragCallback callback = injectData.categoryListItemDragCallback;
+            callback.addOnItemGestureListener((CategoryPlansRecyclerViewAdapter)adapter);
+        }
+
+        if(adapter instanceof CategoryPlansRecyclerViewAdapter)
+        {
+            final RecyclerView.Adapter finalAdapter = adapter;
+
+            recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+                @Override
+                public void onGlobalLayout()
+                {
+                    recyclerView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    Log.d(LOG_TAG, "Binding category plans source - updating adapter source");
+                    CategoryPlansRecyclerViewAdapter dataAdapter = (CategoryPlansRecyclerViewAdapter) finalAdapter;
+                    dataAdapter.setYearMonthPair(new YearMonthPair(monthlyPlanningCategoryListViewModel.getMonthData().getYear(), monthlyPlanningCategoryListViewModel.getMonthData().getMonth()));
+                    dataAdapter.updateSourceCollectionOneByOne(itemsSource);
+                }
+            });
+        }
+        Log.d(LOG_TAG, "Binding category plans source - END");
+    }
 
     @BindingAdapter("bind:daysListHeaderSource")
     public static void setDaysListHeaderSource(RecyclerView recyclerView, MonthViewModel monthViewModel)
@@ -191,6 +243,7 @@ public class Bindings {
             Dagger2InjectData injectData = new Dagger2InjectData();
             Dagger2ComponentContainer.getApplicationDagger2Component().inject(injectData);
 
+            injectData.recyclerViewSimultaneousScrollingController.addForSimultaneousScrolling(recyclerView);
             adapter = injectData.itemsCollectionAdapterProvider
                     .provideDailyPlanHeaderRecyclerViewAdapter(
                             injectData.applicationContext.getDefaultContext(),
@@ -206,6 +259,21 @@ public class Bindings {
             dataAdapter.setYearMonthPair(new YearMonthPair(monthViewModel.getYear(), monthViewModel.getMonth()));
             dataAdapter.updateSourceCollectionOneByOne(itemsSource);
         }
+    }
+
+    @BindingAdapter("bind:scrollSimultaneouslyWithHeader")
+    public static void setScrollSimultaneouslyWithHeader(RecyclerView recyclerView, Boolean value)
+    {
+        if(recyclerView == null)
+            return;
+
+        Dagger2InjectData injectData = new Dagger2InjectData();
+        Dagger2ComponentContainer.getApplicationDagger2Component().inject(injectData);
+
+        if(value)
+            injectData.recyclerViewSimultaneousScrollingController.addForSimultaneousScrolling(recyclerView);
+        else
+            injectData.recyclerViewSimultaneousScrollingController.removeFromSimultaneousScrolling(recyclerView);
     }
 
     @BindingAdapter(value = {"bind:selectedValue", "bind:selectedValueAttrChanged"}, requireAll = false)
@@ -316,5 +384,8 @@ public class Bindings {
 
         @Inject
         ItemDragCallback categoryListItemDragCallback;
+
+        @Inject
+        RecyclerViewSimultaneousScrollingController recyclerViewSimultaneousScrollingController;
     }
 }

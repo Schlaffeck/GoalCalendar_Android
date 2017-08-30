@@ -30,6 +30,7 @@
     <dimen name="monthly_goals_table_category_column_width">120dp</dimen>
     <dimen name="monthly_goals_table_category_name_height">45dp</dimen>
     <dimen name="monthly_goals_table_category_frequency_height">35dp</dimen>
+    <dimen name="monthly_goals_table_category_column_height">80dp</dimen>
 
     <dimen name="monthly_goals_table_category_menu_button_width">60dp</dimen>
 

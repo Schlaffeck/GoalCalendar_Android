@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text='@{String.format("%d", vm.monthlyPlans.monthData.year)}'
-            android:gravity="center"></TextView>
+            android:gravity="center"/>
         <ImageButton
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:id="@+id/monthly_goals_increment_year_button"
@@ -67,27 +67,42 @@
     <include layout="@layout/monthly_goals_empty_list_content"/>
     </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_below="@id/monthly_goals_yearValue_layout"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/monthly_goals_table_listView_marginTop"
+        android:orientation="vertical"
         android:layout_marginBottom="@dimen/monthly_goals_table_listView_marginBottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
-            android:id="@+id/monthly_goals_category_column_layout"
+
+        <FrameLayout
+            android:id="@+id/monthly_goals_list_header_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_gravity="start">
+
+            <!-- categories names -->
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/monthly_goals_day_numbers_listview"
+                android:layout_marginTop="@dimen/monthly_goals_table_listView_marginTop"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/monthly_goals_table_category_column_width"
+                android:layout_marginStart="@dimen/monthly_goals_table_category_column_width"
+                android:verticalSpacing="@dimen/default_vertical_spacing"
+                android:horizontalSpacing="@dimen/default_horizontal_spacing"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                android:scrollbars="none"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal"
+                bind:daysListHeaderSource="@{vm.monthlyPlans.monthData}"/>
 
             <!-- header for category names list -->
             <Spinner
                 android:id="@+id/monthly_goals_list_header_month_spinner"
                 android:layout_width="@dimen/monthly_goals_table_category_column_width"
                 android:layout_height="@dimen/monthly_goals_table_header_height"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignWithParentIfMissing="true"
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:layout_marginTop="@dimen/default_margin"
@@ -96,78 +111,26 @@
                 android:ellipsize="marquee"
                 android:paddingLeft="@dimen/monthly_goals_table_category_column_item_left_padding"
                 android:paddingRight="10dp"
-                android:layout_marginLeft="-5dp"
-                android:layout_marginRight="0dp"
                 android:entries="@array/months_array"
                 bind:selectedValue="@={vm.monthString}">
             </Spinner>
-
-            <!-- categories names -->
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/monthly_goals_listview"
-                android:layout_marginTop="@dimen/monthly_goals_table_listView_marginTop"
-                android:layout_width="@dimen/monthly_goals_table_category_column_width"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/monthly_goals_table_category_column_left_margin"
-                android:verticalSpacing="@dimen/default_vertical_spacing"
-                android:horizontalSpacing="@dimen/default_horizontal_spacing"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-                android:gravity="left"
-                android:scrollbars="none"
-                bind:categoryNamesSource="@{vm.monthlyPlans.categoryPlansList}"></android.support.v7.widget.RecyclerView>
-        </LinearLayout>
+        </FrameLayout>
 
         <HorizontalScrollView
-            android:id="@+id/monthly_goals_table_horizontalScrollView"
-            android:layout_toRightOf="@id/monthly_goals_category_column_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="none">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/monthly_goals_header_list_item_days_list"
-                    android:layout_marginTop="@dimen/monthly_goals_table_listView_marginTop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:verticalSpacing="@dimen/default_vertical_spacing"
-                    android:horizontalSpacing="@dimen/default_horizontal_spacing"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    bind:daysListHeaderSource="@{vm.monthlyPlans.monthData}"></android.support.v7.widget.RecyclerView>
-            <!-- days in month list -->
-            <!--<LinearLayout-->
-                <!--android:layout_height="@dimen/monthly_goals_table_header_height"-->
-                <!--android:orientation="horizontal"-->
-                <!--android:id="@+id/monthly_goals_header_list_item_days_list"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_marginTop="@dimen/default_margin"-->
-                <!--android:layout_marginBottom="@dimen/monthly_goals_table_header_bottomMargin">-->
-            <!--</LinearLayout>-->
-
-            <!-- categories daily plans -->
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/monthly_goals_dailyplans_listview"
-                android:layout_marginTop="@dimen/monthly_goals_table_listView_marginTop"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:verticalSpacing="@dimen/default_vertical_spacing"
-                android:horizontalSpacing="@dimen/default_horizontal_spacing"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-                android:gravity="center"
-                bind:categoryPlansSource="@{vm.monthlyPlans}"
-                bind:onLayoutReady="@{presenter.onLayoutReadyCallback}"></android.support.v7.widget.RecyclerView>
-            </LinearLayout>
+            android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/monthly_goals_listview"
+            android:layout_marginTop="@dimen/monthly_goals_table_listView_marginTop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:verticalSpacing="@dimen/default_vertical_spacing"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            android:gravity="start"
+            android:scrollbars="none"
+            bind:monthlyPlansSource="@{vm.monthlyPlans}"/>
         </HorizontalScrollView>
-    </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>
 </layout>

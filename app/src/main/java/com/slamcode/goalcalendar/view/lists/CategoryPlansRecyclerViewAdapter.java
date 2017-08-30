@@ -8,9 +8,13 @@ import android.support.v7.widget.util.SortedListAdapterCallback;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.LinearLayout;
 
 import com.android.databinding.library.baseAdapters.BR;
 import com.slamcode.goalcalendar.R;
+import com.slamcode.goalcalendar.planning.YearMonthPair;
+import com.slamcode.goalcalendar.planning.schedule.DateTimeChangeListenersRegistry;
 import com.slamcode.goalcalendar.view.BaseSourceChangeRequest;
 import com.slamcode.goalcalendar.view.lists.base.ComparatorSortedListCallback;
 import com.slamcode.goalcalendar.view.lists.base.DefaultComparator;
@@ -19,26 +23,40 @@ import com.slamcode.goalcalendar.view.lists.base.bindable.BindableRecyclerViewDa
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableViewHolderBase;
 import com.slamcode.goalcalendar.view.lists.base.bindable.ObservableSortedList;
 import com.slamcode.goalcalendar.view.lists.gestures.ItemDragCallback;
+import com.slamcode.goalcalendar.view.utils.ViewBinder;
+import com.slamcode.goalcalendar.view.utils.ViewReference;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
+import com.slamcode.goalcalendar.viewmodels.DailyPlansViewModel;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 
-/**
- * Created by moriasla on 15.12.2016.
- */
+public class CategoryPlansRecyclerViewAdapter extends BindableRecyclerViewDataAdapter<CategoryPlansViewModel, CategoryPlansRecyclerViewAdapter.CategoryPlansViewHolder>
+        implements ItemDragCallback.ItemDragMoveListener{
 
-public class CategoryNameRecyclerViewAdapter extends BindableRecyclerViewDataAdapter<CategoryPlansViewModel, CategoryNameRecyclerViewAdapter.CategoryNameViewHolder>
-                            implements ItemDragCallback.ItemDragMoveListener {
+    public static final int CONTEXT_MENU_DELETE_ITEM_ID = 222;
+    public static final int CONTEXT_MENU_EDIT_ITEM_ID = 221;
+    private final DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry;
+    private YearMonthPair yearMonthPair;
 
     private SortedList.Callback<CategoryPlansViewModel> recyclerViewCallback;
 
-    public CategoryNameRecyclerViewAdapter(Context context, LayoutInflater layoutInflater, ObservableList<CategoryPlansViewModel> items)
-        {
-            super(context, layoutInflater, new ObservableSortedList<>(items, CategoryPlansViewModel.class,
-                    new SortedListCallbackSet<>(new DefaultComparator<CategoryPlansViewModel>())));
-            this.getSourceList().getCallbackSet().addCallback(new ComparatorSortedListCallback<>(new DefaultComparator<CategoryPlansViewModel>()));
-        }
+    public CategoryPlansRecyclerViewAdapter(Context context,
+                                            LayoutInflater layoutInflater,
+                                            DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry,
+                                            YearMonthPair yearMonthPair,
+                                            ObservableList<CategoryPlansViewModel> items)
+    {
+        super(context, layoutInflater, new ObservableSortedList<>(items, CategoryPlansViewModel.class,
+                new SortedListCallbackSet<>(new DefaultComparator<CategoryPlansViewModel>())));
+        this.dateTimeChangeListenersRegistry = dateTimeChangeListenersRegistry;
+        this.yearMonthPair = yearMonthPair;
+        this.getSourceList().getCallbackSet().addCallback(new ComparatorSortedListCallback<>(new DefaultComparator<CategoryPlansViewModel>()));
+    }
 
+    public void setYearMonthPair(YearMonthPair yearMonthPair) {
+        this.yearMonthPair = yearMonthPair;
+    }
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
@@ -97,15 +115,15 @@ public class CategoryNameRecyclerViewAdapter extends BindableRecyclerViewDataAda
     }
 
     @Override
-    public CategoryNameViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View convertView = this.getLayoutInflater().inflate(R.layout.monthly_goals_category_name_list_item,null);
+    public CategoryPlansViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View convertView = this.getLayoutInflater().inflate(R.layout.monthly_goals_category_list_item,null);
 
         convertView.setPadding(0, 0, 0,
                 viewType == ITEM_VIEM_TYPE_LAST_ITEM ?
                         convertView.getResources().getDimensionPixelSize(R.dimen.monthly_goals_category_listView_lastItem_paddingBottom) : 0
         );
 
-        return new CategoryNameViewHolder(convertView, null);
+        return new CategoryPlansViewHolder(convertView, null);
     }
 
     @Override
@@ -113,13 +131,15 @@ public class CategoryNameRecyclerViewAdapter extends BindableRecyclerViewDataAda
         notifyItemMoved(fromPosition, toPosition);
     }
 
-    public class CategoryNameViewHolder extends BindableViewHolderBase<CategoryPlansViewModel>
+    public class CategoryPlansViewHolder extends BindableViewHolderBase<CategoryPlansViewModel>
     {
-        CategoryNameViewHolder(
-                View view,
-                CategoryPlansViewModel model)
+        @ViewReference(R.id.monthly_goals_list_item_days_list)
+        RecyclerView daysListListRecyclerView;
+
+        CategoryPlansViewHolder(View view, CategoryPlansViewModel model)
         {
             super(view, model);
+            this.daysListListRecyclerView = ViewBinder.findView(view, R.id.monthly_goals_list_item_days_list);
         }
 
         public void requestItemRemove()
@@ -133,10 +153,18 @@ public class CategoryNameRecyclerViewAdapter extends BindableRecyclerViewDataAda
         }
 
         @Override
-        public void bindToModel(CategoryPlansViewModel modelObject) {
+        public void bindToModel(final CategoryPlansViewModel modelObject) {
             super.bindToModel(modelObject);
-            this.getBinding().setVariable(BR.presenter,  this);
+
+            final DailyPlanRecyclerViewAdapter adapter = new DailyPlanRecyclerViewAdapter(
+                    getView().getContext(),
+                    getLayoutInflater(),
+                    dateTimeChangeListenersRegistry,
+                    yearMonthPair,
+                    new ArrayList<DailyPlansViewModel>());
+
+            this.daysListListRecyclerView.setAdapter(adapter);
+            adapter.updateSourceCollection(modelObject.getDailyPlansList());
         }
     }
-
 }

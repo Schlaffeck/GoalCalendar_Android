@@ -42,4 +42,9 @@ public class AppContextBasedViewAdapterProvider implements ItemsCollectionAdapte
                                                                                         DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry) {
         return new DailyPlanHeaderRecyclerViewAdapter(context, yearMonthPair, layoutInflater, dateTimeChangeListenersRegistry);
     }
+
+    @Override
+    public CategoryPlansRecyclerViewAdapter provideCategoryPlansRecyclerViewAdapter(Context context, LayoutInflater layoutInflater, DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry, YearMonthPair yearMonthPair, ObservableList<CategoryPlansViewModel> itemsSource) {
+        return new CategoryPlansRecyclerViewAdapter(context, layoutInflater, dateTimeChangeListenersRegistry, yearMonthPair, itemsSource);
+    }
 }

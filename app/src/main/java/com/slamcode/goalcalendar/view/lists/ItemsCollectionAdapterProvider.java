@@ -28,4 +28,10 @@ public interface ItemsCollectionAdapterProvider {
                                                                                  YearMonthPair yearMonthPair,
                                                                                  LayoutInflater layoutInflater,
                                                                                  DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry);
+
+    CategoryPlansRecyclerViewAdapter provideCategoryPlansRecyclerViewAdapter(Context context,
+                                                                                   LayoutInflater layoutInflater,
+                                                                                   DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry,
+                                                                                   YearMonthPair yearMonthPair,
+                                                                                   ObservableList<CategoryPlansViewModel> itemsSource);
 }
