@@ -156,4 +156,7 @@
 
     <!-- other messages -->
     <string name="exitApplication_confirm_toast_message">Press Back again to Exit.</string>
+
+    <!-- dev -->
+    <string name="category_list_scroll_group_name">category_list_scroll_group</string>
 </resources>

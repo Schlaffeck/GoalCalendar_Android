@@ -16,7 +16,7 @@
         android:layout_height="@dimen/monthly_goals_table_category_column_height">
 
         <!-- daily plans list -->
-        <HorizontalScrollView
+        <com.slamcode.goalcalendar.view.controls.ListenableHorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="none"
@@ -30,9 +30,8 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-            android:scrollbars="none"
-            app:scrollSimultaneouslyWithHeader="@{true}"/>
-        </HorizontalScrollView>
+            android:scrollbars="none"/>
+        </com.slamcode.goalcalendar.view.controls.ListenableHorizontalScrollView>
 
         <!-- cat name layout -->
         <com.chauthai.swipereveallayout.SwipeRevealLayout

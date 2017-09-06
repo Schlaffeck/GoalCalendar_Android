@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.HorizontalScrollView;
 import android.widget.Spinner;
 
 import com.slamcode.goalcalendar.ApplicationContext;
@@ -32,7 +31,7 @@ import com.slamcode.goalcalendar.view.lists.CategoryPlansSummaryRecyclerViewAdap
 import com.slamcode.goalcalendar.view.lists.DailyPlanHeaderRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
 import com.slamcode.goalcalendar.view.lists.gestures.ItemDragCallback;
-import com.slamcode.goalcalendar.view.lists.utils.RecyclerViewSimultaneousScrollingController;
+import com.slamcode.goalcalendar.view.lists.scrolling.RecyclerViewSimultaneousScrollingController;
 import com.slamcode.goalcalendar.viewmodels.*;
 
 import java.util.Collection;

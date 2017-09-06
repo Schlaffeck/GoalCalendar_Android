@@ -8,7 +8,7 @@ import com.slamcode.goalcalendar.view.charts.data.hellocharts.HelloChartsViewDat
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
 import com.slamcode.goalcalendar.view.lists.AppContextBasedViewAdapterProvider;
 import com.slamcode.goalcalendar.view.lists.gestures.ItemDragCallback;
-import com.slamcode.goalcalendar.view.lists.utils.RecyclerViewSimultaneousScrollingController;
+import com.slamcode.goalcalendar.view.lists.scrolling.RecyclerViewSimultaneousScrollingController;
 import com.slamcode.goalcalendar.view.presenters.CachedApplicationPresentersSource;
 import com.slamcode.goalcalendar.view.presenters.PresentersSource;
 

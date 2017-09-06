@@ -1,11 +1,11 @@
-package com.slamcode.goalcalendar.view.lists.utils;
+package com.slamcode.goalcalendar.view.lists.scrolling;
 
 import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public final class RecyclerViewSimultaneousScrollingController {
+public final class RecyclerViewSimultaneousScrollingController implements SimultaneousScrollingController<RecyclerView> {
 
     private List<RecyclerView> recyclerViewList = new ArrayList<>();
     private ScrollSimultaneouslyListener onScrollListener = new ScrollSimultaneouslyListener();
@@ -26,7 +26,7 @@ public final class RecyclerViewSimultaneousScrollingController {
         recyclerView.removeOnScrollListener(onScrollListener);
     }
 
-    public void clearAllRecyclerViews()
+    public void clearScrollableControls()
     {
         for (RecyclerView recyclerView : recyclerViewList)
             recyclerView.removeOnScrollListener(onScrollListener);
@@ -62,7 +62,7 @@ public final class RecyclerViewSimultaneousScrollingController {
             super.onScrollStateChanged(recyclerView, newState);
         }
 
-        public void scrollListenerAdded(RecyclerView recyclerView)
+        private void scrollListenerAdded(RecyclerView recyclerView)
         {
             recyclerView.scrollTo(fullScrollX, fullScrollY);
         }

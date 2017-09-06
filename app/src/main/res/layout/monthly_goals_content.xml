@@ -82,13 +82,18 @@
             android:layout_gravity="start">
 
             <!-- categories names -->
+            <com.slamcode.goalcalendar.view.controls.ListenableHorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                android:layout_marginLeft="@dimen/monthly_goals_table_category_column_width"
+                android:layout_marginStart="@dimen/monthly_goals_table_category_column_width"
+                android:layout_gravity="center_vertical">
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/monthly_goals_day_numbers_listview"
                 android:layout_marginTop="@dimen/monthly_goals_table_listView_marginTop"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/monthly_goals_table_category_column_width"
-                android:layout_marginStart="@dimen/monthly_goals_table_category_column_width"
                 android:verticalSpacing="@dimen/default_vertical_spacing"
                 android:horizontalSpacing="@dimen/default_horizontal_spacing"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -97,6 +102,7 @@
                 android:layout_gravity="center_vertical"
                 android:orientation="horizontal"
                 bind:daysListHeaderSource="@{vm.monthlyPlans.monthData}"/>
+            </com.slamcode.goalcalendar.view.controls.ListenableHorizontalScrollView>
 
             <!-- header for category names list -->
             <Spinner
@@ -116,9 +122,6 @@
             </Spinner>
         </FrameLayout>
 
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/monthly_goals_listview"
             android:layout_marginTop="@dimen/monthly_goals_table_listView_marginTop"
@@ -129,7 +132,6 @@
             android:gravity="start"
             android:scrollbars="none"
             bind:monthlyPlansSource="@{vm.monthlyPlans}"/>
-        </HorizontalScrollView>
     </LinearLayout>
 
 </RelativeLayout>
