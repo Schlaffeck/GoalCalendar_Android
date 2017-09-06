@@ -75,7 +75,7 @@ public class CategoryPlansSummaryRecyclerViewAdapter extends BindableRecyclerVie
         return new CategoryPlansSummaryViewHolder(view);
     }
 
-    public  class CategoryPlansSummaryViewHolder extends BindableViewHolderBase<CategoryPlansViewModel> {
+    public class CategoryPlansSummaryViewHolder extends BindableViewHolderBase<CategoryPlansViewModel> {
 
         public CategoryPlansSummaryViewHolder(View view) {
             super(view);

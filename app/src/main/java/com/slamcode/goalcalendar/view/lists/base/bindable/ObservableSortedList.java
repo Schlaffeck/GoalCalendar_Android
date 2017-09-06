@@ -41,12 +41,15 @@ public class ObservableSortedList<Item extends Observable> extends SortedList<It
             return;
 
         if(newSourceList instanceof ObservableList) {
+            if(this.baseList != null)
+                this.baseList.removeOnListChangedCallback(this.listChangedListener);
             this.baseList = (ObservableList<Item>) newSourceList;
         }
         else {
             this.baseList = new ObservableArrayList<Item>();
             this.baseList.addAll(newSourceList);
         }
+        this.baseList.addOnListChangedCallback(this.listChangedListener);
     }
 
     @Override

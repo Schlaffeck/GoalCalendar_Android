@@ -78,6 +78,59 @@ public class Bindings {
         Log.d(LOG_TAG, "Binding category summary source - END");
     }
 
+    @BindingAdapter("bind:monthlyPlansSource")
+    public static void setCategoriesMonthlyPlansSource(final RecyclerView recyclerView, final MonthlyPlanningCategoryListViewModel monthlyPlanningCategoryListViewModel)
+    {
+        Log.d(LOG_TAG, "Binding category plans source - START");
+        if(recyclerView == null)
+            return;
+
+        final ObservableList<CategoryPlansViewModel> itemsSource = monthlyPlanningCategoryListViewModel.getCategoryPlansList();
+        RecyclerView.Adapter adapter = recyclerView.getAdapter();
+
+        if(adapter == null)
+        {
+            Log.d(LOG_TAG, "Binding category plans source - injecting services");
+            Dagger2InjectData injectData = new Dagger2InjectData();
+            Dagger2ComponentContainer.getApplicationDagger2Component().inject(injectData);
+
+            Log.d(LOG_TAG, "Binding category plans source - creating new adapter");
+            adapter = injectData.itemsCollectionAdapterProvider
+                    .provideCategoryPlansRecyclerViewAdapter(
+                            injectData.applicationContext.getDefaultContext(),
+                            (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                            injectData.dateTimeChangeListenersRegistry,
+                            new YearMonthPair(monthlyPlanningCategoryListViewModel.getMonthData().getYear(), monthlyPlanningCategoryListViewModel.getMonthData().getMonth()),
+                            new ObservableArrayList<CategoryPlansViewModel>());
+            recyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+
+            ItemDragCallback callback = injectData.categoryListItemDragCallback;
+            callback.addOnItemGestureListener((CategoryPlansRecyclerViewAdapter)adapter);
+            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+            itemTouchHelper.attachToRecyclerView(recyclerView);
+        }
+
+        if(adapter instanceof CategoryPlansRecyclerViewAdapter)
+        {
+            final RecyclerView.Adapter finalAdapter = adapter;
+
+            recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+                @Override
+                public void onGlobalLayout()
+                {
+                    recyclerView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    Log.d(LOG_TAG, "Binding category plans source - updating adapter source");
+                    CategoryPlansRecyclerViewAdapter dataAdapter = (CategoryPlansRecyclerViewAdapter) finalAdapter;
+                    dataAdapter.setYearMonthPair(new YearMonthPair(monthlyPlanningCategoryListViewModel.getMonthData().getYear(), monthlyPlanningCategoryListViewModel.getMonthData().getMonth()));
+                    dataAdapter.updateSourceCollection(itemsSource);
+                }
+            });
+        }
+        Log.d(LOG_TAG, "Binding category plans source - END");
+    }
+
     @BindingAdapter("bind:categoryNamesSource")
     public static void setCategoryNamesItemsSource(final RecyclerView recyclerView, final ObservableList<CategoryPlansViewModel> itemsSource)
     {
@@ -169,59 +222,6 @@ public class Bindings {
                     recyclerView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                     Log.d(LOG_TAG, "Binding category plans source - updating adapter source");
                     CategoryDailyPlansRecyclerViewAdapter dataAdapter = (CategoryDailyPlansRecyclerViewAdapter) finalAdapter;
-                    dataAdapter.setYearMonthPair(new YearMonthPair(monthlyPlanningCategoryListViewModel.getMonthData().getYear(), monthlyPlanningCategoryListViewModel.getMonthData().getMonth()));
-                    dataAdapter.updateSourceCollectionOneByOne(itemsSource);
-                }
-            });
-        }
-        Log.d(LOG_TAG, "Binding category plans source - END");
-    }
-
-    @BindingAdapter("bind:monthlyPlansSource")
-    public static void setCategoriesMonthlyPlansSource(final RecyclerView recyclerView, final MonthlyPlanningCategoryListViewModel monthlyPlanningCategoryListViewModel)
-    {
-        Log.d(LOG_TAG, "Binding category plans source - START");
-        if(recyclerView == null)
-            return;
-
-        final ObservableList<CategoryPlansViewModel> itemsSource = monthlyPlanningCategoryListViewModel.getCategoryPlansList();
-        RecyclerView.Adapter adapter = recyclerView.getAdapter();
-
-        if(adapter == null)
-        {
-            Log.d(LOG_TAG, "Binding category plans source - injecting services");
-            Dagger2InjectData injectData = new Dagger2InjectData();
-            Dagger2ComponentContainer.getApplicationDagger2Component().inject(injectData);
-
-            Log.d(LOG_TAG, "Binding category plans source - creating new adapter");
-            adapter = injectData.itemsCollectionAdapterProvider
-                    .provideCategoryPlansRecyclerViewAdapter(
-                            injectData.applicationContext.getDefaultContext(),
-                            (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-                            injectData.dateTimeChangeListenersRegistry,
-                            new YearMonthPair(monthlyPlanningCategoryListViewModel.getMonthData().getYear(), monthlyPlanningCategoryListViewModel.getMonthData().getMonth()),
-                            new ObservableArrayList<CategoryPlansViewModel>());
-            recyclerView.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
-
-            ItemDragCallback callback = injectData.categoryListItemDragCallback;
-            callback.addOnItemGestureListener((CategoryPlansRecyclerViewAdapter)adapter);
-            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
-            itemTouchHelper.attachToRecyclerView(recyclerView);
-        }
-
-        if(adapter instanceof CategoryPlansRecyclerViewAdapter)
-        {
-            final RecyclerView.Adapter finalAdapter = adapter;
-
-            recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-                @Override
-                public void onGlobalLayout()
-                {
-                    recyclerView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                    Log.d(LOG_TAG, "Binding category plans source - updating adapter source");
-                    CategoryPlansRecyclerViewAdapter dataAdapter = (CategoryPlansRecyclerViewAdapter) finalAdapter;
                     dataAdapter.setYearMonthPair(new YearMonthPair(monthlyPlanningCategoryListViewModel.getMonthData().getYear(), monthlyPlanningCategoryListViewModel.getMonthData().getMonth()));
                     dataAdapter.updateSourceCollectionOneByOne(itemsSource);
                 }

@@ -29,13 +29,12 @@ import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 import com.slamcode.goalcalendar.viewmodels.DailyPlansViewModel;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 
 public class CategoryPlansRecyclerViewAdapter extends BindableRecyclerViewDataAdapter<CategoryPlansViewModel, CategoryPlansRecyclerViewAdapter.CategoryPlansViewHolder>
         implements ItemDragCallback.ItemDragMoveListener{
 
-    public static final int CONTEXT_MENU_DELETE_ITEM_ID = 222;
-    public static final int CONTEXT_MENU_EDIT_ITEM_ID = 221;
     private final DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry;
     private YearMonthPair yearMonthPair;
 
@@ -79,31 +78,6 @@ public class CategoryPlansRecyclerViewAdapter extends BindableRecyclerViewDataAd
             public boolean areItemsTheSame(CategoryPlansViewModel item1, CategoryPlansViewModel item2) {
                 return item1 == item2;
             }
-
-            @Override
-            public void onChanged(int position, int count) {
-                super.onChanged(position, count);
-            }
-
-            @Override
-            public void onRemoved(int position, int count) {
-                super.onRemoved(position, count);
-            }
-
-            @Override
-            public void onChanged(int position, int count, Object payload) {
-                super.onChanged(position, count, payload);
-            }
-
-            @Override
-            public void onInserted(int position, int count) {
-                super.onInserted(position, count);
-            }
-
-            @Override
-            public void onMoved(int fromPosition, int toPosition) {
-                super.onMoved(fromPosition, toPosition);
-            }
         });
     }
 
@@ -130,6 +104,12 @@ public class CategoryPlansRecyclerViewAdapter extends BindableRecyclerViewDataAd
     @Override
     public void onItemDragMoved(int fromPosition, int toPosition) {
         notifyItemMoved(fromPosition, toPosition);
+    }
+
+    @Override
+    public void updateSourceCollection(Collection<CategoryPlansViewModel> newSourceCollection) {
+        this.getSourceList().updateSourceList(newSourceCollection);
+        super.updateSourceCollection(newSourceCollection);
     }
 
     public class CategoryPlansViewHolder extends BindableViewHolderBase<CategoryPlansViewModel>
