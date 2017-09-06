@@ -109,13 +109,9 @@ public class SimplePlansDescriptionProvider implements PlansSummaryDescriptionPr
                 else
                 {
                     // some in progress some not started
-                    if(notStartedCategories < dateTimeNow.getDay())
-                    {
-                        // more not done than days
-                        result.setTitle(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_someCategoriesNotStarted_title));
-                        result.setDetails(
-                                String.format(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_someCategoriesNotStarted_description), notStartedCategories));
-                    }
+                    result.setTitle(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_someCategoriesNotStarted_title));
+                    result.setDetails(
+                            String.format(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_someCategoriesNotStarted_description), notStartedCategories));
                 }
 
             }
