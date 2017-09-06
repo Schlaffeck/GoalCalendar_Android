@@ -22,6 +22,7 @@ import android.widget.Spinner;
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.dagger2.Dagger2ComponentContainer;
+import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.schedule.DateTimeChangeListenersRegistry;
 import com.slamcode.goalcalendar.planning.YearMonthPair;
 import com.slamcode.goalcalendar.view.lists.CategoryDailyPlansRecyclerViewAdapter;
@@ -79,13 +80,16 @@ public class Bindings {
     }
 
     @BindingAdapter("bind:monthlyPlansSource")
-    public static void setCategoriesMonthlyPlansSource(final RecyclerView recyclerView, final MonthlyPlanningCategoryListViewModel monthlyPlanningCategoryListViewModel)
+    public static void setCategoriesMonthlyPlansSource(final RecyclerView recyclerView, MonthlyPlanningCategoryListViewModel monthlyPlanningCategoryListViewModel)
     {
         Log.d(LOG_TAG, "Binding category plans source - START");
         if(recyclerView == null)
             return;
 
         final ObservableList<CategoryPlansViewModel> itemsSource = monthlyPlanningCategoryListViewModel.getCategoryPlansList();
+        final int year = monthlyPlanningCategoryListViewModel.getMonthData().getYear();
+        final Month month = monthlyPlanningCategoryListViewModel.getMonthData().getMonth();
+
         RecyclerView.Adapter adapter = recyclerView.getAdapter();
 
         if(adapter == null)
@@ -123,7 +127,7 @@ public class Bindings {
                     recyclerView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                     Log.d(LOG_TAG, "Binding category plans source - updating adapter source");
                     CategoryPlansRecyclerViewAdapter dataAdapter = (CategoryPlansRecyclerViewAdapter) finalAdapter;
-                    dataAdapter.setYearMonthPair(new YearMonthPair(monthlyPlanningCategoryListViewModel.getMonthData().getYear(), monthlyPlanningCategoryListViewModel.getMonthData().getMonth()));
+                    dataAdapter.setYearMonthPair(new YearMonthPair(year, month));
                     dataAdapter.updateSourceCollection(itemsSource);
                 }
             });

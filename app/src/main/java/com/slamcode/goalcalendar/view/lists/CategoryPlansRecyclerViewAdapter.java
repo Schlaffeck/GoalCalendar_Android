@@ -78,6 +78,16 @@ public class CategoryPlansRecyclerViewAdapter extends BindableRecyclerViewDataAd
             public boolean areItemsTheSame(CategoryPlansViewModel item1, CategoryPlansViewModel item2) {
                 return item1 == item2;
             }
+
+            @Override
+            public void onRemoved(int position, int count) {
+                super.onRemoved(position, count);
+            }
+
+            @Override
+            public void onInserted(int position, int count) {
+                super.onInserted(position, count);
+            }
         });
     }
 
