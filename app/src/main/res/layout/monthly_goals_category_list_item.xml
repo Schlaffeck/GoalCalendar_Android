@@ -21,7 +21,8 @@
             android:layout_height="match_parent"
             android:scrollbars="none"
             android:layout_marginLeft="@dimen/monthly_goals_table_category_column_width"
-            android:layout_marginStart="@dimen/monthly_goals_table_category_column_width">
+            android:layout_marginStart="@dimen/monthly_goals_table_category_column_width"
+            app:scrollGroupName="@{@string/category_list_scroll_group_name}">
         <android.support.v7.widget.RecyclerView
             android:background="@color/listItemBackgroundColor"
             android:id="@+id/monthly_goals_list_item_days_list"

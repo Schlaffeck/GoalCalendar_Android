@@ -10,7 +10,7 @@
             type="com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract.Presenter"/>
     </data>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_monthly_goals"
@@ -88,7 +88,8 @@
                 android:scrollbars="none"
                 android:layout_marginLeft="@dimen/monthly_goals_table_category_column_width"
                 android:layout_marginStart="@dimen/monthly_goals_table_category_column_width"
-                android:layout_gravity="center_vertical">
+                android:layout_gravity="center_vertical"
+                bind:scrollGroupName="@{@string/category_list_scroll_group_name}">
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/monthly_goals_day_numbers_listview"
                 android:layout_marginTop="@dimen/monthly_goals_table_listView_marginTop"

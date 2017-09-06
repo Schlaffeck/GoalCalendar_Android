@@ -10,6 +10,9 @@ public final class HorizontalScrollViewSimultaneousScrollingController implement
     private List<ListenableHorizontalScrollView> scrollViewList = new ArrayList<>();
     private OnScrolledListener scrollListener = new OnScrolledListener();
 
+    private int currentScrollX = 0;
+    private int currentScrollY = 0;
+
     public void addForSimultaneousScrolling(ListenableHorizontalScrollView scrollView)
     {
         if(scrollViewList.contains(scrollView))
@@ -17,7 +20,7 @@ public final class HorizontalScrollViewSimultaneousScrollingController implement
 
         scrollViewList.add(scrollView);
         scrollView.addOnScrollListener(this.scrollListener);
-        this.scrollListener.scrollListenerAdded(scrollView);
+        this.scrollListenerAdded(scrollView);
     }
 
     public void removeFromSimultaneousScrolling(ListenableHorizontalScrollView scrollView)
@@ -34,31 +37,27 @@ public final class HorizontalScrollViewSimultaneousScrollingController implement
         scrollViewList.clear();
     }
 
-    private class OnScrolledListener implements ListenableHorizontalScrollView.OnScrollListener{
+    private void scrollListenerAdded(ListenableHorizontalScrollView scrollView)
+    {
+        scrollView.scrollTo(currentScrollX, currentScrollY);
+    }
 
-        private int fullScrollX = 0;
-        private int fullScrollY = 0;
+    private class OnScrolledListener implements ListenableHorizontalScrollView.OnScrollListener{
 
         @Override
         public void onScrolled(ListenableHorizontalScrollView scrollView, int dx, int dy) {
+
+            currentScrollX = scrollView.getScrollX();
+            currentScrollY = scrollView.getScrollY();
+
             for (ListenableHorizontalScrollView scrollViewInList : scrollViewList) {
                 if(scrollViewInList != scrollView)
                 {
                     scrollViewInList.removeOnScrollListener(this);
-                    scrollViewInList.scrollBy(dx, dy);
+                    scrollViewInList.scrollTo(currentScrollX, currentScrollY);
                     scrollViewInList.addOnScrollListener(this);
                 }
-                else
-                {
-                    fullScrollX += dx;
-                    fullScrollY += dy;
-                }
             }
-        }
-
-        private void scrollListenerAdded(ListenableHorizontalScrollView scrollView)
-        {
-            scrollView.scrollTo(fullScrollX, fullScrollY);
         }
     }
 }

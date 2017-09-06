@@ -33,8 +33,8 @@ public class ListenableHorizontalScrollView extends HorizontalScrollView {
 
         super.onScrollChanged(l, t, oldl, oldt);
 
-        int dx = oldl - l;
-        int dy = oldt - t;
+        int dx = l - oldl;
+        int dy = t - oldt;
 
         for(OnScrollListener listener : this.onScrollListeners)
             listener.onScrolled(this, dx, dy);
