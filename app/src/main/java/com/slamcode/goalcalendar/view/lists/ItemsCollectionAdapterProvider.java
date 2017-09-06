@@ -14,14 +14,6 @@ import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 
 public interface ItemsCollectionAdapterProvider {
 
-    CategoryNameRecyclerViewAdapter provideCategoryNameListViewAdapter(Context context, LayoutInflater inflater, ObservableList<CategoryPlansViewModel> itemsSource);
-
-    CategoryDailyPlansRecyclerViewAdapter provideCategoryDailyPlansListViewAdapter(Context context,
-                                                                                   LayoutInflater layoutInflater,
-                                                                                   DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry,
-                                                                                   YearMonthPair yearMonthPair,
-                                                                                   ObservableList<CategoryPlansViewModel> itemsSource);
-
     CategoryPlansSummaryRecyclerViewAdapter providePlansSummaryForCategoriesRecyclerViewAdapter(Context context, LayoutInflater layoutInflater);
 
     DailyPlanHeaderRecyclerViewAdapter provideDailyPlanHeaderRecyclerViewAdapter(Context context,
