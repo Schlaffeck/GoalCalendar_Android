@@ -206,6 +206,8 @@ public class Bindings {
 
             ItemDragCallback callback = injectData.categoryListItemDragCallback;
             callback.addOnItemGestureListener((CategoryPlansRecyclerViewAdapter)adapter);
+            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+            itemTouchHelper.attachToRecyclerView(recyclerView);
         }
 
         if(adapter instanceof CategoryPlansRecyclerViewAdapter)

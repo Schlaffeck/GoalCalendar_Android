@@ -122,6 +122,7 @@ public class CategoryPlansRecyclerViewAdapter extends BindableRecyclerViewDataAd
                 viewType == ITEM_VIEM_TYPE_LAST_ITEM ?
                         convertView.getResources().getDimensionPixelSize(R.dimen.monthly_goals_category_listView_lastItem_paddingBottom) : 0
         );
+        convertView.setLongClickable(true);
 
         return new CategoryPlansViewHolder(convertView, null);
     }
