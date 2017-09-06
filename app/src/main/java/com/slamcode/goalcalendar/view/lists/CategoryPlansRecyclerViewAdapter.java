@@ -156,6 +156,8 @@ public class CategoryPlansRecyclerViewAdapter extends BindableRecyclerViewDataAd
         public void bindToModel(final CategoryPlansViewModel modelObject) {
             super.bindToModel(modelObject);
 
+            this.getBinding().setVariable(BR.presenter, this);
+
             final DailyPlanRecyclerViewAdapter adapter = new DailyPlanRecyclerViewAdapter(
                     getView().getContext(),
                     getLayoutInflater(),
