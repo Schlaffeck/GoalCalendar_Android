@@ -79,7 +79,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_gravity="start">
+            android:layout_gravity="start"
+            android:layout_marginBottom="@dimen/monthly_goals_table_header_bottomMargin">
 
             <!-- categories names -->
             <com.slamcode.goalcalendar.view.controls.ListenableHorizontalScrollView
@@ -112,12 +113,12 @@
                 android:layout_height="@dimen/monthly_goals_table_header_height"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:layout_marginTop="@dimen/default_margin"
-                android:layout_marginBottom="@dimen/monthly_goals_table_header_bottomMargin"
                 android:textSize="@dimen/list_item_text_size"
                 android:ellipsize="marquee"
-                android:paddingLeft="@dimen/monthly_goals_table_category_column_item_left_padding"
-                android:paddingRight="10dp"
+                android:paddingLeft="@dimen/monthly_goals_table_category_column_item_month_spinner_left_padding"
+                android:paddingStart="@dimen/monthly_goals_table_category_column_item_month_spinner_left_padding"
+                android:paddingRight="@dimen/monthly_goals_table_category_column_item_month_spinner_right_padding"
+                android:paddingEnd="@dimen/monthly_goals_table_category_column_item_month_spinner_right_padding"
                 android:entries="@array/months_array"
                 bind:selectedValue="@={vm.monthString}">
             </Spinner>

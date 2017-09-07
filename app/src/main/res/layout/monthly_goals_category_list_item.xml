@@ -66,6 +66,9 @@
             <!-- main layout -->
             <LinearLayout
                 android:paddingLeft="@dimen/monthly_goals_table_category_column_item_left_padding"
+                android:paddingStart="@dimen/monthly_goals_table_category_column_item_left_padding"
+                android:paddingEnd="@dimen/monthly_goals_table_category_column_item_right_padding"
+                android:paddingRight="@dimen/monthly_goals_table_category_column_item_right_padding"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:id="@+id/monthly_goals_list_item_category_panel"
