@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.view.lists.base;
 
 import android.content.Context;
+import android.databinding.ObservableList;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.slamcode.collections.CollectionUtils;
+import com.slamcode.goalcalendar.view.lists.base.bindable.ObservableSortedList;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,17 +26,21 @@ public abstract class RecyclerViewDataAdapter<Item, ViewHolder extends ViewHolde
     public static final int ITEM_VIEM_TYPE_LAST_ITEM = 202;
     public static final int ITEM_VIEM_TYPE_REGULAR_ITEM = 101;
 
-    private SortedList<Item> list;
+    private ObservableList<Item> list;
     private Context context;
     private LayoutInflater layoutInflater;
 
     private Map<Item, ViewHolder> modelToViewHolderMap = new HashMap<>();
 
-    protected RecyclerViewDataAdapter(Context context, LayoutInflater layoutInflater, SortedList<Item> sourceList)
+    protected RecyclerViewDataAdapter(Context context, LayoutInflater layoutInflater, ObservableList<Item> sourceList)
     {
         this.list = sourceList;
         this.context = context;
         this.layoutInflater = layoutInflater;
+    }
+
+    protected ObservableList<Item> getSourceList() {
+        return list;
     }
 
     public Item getItem(int position)
