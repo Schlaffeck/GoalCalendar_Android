@@ -108,7 +108,8 @@
     <string name="monthly_plans_summary_progressMonth_oneCategoryNotStarted_description" formatted="false">Try to do something in category %s today</string>
     <string name="monthly_plans_summary_progressMonth_oneCategoryNotStarted_title">Category not started yet</string>
     <string name="monthly_plans_summary_progressMonth_someCategoriesNotStarted_title">Do not forget those categories</string>
-    <string name="monthly_plans_summary_progressMonth_someCategoriesNotStarted_description">You still have %d categories to progress in this month</string>
+    <string name="monthly_plans_summary_progressMonth_2To4CategoriesNotStarted_description">You still have %d categories to progress in this month</string>
+    <string name="monthly_plans_summary_progressMonth_5AndMoreCategoriesNotStarted_description">You still have %d categories to progress in this month</string>
     <string name="monthly_plans_summary_progressMonth_progressSlower_title">You are little behind with plans</string>
     <string name="monthly_plans_summary_progressMonth_progressSlower_description">Maybe you can do something more this next days</string>
     <string name="monthly_plans_summary_progressMonth_progressRegular_title">Everything goes as planned</string>
