@@ -2,6 +2,7 @@ package com.slamcode.goalcalendar.view.lists.base.bindable;
 
 import android.content.Context;
 import android.databinding.Observable;
+import android.databinding.ObservableList;
 import android.support.v7.util.SortedList;
 import android.view.LayoutInflater;
 
@@ -13,14 +14,7 @@ import com.slamcode.goalcalendar.view.lists.base.RecyclerViewDataAdapter;
 
 public abstract class BindableRecyclerViewDataAdapter<Item extends Observable, ViewHolder extends BindableViewHolderBase<Item>> extends RecyclerViewDataAdapter<Item, ViewHolder> {
 
-    private final ObservableSortedList<Item> sourceList;
-
-    protected BindableRecyclerViewDataAdapter(Context context, LayoutInflater layoutInflater, ObservableSortedList<Item> sourceList) {
+    protected BindableRecyclerViewDataAdapter(Context context, LayoutInflater layoutInflater, ObservableList<Item> sourceList) {
         super(context, layoutInflater, sourceList);
-        this.sourceList = sourceList;
-    }
-
-    protected ObservableSortedList<Item> getSourceList() {
-        return sourceList;
     }
 }

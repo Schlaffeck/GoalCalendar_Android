@@ -38,64 +38,19 @@ public class CategoryPlansRecyclerViewAdapter extends BindableRecyclerViewDataAd
     private final DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry;
     private YearMonthPair yearMonthPair;
 
-    private SortedList.Callback<CategoryPlansViewModel> recyclerViewCallback;
-
     public CategoryPlansRecyclerViewAdapter(Context context,
                                             LayoutInflater layoutInflater,
                                             DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry,
                                             YearMonthPair yearMonthPair,
                                             ObservableList<CategoryPlansViewModel> items)
     {
-        super(context, layoutInflater, new ObservableSortedList<>(items, CategoryPlansViewModel.class,
-                new SortedListCallbackSet<>(new DefaultComparator<CategoryPlansViewModel>())));
+        super(context, layoutInflater, items);
         this.dateTimeChangeListenersRegistry = dateTimeChangeListenersRegistry;
         this.yearMonthPair = yearMonthPair;
-        this.getSourceList().getCallbackSet().addCallback(new ComparatorSortedListCallback<>(new DefaultComparator<CategoryPlansViewModel>()));
     }
 
     public void setYearMonthPair(YearMonthPair yearMonthPair) {
         this.yearMonthPair = yearMonthPair;
-    }
-
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        // assign additional callback
-        this.getSourceList().getCallbackSet().addCallback(this.recyclerViewCallback = new SortedListAdapterCallback<CategoryPlansViewModel>(this) {
-
-            private Comparator<CategoryPlansViewModel> comparator = new DefaultComparator<>();
-            @Override
-            public int compare(CategoryPlansViewModel o1, CategoryPlansViewModel o2) {
-                return this.comparator.compare(o1, o2);
-            }
-
-            @Override
-            public boolean areContentsTheSame(CategoryPlansViewModel oldItem, CategoryPlansViewModel newItem) {
-                return this.comparator.compare(oldItem, newItem) == 0;
-            }
-
-            @Override
-            public boolean areItemsTheSame(CategoryPlansViewModel item1, CategoryPlansViewModel item2) {
-                return item1 == item2;
-            }
-
-            @Override
-            public void onRemoved(int position, int count) {
-                super.onRemoved(position, count);
-            }
-
-            @Override
-            public void onInserted(int position, int count) {
-                super.onInserted(position, count);
-            }
-        });
-    }
-
-    @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
-        // remove callback
-        this.getSourceList().getCallbackSet().removeCallback(this.recyclerViewCallback);
-        super.onDetachedFromRecyclerView(recyclerView);
     }
 
     @Override
@@ -114,12 +69,7 @@ public class CategoryPlansRecyclerViewAdapter extends BindableRecyclerViewDataAd
     @Override
     public void onItemDragMoved(int fromPosition, int toPosition) {
         notifyItemMoved(fromPosition, toPosition);
-    }
-
-    @Override
-    public void updateSourceCollection(Collection<CategoryPlansViewModel> newSourceCollection) {
-        this.getSourceList().updateSourceList(newSourceCollection);
-        super.updateSourceCollection(newSourceCollection);
+        ObservableListUtils.moveItem(this.getSourceList(), fromPosition, toPosition);
     }
 
     public class CategoryPlansViewHolder extends BindableViewHolderBase<CategoryPlansViewModel>

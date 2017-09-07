@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.view.lists;
 
 import android.content.Context;
+import android.databinding.ObservableArrayList;
 import android.support.v7.util.SortedList;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -43,10 +44,7 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
                                            DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry,
                                            YearMonthPair yearMonthPair,
                                            Collection<DailyPlansViewModel> sourceCollection) {
-        super(context, layoutInflater,
-                new SortedList<>(
-                        DailyPlansViewModel.class,
-                        new ComparatorSortedListCallback<>(new DefaultComparator<DailyPlansViewModel>())));
+        super(context, layoutInflater, ObservableListUtils.createObservableList(sourceCollection));
         this.yearMonthPair = yearMonthPair;
         this.dateTimeChangeListenersRegistry = dateTimeChangeListenersRegistry;
         this.updateSourceCollection(sourceCollection);
