@@ -35,7 +35,7 @@ public interface MonthlyGoalsActivityContract {
 
         void showAddNewCategoryDialog(View view);
 
-        OnLayoutReadyCallback getOnLayoutReadyCallback();
+        OnLayoutReadyCallback getOnCategoryListReadyCallback();
     }
 
     /**
@@ -46,5 +46,7 @@ public interface MonthlyGoalsActivityContract {
         void onDataSet(MonthlyGoalsViewModel data);
 
         void showDialog(DialogFragment dialogFragment);
+
+        void scrollToCurrentDate();
     }
 }

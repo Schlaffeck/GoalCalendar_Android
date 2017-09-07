@@ -84,6 +84,7 @@
 
             <!-- categories names -->
             <com.slamcode.goalcalendar.view.controls.ListenableHorizontalScrollView
+                android:id="@+id/monthly_goals_list_header_days_list_horizontal_scroll_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="none"
@@ -133,7 +134,8 @@
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             android:gravity="start"
             android:scrollbars="none"
-            bind:monthlyPlansSource="@{vm.monthlyPlans}"/>
+            bind:monthlyPlansSource="@{vm.monthlyPlans}"
+            bind:onLayoutReady="@{presenter.onCategoryListReadyCallback}"/>
     </LinearLayout>
 
 </RelativeLayout>

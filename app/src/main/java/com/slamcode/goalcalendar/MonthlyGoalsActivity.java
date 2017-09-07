@@ -343,16 +343,16 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         capp.getApplicationComponent().inject(this);
     }
 
-//    private void scrollToCurrentDate()
-//    {
-//        if(this.activityViewModel.getMonth() != DateTimeHelper.getCurrentMonth()
-//                || this.activityViewModel.getYear() != DateTimeHelper.getCurrentYear())
-//            return;
-//
-//        HorizontalScrollView daysPlanScrollView = (HorizontalScrollView) this.findViewById(R.id.monthly_goals_table_horizontalScrollView);
-//        int dayToScrollTo = DateTimeHelper.currentDayNumber() - 3;
-//        dayToScrollTo = (dayToScrollTo > 0 ? dayToScrollTo : 0);
-//        int width = (int) this.getResources().getDimension(R.dimen.monthly_goals_table_day_plan_column_width);
-//        daysPlanScrollView.smoothScrollTo(dayToScrollTo * width, 0);
-//    }
+    public void scrollToCurrentDate()
+    {
+        if(this.activityViewModel.getMonth() != DateTimeHelper.getCurrentMonth()
+                || this.activityViewModel.getYear() != DateTimeHelper.getCurrentYear())
+            return;
+
+        HorizontalScrollView daysPlanScrollView = (HorizontalScrollView) this.findViewById(R.id.monthly_goals_list_header_days_list_horizontal_scroll_view);
+        int dayToScrollTo = DateTimeHelper.currentDayNumber() - 3;
+        dayToScrollTo = (dayToScrollTo > 0 ? dayToScrollTo : 0);
+        int width = (int) this.getResources().getDimension(R.dimen.monthly_goals_table_day_plan_column_width);
+        daysPlanScrollView.smoothScrollTo(dayToScrollTo * width, 0);
+    }
 }

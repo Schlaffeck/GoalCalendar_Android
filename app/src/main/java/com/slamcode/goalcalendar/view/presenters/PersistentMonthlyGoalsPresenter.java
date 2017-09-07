@@ -48,10 +48,11 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
 
     private CategoryPlansViewModelChangeRequestListener categoryChangeRequestListener = new CategoryPlansViewModelChangeRequestListener();
     private DailyPlansViewModelChangeRequestListener dailyPlansChangeRequestListener = new DailyPlansViewModelChangeRequestListener();
-    private OnLayoutReadyCallback onLayoutReadyCallback = new OnLayoutReadyCallback() {
+    private OnLayoutReadyCallback onCategoryListReadyCallback = new OnLayoutReadyCallback() {
         @Override
         public void onLayoutReady(View view) {
             Log.d(LOG_TAG, "Ready layout for view: " + view.toString());
+            activityView.scrollToCurrentDate();
         }
     };
 
@@ -144,8 +145,8 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
     }
 
     @Override
-    public OnLayoutReadyCallback getOnLayoutReadyCallback() {
-        return this.onLayoutReadyCallback;
+    public OnLayoutReadyCallback getOnCategoryListReadyCallback() {
+        return this.onCategoryListReadyCallback;
     }
 
     private void showAddOrEditCategoryDialog(CategoryPlansViewModel viewModel)
