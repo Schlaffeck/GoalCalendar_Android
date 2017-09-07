@@ -18,4 +18,10 @@ public class ObservableListUtils {
 
         return result;
     }
+
+    public static <Item> void moveItem(ObservableList<Item> list, int fromIndex, int toIndex)
+    {
+        Item removed = list.remove(fromIndex);
+        list.add(toIndex, removed);
+    }
 }

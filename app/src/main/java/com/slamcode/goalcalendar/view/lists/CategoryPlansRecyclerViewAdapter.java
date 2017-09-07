@@ -69,6 +69,7 @@ public class CategoryPlansRecyclerViewAdapter extends BindableRecyclerViewDataAd
     @Override
     public void onItemDragMoved(int fromPosition, int toPosition) {
         notifyItemMoved(fromPosition, toPosition);
+        ObservableListUtils.moveItem(this.getSourceList(), fromPosition, toPosition);
     }
 
     public class CategoryPlansViewHolder extends BindableViewHolderBase<CategoryPlansViewModel>
