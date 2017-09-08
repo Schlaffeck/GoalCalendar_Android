@@ -70,7 +70,6 @@
     <LinearLayout
         android:layout_below="@id/monthly_goals_yearValue_layout"
         android:orientation="vertical"
-        android:layout_marginBottom="@dimen/monthly_goals_table_listView_marginBottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -135,7 +134,8 @@
             android:gravity="start"
             android:scrollbars="none"
             bind:monthlyPlansSource="@{vm.monthlyPlans}"
-            bind:onLayoutReady="@{presenter.onCategoryListReadyCallback}"/>
+            bind:onLayoutReady="@{presenter.onCategoryListReadyCallback}"
+            android:paddingBottom="@dimen/monthly_goals_category_listView_lastItem_paddingBottom"/>
     </LinearLayout>
 
 </RelativeLayout>
