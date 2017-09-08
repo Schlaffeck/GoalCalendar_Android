@@ -56,11 +56,6 @@ public class CategoryPlansRecyclerViewAdapter extends BindableRecyclerViewDataAd
     @Override
     public CategoryPlansViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View convertView = this.getLayoutInflater().inflate(R.layout.monthly_goals_category_list_item,null);
-
-        convertView.setPadding(0, 0, 0,
-                viewType == ITEM_VIEM_TYPE_LAST_ITEM ?
-                        convertView.getResources().getDimensionPixelSize(R.dimen.monthly_goals_category_listView_lastItem_paddingBottom) : 0
-        );
         convertView.setLongClickable(true);
 
         return new CategoryPlansViewHolder(convertView, null);

@@ -132,7 +132,8 @@
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             android:gravity="start"
             android:scrollbars="none"
-            bind:monthlyPlansSource="@{vm.monthlyPlans}"/>
+            bind:monthlyPlansSource="@{vm.monthlyPlans}"
+            android:layout_marginBottom="@dimen/monthly_goals_category_listView_lastItem_paddingBottom"/>
     </LinearLayout>
 
 </RelativeLayout>
