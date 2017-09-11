@@ -56,7 +56,9 @@ public class CategoryPlansRecyclerViewAdapter extends BindableRecyclerViewDataAd
     @Override
     public CategoryPlansViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View convertView = this.getLayoutInflater().inflate(R.layout.monthly_goals_category_list_item,null);
-        convertView.setLongClickable(true);
+
+        View categoryView = convertView.findViewById(R.id.monthly_goals_list_item_category_panel);
+        categoryView.setLongClickable(true);
 
         return new CategoryPlansViewHolder(convertView, null);
     }
