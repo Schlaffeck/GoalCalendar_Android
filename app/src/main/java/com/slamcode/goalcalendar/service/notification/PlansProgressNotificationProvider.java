@@ -28,6 +28,7 @@ public final class PlansProgressNotificationProvider implements NotificationProv
 
     private static final int NOTIFICATION_ID = 3;
     private static final String LOG_TAG = "GOAL_PlansProgrNotPrv";
+    private final static int NOTIFICATION_HOUR = 16;
 
     private final ApplicationContext applicationContext;
     private final AppSettingsManager settingsManager;
@@ -68,7 +69,8 @@ public final class PlansProgressNotificationProvider implements NotificationProv
 
         Date lastTimePublished = this.notificationHistory.getLastTimeNotificationWasPublished(this.getNotificationIdString());
         if(lastTimePublished != null
-                && DateTimeHelper.isTodayDate(lastTimePublished))
+                && DateTimeHelper.isTodayDate(lastTimePublished)
+                    || this.notificationTimePassed())
         {
             return null;
         }
@@ -90,7 +92,7 @@ public final class PlansProgressNotificationProvider implements NotificationProv
 
     @Override
     public void scheduleNotification() {
-        Calendar inTime = DateTimeHelper.getTodayCalendar(16, 0, 0);
+        Calendar inTime = DateTimeHelper.getTodayCalendar(NOTIFICATION_HOUR, 0, 0);
 
         Intent notificationIntent = this.applicationContext.createIntent(NotificationPublisher.class);
         notificationIntent.putExtra(NotificationScheduler.NOTIFICATION_PROVIDER_NAME, PlansProgressNotificationProvider.class.getName());
@@ -102,5 +104,9 @@ public final class PlansProgressNotificationProvider implements NotificationProv
         this.logger.v(LOG_TAG, String.format("Scheduled middle day plans progress notification in time: %1$tb %1$td %1$tY at %1$tI:%1$tM %1$Tp", inTime));
 
         alarmManager.set(AlarmManager.RTC_WAKEUP, inTime.getTimeInMillis(), pendingIntent);
+    }
+
+    private boolean notificationTimePassed() {
+        return DateTimeHelper.getNowDateTime().getHour() > NOTIFICATION_HOUR;
     }
 }

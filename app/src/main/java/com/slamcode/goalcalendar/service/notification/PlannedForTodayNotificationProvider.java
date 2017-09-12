@@ -31,6 +31,8 @@ public final class PlannedForTodayNotificationProvider implements NotificationPr
     private static final int NOTIFICATION_ID = 1;
     private static final String LOG_TAG = "GOAL_PlannedNotPrv";
 
+    private final static int NOTIFICATION_HOUR = 8;
+
     private final ApplicationContext context;
     private final PersistenceContext persistenceContext;
     private final AppSettingsManager settingsManager;
@@ -67,7 +69,8 @@ public final class PlannedForTodayNotificationProvider implements NotificationPr
 
         Date lastTimePublished = this.notificationHistory.getLastTimeNotificationWasPublished(this.getNotificationIdString());
         if(lastTimePublished != null
-                && DateTimeHelper.isTodayDate(lastTimePublished))
+                && DateTimeHelper.isTodayDate(lastTimePublished)
+                    || this.notificationTimePassed())
         {
             return null;
         }
@@ -116,7 +119,7 @@ public final class PlannedForTodayNotificationProvider implements NotificationPr
 
     @Override
     public void scheduleNotification() {
-        Calendar inTime = DateTimeHelper.getTodayCalendar(8, 0, 0);
+        Calendar inTime = DateTimeHelper.getTodayCalendar(NOTIFICATION_HOUR, 0, 0);
 
         Intent notificationIntent = this.context.createIntent(NotificationPublisher.class);
         notificationIntent.putExtra(NotificationScheduler.NOTIFICATION_PROVIDER_NAME, PlannedForTodayNotificationProvider.class.getName());
@@ -141,5 +144,9 @@ public final class PlannedForTodayNotificationProvider implements NotificationPr
                 .size();
 
         return countPlannedForToday;
+    }
+
+    private boolean notificationTimePassed() {
+        return DateTimeHelper.getNowDateTime().getHour() > NOTIFICATION_HOUR;
     }
 }

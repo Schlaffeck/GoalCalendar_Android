@@ -60,7 +60,8 @@ public final class EndOfDayNotificationProvider implements NotificationProvider 
 
         Date lastTimePublished = this.notificationHistory.getLastTimeNotificationWasPublished(this.getNotificationIdString());
         if(lastTimePublished != null
-                && DateTimeHelper.isTodayDate(lastTimePublished))
+                && DateTimeHelper.isTodayDate(lastTimePublished)
+                    || this.notificationTimePassed())
         {
             return null;
         }
@@ -93,5 +94,11 @@ public final class EndOfDayNotificationProvider implements NotificationProvider 
         AlarmManager alarmManager = (AlarmManager)this.context.getSystemService(Context.ALARM_SERVICE);
 
         alarmManager.set(AlarmManager.RTC_WAKEUP, inTime.getTimeInMillis(), pendingIntent);
+    }
+
+    private boolean notificationTimePassed()
+    {
+        HourMinuteTime notificationTime = this.settingsManager.getEndOfDayNotificationTime();
+        return notificationTime.getHour() < DateTimeHelper.getNowDateTime().getHour();
     }
 }
