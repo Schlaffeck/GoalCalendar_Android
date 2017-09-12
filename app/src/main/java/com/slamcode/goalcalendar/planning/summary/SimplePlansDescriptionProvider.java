@@ -65,12 +65,12 @@ public class SimplePlansDescriptionProvider implements PlansSummaryDescriptionPr
             }
             else{
                 // calculate each category independently
-                Map<CategoryModel, Double> map = SummaryCalculatorUtils.calculateProgressForEachCategory(categories);
+                Map<CategoryModel, SummaryCalculatorUtils.CategoryProgressData> map = SummaryCalculatorUtils.calculateProgressForEachCategory(categories);
 
-                int notStartedCategories = CollectionUtils.sum(map.values(), new ElementSelector<Double, Integer>() {
+                int notStartedCategories = CollectionUtils.sum(map.values(), new ElementSelector<SummaryCalculatorUtils.CategoryProgressData, Integer>() {
                     @Override
-                    public Integer select(Double parent) {
-                        return parent == 0 ? 1 : 0;
+                    public Integer select(SummaryCalculatorUtils.CategoryProgressData parent) {
+                        return parent.getDoneTasksPercentage() == 0 ? 1 : 0;
                     }
                 });
 
@@ -96,10 +96,10 @@ public class SimplePlansDescriptionProvider implements PlansSummaryDescriptionPr
                 else if(notStartedCategories == 1)
                 {
                     // single category left alone
-                    Map.Entry<CategoryModel, Double> notStarted = CollectionUtils.singleOrDefault(map.entrySet(), new ElementSelector<Map.Entry<CategoryModel, Double>, Boolean>() {
+                    Map.Entry<CategoryModel, SummaryCalculatorUtils.CategoryProgressData> notStarted = CollectionUtils.singleOrDefault(map.entrySet(), new ElementSelector<Map.Entry<CategoryModel, SummaryCalculatorUtils.CategoryProgressData>, Boolean>() {
                         @Override
-                        public Boolean select(Map.Entry<CategoryModel, Double> parent) {
-                            return parent.getValue() == 0;
+                        public Boolean select(Map.Entry<CategoryModel, SummaryCalculatorUtils.CategoryProgressData> parent) {
+                            return parent.getValue().getDoneTasksPercentage() == 0;
                         }
                     });
                     result.setTitle(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_oneCategoryNotStarted_title));
@@ -108,10 +108,24 @@ public class SimplePlansDescriptionProvider implements PlansSummaryDescriptionPr
                 }
                 else
                 {
-                    // some in progress some not started
-                    result.setTitle(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_someCategoriesNotStarted_title));
-                    result.setDetails(
-                            String.format(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_someCategoriesNotStarted_description), notStartedCategories));
+                    int notStartedNotPlannedCategories = CollectionUtils.sum(map.values(), new ElementSelector<SummaryCalculatorUtils.CategoryProgressData, Integer>() {
+                        @Override
+                        public Integer select(SummaryCalculatorUtils.CategoryProgressData parent) {
+                            return parent.getDoneTasksPercentage() == 0 && parent.getPlannedTasksPercentage() == 0 ? 1 : 0;
+                        }
+                    });
+
+                    if(notStartedNotPlannedCategories != 0) {
+                        result.setTitle(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_someCategoriesNotStarted_notPlanned_title));
+                        result.setDetails(
+                                String.format(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_someCategoriesNotStarted_notPlanned_description), notStartedCategories));
+                    }
+                    else {
+                        // some in progress some not started
+                        result.setTitle(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_someCategoriesNotStarted_title));
+                        result.setDetails(
+                                String.format(this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_someCategoriesNotStarted_description), notStartedCategories));
+                    }
                 }
 
             }
@@ -125,13 +139,12 @@ public class SimplePlansDescriptionProvider implements PlansSummaryDescriptionPr
         List<CategoryModel> categoryModels = categoriesRepository.findForMonthWithName(year, month, categoryName);
         double monthProgress = SummaryCalculatorUtils.calculateMonthProgress(year, month, this.applicationContext.getDateTimeNow());
         double categoryProgress = SummaryCalculatorUtils.calculateCategoryProgress(categoryModels);
+        double plannedTasksPercentage = SummaryCalculatorUtils.calculateCategoryPlannedTasksPercentage(categoryModels);
 
-        String generalProgressDescription = this.provideGeneralProgressDescription(monthProgress, categoryProgress);
-
-        return generalProgressDescription;
+        return this.provideGeneralProgressDescription(monthProgress, categoryProgress, plannedTasksPercentage);
     }
 
-    private String provideGeneralProgressDescription(double monthProgress, double categoryProgress) {
+    private String provideGeneralProgressDescription(double monthProgress, double categoryProgress, double plannedTasksPercentage) {
 
         if(monthProgress < 0.0) {
             if(categoryProgress > 0)
@@ -158,8 +171,12 @@ public class SimplePlansDescriptionProvider implements PlansSummaryDescriptionPr
         }
         else if(isLittleAfterBeginningOfMonth)
         {
-            if(categoryProgress == 0)
-                return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_gt_progressCategory_eq_zero);
+            if(categoryProgress == 0) {
+                if(plannedTasksPercentage == 0)
+                    return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_gt_progressCategory_eq_zero);
+
+                    return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_eq_progressCategory_eq_zero_planned_gt_zero);
+            }
 
             return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_lt_progressCategory_eq_zero);
         }
@@ -171,7 +188,10 @@ public class SimplePlansDescriptionProvider implements PlansSummaryDescriptionPr
             if(isWorkOverdone)
                 return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_overDone);
 
-            return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_notDone);
+            if(plannedTasksPercentage == 0)
+                return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_notDone);
+
+            return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_notDone_planned_gt_zero);
         }
         else if(isAlmostEndOfMonth && !isWorkDone && !isWorkOverdone)
         {
@@ -180,7 +200,9 @@ public class SimplePlansDescriptionProvider implements PlansSummaryDescriptionPr
 
         // middle of the month
         if(categoryProgress == 0)
-            return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_gt_progressCategory_eq_zero);
+            return plannedTasksPercentage == 0 ?
+                    this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_gt_progressCategory_eq_zero)
+                    : this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressMonth_gt_progressCategory_eq_zero_planned_gt_zero);
 
         if(isWorkDone)
             return this.applicationContext.getStringFromResources(R.string.monthly_plans_summary_category_description_progressCategory_doneBeforeEndOfMonth);

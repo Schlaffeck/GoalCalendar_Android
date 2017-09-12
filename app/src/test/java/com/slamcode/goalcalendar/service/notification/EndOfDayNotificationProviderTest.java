@@ -111,6 +111,7 @@ public class EndOfDayNotificationProviderTest {
         when(contextMock.getColorArgbFromResources(R.color.planningStateButton_stateSuccess_backgroundColor)).thenReturn(55);
         when(contextMock.getStringFromResources(R.string.notification_endOfDay_title)).thenReturn("Title");
         when(contextMock.getStringFromResources(R.string.notification_endOfDay_content)).thenReturn("Content");
+        when(appSettingsManagerMock.getEndOfDayNotificationTime()).thenReturn(new HourMinuteTime(DateTimeHelper.getNowDateTime().getHour(), 0));
 
         PendingIntent pendingIntentMock = mock(PendingIntent.class);
         when(contextMock.createPendingIntent(0, intentMock, PendingIntent.FLAG_UPDATE_CURRENT)).thenReturn(pendingIntentMock);
