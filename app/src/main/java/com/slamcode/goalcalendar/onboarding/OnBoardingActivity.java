@@ -136,19 +136,19 @@ public class OnBoardingActivity extends AppCompatActivity {
         this.pagesDataList.add(new PageFragmentData(getResources().getString(
                 R.string.onboarding_page_1_title),
                 getResources().getString(R.string.onboarding_page_1_description),
-                R.drawable.onboarding_screen_1_cropped_pl,
+                R.drawable.onboarding_screen_1_cropped,
                 ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary),
                 ContextCompat.getColor(getApplicationContext(), android.R.color.white)));
         this.pagesDataList.add(new PageFragmentData(getResources().getString(
                 R.string.onboarding_page_2_title),
                 getResources().getString(R.string.onboarding_page_2_description),
-                R.drawable.onboarding_screen_2_cropped_pl,
+                R.drawable.onboarding_screen_2_cropped,
                 ContextCompat.getColor(getApplicationContext(), R.color.listAccentColor),
                 ContextCompat.getColor(getApplicationContext(), android.R.color.holo_green_light)));
         this.pagesDataList.add(new PageFragmentData(getResources().getString(
                 R.string.onboarding_page_3_title),
                 getResources().getString(R.string.onboarding_page_3_description),
-                R.drawable.onboarding_screen_3_cropped_pl,
+                R.drawable.onboarding_screen_3_cropped,
                 ContextCompat.getColor(getApplicationContext(), R.color.planningStateButton_statePlanned_backgroundColor),
                 ContextCompat.getColor(getApplicationContext(), android.R.color.holo_orange_light)));
     }
