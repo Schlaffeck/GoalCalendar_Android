@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.slamcode.goalcalendar.onboarding.OnBoardingActivity;
 import com.slamcode.goalcalendar.data.UnitOfWork;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.query.NumericalComparisonOperator;
@@ -51,6 +52,8 @@ import java.util.Random;
 import javax.inject.Inject;
 
 public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGoalsActivityContract.ActivityView{
+
+    public final static String STARTED_FROM_PARENT_INTENT_PARAM = "STARTED_FROM_PARENT";
 
     final String ACTIVITY_ID = MonthlyGoalsActivity.class.getName();
 
@@ -84,7 +87,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
     @Inject
     ItemsCollectionAdapterProvider adapterProvider;
-    
+
     @Inject
     AutoMarkTasksCommand autoMarkTasksCommand;
 
@@ -108,6 +111,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
     private MonthlyGoalsViewModel activityViewModel;
 
+    private boolean launchTimeSet;
+
     private boolean exitApplication;
 
     private boolean dataBindingsSetUp;
@@ -119,21 +124,13 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         setContentView(com.slamcode.goalcalendar.R.layout.monthly_goals_activity);
         Log.d(LOG_TAG, "Monthly goals activity view set");
 
-        this.mainLayout = this.findViewById(android.R.id.content);
         this.findAllRelatedViews();
         this.injectDependencies();
         Log.d(LOG_TAG, "Monthly goals dependencies injected");
+        if(this.isFirstLaunch())
+            this.startOnBoardingActivity();
 
-        this.mainLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-            @Override
-            public void onGlobalLayout() {
-                View v = mainLayout;
-                v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                onCreateGlobalLayoutAvailable();
-                Log.d(LOG_TAG, "Monthly goals activity view rendered");
-            }
-        });
+        this.startMainActivity();
         Log.d(LOG_TAG, "Monthly goals activity creating - END");
     }
 
@@ -261,6 +258,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
     private void findAllRelatedViews()
     {
+        this.mainLayout = this.findViewById(android.R.id.content);
         this.monthlyGoalsActivityLayout = ViewBinder.findView(this, R.id.monthly_goals_activity_main_coordinator_layout);
         this.categoryNamesRecyclerView = ViewBinder.findView(this, R.id.monthly_goals_listview);
         this.monthlyPlansGridContentLayout = ViewBinder.findView(this, R.id.content_monthly_goals);
@@ -269,11 +267,49 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         this.bottomSheetScrollView = ViewBinder.findView(this, R.id.monthly_goals_activity_bottom_sheet);
     }
 
-    private void showDailyProgressDialog() {
-        DateTime lastlaunchDateTime = this.settingsManager.getLastLaunchDateTime();
+    private boolean isFirstLaunch()
+    {
+        if(BuildConfig.DEBUG)
+            return true;
 
-        if(lastlaunchDateTime == null
-                || DateTimeHelper.isDateBefore(lastlaunchDateTime, DateTimeHelper.getTodayDateTime()))
+        return this.settingsManager.getLastLaunchDateTime() == null;
+    }
+
+    private void setLaunchTime()
+    {
+        if(!this.launchTimeSet) {
+            this.settingsManager.setLastLaunchDateTimeMillis(DateTimeHelper.getNowDateTime());
+            this.launchTimeSet = true;
+        }
+    }
+
+    private void startOnBoardingActivity()
+    {
+        Intent intent = new Intent(this, OnBoardingActivity.class);
+        intent.putExtra(STARTED_FROM_PARENT_INTENT_PARAM, true);
+        this.startActivity(intent);
+    }
+
+    private void startMainActivity()
+    {
+        this.mainLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                View v = mainLayout;
+                v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                onCreateGlobalLayoutAvailable();
+                Log.d(LOG_TAG, "Monthly goals activity view rendered");
+            }
+        });
+    }
+
+    private void showDailyProgressDialog() {
+        DateTime lastLaunchDateTime = this.settingsManager.getLastLaunchDateTime();
+
+        if(!this.launchTimeSet
+               && !this.isFirstLaunch()
+                && DateTimeHelper.isDateBefore(lastLaunchDateTime, DateTimeHelper.getTodayDateTime()))
         {
             int year = DateTimeHelper.getCurrentYear();
             Month month = DateTimeHelper.getCurrentMonth();
@@ -294,8 +330,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
                 this.showDialog(dialog);
             }
         }
-
-        this.settingsManager.setLastLaunchDateTimeMillis(DateTimeHelper.getNowDateTime());
     }
 
     private List<CategoryModel> getUnfinishedCategories(int year, Month month)
@@ -315,6 +349,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         this.setupBottomSheetBehavior();
         this.runStartupCommands();
         this.showDailyProgressDialog();
+        this.setLaunchTime();
     }
 
     private void setupPresenter() {
