@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:indeterminate="false"
             android:progress="@{vm.progressPercentageInteger}"
-            android:minWidth="200dp"
+            android:minWidth="@dimen/monthly_goals_summary_item_progressBar_minWidth"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="wrap_content"
             android:layout_marginRight="5dp" />
@@ -39,7 +39,7 @@
         android:layout_alignParentRight="true"
         android:layout_toRightOf="@id/plans_category_summary_leftSide_layout"
         android:textSize="@dimen/list_item_text_size"
-        android:gravity="right"
+        android:gravity="end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/colorPrimaryDark"
@@ -49,7 +49,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@id/plans_category_summary_item_percentage_textView"
         android:id="@+id/plans_category_summary_item_percentage_tasksSummary_layout"
-        android:gravity="right"
+        android:gravity="end"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">

@@ -48,4 +48,5 @@
 
     <!-- summary bottom -->
     <dimen name="monthly_goals_summary_pieChart_minHeight">400dp</dimen>
+    <dimen name="monthly_goals_summary_pieChart_landWidth">350dp</dimen>
 </resources>
