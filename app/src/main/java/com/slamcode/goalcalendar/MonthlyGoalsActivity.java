@@ -269,6 +269,9 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
     private boolean isFirstLaunch()
     {
+        if(BuildConfig.DEBUG)
+            return true;
+
         return this.settingsManager.getLastLaunchDateTime() == null;
     }
 
