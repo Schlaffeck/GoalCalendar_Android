@@ -3,4 +3,5 @@
     <dimen name="monthly_goals_table_category_column_width">100dp</dimen>
 
     <dimen name="monthly_goals_table_category_menu_button_width">50dp</dimen>
+    <dimen name="monthly_goals_summary_item_progressBar_minWidth">400dp</dimen>
 </resources>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            android:id="@+id/binding_view_model_variable_id"
+            name="vm"
+            type="com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel"/>
+    </data>
+<LinearLayout android:layout_width="match_parent"
+    android:id="@+id/monthly_goals_summary_content_layout"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/activity_horizontal_margin">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/monthly_goals_summary_generalProgress_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{String.format(@string/monthly_plans_summary_generalPercentage, vm.monthlyPlans.plansSummaryPercentage)}"
+            android:textSize="16sp"
+            android:textAllCaps="false"
+            android:padding="@dimen/default_padding"/>
+        <TextView
+            android:id="@+id/monthly_goals_summary_daysLeft_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{String.format(@string/monthly_plans_summary_noOfDaysLeft, vm.monthlyPlans.noOfDaysLeft)}"
+            android:textSize="16sp"
+            android:textAllCaps="false"
+            android:padding="@dimen/default_padding"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:animateLayoutChanges="true">
+    <com.slamcode.goalcalendar.view.charts.data.hellocharts.PieChartViewWithProgress
+        android:id="@+id/monthly_goals_summary_general_pieChart"
+        android:minHeight="@dimen/monthly_goals_summary_pieChart_minHeight"
+        android:layout_height="wrap_content"
+        android:layout_width="@dimen/monthly_goals_summary_pieChart_landWidth"
+        bind:selectedSliceIndex="@={vm.monthlyPlans.selectedCategoryIndex}"
+        bind:pieChartCategoryPlansSource="@{vm.monthlyPlans.categoryPlansList}">
+
+    </com.slamcode.goalcalendar.view.charts.data.hellocharts.PieChartViewWithProgress>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{vm.monthlyPlans.hasSelectedCategory?View.VISIBLE:View.GONE}">
+                    <include layout="@layout/monthly_goals_summary_selected_item_details_layout"
+                        app:vm="@{vm.monthlyPlans.selectedCategory}"/>
+            </LinearLayout>
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/monthly_goals_summary_categories_recyclerView"
+        android:orientation="vertical"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/monthly_goals_table_category_name_height"
+        bind:categorySummarySource="@{vm.monthlyPlans.categoryPlansList}">
+
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>
+</layout>

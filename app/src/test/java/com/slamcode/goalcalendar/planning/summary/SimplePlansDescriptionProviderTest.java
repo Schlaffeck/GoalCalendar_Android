@@ -814,6 +814,11 @@ public class SimplePlansDescriptionProviderTest {
         when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_2To4CategoriesNotStarted_description))
                 .thenReturn("You still have %d categories to progress in this month");
 
+        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_someCategoriesNotStarted_notPlanned_title))
+                .thenReturn("Do not forget those categories");
+        when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_2To4CategoriesNotStarted_notPlanned_description))
+                .thenReturn("You still have %d categories to progress in this month");
+
         when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_progressSlower_title))
                 .thenReturn("You are little behind with plans");
         when(applicationContext.getStringFromResources(R.string.monthly_plans_summary_progressMonth_progressSlower_description))

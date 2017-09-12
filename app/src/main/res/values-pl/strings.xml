@@ -82,15 +82,18 @@
     <!-- summary description -->
     <string name="monthly_plans_summary_category_description_progressMonth_eq_progressCategory_neq_zero">Wszystko idzie zgodnie z planem. Dobra robota.</string>
     <string name="monthly_plans_summary_category_description_progressMonth_eq_progressCategory_eq_zero">Rozpoczął się nowy miesiąc, czas go zaplanować.</string>
+    <string name="monthly_plans_summary_category_description_progressMonth_eq_progressCategory_eq_zero_planned_gt_zero">Masz już zadania zaplanowane w tej kategorii, pamiętaj aby je wykonać.</string>
     <string name="monthly_plans_summary_category_description_progressMonth_lt_progressCategory_eq_zero">Szybki start, oby tak dalej.</string>
     <string name="monthly_plans_summary_category_description_progressMonth_gt_progressCategory_neq_zero">Jesteś nieco do tyłu z planami w tej kategorii, spróbuj wykorzystać wolne chwile na poprawe wyników.</string>
     <string name="monthly_plans_summary_category_description_progressMonth_gt_progressCategory_eq_zero">Miesiąc rozpoczął się jakiś czas temu, wykonaj pierwszy krok i zaplanuj coś w tej kategorii.</string>
+    <string name="monthly_plans_summary_category_description_progressMonth_gt_progressCategory_eq_zero_planned_gt_zero">Miesiąc rozpoczął się jakiś czas temu, czas zabrac się za wykonywanie planów w tej kategorii.</string>
     <string name="monthly_plans_summary_category_description_progressMonth_lt_progressCategory_neq_zero">Jesteś do przodu z planami, to świetnie. Utrzymaj ten trend.</string>
     <string name="monthly_plans_summary_category_description_progressCategory_doneBeforeEndOfMonth">Wszystkie plany na ten miesiąc zostały juz wykonane. To może być dobry czas na skupienie sie na innych kategoriach.</string>
     <string name="monthly_plans_summary_category_description_progressCategory_done">Znakomicie, wszystko na ten miesiąc zostało wykonane.</string>
     <string name="monthly_plans_summary_category_description_progressCategory_overDone">W tej kategorii wyrobiono zadania ponad plan, może warto rozważyć zwiększenie ich liczby na nastepny miesiąc.</string>
     <string name="monthly_plans_summary_category_description_progressCategory_overDoneBeforeEndOfMonth">Wykonujesz więcej zadań w tej kategorii niż zaplanowane, to dobrze. Upewnij się tylko, że nie zaniedbujesz innych kategorii.</string>
     <string name="monthly_plans_summary_category_description_progressCategory_notDone">Nie udało sie wykonać wszystkiego, co zaplanowano. Sprawdź, czy wiecej czasu nie zabrały ci inne kategorie, oraz czy i dlaczego niektóre twoje plany się nie udały.</string>
+    <string name="monthly_plans_summary_category_description_progressCategory_notDone_planned_gt_zero">Masz ostatnią szansę na wykonanie planów w tej kategorii rpzed końcem miesiąca.</string>
     <string name="monthly_plans_summary_category_description_progressCategory_notDoneBeforeEndOfMonth">Zostało jeszcze trochę do zrobienia w tej kategorii. Spróbuj wykorzystać te kilka dni, by dokończyć zaplanowane zadania.</string>
     <string name="monthly_plans_summary_category_description_monthNotStartedYet">Miesiąc się jeszcze nie rozpoczął</string>
     <string name="monthly_plans_summary_category_description_monthNotStartedYet_somethingDone">Miesiąc się jeszcze nie zaczął. Czy te wykonane już plany to nie pomyłka?</string>
@@ -104,6 +107,9 @@
     <string name="monthly_plans_summary_progressMonth_nothingDone_description">Zacznij realizować swoje plany</string>
     <string name="monthly_plans_summary_progressMonth_oneCategoryNotStarted_title">Nie rozpoczęta kategoria</string>
     <string name="monthly_plans_summary_progressMonth_oneCategoryNotStarted_description" formatted="false">Spróbuj wykonać dzis coś w kategorii %s</string>
+    <string name="monthly_plans_summary_progressMonth_someCategoriesNotStarted_notPlanned_title">Zacznij planować w tych kategoriach</string>
+    <string name="monthly_plans_summary_progressMonth_2To4CategoriesNotStarted_notPlanned_description">%d kategorie wciaż są niezaplanowane</string>
+    <string name="monthly_plans_summary_progressMonth_5AndMoreCategoriesNotStarted_notPlanned_description">%d kategorii jest wciaż niezaplanowanych</string>
     <string name="monthly_plans_summary_progressMonth_someCategoriesNotStarted_title">Nie zapomnij o tych kategoriach</string>
     <string name="monthly_plans_summary_progressMonth_2To4CategoriesNotStarted_description">%d kategorie wciąż czekają na rozpoczęcie</string>
     <string name="monthly_plans_summary_progressMonth_5AndMoreCategoriesNotStarted_description">%d kategorii wciąż czeka na rozpoczęcie</string>
