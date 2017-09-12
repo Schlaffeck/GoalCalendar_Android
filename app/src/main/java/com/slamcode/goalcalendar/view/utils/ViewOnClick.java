@@ -1,9 +1,9 @@
 package com.slamcode.goalcalendar.view.utils;
 
-/**
- * Created by schlaffeck on 20.04.2017.
- */
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
+@Retention(RetentionPolicy.RUNTIME)
 public @interface ViewOnClick {
     int value();
 }

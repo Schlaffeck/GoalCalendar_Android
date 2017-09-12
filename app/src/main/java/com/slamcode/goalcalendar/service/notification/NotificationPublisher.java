@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.slamcode.goalcalendar.dagger2.Dagger2ComponentContainer;
 
@@ -17,6 +18,8 @@ import javax.inject.Inject;
  */
 
 public final class NotificationPublisher extends BroadcastReceiver {
+
+    private final static String LOG_TAG = "GOAL_NotPubl";
 
     @Inject
     Map<String, NotificationProvider> notificationProviderMap;
@@ -39,6 +42,8 @@ public final class NotificationPublisher extends BroadcastReceiver {
                 || !this.notificationProviderMap.containsKey(notificationProviderName))
             return;
 
+        Log.d(LOG_TAG, String.format("Received notification schedule broadcast - %s", notificationProviderName));
+
         NotificationProvider provider = notificationProviderMap.get(notificationProviderName);
         Notification notification = provider.provideNotification();
         if(notification == null)
@@ -46,5 +51,6 @@ public final class NotificationPublisher extends BroadcastReceiver {
 
         notificationManager.notify(provider.getNotificationId(), notification);
         this.notificationHistory.markNotificationWasPublished(provider.getNotificationIdString());
+        Log.d(LOG_TAG, String.format("Notification published - %s", notificationProviderName));
     }
 }

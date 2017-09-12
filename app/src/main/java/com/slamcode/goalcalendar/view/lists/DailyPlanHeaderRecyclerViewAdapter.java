@@ -2,6 +2,7 @@ package com.slamcode.goalcalendar.view.lists;
 
 import android.content.Context;
 import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,14 +34,12 @@ public class DailyPlanHeaderRecyclerViewAdapter extends BindableRecyclerViewData
                                                  YearMonthPair yearMonthPair,
                                                  LayoutInflater layoutInflater,
                                                  DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry) {
-        this(context, yearMonthPair, layoutInflater, new ObservableSortedList<>(
-                new ObservableArrayList<DayInMonthViewModel>(),
-                DayInMonthViewModel.class,
-                new SortedListCallbackSet<>(new ComparatorSortedListCallback<>(new DefaultComparator<DayInMonthViewModel>()), new DefaultComparator<DayInMonthViewModel>())), dateTimeChangeListenersRegistry);
+        this(context, yearMonthPair, layoutInflater,
+                new ObservableArrayList<DayInMonthViewModel>(), dateTimeChangeListenersRegistry);
     }
 
     protected DailyPlanHeaderRecyclerViewAdapter(Context context, YearMonthPair yearMonthPair,
-                                                 LayoutInflater layoutInflater, ObservableSortedList<DayInMonthViewModel> sourceList, DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry) {
+                                                 LayoutInflater layoutInflater, ObservableList<DayInMonthViewModel> sourceList, DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry) {
         super(context, layoutInflater, sourceList);
         this.yearMonthPair = yearMonthPair;
         this.dateTimeChangeListenersRegistry = dateTimeChangeListenersRegistry;

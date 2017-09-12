@@ -193,7 +193,7 @@ public class MonthlyPlanningCategoryListViewModel extends BaseObservable {
             {
                 CategoryPlansViewModel itemVm = categoryPlansViewModels.get(i);
                 itemVm.addOnPropertyChangedCallback(categoryPropertyChangedListener);
-                model.getCategories().add(itemVm.getModel());
+                model.getCategories().add(i, itemVm.getModel());
                 itemVm.updatePlansSummary();
             }
 

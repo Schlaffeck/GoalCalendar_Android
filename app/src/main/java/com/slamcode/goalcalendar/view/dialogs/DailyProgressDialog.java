@@ -36,7 +36,10 @@ public final class DailyProgressDialog extends ModelBasedDialog<PlansSummaryDesc
     protected View initializeView(LayoutInflater inflater) {
         View view = inflater.inflate(R.layout.daily_plans_progress_dialog, null);
 
-        ViewBinder.bindViews(this, view);
+        this.titleTextView = ViewBinder.findView(view, R.id.daily_progress_dialog_title_textView);
+        this.descriptionTextView = ViewBinder.findView(view, R.id.daily_progress_dialog_description_textView);
+        this.confirmButton = ViewBinder.findView(view, R.id.daily_progress_dialog_confirm_button);
+
 
         this.titleTextView.setText(this.getModel().getTitle());
         this.descriptionTextView.setText(this.getModel().getDetails());

@@ -3,6 +3,7 @@ package com.slamcode.goalcalendar.view.activity;
 import android.app.DialogFragment;
 import android.view.View;
 
+import com.slamcode.goalcalendar.view.OnLayoutReadyCallback;
 import com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel;
 
 /**
@@ -33,6 +34,8 @@ public interface MonthlyGoalsActivityContract {
         void goToPreviousMonth(View view);
 
         void showAddNewCategoryDialog(View view);
+
+        OnLayoutReadyCallback getOnCategoryListReadyCallback();
     }
 
     /**
@@ -43,5 +46,7 @@ public interface MonthlyGoalsActivityContract {
         void onDataSet(MonthlyGoalsViewModel data);
 
         void showDialog(DialogFragment dialogFragment);
+
+        void scrollToCurrentDate();
     }
 }

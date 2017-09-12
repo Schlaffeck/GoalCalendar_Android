@@ -3,6 +3,7 @@ package com.slamcode.goalcalendar.view.presenters;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.View;
 
 import com.android.databinding.library.baseAdapters.BR;
@@ -17,6 +18,7 @@ import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
+import com.slamcode.goalcalendar.view.OnLayoutReadyCallback;
 import com.slamcode.goalcalendar.view.SourceChangeRequestNotifier;
 import com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract;
 import com.slamcode.goalcalendar.view.dialogs.AddEditCategoryViewModelDialog;
@@ -33,6 +35,7 @@ import com.slamcode.goalcalendar.viewmodels.MonthlyPlanningCategoryListViewModel
 
 public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
 
+    private static final String LOG_TAG = "GC_PerMGPres";
     private final ApplicationContext applicationContext;
 
     private final PersistenceContext persistenceContext;
@@ -45,6 +48,13 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
 
     private CategoryPlansViewModelChangeRequestListener categoryChangeRequestListener = new CategoryPlansViewModelChangeRequestListener();
     private DailyPlansViewModelChangeRequestListener dailyPlansChangeRequestListener = new DailyPlansViewModelChangeRequestListener();
+    private OnLayoutReadyCallback onCategoryListReadyCallback = new OnLayoutReadyCallback() {
+        @Override
+        public void onLayoutReady(View view) {
+            Log.d(LOG_TAG, "Ready layout for view: " + view.toString());
+            activityView.scrollToCurrentDate();
+        }
+    };
 
     public PersistentMonthlyGoalsPresenter(
             ApplicationContext applicationContext,
@@ -132,6 +142,11 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
     @Override
     public void showAddNewCategoryDialog(View view) {
        this.showAddOrEditCategoryDialog(null);
+    }
+
+    @Override
+    public OnLayoutReadyCallback getOnCategoryListReadyCallback() {
+        return this.onCategoryListReadyCallback;
     }
 
     private void showAddOrEditCategoryDialog(CategoryPlansViewModel viewModel)

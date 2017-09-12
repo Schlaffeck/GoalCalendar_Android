@@ -149,11 +149,11 @@ public class GoalPlanStatusButton extends ImageButton implements View.OnClickLis
         if(this.initialized) {
             // scale out animation
             Animation outAnimation = AnimationUtils.loadAnimation(this.getContext(), R.anim.scale_out);
-            outAnimation.setDuration(android.R.integer.config_shortAnimTime);
+            outAnimation.setDuration(android.R.integer.config_mediumAnimTime);
 
             Animation inAnimation = AnimationUtils.loadAnimation(this.getContext(), R.anim.scale_in);
             outAnimation.setStartOffset(android.R.integer.config_shortAnimTime);
-            outAnimation.setDuration(android.R.integer.config_shortAnimTime);
+            outAnimation.setDuration(android.R.integer.config_mediumAnimTime);
 
             this.setBackgroundResource(STATUS_TO_DATA_MAP.get(status).backgroundId);
 

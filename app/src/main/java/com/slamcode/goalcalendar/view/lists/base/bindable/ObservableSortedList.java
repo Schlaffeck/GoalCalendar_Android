@@ -7,8 +7,10 @@ import android.support.v7.util.SortedList;
 
 import com.slamcode.goalcalendar.view.lists.base.SortedListCallbackSet;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by moriasla on 09.03.2017.
@@ -18,6 +20,8 @@ public class ObservableSortedList<Item extends Observable> extends SortedList<It
 
     private final SortedListCallbackSet<Item> callbackSet;
     private ObservableList<Item> baseList;
+    private List<Item> copyOfBaseList = new ArrayList<>();
+
     private final ObservableListChangedListener listChangedListener;
     private final ItemPropertyChangedListener propertyChangedListener;
     private boolean preventObservableListChangeNotification = false;
@@ -26,11 +30,14 @@ public class ObservableSortedList<Item extends Observable> extends SortedList<It
     public ObservableSortedList(ObservableList<Item> baseList, Class<Item> klass, SortedListCallbackSet<Item> callback) {
         super(klass, callback);
         this.baseList = baseList;
+        if(baseList != null) {
+            for(Item item : baseList)
+                this.setupItemPropertyChangeListener(item);
+            this.addAll(baseList);
+        }
+
         this.listChangedListener = new ObservableListChangedListener();
         this.propertyChangedListener = new ItemPropertyChangedListener();
-        for(Item item : baseList)
-            this.setupItemPropertyChangeListener(item);
-        this.addAll(baseList);
         this.baseList.addOnListChangedCallback(this.listChangedListener);
         this.callbackSet = callback;
     }
@@ -41,17 +48,25 @@ public class ObservableSortedList<Item extends Observable> extends SortedList<It
             return;
 
         if(newSourceList instanceof ObservableList) {
+            if(this.baseList != null)
+                this.baseList.removeOnListChangedCallback(this.listChangedListener);
             this.baseList = (ObservableList<Item>) newSourceList;
         }
         else {
             this.baseList = new ObservableArrayList<Item>();
             this.baseList.addAll(newSourceList);
         }
+
+        this.copyOfBaseList.clear();
+        this.copyOfBaseList.addAll(this.baseList);
+
+        this.baseList.addOnListChangedCallback(this.listChangedListener);
     }
 
     @Override
     public int add(Item item) {
         this.preventObservableListChangeNotification = true;
+        this.copyOfBaseList.add(item);
         int result = super.add(item);
 //        if(!this.observableSourceListChanging)
 //            this.baseList.add(item);
@@ -62,6 +77,7 @@ public class ObservableSortedList<Item extends Observable> extends SortedList<It
     @Override
     public boolean remove(Item item) {
         this.preventObservableListChangeNotification = true;
+        this.copyOfBaseList.remove(item);
         boolean result = super.remove(item);
 //        if(!this.observableSourceListChanging)
 //        this.baseList.remove(item);
@@ -70,26 +86,9 @@ public class ObservableSortedList<Item extends Observable> extends SortedList<It
     }
 
     @Override
-    public void addAll(Item... items) {
-        this.preventObservableListChangeNotification = true;
-        super.addAll(items);
-//        if(!this.observableSourceListChanging)
-//        this.baseList.addAll(Arrays.asList(items));
-        this.preventObservableListChangeNotification = false;
-    }
-
-    @Override
-    public void addAll(Collection<Item> items) {
-        this.preventObservableListChangeNotification = true;
-        super.addAll(items);
-//        if(!this.observableSourceListChanging)
-//        this.baseList.addAll(items);
-        this.preventObservableListChangeNotification = false;
-    }
-
-    @Override
     public void addAll(Item[] items, boolean mayModifyInput) {
         this.preventObservableListChangeNotification = true;
+        this.copyOfBaseList.addAll(Arrays.asList(items));
         super.addAll(items, mayModifyInput);
 //        if(!this.observableSourceListChanging)
 //        this.baseList.addAll(Arrays.asList(items));
@@ -99,6 +98,7 @@ public class ObservableSortedList<Item extends Observable> extends SortedList<It
     @Override
     public void clear() {
         this.preventObservableListChangeNotification = true;
+        this.copyOfBaseList.clear();
         super.clear();
 //        if(!this.observableSourceListChanging)
 //        this.baseList.clear();
@@ -109,8 +109,9 @@ public class ObservableSortedList<Item extends Observable> extends SortedList<It
     public Item removeItemAt(int index) {
         this.preventObservableListChangeNotification = true;
         Item result = super.removeItemAt(index);
+        this.copyOfBaseList.remove(result);
         if(!this.observableSourceListChanging)
-        this.baseList.remove(result);
+            this.baseList.remove(result);
         this.preventObservableListChangeNotification = false;
         return result;
     }
@@ -201,7 +202,7 @@ public class ObservableSortedList<Item extends Observable> extends SortedList<It
             observableSourceListChanging = true;
             for(int i = movedToPosition; i < movedToPosition + count; i++)
             {
-                Item item = items.get(i);
+                Item item = copyOfBaseList.get(i);
                 remove(item);
                 add(item);
             }
@@ -213,9 +214,9 @@ public class ObservableSortedList<Item extends Observable> extends SortedList<It
             if(preventObservableListChangeNotification)
                 return;
             observableSourceListChanging = true;
-            for(int i = startPosition; i < startPosition + count && i < items.size(); i++)
+            for(int i = startPosition; i < startPosition + count && i < copyOfBaseList.size(); i++)
             {
-                remove(items.get(i));
+                remove(copyOfBaseList.get(i));
             }
             observableSourceListChanging = false;
         }

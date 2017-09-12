@@ -15,22 +15,6 @@ import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 public class AppContextBasedViewAdapterProvider implements ItemsCollectionAdapterProvider {
 
     @Override
-    public CategoryNameRecyclerViewAdapter provideCategoryNameListViewAdapter(Context context,
-                                                                              LayoutInflater inflater,
-                                                                              ObservableList<CategoryPlansViewModel> itemsSource) {
-        return new CategoryNameRecyclerViewAdapter(context, inflater, itemsSource);
-    }
-
-    @Override
-    public CategoryDailyPlansRecyclerViewAdapter provideCategoryDailyPlansListViewAdapter(Context context,
-                                                                                          LayoutInflater layoutInflater,
-                                                                                          DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry,
-                                                                                          YearMonthPair yearMonthPair,
-                                                                                          ObservableList<CategoryPlansViewModel> itemsSource) {
-        return new CategoryDailyPlansRecyclerViewAdapter(context, layoutInflater, dateTimeChangeListenersRegistry, yearMonthPair, itemsSource);
-    }
-
-    @Override
     public CategoryPlansSummaryRecyclerViewAdapter providePlansSummaryForCategoriesRecyclerViewAdapter(Context context, LayoutInflater layoutInflater) {
         return new CategoryPlansSummaryRecyclerViewAdapter(context, layoutInflater);
     }
@@ -41,5 +25,10 @@ public class AppContextBasedViewAdapterProvider implements ItemsCollectionAdapte
                                                                                         LayoutInflater layoutInflater,
                                                                                         DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry) {
         return new DailyPlanHeaderRecyclerViewAdapter(context, yearMonthPair, layoutInflater, dateTimeChangeListenersRegistry);
+    }
+
+    @Override
+    public CategoryPlansRecyclerViewAdapter provideCategoryPlansRecyclerViewAdapter(Context context, LayoutInflater layoutInflater, DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry, YearMonthPair yearMonthPair, ObservableList<CategoryPlansViewModel> itemsSource) {
+        return new CategoryPlansRecyclerViewAdapter(context, layoutInflater, dateTimeChangeListenersRegistry, yearMonthPair, itemsSource);
     }
 }
