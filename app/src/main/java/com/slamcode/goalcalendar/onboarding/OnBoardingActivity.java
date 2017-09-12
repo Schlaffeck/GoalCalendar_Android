@@ -4,6 +4,7 @@ import android.animation.ArgbEvaluator;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -148,7 +149,7 @@ public class OnBoardingActivity extends AppCompatActivity {
                 R.string.onboarding_page_3_title),
                 getResources().getString(R.string.onboarding_page_3_description),
                 R.drawable.onboarding_screen_3_cropped_pl,
-                ContextCompat.getColor(getApplicationContext(), R.color.colorAccent),
+                ContextCompat.getColor(getApplicationContext(), R.color.planningStateButton_statePlanned_backgroundColor),
                 ContextCompat.getColor(getApplicationContext(), android.R.color.holo_orange_light)));
     }
 
@@ -312,12 +313,16 @@ public class OnBoardingActivity extends AppCompatActivity {
             {
                 nextButton.setVisibility(View.GONE);
                 finishButton.setVisibility(View.VISIBLE);
+                finishButton.setTextColor(pagesDataList.get(position).textColorValue);
             }
             else
             {
                 nextButton.setVisibility(View.VISIBLE);
                 finishButton.setVisibility(View.GONE);
+                nextButton.setColorFilter(pagesDataList.get(position).textColorValue, PorterDuff.Mode.SRC_IN);
             }
+
+            ((Button)findViewById(R.id.onboarding_skip_button)).setTextColor(pagesDataList.get(position).textColorValue);
         }
 
     }
