@@ -127,7 +127,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         this.findAllRelatedViews();
         this.injectDependencies();
         Log.d(LOG_TAG, "Monthly goals dependencies injected");
-        if(this.isFirstLaunch())
+        if(this.isFirstLaunch()
+                && !this.originatedFromNotification())
             this.startOnBoardingActivity();
 
         this.startMainActivity();
@@ -265,6 +266,11 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         this.emptyContentHorizontalScrollView = ViewBinder.findView(this, R.id.monthly_goals_emptyContent_horizontallScrollView);
         this.summaryContentLayout = ViewBinder.findView(this, R.id.monthly_goals_summary_content_layout);
         this.bottomSheetScrollView = ViewBinder.findView(this, R.id.monthly_goals_activity_bottom_sheet);
+    }
+
+    private boolean originatedFromNotification()
+    {
+        return this.getIntent().getBooleanExtra(NotificationScheduler.NOTIFICATION_ORIGINATED_FROM_FLAG, false);
     }
 
     private boolean isFirstLaunch()
