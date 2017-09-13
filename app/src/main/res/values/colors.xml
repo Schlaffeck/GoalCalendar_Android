@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- flat theme colors -->
     <!--  palette colors: http://paletton.com/palette.php?uid=72K0u0k70UE00%2B%2B2TZBbmMqfMAo -->
     <color name="colorPrimary">#336998</color>
     <color name="colorPrimaryDark">#303F9F</color>
@@ -17,10 +18,6 @@
     <color name="planningStateButton_stateEmpty_borderColor">#89D4C7</color>
     <color name="planningStateButton_stateEmpty_foregroundColor">#389686</color>
     <color name="planningStateButton_stateEmpty_backgroundColor">#B9ECE3</color>
-
-    <!--<color name="planningStateButton_statePlanned_borderColor">#FFB481</color>-->
-    <!--<color name="planningStateButton_statePlanned_foregroundColor">#BC662C</color>-->
-    <!--<color name="planningStateButton_statePlanned_backgroundColor">#FFC9A5</color>-->
 
     <color name="planningStateButton_statePlanned_borderColor">#FFEB88</color>
     <color name="planningStateButton_statePlanned_foregroundColor">#F4D53E</color>
@@ -40,5 +37,10 @@
     <color name="dailyProgress_dialog_backgroundColor">#EBFDE7</color>
     <color name="dailyProgress_dialog_header_textColor">#389686</color>
     <color name="dailyProgress_dialog_description_textColor">#46AE2A</color>
+
+    <!-- material modern theme colors -->
+    <color name="material_planningStateButton_stateEmpty_borderColor">#DDDDDD</color>
+    <color name="material_planningStateButton_stateEmpty_foregroundColor">#DDDDDD</color>
+    <color name="material_planningStateButton_stateEmpty_backgroundColor">#FFFFFF</color>
 
 </resources>

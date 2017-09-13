@@ -30,24 +30,21 @@ public class DailyPlanHeaderRecyclerViewAdapter extends BindableRecyclerViewData
     private YearMonthPair yearMonthPair;
     private final DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry;
 
-    protected DailyPlanHeaderRecyclerViewAdapter(Context context,
-                                                 YearMonthPair yearMonthPair,
-                                                 LayoutInflater layoutInflater,
+    protected DailyPlanHeaderRecyclerViewAdapter(YearMonthPair yearMonthPair,
                                                  DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry) {
-        this(context, yearMonthPair, layoutInflater,
+        this(yearMonthPair,
                 new ObservableArrayList<DayInMonthViewModel>(), dateTimeChangeListenersRegistry);
     }
 
-    protected DailyPlanHeaderRecyclerViewAdapter(Context context, YearMonthPair yearMonthPair,
-                                                 LayoutInflater layoutInflater, ObservableList<DayInMonthViewModel> sourceList, DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry) {
-        super(context, layoutInflater, sourceList);
+    protected DailyPlanHeaderRecyclerViewAdapter(YearMonthPair yearMonthPair, ObservableList<DayInMonthViewModel> sourceList, DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry) {
+        super(sourceList);
         this.yearMonthPair = yearMonthPair;
         this.dateTimeChangeListenersRegistry = dateTimeChangeListenersRegistry;
     }
 
     @Override
     public DailyPlanHeaderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = this.getLayoutInflater().inflate(R.layout.monthly_goals_header_day_number_cell, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.monthly_goals_header_day_number_cell, null);
         return new DailyPlanHeaderViewHolder(view);
     }
 

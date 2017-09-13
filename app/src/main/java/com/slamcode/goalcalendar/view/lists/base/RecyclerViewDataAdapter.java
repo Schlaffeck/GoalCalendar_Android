@@ -24,16 +24,12 @@ import java.util.Map;
 public abstract class RecyclerViewDataAdapter<Item, ViewHolder extends ViewHolderBase<Item>> extends RecyclerView.Adapter<ViewHolder> {
 
     private ObservableList<Item> list;
-    private Context context;
-    private LayoutInflater layoutInflater;
 
     private Map<Item, ViewHolder> modelToViewHolderMap = new HashMap<>();
 
-    protected RecyclerViewDataAdapter(Context context, LayoutInflater layoutInflater, ObservableList<Item> sourceList)
+    protected RecyclerViewDataAdapter(ObservableList<Item> sourceList)
     {
         this.list = sourceList;
-        this.context = context;
-        this.layoutInflater = layoutInflater;
     }
 
     protected ObservableList<Item> getSourceList() {
@@ -75,14 +71,6 @@ public abstract class RecyclerViewDataAdapter<Item, ViewHolder extends ViewHolde
     @Override
     public int getItemCount() {
         return this.list != null ? this.list.size() : 0;
-    }
-
-    protected LayoutInflater getLayoutInflater() {
-        return layoutInflater;
-    }
-
-    protected Context getContext() {
-        return context;
     }
 
     public void updateSourceCollection(Collection<Item> newSourceCollection) {

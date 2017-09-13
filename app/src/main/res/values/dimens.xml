@@ -15,7 +15,6 @@
     <dimen name="default_vertical_spacing">5dp</dimen>
     <dimen name="list_item_text_size">16sp</dimen>
     <dimen name="list_item_text_small_size">12sp</dimen>
-    <dimen name="dialog_header_text_size">20sp</dimen>
 
     <!-- monthly goals view -->
     <!--  year bar -->
@@ -55,7 +54,6 @@
     <dimen name="planning_state_button_height">45dp</dimen>
 
     <!-- empty view -->
-    <dimen name="monthly_goals_empty_view_header_textSize">20sp</dimen>
     <dimen name="monthly_goals_empty_view_layout_width">300dp</dimen>
 
     <!-- symbol font -->
@@ -70,5 +68,8 @@
     <dimen name="monthly_goals_summary_bottomSheet_peekHeight">50dp</dimen>
     <dimen name="monthly_goals_summary_pieChart_landWidth">250dp</dimen>
     <dimen name="monthly_goals_summary_item_progressBar_minWidth">200dp</dimen>
+
+    <!-- general dimens -->
+    <dimen name="monthly_goals_header_textSize">20sp</dimen>
 
 </resources>

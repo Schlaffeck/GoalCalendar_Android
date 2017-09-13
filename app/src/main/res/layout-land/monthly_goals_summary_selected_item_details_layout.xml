@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:text="@{vm.name}"
             android:layout_margin="@dimen/default_margin"
-            android:textColor="@color/colorPrimary"
+            android:textColor="?attr/colorPrimary"
             tools:text="Category name"/>
 
     <LinearLayout
@@ -31,7 +31,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/planningStateButton_stateSuccess_foregroundColor"
+            android:textColor="?attr/planningStateButton_stateSuccess_foregroundColor"
             android:textSize="@dimen/symbol_font_size"
             android:layout_margin="@dimen/default_margin"
             android:text='@{String.format(@string/monthly_plans_summary_selectedCategory_done_tasks, vm.noOfSuccessfulTasks, vm.noOfExpectedTasks)}'
@@ -39,7 +39,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/planningStateButton_stateFailed_foregroundColor"
+            android:textColor="?attr/planningStateButton_stateFailed_foregroundColor"
             android:textSize="@dimen/symbol_font_size"
             android:layout_margin="@dimen/default_margin"
             android:text='@{String.format(@string/monthly_plans_summary_selectedCategory_failed_tasks, vm.noOfFailedTasks)}'
@@ -47,7 +47,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/planningStateButton_statePlanned_foregroundColor"
+            android:textColor="?attr/planningStateButton_statePlanned_foregroundColor"
             android:textSize="@dimen/symbol_font_size"
             android:layout_margin="@dimen/default_margin"
             android:text='@{String.format(@string/monthly_plans_summary_selectedCategory_planned_tasks, vm.noOfPlannedTasks)}'

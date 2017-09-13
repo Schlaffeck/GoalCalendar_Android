@@ -1,14 +1,75 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <!-- styled references -->
+    <attr name="listAccentColor" format="reference|integer"/>
+    <attr name="listActivityBackgroundColor" format="reference|integer"/>
+    <attr name="listItemBackgroundColor" format="reference|integer"/>
+
+    <attr name="planningStateButton_shape_style" format="reference"/>
+
+    <attr name="planningStateButton_stateEmpty_borderColor" format="reference"/>
+    <attr name="planningStateButton_stateEmpty_foregroundColor" format="reference"/>
+    <attr name="planningStateButton_stateEmpty_backgroundColor" format="reference"/>
+
+    <attr name="planningStateButton_statePlanned_borderColor" format="reference"/>
+    <attr name="planningStateButton_statePlanned_foregroundColor" format="reference"/>
+    <attr name="planningStateButton_statePlanned_backgroundColor" format="reference"/>
+
+    <attr name="planningStateButton_stateFailed_borderColor" format="reference"/>
+    <attr name="planningStateButton_stateFailed_foregroundColor" format="reference"/>
+    <attr name="planningStateButton_stateFailed_backgroundColor" format="reference"/>
+
+    <attr name="planningStateButton_stateSuccess_borderColor" format="reference"/>
+    <attr name="planningStateButton_stateSuccess_foregroundColor" format="reference"/>
+    <attr name="planningStateButton_stateSuccess_backgroundColor" format="reference"/>
+
+    <attr name="dailyProgress_dialog_header_textColor" format="reference"/>
+    <attr name="dailyProgress_dialog_description_textColor" format="reference"/>
+    <attr name="dailyProgress_dialog_backgroundColor" format="reference"/>
+    <attr name="dailyProgress_dialog_button_tintColor" format="reference|color"/>
+
+    <!-- Flat brand theme styles -->
+    <style name="FlatBrandTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <!-- list -->
+        <item name="listAccentColor">@color/listAccentColor</item>
+        <item name="listItemBackgroundColor">@color/listItemBackgroundColor</item>
+        <item name="listActivityBackgroundColor">@color/listActivityBackgroundColor</item>
+
+        <!-- state button -->
+        <item name="planningStateButton_shape_style">@style/FlatBrandTheme.GoalStatusButtonShape</item>
+
+        <item name="planningStateButton_stateEmpty_borderColor">@color/planningStateButton_stateEmpty_borderColor</item>
+        <item name="planningStateButton_stateEmpty_foregroundColor">@color/planningStateButton_stateEmpty_foregroundColor</item>
+        <item name="planningStateButton_stateEmpty_backgroundColor">@color/planningStateButton_stateEmpty_backgroundColor</item>
+
+        <item name="planningStateButton_statePlanned_borderColor">@color/planningStateButton_statePlanned_borderColor</item>
+        <item name="planningStateButton_statePlanned_foregroundColor">@color/planningStateButton_statePlanned_foregroundColor</item>
+        <item name="planningStateButton_statePlanned_backgroundColor">@color/planningStateButton_statePlanned_backgroundColor</item>
+
+        <item name="planningStateButton_stateFailed_borderColor">@color/planningStateButton_stateFailed_borderColor</item>
+        <item name="planningStateButton_stateFailed_foregroundColor">@color/planningStateButton_stateFailed_foregroundColor</item>
+        <item name="planningStateButton_stateFailed_backgroundColor">@color/planningStateButton_stateFailed_backgroundColor</item>
+
+        <item name="planningStateButton_stateSuccess_borderColor">@color/planningStateButton_stateSuccess_borderColor</item>
+        <item name="planningStateButton_stateSuccess_foregroundColor">@color/planningStateButton_stateSuccess_foregroundColor</item>
+        <item name="planningStateButton_stateSuccess_backgroundColor">@color/planningStateButton_stateSuccess_backgroundColor</item>
+
+        <!-- dialog -->
+        <item name="dailyProgress_dialog_header_textColor">@color/dailyProgress_dialog_header_textColor</item>
+        <item name="dailyProgress_dialog_description_textColor">@color/dailyProgress_dialog_description_textColor</item>
+        <item name="dailyProgress_dialog_backgroundColor">@color/dailyProgress_dialog_backgroundColor</item>
+        <item name="dailyProgress_dialog_button_tintColor">@color/dailyProgress_dialog_button_tintColor</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
+    <style name="FlatBrandTheme.GoalStatusButtonShape">
+        <item name="android:shape">rectangle</item>
+    </style>
+
+    <style name="FlatBrandTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
@@ -17,6 +78,65 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <!--  Material ui modern style -->
+    <style name="MaterialTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <!-- list -->
+        <item name="listAccentColor">@color/listAccentColor</item>
+        <item name="listItemBackgroundColor">@color/colorAccent</item>
+        <item name="listActivityBackgroundColor">@color/listActivityBackgroundColor</item>
+
+        <!-- state button -->
+        <item name="planningStateButton_shape_style">@style/MaterialTheme.GoalStatusButtonShape</item>
+
+        <item name="planningStateButton_stateEmpty_borderColor">@color/material_planningStateButton_stateEmpty_borderColor</item>
+        <item name="planningStateButton_stateEmpty_foregroundColor">@color/material_planningStateButton_stateEmpty_foregroundColor</item>
+        <item name="planningStateButton_stateEmpty_backgroundColor">@color/material_planningStateButton_stateEmpty_backgroundColor</item>
+
+        <item name="planningStateButton_statePlanned_borderColor">@color/planningStateButton_statePlanned_borderColor</item>
+        <item name="planningStateButton_statePlanned_foregroundColor">@color/planningStateButton_statePlanned_foregroundColor</item>
+        <item name="planningStateButton_statePlanned_backgroundColor">@color/planningStateButton_statePlanned_backgroundColor</item>
+
+        <item name="planningStateButton_stateFailed_borderColor">@color/planningStateButton_stateFailed_borderColor</item>
+        <item name="planningStateButton_stateFailed_foregroundColor">@color/planningStateButton_stateFailed_foregroundColor</item>
+        <item name="planningStateButton_stateFailed_backgroundColor">@color/planningStateButton_stateFailed_backgroundColor</item>
+
+        <item name="planningStateButton_stateSuccess_borderColor">@color/planningStateButton_stateSuccess_borderColor</item>
+        <item name="planningStateButton_stateSuccess_foregroundColor">@color/planningStateButton_stateSuccess_foregroundColor</item>
+        <item name="planningStateButton_stateSuccess_backgroundColor">@color/planningStateButton_stateSuccess_backgroundColor</item>
+
+        <!--  dialog -->
+        <item name="dailyProgress_dialog_header_textColor">@color/dailyProgress_dialog_header_textColor</item>
+        <item name="dailyProgress_dialog_description_textColor">@color/dailyProgress_dialog_description_textColor</item>
+        <item name="dailyProgress_dialog_backgroundColor">@color/dailyProgress_dialog_backgroundColor</item>
+        <item name="dailyProgress_dialog_button_tintColor">@color/dailyProgress_dialog_button_tintColor</item>
+    </style>
+
+    <style name="MaterialTheme.GoalStatusButtonShape">
+        <item name="android:shape">oval</item>
+    </style>
+
+    <!-- general control  styles -->
+
+    <style name="DialogButtonStyle" parent="Base.Widget.AppCompat.Button">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_margin">@dimen/default_margin</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="HeaderText" parent="@android:style/TextAppearance">
+        <item name="android:textSize">@dimen/monthly_goals_header_textSize</item>
+        <item name="android:layout_margin">@dimen/activity_vertical_margin</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- splash screen theme -->
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>

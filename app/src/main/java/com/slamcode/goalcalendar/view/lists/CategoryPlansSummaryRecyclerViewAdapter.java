@@ -30,15 +30,15 @@ public class CategoryPlansSummaryRecyclerViewAdapter extends BindableRecyclerVie
 
     private ObservableList.OnListChangedCallback<ObservableList<CategoryPlansViewModel>> listChangedCallback = new CategoryListChangedCallback();
 
-    public CategoryPlansSummaryRecyclerViewAdapter(Context context, LayoutInflater layoutInflater)
+    public CategoryPlansSummaryRecyclerViewAdapter()
     {
-        super(context, layoutInflater, new ObservableArrayList<CategoryPlansViewModel>());
+        super(new ObservableArrayList<CategoryPlansViewModel>());
         this.getSourceList().addOnListChangedCallback(this.listChangedCallback);
     }
 
     @Override
     public CategoryPlansSummaryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = this.getLayoutInflater().inflate(R.layout.plans_category_summary_item_view, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.plans_category_summary_item_view, null);
         return new CategoryPlansSummaryViewHolder(view);
     }
 

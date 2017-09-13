@@ -19,11 +19,11 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".MonthlyGoalsActivity"
     tools:showIn="@layout/monthly_goals_activity"
-    android:background="@color/listActivityBackgroundColor">
+    android:background="?attr/listActivityBackgroundColor">
 
     <RelativeLayout
         android:id="@+id/monthly_goals_yearValue_layout"
-        android:background="@color/colorPrimary"
+        android:background="?attr/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

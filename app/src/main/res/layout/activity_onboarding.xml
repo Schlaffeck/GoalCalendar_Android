@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context="com.slamcode.goalcalendar.onboarding.OnBoardingActivity"
-    android:background="@color/colorPrimary">
+    android:background="?attr/colorPrimary">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/onboarding_view_pager"

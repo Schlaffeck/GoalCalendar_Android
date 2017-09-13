@@ -3,15 +3,12 @@
     android:orientation="vertical" android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:background="@color/dailyProgress_dialog_backgroundColor">
+    android:background="?attr/dailyProgress_dialog_backgroundColor">
 
     <TextView
         android:id="@+id/daily_progress_dialog_title_textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/dialog_header_text_size"
-        android:layout_margin="@dimen/activity_vertical_margin"
-        android:textColor="@color/dailyProgress_dialog_header_textColor"
+        style="@style/HeaderText"
+        android:textColor="?attr/dailyProgress_dialog_header_textColor"
         android:text="Header"/>
 
     <TextView
@@ -19,16 +16,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_vertical_margin"
-        android:textColor="@color/dailyProgress_dialog_description_textColor"
+        android:textColor="?attr/dailyProgress_dialog_description_textColor"
         android:text="text"/>
 
     <Button
         android:id="@+id/daily_progress_dialog_confirm_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/DialogButtonStyle"
         android:text="OK"
-        android:layout_margin="@dimen/default_margin"
-        android:backgroundTint="@color/dailyProgress_dialog_button_tintColor"
-        android:layout_gravity="center" />
+        android:backgroundTint="?attr/dailyProgress_dialog_button_tintColor"/>
 
 </LinearLayout>

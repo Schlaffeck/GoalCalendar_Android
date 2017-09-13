@@ -24,7 +24,7 @@
             android:layout_marginStart="@dimen/monthly_goals_table_category_column_width"
             app:scrollGroupName="@{@string/category_list_scroll_group_name}">
         <android.support.v7.widget.RecyclerView
-            android:background="@color/listItemBackgroundColor"
+            android:background="?attr/listItemBackgroundColor"
             android:id="@+id/monthly_goals_list_item_days_list"
             android:horizontalSpacing="@dimen/default_horizontal_spacing"
             android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
                 <ImageButton
                     android:layout_width="@dimen/monthly_goals_table_category_menu_button_width"
                     android:layout_height="match_parent"
-                    android:background="@color/planningStateButton_stateFailed_backgroundColor"
+                    android:background="?attr/planningStateButton_stateFailed_backgroundColor"
                     android:src="@drawable/ic_delete_white_24dp"
                     android:scaleType="center"
                     android:contentDescription="@string/context_menu_delete_item"
@@ -56,7 +56,7 @@
                 <ImageButton
                     android:layout_width="@dimen/monthly_goals_table_category_menu_button_width"
                     android:layout_height="match_parent"
-                    android:background="@color/planningStateButton_stateEmpty_backgroundColor"
+                    android:background="?attr/planningStateButton_stateEmpty_backgroundColor"
                     android:src="@drawable/ic_mode_edit_white_24dp"
                     android:scaleType="center"
                     android:contentDescription="@string/context_menu_edit_item"
@@ -73,7 +73,7 @@
                 android:layout_width="match_parent"
                 android:id="@+id/monthly_goals_list_item_category_panel"
                 android:orientation="vertical"
-                android:background="@color/listItemBackgroundColor">
+                android:background="?attr/listItemBackgroundColor">
                 <TextView
                     android:id="@+id/monthly_goals_list_item_category_name"
                     android:textColor="@android:color/tertiary_text_dark"
