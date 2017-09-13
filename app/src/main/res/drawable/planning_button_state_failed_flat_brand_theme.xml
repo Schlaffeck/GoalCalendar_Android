@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    style="?attr/planningStateButton_shape_style">
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item>
+        <shape
+            android:shape="oval">
+            <gradient
+
+                android:type="linear"
+                android:centerX="78%"
+                android:startColor="#45bebebe"
+                android:centerColor="#45C0C0C0"
+                android:endColor="#45F7F7F7"
+                android:angle="90"/>
+
+        </shape>
+    </item>
+<item android:right="1dp" android:left="1dp" android:bottom="4dp" android:top="1dp">
+
+<shape  style="?attr/planningStateButton_shape_style">
     <solid android:color="?attr/planningStateButton_stateFailed_backgroundColor"/>
     <stroke android:color="?attr/planningStateButton_stateFailed_borderColor"
         android:width="2dp"/>
@@ -9,3 +25,5 @@
         android:left="@dimen/planning_state_button_padding"
         android:right="@dimen/planning_state_button_padding"/>
 </shape>
+    </item>
+    </layer-list>
