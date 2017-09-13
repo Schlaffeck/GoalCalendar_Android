@@ -104,13 +104,10 @@ public class Bindings {
                             injectData.dateTimeChangeListenersRegistry,
                             new YearMonthPair(monthlyPlanningCategoryListViewModel.getMonthData().getYear(), monthlyPlanningCategoryListViewModel.getMonthData().getMonth()),
                             new ObservableArrayList<CategoryPlansViewModel>());
+
+            ((CategoryPlansRecyclerViewAdapter)adapter).setUpItemDragging(injectData.categoryListItemDragCallback);
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
-
-            ItemDragCallback callback = injectData.categoryListItemDragCallback;
-            callback.addOnItemGestureListener((CategoryPlansRecyclerViewAdapter)adapter);
-            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
-            itemTouchHelper.attachToRecyclerView(recyclerView);
         }
 
         if(adapter instanceof CategoryPlansRecyclerViewAdapter)

@@ -4,8 +4,10 @@ import android.content.Context;
 import android.databinding.ObservableList;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.support.v7.widget.util.SortedListAdapterCallback;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -37,6 +39,7 @@ public class CategoryPlansRecyclerViewAdapter extends BindableRecyclerViewDataAd
 
     private final DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry;
     private YearMonthPair yearMonthPair;
+    private ItemDragCallback itemDragCallback;
 
     public CategoryPlansRecyclerViewAdapter(Context context,
                                             LayoutInflater layoutInflater,
@@ -55,10 +58,25 @@ public class CategoryPlansRecyclerViewAdapter extends BindableRecyclerViewDataAd
 
     @Override
     public CategoryPlansViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View convertView = this.getLayoutInflater().inflate(R.layout.monthly_goals_category_list_item,null);
 
-        View categoryView = convertView.findViewById(R.id.monthly_goals_list_item_category_panel);
+        View convertView = this.getLayoutInflater().inflate(R.layout.monthly_goals_category_list_item,null);
+        convertView.setLongClickable(false);
+
+
+        final View categoryView = convertView.findViewById(R.id.monthly_goals_list_item_category_panel);
         categoryView.setLongClickable(true);
+
+        View.OnTouchListener onTouchListener = new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                itemDragCallback.setDraggingEnabled(v == categoryView && v.isLongClickable()
+                        && (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE));
+                return false;
+            }
+        };
+
+        convertView.setOnTouchListener(onTouchListener);
+        categoryView.setOnTouchListener(onTouchListener);
 
         return new CategoryPlansViewHolder(convertView, null);
     }
@@ -67,6 +85,22 @@ public class CategoryPlansRecyclerViewAdapter extends BindableRecyclerViewDataAd
     public void onItemDragMoved(int fromPosition, int toPosition) {
         notifyItemMoved(fromPosition, toPosition);
         ObservableListUtils.moveItem(this.getSourceList(), fromPosition, toPosition);
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        if(this.itemDragCallback != null)
+        {
+            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(this.itemDragCallback);
+            itemTouchHelper.attachToRecyclerView(recyclerView);
+        }
+    }
+
+    public void setUpItemDragging(ItemDragCallback itemDragCallback)
+    {
+        this.itemDragCallback = itemDragCallback;
+        this.itemDragCallback.addOnItemGestureListener(this);
     }
 
     public class CategoryPlansViewHolder extends BindableViewHolderBase<CategoryPlansViewModel>

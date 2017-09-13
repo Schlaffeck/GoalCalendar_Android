@@ -10,16 +10,18 @@ public class ItemDragCallback extends ItemTouchHelper.Callback {
 
     private List<ItemDragMoveListener> itemDragMoveListeners = new ArrayList<>();
 
+    private boolean draggingEnabled = false;
+
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-        int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+        int dragFlags = this.draggingEnabled ? ItemTouchHelper.UP | ItemTouchHelper.DOWN : 0;
         int swipeFlags = 0;
         return makeMovementFlags(dragFlags, swipeFlags);
     }
 
     @Override
     public boolean isLongPressDragEnabled() {
-        return true;
+        return this.draggingEnabled;
     }
 
     @Override
@@ -57,6 +59,14 @@ public class ItemDragCallback extends ItemTouchHelper.Callback {
     public void clearOnItemGestureListeners()
     {
         this.itemDragMoveListeners.clear();
+    }
+
+    public boolean isDraggingEnabled() {
+        return draggingEnabled;
+    }
+
+    public void setDraggingEnabled(boolean draggingEnabled) {
+        this.draggingEnabled = draggingEnabled;
     }
 
     /**
