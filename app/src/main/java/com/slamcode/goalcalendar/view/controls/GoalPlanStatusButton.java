@@ -1,10 +1,6 @@
 package com.slamcode.goalcalendar.view.controls;
 
 import android.content.Context;
-import android.databinding.BindingAdapter;
-import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
-import com.slamcode.goalcalendar.BR;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
@@ -12,7 +8,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.slamcode.goalcalendar.R;
@@ -45,22 +40,22 @@ public class GoalPlanStatusButton extends ImageButton implements View.OnClickLis
 
         STATUS_TO_DATA_MAP.put(PlanStatus.Empty, new ButtonStatusData(
                 R.drawable.planning_button_state_empty_flat_brand_theme,
-                R.color.planningStateButton_stateEmpty_foregroundColor,
+                R.color.flat_planningStateButton_stateEmpty_foregroundColor,
                 -1));
 
         STATUS_TO_DATA_MAP.put(PlanStatus.Failure, new ButtonStatusData(
                 R.drawable.planning_button_state_failed_flat_brand_theme,
-                R.color.planningStateButton_stateFailed_foregroundColor,
+                R.color.flat_planningStateButton_stateFailed_foregroundColor,
                 R.drawable.ic_clear_white_24dp));
 
         STATUS_TO_DATA_MAP.put(PlanStatus.Success, new ButtonStatusData(
                 R.drawable.planning_button_state_success_flat_brand_theme,
-                R.color.planningStateButton_stateSuccess_foregroundColor,
+                R.color.flat_planningStateButton_stateSuccess_foregroundColor,
                 R.drawable.ic_done_white_24dp));
 
         STATUS_TO_DATA_MAP.put(PlanStatus.Planned, new ButtonStatusData(
                 R.drawable.planning_button_state_planned_flat_brand_theme,
-                R.color.planningStateButton_statePlanned_foregroundColor,
+                R.color.flat_planningStateButton_statePlanned_foregroundColor,
                 R.drawable.ic_date_range_white_24dp));
     }
 

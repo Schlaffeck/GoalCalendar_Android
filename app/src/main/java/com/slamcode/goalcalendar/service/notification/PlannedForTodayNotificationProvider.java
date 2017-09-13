@@ -97,7 +97,7 @@ public final class PlannedForTodayNotificationProvider implements NotificationPr
                                                 R.string.notification_plannedForToday_single_content),
                                 countCategoriesPlannedForToday
                         ),
-                        this.context.getColorArgbFromResources(R.color.planningStateButton_statePlanned_foregroundColor),
+                        this.context.getColorArgbFromResources(R.color.flat_planningStateButton_statePlanned_foregroundColor),
                         this.context.createPendingIntent(0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT));
             }
             else{
@@ -105,7 +105,7 @@ public final class PlannedForTodayNotificationProvider implements NotificationPr
                         this.context.getStringFromResources(
                                 R.string.notification_plannedForToday_noPlans_title),
                         this.context.getStringFromResources(R.string.notification_plannedForToday_noPlans_content),
-                        this.context.getColorArgbFromResources(R.color.planningStateButton_statePlanned_foregroundColor),
+                        this.context.getColorArgbFromResources(R.color.flat_planningStateButton_statePlanned_foregroundColor),
                         this.context.createPendingIntent(0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT));
             }
 

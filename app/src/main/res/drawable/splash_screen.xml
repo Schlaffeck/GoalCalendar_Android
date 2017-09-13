@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="@color/colorPrimary"/>
+    <item android:drawable="@color/flat_colorPrimary"/>
         <item>
             <bitmap android:gravity="center"
                 android:src="@drawable/ic_calendar_check_white_96dp"
-                android:tint="@color/planningStateButton_stateSuccess_backgroundColor"/>
+                android:tint="@color/flat_planningStateButton_stateSuccess_backgroundColor"/>
         </item>
 </layer-list>

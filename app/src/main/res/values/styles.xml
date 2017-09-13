@@ -30,39 +30,39 @@
 
     <!-- Flat brand theme styles -->
     <style name="FlatBrandTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/flat_colorPrimary</item>
+        <item name="colorPrimaryDark">@color/flat_colorPrimaryDark</item>
+        <item name="colorAccent">@color/flat_colorAccent</item>
 
         <!-- list -->
-        <item name="listAccentColor">@color/listAccentColor</item>
-        <item name="listItemBackgroundColor">@color/listItemBackgroundColor</item>
-        <item name="listActivityBackgroundColor">@color/listActivityBackgroundColor</item>
+        <item name="listAccentColor">@color/flat_listAccentColor</item>
+        <item name="listItemBackgroundColor">@color/flat_listItemBackgroundColor</item>
+        <item name="listActivityBackgroundColor">@color/flat_listActivityBackgroundColor</item>
 
         <!-- state button -->
         <item name="planningStateButton_shape_style">@style/FlatBrandTheme.GoalStatusButtonShape</item>
 
-        <item name="planningStateButton_stateEmpty_borderColor">@color/planningStateButton_stateEmpty_borderColor</item>
-        <item name="planningStateButton_stateEmpty_foregroundColor">@color/planningStateButton_stateEmpty_foregroundColor</item>
-        <item name="planningStateButton_stateEmpty_backgroundColor">@color/planningStateButton_stateEmpty_backgroundColor</item>
+        <item name="planningStateButton_stateEmpty_borderColor">@color/flat_planningStateButton_stateEmpty_borderColor</item>
+        <item name="planningStateButton_stateEmpty_foregroundColor">@color/flat_planningStateButton_stateEmpty_foregroundColor</item>
+        <item name="planningStateButton_stateEmpty_backgroundColor">@color/flat_planningStateButton_stateEmpty_backgroundColor</item>
 
-        <item name="planningStateButton_statePlanned_borderColor">@color/planningStateButton_statePlanned_borderColor</item>
-        <item name="planningStateButton_statePlanned_foregroundColor">@color/planningStateButton_statePlanned_foregroundColor</item>
-        <item name="planningStateButton_statePlanned_backgroundColor">@color/planningStateButton_statePlanned_backgroundColor</item>
+        <item name="planningStateButton_statePlanned_borderColor">@color/flat_planningStateButton_statePlanned_borderColor</item>
+        <item name="planningStateButton_statePlanned_foregroundColor">@color/flat_planningStateButton_statePlanned_foregroundColor</item>
+        <item name="planningStateButton_statePlanned_backgroundColor">@color/flat_planningStateButton_statePlanned_backgroundColor</item>
 
-        <item name="planningStateButton_stateFailed_borderColor">@color/planningStateButton_stateFailed_borderColor</item>
-        <item name="planningStateButton_stateFailed_foregroundColor">@color/planningStateButton_stateFailed_foregroundColor</item>
-        <item name="planningStateButton_stateFailed_backgroundColor">@color/planningStateButton_stateFailed_backgroundColor</item>
+        <item name="planningStateButton_stateFailed_borderColor">@color/flat_planningStateButton_stateFailed_borderColor</item>
+        <item name="planningStateButton_stateFailed_foregroundColor">@color/flat_planningStateButton_stateFailed_foregroundColor</item>
+        <item name="planningStateButton_stateFailed_backgroundColor">@color/flat_planningStateButton_stateFailed_backgroundColor</item>
 
-        <item name="planningStateButton_stateSuccess_borderColor">@color/planningStateButton_stateSuccess_borderColor</item>
-        <item name="planningStateButton_stateSuccess_foregroundColor">@color/planningStateButton_stateSuccess_foregroundColor</item>
-        <item name="planningStateButton_stateSuccess_backgroundColor">@color/planningStateButton_stateSuccess_backgroundColor</item>
+        <item name="planningStateButton_stateSuccess_borderColor">@color/flat_planningStateButton_stateSuccess_borderColor</item>
+        <item name="planningStateButton_stateSuccess_foregroundColor">@color/flat_planningStateButton_stateSuccess_foregroundColor</item>
+        <item name="planningStateButton_stateSuccess_backgroundColor">@color/flat_planningStateButton_stateSuccess_backgroundColor</item>
 
         <!-- dialog -->
-        <item name="dailyProgress_dialog_header_textColor">@color/dailyProgress_dialog_header_textColor</item>
-        <item name="dailyProgress_dialog_description_textColor">@color/dailyProgress_dialog_description_textColor</item>
-        <item name="dailyProgress_dialog_backgroundColor">@color/dailyProgress_dialog_backgroundColor</item>
-        <item name="dailyProgress_dialog_button_tintColor">@color/dailyProgress_dialog_button_tintColor</item>
+        <item name="dailyProgress_dialog_header_textColor">@color/flat_dailyProgress_dialog_header_textColor</item>
+        <item name="dailyProgress_dialog_description_textColor">@color/flat_dailyProgress_dialog_description_textColor</item>
+        <item name="dailyProgress_dialog_backgroundColor">@color/flat_dailyProgress_dialog_backgroundColor</item>
+        <item name="dailyProgress_dialog_button_tintColor">@color/flat_dailyProgress_dialog_button_tintColor</item>
     </style>
 
     <style name="FlatBrandTheme.GoalStatusButtonShape">
@@ -81,14 +81,14 @@
     <!--  Material ui modern style -->
     <style name="MaterialTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/material_colorPrimary</item>
+        <item name="colorPrimaryDark">@color/material_colorPrimaryDark</item>
+        <item name="colorAccent">@color/material_colorAccent</item>
 
         <!-- list -->
-        <item name="listAccentColor">@color/listAccentColor</item>
-        <item name="listItemBackgroundColor">@color/colorAccent</item>
-        <item name="listActivityBackgroundColor">@color/listActivityBackgroundColor</item>
+        <item name="listAccentColor">@color/material_listAccentColor</item>
+        <item name="listItemBackgroundColor">@color/material_colorAccent</item>
+        <item name="listActivityBackgroundColor">@color/material_listActivityBackgroundColor</item>
 
         <!-- state button -->
         <item name="planningStateButton_shape_style">@style/MaterialTheme.GoalStatusButtonShape</item>
@@ -97,23 +97,23 @@
         <item name="planningStateButton_stateEmpty_foregroundColor">@color/material_planningStateButton_stateEmpty_foregroundColor</item>
         <item name="planningStateButton_stateEmpty_backgroundColor">@color/material_planningStateButton_stateEmpty_backgroundColor</item>
 
-        <item name="planningStateButton_statePlanned_borderColor">@color/planningStateButton_statePlanned_borderColor</item>
-        <item name="planningStateButton_statePlanned_foregroundColor">@color/planningStateButton_statePlanned_foregroundColor</item>
-        <item name="planningStateButton_statePlanned_backgroundColor">@color/planningStateButton_statePlanned_backgroundColor</item>
+        <item name="planningStateButton_statePlanned_borderColor">@color/material_planningStateButton_statePlanned_borderColor</item>
+        <item name="planningStateButton_statePlanned_foregroundColor">@color/material_planningStateButton_statePlanned_foregroundColor</item>
+        <item name="planningStateButton_statePlanned_backgroundColor">@color/material_planningStateButton_statePlanned_backgroundColor</item>
 
-        <item name="planningStateButton_stateFailed_borderColor">@color/planningStateButton_stateFailed_borderColor</item>
-        <item name="planningStateButton_stateFailed_foregroundColor">@color/planningStateButton_stateFailed_foregroundColor</item>
-        <item name="planningStateButton_stateFailed_backgroundColor">@color/planningStateButton_stateFailed_backgroundColor</item>
+        <item name="planningStateButton_stateFailed_borderColor">@color/material_planningStateButton_stateFailed_borderColor</item>
+        <item name="planningStateButton_stateFailed_foregroundColor">@color/material_planningStateButton_stateFailed_foregroundColor</item>
+        <item name="planningStateButton_stateFailed_backgroundColor">@color/material_planningStateButton_stateFailed_backgroundColor</item>
 
-        <item name="planningStateButton_stateSuccess_borderColor">@color/planningStateButton_stateSuccess_borderColor</item>
-        <item name="planningStateButton_stateSuccess_foregroundColor">@color/planningStateButton_stateSuccess_foregroundColor</item>
-        <item name="planningStateButton_stateSuccess_backgroundColor">@color/planningStateButton_stateSuccess_backgroundColor</item>
+        <item name="planningStateButton_stateSuccess_borderColor">@color/material_planningStateButton_stateSuccess_borderColor</item>
+        <item name="planningStateButton_stateSuccess_foregroundColor">@color/material_planningStateButton_stateSuccess_foregroundColor</item>
+        <item name="planningStateButton_stateSuccess_backgroundColor">@color/material_planningStateButton_stateSuccess_backgroundColor</item>
 
         <!--  dialog -->
-        <item name="dailyProgress_dialog_header_textColor">@color/dailyProgress_dialog_header_textColor</item>
-        <item name="dailyProgress_dialog_description_textColor">@color/dailyProgress_dialog_description_textColor</item>
-        <item name="dailyProgress_dialog_backgroundColor">@color/dailyProgress_dialog_backgroundColor</item>
-        <item name="dailyProgress_dialog_button_tintColor">@color/dailyProgress_dialog_button_tintColor</item>
+        <item name="dailyProgress_dialog_header_textColor">@color/material_dailyProgress_dialog_header_textColor</item>
+        <item name="dailyProgress_dialog_description_textColor">@color/material_dailyProgress_dialog_description_textColor</item>
+        <item name="dailyProgress_dialog_backgroundColor">@color/material_dailyProgress_dialog_backgroundColor</item>
+        <item name="dailyProgress_dialog_button_tintColor">@color/material_dailyProgress_dialog_button_tintColor</item>
     </style>
 
     <style name="MaterialTheme.GoalStatusButtonShape">

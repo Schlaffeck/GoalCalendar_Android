@@ -13,13 +13,13 @@ public final class ColorsHelper {
 
     public static View setSecondAccentBackgroundColor(View view)
     {
-        view.setBackgroundColor(ContextCompat.getColor(view.getContext(), R.color.listAccentColor));
+        view.setBackgroundColor(ContextCompat.getColor(view.getContext(), R.color.flat_listAccentColor));
         return view;
     }
 
     public static View setListItemBackgroundColor(View view)
     {
-        view.setBackgroundColor(ContextCompat.getColor(view.getContext(), R.color.listItemBackgroundColor));
+        view.setBackgroundColor(ContextCompat.getColor(view.getContext(), R.color.flat_listItemBackgroundColor));
         return view;
     }
 }

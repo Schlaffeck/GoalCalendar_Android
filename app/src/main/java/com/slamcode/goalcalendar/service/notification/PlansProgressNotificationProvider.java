@@ -82,7 +82,7 @@ public final class PlansProgressNotificationProvider implements NotificationProv
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(NotificationScheduler.NOTIFICATION_ORIGINATED_FROM_FLAG, true);
             PendingIntent pendingIntent = this.applicationContext.createPendingIntent(0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            int color = this.applicationContext.getColorArgbFromResources(R.color.planningStateButton_statePlanned_backgroundColor);
+            int color = this.applicationContext.getColorArgbFromResources(R.color.flat_planningStateButton_statePlanned_backgroundColor);
             notification = this.applicationContext.buildNotification(
                     R.drawable.ic_calendar_range_white_24dp, description.getTitle(), description.getDetails(), color, pendingIntent);
         }
