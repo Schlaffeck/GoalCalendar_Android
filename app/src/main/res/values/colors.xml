@@ -41,32 +41,32 @@
 
     <!-- material modern theme colors -->
     <!-- palette: http://paletton.com/palette.php?uid=74o0u0koazCedNujEFutVvDvzos -->
-    <color name="material_colorPrimary">#683AB7</color>
-    <color name="material_colorPrimaryDark">#3A0E85</color>
-    <color name="material_colorAccent">#FCE010</color>
+    <color name="material_colorPrimary">#326B9C</color>
+    <color name="material_colorPrimaryDark">#175990</color>
+    <color name="material_colorAccent">#FBD59B</color>
 
-    <color name="material_listAccentColor">#A384DD</color>
+    <color name="material_listAccentColor">#CBE5FF</color>
 
     <color name="material_listActivityBackgroundColor">#ffffff</color>
     <color name="material_listItemBackgroundColor">#ffffff</color>
     <color name="material_listItemHeaderBackgroundColor">#ffffff</color>
-    <color name="material_listItemHeaderForegroundColor">#683AB7</color>
+    <color name="material_listItemHeaderForegroundColor">#336998</color>
 
     <color name="material_planningStateButton_stateEmpty_borderColor">#DDDDDD</color>
     <color name="material_planningStateButton_stateEmpty_foregroundColor">#DDDDDD</color>
     <color name="material_planningStateButton_stateEmpty_backgroundColor">#FFFFFF</color>
 
-    <color name="material_planningStateButton_statePlanned_borderColor">#FFF28E</color>
-    <color name="material_planningStateButton_statePlanned_foregroundColor">#FCE010</color>
-    <color name="material_planningStateButton_statePlanned_backgroundColor">#FFF28E</color>
+    <color name="material_planningStateButton_statePlanned_borderColor">#C1C0C0</color>
+    <color name="material_planningStateButton_statePlanned_foregroundColor">#FFFFFF</color>
+    <color name="material_planningStateButton_statePlanned_backgroundColor">#C1C0C0</color>
 
-    <color name="material_planningStateButton_stateSuccess_borderColor">#3A0E85</color>
+    <color name="material_planningStateButton_stateSuccess_borderColor">#B5EEA6</color>
     <color name="material_planningStateButton_stateSuccess_foregroundColor">#FFFFFF</color>
-    <color name="material_planningStateButton_stateSuccess_backgroundColor">#3A0E85</color>
+    <color name="material_planningStateButton_stateSuccess_backgroundColor">#B5EEA6</color>
 
-    <color name="material_planningStateButton_stateFailed_borderColor">#C52F41</color>
+    <color name="material_planningStateButton_stateFailed_borderColor">#FAA1AB</color>
     <color name="material_planningStateButton_stateFailed_foregroundColor">#ffffff</color>
-    <color name="material_planningStateButton_stateFailed_backgroundColor">#C52F41</color>
+    <color name="material_planningStateButton_stateFailed_backgroundColor">#FAA1AB</color>
 
     <!-- dialog -->
     <color name="material_dailyProgress_dialog_borderColor">#ffffff</color>
