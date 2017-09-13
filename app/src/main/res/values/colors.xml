@@ -13,6 +13,7 @@
     <color name="flat_listActivityBackgroundColor">#EBFDE7</color>
     <color name="flat_listItemBackgroundColor">#EBFDE7</color>
     <color name="flat_listItemHeaderBackgroundColor">#EBFDE7</color>
+    <color name="flat_listItemHeaderForegroundColor">#87DD70</color>
 
     <!-- planning state button colors -->
     <color name="flat_planningStateButton_stateEmpty_borderColor">#89D4C7</color>
@@ -39,37 +40,39 @@
     <color name="flat_dailyProgress_dialog_description_textColor">#46AE2A</color>
 
     <!-- material modern theme colors -->
-    <color name="material_colorPrimary">#673ab7</color>
-    <color name="material_colorPrimaryDark">#3e247d</color>
-    <color name="material_colorAccent">#aeea00</color>
+    <!-- palette: http://paletton.com/palette.php?uid=74o0u0koazCedNujEFutVvDvzos -->
+    <color name="material_colorPrimary">#683AB7</color>
+    <color name="material_colorPrimaryDark">#3A0E85</color>
+    <color name="material_colorAccent">#FCE010</color>
 
-    <color name="material_listAccentColor">#CCF7C1</color>
+    <color name="material_listAccentColor">#A384DD</color>
 
-    <color name="material_listActivityBackgroundColor">#EBFDE7</color>
-    <color name="material_listItemBackgroundColor">#EBFDE7</color>
-    <color name="material_listItemHeaderBackgroundColor">#EBFDE7</color>
+    <color name="material_listActivityBackgroundColor">#ffffff</color>
+    <color name="material_listItemBackgroundColor">#ffffff</color>
+    <color name="material_listItemHeaderBackgroundColor">#ffffff</color>
+    <color name="material_listItemHeaderForegroundColor">#683AB7</color>
 
     <color name="material_planningStateButton_stateEmpty_borderColor">#DDDDDD</color>
     <color name="material_planningStateButton_stateEmpty_foregroundColor">#DDDDDD</color>
     <color name="material_planningStateButton_stateEmpty_backgroundColor">#FFFFFF</color>
 
-    <color name="material_planningStateButton_statePlanned_borderColor">#FFEB88</color>
-    <color name="material_planningStateButton_statePlanned_foregroundColor">#F4D53E</color>
-    <color name="material_planningStateButton_statePlanned_backgroundColor">#FFF5C7</color>
+    <color name="material_planningStateButton_statePlanned_borderColor">#FFF28E</color>
+    <color name="material_planningStateButton_statePlanned_foregroundColor">#FCE010</color>
+    <color name="material_planningStateButton_statePlanned_backgroundColor">#FFF28E</color>
 
-    <color name="material_planningStateButton_stateSuccess_borderColor">#87DD70</color>
-    <color name="material_planningStateButton_stateSuccess_foregroundColor">#46AE2A</color>
-    <color name="material_planningStateButton_stateSuccess_backgroundColor">#ABED99</color>
+    <color name="material_planningStateButton_stateSuccess_borderColor">#3A0E85</color>
+    <color name="material_planningStateButton_stateSuccess_foregroundColor">#FFFFFF</color>
+    <color name="material_planningStateButton_stateSuccess_backgroundColor">#3A0E85</color>
 
-    <color name="material_planningStateButton_stateFailed_borderColor">#F67D8B</color>
-    <color name="material_planningStateButton_stateFailed_foregroundColor">#C52F41</color>
-    <color name="material_planningStateButton_stateFailed_backgroundColor">#FAA2AC</color>
+    <color name="material_planningStateButton_stateFailed_borderColor">#C52F41</color>
+    <color name="material_planningStateButton_stateFailed_foregroundColor">#ffffff</color>
+    <color name="material_planningStateButton_stateFailed_backgroundColor">#C52F41</color>
 
     <!-- dialog -->
-    <color name="material_dailyProgress_dialog_borderColor">#CCF7C1</color>
-    <color name="material_dailyProgress_dialog_button_tintColor">#CCF7C1</color>
+    <color name="material_dailyProgress_dialog_borderColor">#ffffff</color>
+    <color name="material_dailyProgress_dialog_button_tintColor">#8259C8</color>
     <color name="material_dailyProgress_dialog_backgroundColor">#ffffff</color>
-    <color name="material_dailyProgress_dialog_header_textColor">#389686</color>
-    <color name="material_dailyProgress_dialog_description_textColor">#46AE2A</color>
+    <color name="material_dailyProgress_dialog_header_textColor">#4F1AAC</color>
+    <color name="material_dailyProgress_dialog_description_textColor">#3A0E85</color>
 
 </resources>

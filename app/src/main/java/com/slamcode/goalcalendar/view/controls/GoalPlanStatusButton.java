@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.planning.PlanStatus;
+import com.slamcode.goalcalendar.view.utils.ResourcesHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,22 +41,22 @@ public class GoalPlanStatusButton extends ImageButton implements View.OnClickLis
 
         STATUS_TO_DATA_MAP.put(PlanStatus.Empty, new ButtonStatusData(
                 R.drawable.planning_button_state_empty_flat_brand_theme,
-                R.color.flat_planningStateButton_stateEmpty_foregroundColor,
+                R.attr.planningStateButton_stateEmpty_foregroundColor,
                 -1));
 
         STATUS_TO_DATA_MAP.put(PlanStatus.Failure, new ButtonStatusData(
                 R.drawable.planning_button_state_failed_flat_brand_theme,
-                R.color.flat_planningStateButton_stateFailed_foregroundColor,
+                R.attr.planningStateButton_stateFailed_foregroundColor,
                 R.drawable.ic_clear_white_24dp));
 
         STATUS_TO_DATA_MAP.put(PlanStatus.Success, new ButtonStatusData(
                 R.drawable.planning_button_state_success_flat_brand_theme,
-                R.color.flat_planningStateButton_stateSuccess_foregroundColor,
+                R.attr.planningStateButton_stateSuccess_foregroundColor,
                 R.drawable.ic_done_white_24dp));
 
         STATUS_TO_DATA_MAP.put(PlanStatus.Planned, new ButtonStatusData(
                 R.drawable.planning_button_state_planned_flat_brand_theme,
-                R.color.flat_planningStateButton_statePlanned_foregroundColor,
+                R.attr.planningStateButton_statePlanned_foregroundColor,
                 R.drawable.ic_date_range_white_24dp));
     }
 
@@ -176,7 +177,7 @@ public class GoalPlanStatusButton extends ImageButton implements View.OnClickLis
             this.setColorFilter(
                     ContextCompat.getColor(
                             this.getContext(),
-                            STATUS_TO_DATA_MAP.get(status).foregroundColorId),
+                            ResourcesHelper.getResourceIdFromThemeAttribute(this, STATUS_TO_DATA_MAP.get(status).foregroundColorAttributeId)),
                     PorterDuff.Mode.MULTIPLY);
         }
     }
@@ -195,13 +196,13 @@ public class GoalPlanStatusButton extends ImageButton implements View.OnClickLis
     private static class ButtonStatusData
     {
         private final int backgroundId;
-        private final int foregroundColorId;
+        private final int foregroundColorAttributeId;
         private final int iconId;
 
-        ButtonStatusData(int backgroundId, int foregroundColorId, int iconId)
+        ButtonStatusData(int backgroundId, int foregroundColorAttributeId, int iconId)
         {
             this.backgroundId = backgroundId;
-            this.foregroundColorId = foregroundColorId;
+            this.foregroundColorAttributeId = foregroundColorAttributeId;
             this.iconId = iconId;
         }
     }

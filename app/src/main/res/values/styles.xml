@@ -4,6 +4,7 @@
     <attr name="listAccentColor" format="reference|integer"/>
     <attr name="listActivityBackgroundColor" format="reference|integer"/>
     <attr name="listItemBackgroundColor" format="reference|integer"/>
+    <attr name="listItemHeaderForegroundColor" format="reference|integer"/>
 
     <attr name="planningStateButton_shape_style" format="reference"/>
 
@@ -37,6 +38,7 @@
         <!-- list -->
         <item name="listAccentColor">@color/flat_listAccentColor</item>
         <item name="listItemBackgroundColor">@color/flat_listItemBackgroundColor</item>
+        <item name="listItemHeaderForegroundColor">@color/flat_listItemHeaderForegroundColor</item>
         <item name="listActivityBackgroundColor">@color/flat_listActivityBackgroundColor</item>
 
         <!-- state button -->
@@ -63,20 +65,15 @@
         <item name="dailyProgress_dialog_description_textColor">@color/flat_dailyProgress_dialog_description_textColor</item>
         <item name="dailyProgress_dialog_backgroundColor">@color/flat_dailyProgress_dialog_backgroundColor</item>
         <item name="dailyProgress_dialog_button_tintColor">@color/flat_dailyProgress_dialog_button_tintColor</item>
+
+        <!-- activity styles -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="FlatBrandTheme.GoalStatusButtonShape">
         <item name="android:shape">rectangle</item>
     </style>
-
-    <style name="FlatBrandTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <!--  Material ui modern style -->
     <style name="MaterialTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -87,7 +84,8 @@
 
         <!-- list -->
         <item name="listAccentColor">@color/material_listAccentColor</item>
-        <item name="listItemBackgroundColor">@color/material_colorAccent</item>
+        <item name="listItemBackgroundColor">@color/material_listItemBackgroundColor</item>
+        <item name="listItemHeaderForegroundColor">@color/material_listItemHeaderForegroundColor</item>
         <item name="listActivityBackgroundColor">@color/material_listActivityBackgroundColor</item>
 
         <!-- state button -->
@@ -114,6 +112,11 @@
         <item name="dailyProgress_dialog_description_textColor">@color/material_dailyProgress_dialog_description_textColor</item>
         <item name="dailyProgress_dialog_backgroundColor">@color/material_dailyProgress_dialog_backgroundColor</item>
         <item name="dailyProgress_dialog_button_tintColor">@color/material_dailyProgress_dialog_button_tintColor</item>
+
+        <!-- activity styles -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:colorForeground">@color/foreground_material_light</item>
     </style>
 
     <style name="MaterialTheme.GoalStatusButtonShape">
