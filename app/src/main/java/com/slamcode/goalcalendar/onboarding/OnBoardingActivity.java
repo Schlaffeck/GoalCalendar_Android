@@ -136,19 +136,19 @@ public class OnBoardingActivity extends AppCompatActivity {
         this.pagesDataList.add(new PageFragmentData(getResources().getString(
                 R.string.onboarding_page_1_title),
                 getResources().getString(R.string.onboarding_page_1_description),
-                R.drawable.onboarding_screen_1_cropped,
+                R.drawable.icons8_innovation_128,
                 ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary),
                 ContextCompat.getColor(getApplicationContext(), android.R.color.white)));
         this.pagesDataList.add(new PageFragmentData(getResources().getString(
                 R.string.onboarding_page_2_title),
                 getResources().getString(R.string.onboarding_page_2_description),
-                R.drawable.onboarding_screen_2_cropped,
+                R.drawable.icons8_schedule_128,
                 ContextCompat.getColor(getApplicationContext(), R.color.listAccentColor),
                 ContextCompat.getColor(getApplicationContext(), android.R.color.holo_green_light)));
         this.pagesDataList.add(new PageFragmentData(getResources().getString(
                 R.string.onboarding_page_3_title),
                 getResources().getString(R.string.onboarding_page_3_description),
-                R.drawable.onboarding_screen_3_cropped,
+                R.drawable.icons8_piechart_128,
                 ContextCompat.getColor(getApplicationContext(), R.color.planningStateButton_statePlanned_backgroundColor),
                 ContextCompat.getColor(getApplicationContext(), android.R.color.holo_orange_light)));
     }
@@ -196,18 +196,9 @@ public class OnBoardingActivity extends AppCompatActivity {
             descTextView.setTextColor(this.getArguments().getInt(ARG_PAGE_TEXT_COLOR_VALUE_ID));
 
             ImageView imageView = (ImageView) rootView.findViewById(R.id.onboarding_fragment_image);
-            imageView.setImageDrawable(this.prepareDrawable());
+            imageView.setImageDrawable(ContextCompat.getDrawable(getContext(), this.getArguments().getInt(ARG_PAGE_IMAGE_RESOURCE_ID)));
 
             return rootView;
-        }
-
-        private Drawable prepareDrawable()
-        {
-            Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), this.getArguments().getInt(ARG_PAGE_IMAGE_RESOURCE_ID));
-
-            RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(this.getResources(), bitmap);
-            drawable.setCornerRadius(Math.max(bitmap.getWidth(), bitmap.getHeight()) / 2.0f);
-            return drawable;
         }
     }
 
