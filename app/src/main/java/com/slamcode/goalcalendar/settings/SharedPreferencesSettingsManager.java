@@ -10,13 +10,15 @@ import com.slamcode.goalcalendar.planning.DateTime;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.HourMinuteTime;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by moriasla on 23.01.2017.
  */
 
-public class SharedPreferencesSettingsManager implements AppSettingsManager {
+public class SharedPreferencesSettingsManager implements AppSettingsManager, SharedPreferences.OnSharedPreferenceChangeListener {
 
     // keep below values compatible with the preferences activity resources
     private final static int EOD_NOTIFICATION_HOUR_TIME_DEFAULT_VALUE = 20;
@@ -40,7 +42,6 @@ public class SharedPreferencesSettingsManager implements AppSettingsManager {
     private final static String LAST_LAUNCH_DATETIME_MILLIS_NAME = "LAST_LAUNCH_DATETIME_MILLIS";
     private final static long LAST_LAUNCH_DATETIME_MILLIS_VALUE = 0;
 
-    private final static String THEME_ID_NAME = "THEME_ID";
     private final static String THEME_ID_INDEX_VALUE = "0";
     private final static int[] THEME_ID_ARRAY = new int[]
             {
@@ -48,14 +49,14 @@ public class SharedPreferencesSettingsManager implements AppSettingsManager {
                     R.style.FlatBrandTheme
             };
 
-    private final Context context;
-
     private SharedPreferences sharedPreferences;
+
+    private List<SettingsChangedListener> settingsChangedListeners = new ArrayList<>();
 
     public SharedPreferencesSettingsManager(Context context)
     {
-        this.context = context;
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        this.sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -134,7 +135,7 @@ public class SharedPreferencesSettingsManager implements AppSettingsManager {
 
     @Override
     public int getThemeId() {
-        int index = Integer.parseInt(this.sharedPreferences.getString(THEME_ID_NAME, THEME_ID_INDEX_VALUE));
+        int index = Integer.parseInt(this.sharedPreferences.getString(SettingsKeys.THEME_ID_NAME, THEME_ID_INDEX_VALUE));
         if(THEME_ID_ARRAY.length <= index)
             index = 0;
 
@@ -151,7 +152,33 @@ public class SharedPreferencesSettingsManager implements AppSettingsManager {
 
         if(foundIndex >= 0) {
             SharedPreferences.Editor editor = this.sharedPreferences.edit();
-            editor.putString(THEME_ID_NAME, Integer.toString(foundIndex));
+            editor.putString(SettingsKeys.THEME_ID_NAME, Integer.toString(foundIndex));
         }
+    }
+
+    public void addSettingsChangedListener(SettingsChangedListener listener)
+    {
+        this.settingsChangedListeners.add(listener);
+    }
+
+    public void removeSettingsChangedListener(SettingsChangedListener listener)
+    {
+        this.settingsChangedListeners.remove(listener);
+    }
+
+    public void clearSettingsChangedListeners()
+    {
+        this.settingsChangedListeners.clear();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        notifyPreferenceChanged(key);
+    }
+
+    private void notifyPreferenceChanged(String preferenceKey)
+    {
+        for (SettingsChangedListener listener : this.settingsChangedListeners)
+            listener.settingChanged(preferenceKey);
     }
 }

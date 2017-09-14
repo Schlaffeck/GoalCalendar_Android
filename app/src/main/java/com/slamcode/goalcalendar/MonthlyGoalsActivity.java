@@ -34,6 +34,7 @@ import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryDescriptionProvider;
 import com.slamcode.goalcalendar.service.notification.NotificationScheduler;
 import com.slamcode.goalcalendar.settings.AppSettingsManager;
+import com.slamcode.goalcalendar.settings.SettingsKeys;
 import com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract;
 import com.slamcode.goalcalendar.dagger2.ComposableApplication;
 import com.slamcode.goalcalendar.data.PersistenceContext;
@@ -51,7 +52,8 @@ import java.util.Random;
 
 import javax.inject.Inject;
 
-public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGoalsActivityContract.ActivityView{
+public class MonthlyGoalsActivity extends AppCompatActivity
+        implements MonthlyGoalsActivityContract.ActivityView, AppSettingsManager.SettingsChangedListener{
 
     public final static String STARTED_FROM_PARENT_INTENT_PARAM = "STARTED_FROM_PARENT";
 
@@ -116,6 +118,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     private boolean exitApplication;
 
     private boolean dataBindingsSetUp;
+    private boolean needToRecreate;
+    private int currentThemeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +127,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         super.onCreate(savedInstanceState);
         this.injectDependencies();
         this.setTheme(this.settingsManager.getThemeId());
+        this.currentThemeId = this.settingsManager.getThemeId();
+        this.settingsManager.addSettingsChangedListener(this);
         setContentView(com.slamcode.goalcalendar.R.layout.monthly_goals_activity);
         Log.d(LOG_TAG, "Monthly goals activity view set");
 
@@ -164,7 +170,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_DATE_CHANGED);
         this.registerReceiver(this.dateTimeChangedService, intentFilter);
-
     }
 
     @Override
@@ -174,6 +179,13 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         this.unregisterReceiver(this.dateTimeChangedService);
         //this.unregisterReceiver(this.notificationServiceStarterReceiver);
         super.onStop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(this.needToRecreate)
+            this.recreate();
     }
 
     @Override
@@ -396,5 +408,13 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         dayToScrollTo = (dayToScrollTo > 0 ? dayToScrollTo : 0);
         int width = (int) this.getResources().getDimension(R.dimen.monthly_goals_table_day_plan_column_width);
         daysPlanScrollView.smoothScrollTo(dayToScrollTo * width, 0);
+    }
+
+    @Override
+    public void settingChanged(String settingId) {
+        if(settingId.equals(SettingsKeys.THEME_ID_NAME))
+        {
+            this.needToRecreate = this.currentThemeId != this.settingsManager.getThemeId();
+        }
     }
 }
