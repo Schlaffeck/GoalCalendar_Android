@@ -121,11 +121,12 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(LOG_TAG, "Monthly goals activity creating - START");
         super.onCreate(savedInstanceState);
+        this.injectDependencies();
+        this.setTheme(this.settingsManager.getThemeId());
         setContentView(com.slamcode.goalcalendar.R.layout.monthly_goals_activity);
         Log.d(LOG_TAG, "Monthly goals activity view set");
 
         this.findAllRelatedViews();
-        this.injectDependencies();
         Log.d(LOG_TAG, "Monthly goals dependencies injected");
         if(this.isFirstLaunch()
                 && !this.originatedFromNotification())

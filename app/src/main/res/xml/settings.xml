@@ -6,6 +6,14 @@
             android:key="MARK_UNCOMPLETED_AS_FAILED"
             android:title="@string/pref_title_markPlannedAsFailed_switch"
             android:summary="@string/pref_title_markPlannedAsFailed_desctiption_checkbox"/>
+        <ListPreference
+            android:dialogTitle="@string/pref_themeList_title"
+            android:entries="@array/pref_themeList_entries"
+            android:defaultValue="@string/pref_themeList_defaultValue"
+            android:key="THEME_ID"
+            android:entryValues="@array/pref_themeList_entryValues"
+            android:summary="@string/pref_themeList_description"
+            android:title="@string/pref_themeList_title" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_header_notifications">
         <SwitchPreference

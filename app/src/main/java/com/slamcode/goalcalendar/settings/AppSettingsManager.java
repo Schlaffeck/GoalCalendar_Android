@@ -32,4 +32,8 @@ public interface AppSettingsManager {
     DateTime getLastLaunchDateTime();
 
     void setLastLaunchDateTimeMillis(DateTime lastLaunchTime);
+
+    int getThemeId();
+
+    void setThemeId(int themeId);
 }
