@@ -52,7 +52,7 @@
     <color name="material_listItemHeaderBackgroundColor">#ffffff</color>
     <color name="material_listItemHeaderForegroundColor">#336998</color>
 
-    <color name="material_planningStateButton_stateEmpty_borderColor">#FFFFFF</color>
+    <color name="material_planningStateButton_stateEmpty_borderColor">#DDDDDD</color>
     <color name="material_planningStateButton_stateEmpty_foregroundColor">#DDDDDD</color>
     <color name="material_planningStateButton_stateEmpty_backgroundColor">#FFFFFF</color>
 
