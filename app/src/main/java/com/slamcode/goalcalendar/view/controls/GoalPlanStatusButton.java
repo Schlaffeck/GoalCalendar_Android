@@ -40,22 +40,22 @@ public class GoalPlanStatusButton extends ImageButton implements View.OnClickLis
         STATUS_TO_DATA_MAP = new HashMap<>();
 
         STATUS_TO_DATA_MAP.put(PlanStatus.Empty, new ButtonStatusData(
-                R.drawable.planning_button_state_empty_flat_brand_theme,
+                R.drawable.planning_button_state_empty,
                 R.attr.planningStateButton_stateEmpty_foregroundColor,
                 -1));
 
         STATUS_TO_DATA_MAP.put(PlanStatus.Failure, new ButtonStatusData(
-                R.drawable.planning_button_state_failed_flat_brand_theme,
+                R.drawable.planning_button_state_failed,
                 R.attr.planningStateButton_stateFailed_foregroundColor,
                 R.drawable.ic_clear_white_24dp));
 
         STATUS_TO_DATA_MAP.put(PlanStatus.Success, new ButtonStatusData(
-                R.drawable.planning_button_state_success_flat_brand_theme,
+                R.drawable.planning_button_state_success,
                 R.attr.planningStateButton_stateSuccess_foregroundColor,
                 R.drawable.ic_done_white_24dp));
 
         STATUS_TO_DATA_MAP.put(PlanStatus.Planned, new ButtonStatusData(
-                R.drawable.planning_button_state_planned_flat_brand_theme,
+                R.drawable.planning_button_state_planned,
                 R.attr.planningStateButton_statePlanned_foregroundColor,
                 R.drawable.ic_date_range_white_24dp));
     }

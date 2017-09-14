@@ -13,12 +13,8 @@
     android:layout_margin="@dimen/zero">
     <com.slamcode.goalcalendar.view.controls.GoalPlanStatusButton
         android:id="@+id/plan_status_list_item_view_button"
-        android:background="@drawable/planning_button_state_empty_flat_brand_theme"
-        android:layout_width="@dimen/planning_state_button_width"
-        android:layout_height="@dimen/planning_state_button_height"
-        android:layout_margin="@dimen/planning_state_button_margin"
-        android:layout_gravity="center"
-        android:padding="@dimen/default_padding"
+        android:background="@drawable/planning_button_state_empty"
+        style="?attr/planningStateButton_style"
         app:status="@{vm.status}">
     </com.slamcode.goalcalendar.view.controls.GoalPlanStatusButton>
 </LinearLayout>
