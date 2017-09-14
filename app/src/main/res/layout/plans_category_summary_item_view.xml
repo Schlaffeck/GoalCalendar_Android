@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{vm.name}"
-            android:textColor="?attr/colorPrimary"/>
+            style="@style/SummarySheetText"/>
         <ProgressBar
             android:layout_height="wrap_content"
             android:indeterminate="false"
@@ -38,11 +38,10 @@
         android:id="@+id/plans_category_summary_item_percentage_textView"
         android:layout_alignParentRight="true"
         android:layout_toRightOf="@id/plans_category_summary_leftSide_layout"
-        android:textSize="@dimen/list_item_text_size"
         android:gravity="end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="?attr/colorPrimaryDark"
+        style="@style/SummarySheetText"
         android:text="@{String.format(@string/plans_summary_percentageFormat, vm.exceeded ? '>' : ' ', vm.progressPercentage)}"/>
 
     <LinearLayout
@@ -56,19 +55,19 @@
        <TextView
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:textColor="?attr/planningStateButton_stateSuccess_foregroundColor"
+           android:textColor="?attr/summarySheet_successTasks_textColor"
            android:textSize="@dimen/symbol_font_size"
            android:text='@{String.format("%d/%d ● ", vm.noOfSuccessfulTasks, vm.noOfExpectedTasks)}'/>
        <TextView
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:textColor="?attr/planningStateButton_stateFailed_foregroundColor"
+           android:textColor="?attr/summarySheet_failedTasks_textColor"
            android:textSize="@dimen/symbol_font_size"
            android:text='@{String.format("%d ● ", vm.noOfFailedTasks)}'/>
        <TextView
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:textColor="?attr/planningStateButton_statePlanned_foregroundColor"
+           android:textColor="?attr/summarySheet_plannedTasks_textColor"
            android:textSize="@dimen/symbol_font_size"
            android:text='@{String.format("%d ● ", vm.noOfPlannedTasks)}'/>
     </LinearLayout>

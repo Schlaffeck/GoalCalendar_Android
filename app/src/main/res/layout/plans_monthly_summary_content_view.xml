@@ -20,18 +20,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@{String.format(@string/monthly_plans_summary_generalPercentage, vm.monthlyPlans.plansSummaryPercentage)}"
-        android:textSize="16sp"
         android:textAllCaps="false"
-        android:padding="@dimen/default_padding"/>
+        android:padding="@dimen/default_padding"
+        style="@style/SummarySheetText"/>
     <TextView
         android:id="@+id/monthly_goals_summary_daysLeft_textView"
-        android:layout_below="@id/monthly_goals_summary_generalProgress_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@{String.format(@string/monthly_plans_summary_noOfDaysLeft, vm.monthlyPlans.noOfDaysLeft)}"
-        android:textSize="16sp"
         android:textAllCaps="false"
-        android:padding="@dimen/default_padding"/>
+        android:padding="@dimen/default_padding"
+        style="@style/SummarySheetText"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -60,7 +59,6 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/monthly_goals_summary_categories_recyclerView"
-            android:layout_below="@id/monthly_goals_summary_daysLeft_textView"
             android:orientation="vertical"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             android:layout_width="wrap_content"

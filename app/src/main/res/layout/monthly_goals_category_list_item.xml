@@ -48,7 +48,7 @@
                 <ImageButton
                     android:layout_width="@dimen/monthly_goals_table_category_menu_button_width"
                     android:layout_height="match_parent"
-                    android:background="?attr/planningStateButton_stateFailed_backgroundColor"
+                    android:background="?attr/listItem_delete_button_backgroundColor"
                     android:src="@drawable/ic_delete_white_24dp"
                     android:scaleType="center"
                     android:contentDescription="@string/context_menu_delete_item"
@@ -56,7 +56,7 @@
                 <ImageButton
                     android:layout_width="@dimen/monthly_goals_table_category_menu_button_width"
                     android:layout_height="match_parent"
-                    android:background="?attr/planningStateButton_stateEmpty_backgroundColor"
+                    android:background="?attr/listItem_editMode_button_backgroundColor"
                     android:src="@drawable/ic_mode_edit_white_24dp"
                     android:scaleType="center"
                     android:contentDescription="@string/context_menu_edit_item"

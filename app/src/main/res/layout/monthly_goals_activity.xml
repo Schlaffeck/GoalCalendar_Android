@@ -30,7 +30,10 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary" />
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ActionBarThemeOverlay"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            style="@style/ToolbarSolidStyle"/>
 
     </android.support.design.widget.AppBarLayout>
 
@@ -42,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToPadding="true"
-            android:background="?attr/listAccentColor"
+            android:background="?attr/summarySheet_background"
             app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
             <include layout="@layout/plans_monthly_summary_content_view" />

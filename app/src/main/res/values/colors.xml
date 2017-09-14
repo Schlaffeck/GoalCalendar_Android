@@ -7,6 +7,8 @@
     <color name="flat_colorPrimaryDark">#303F9F</color>
     <color name="flat_colorAccent">#FBD59B</color>
 
+    <color name="flat_title_textColor">#FFFFFF</color>
+
     <!-- list colors -->
     <color name="flat_listAccentColor">#CCF7C1</color>
 
@@ -14,6 +16,9 @@
     <color name="flat_listItemBackgroundColor">#EBFDE7</color>
     <color name="flat_listItemHeaderBackgroundColor">#EBFDE7</color>
     <color name="flat_listItemHeaderForegroundColor">#87DD70</color>
+
+    <color name="flat_listItem_editMode_button_backgroundColor">#B9ECE3</color>
+    <color name="flat_listItem_delete_button_backgroundColor">#FAA2AC</color>
 
     <!-- planning state button colors -->
     <color name="flat_planningStateButton_stateEmpty_borderColor">#89D4C7</color>
@@ -39,11 +44,21 @@
     <color name="flat_dailyProgress_dialog_header_textColor">#389686</color>
     <color name="flat_dailyProgress_dialog_description_textColor">#46AE2A</color>
 
+    <!-- bottom sheet -->
+    <color name="flat_summarySheet_background">#CCF7C1</color>
+    <color name="flat_summarySheet_textColor">#87DD70</color>
+    <color name="flat_summarySheet_selectedItem_description_textColor">#5F5F5F</color>
+    <color name="flat_summarySheet_selectedItem_plannedTasks_textColor">#F4D53E</color>
+    <color name="flat_summarySheet_selectedItem_failedTasks_textColor">#C52F41</color>
+    <color name="flat_summarySheet_selectedItem_successTasks_textColor">#46AE2A</color>
+
     <!-- material modern theme colors -->
     <!-- palette: http://paletton.com/palette.php?uid=74o0u0koazCedNujEFutVvDvzos -->
     <color name="material_colorPrimary">#326B9C</color>
     <color name="material_colorPrimaryDark">#175990</color>
     <color name="material_colorAccent">#FBD59B</color>
+
+    <color name="material_title_textColor">#FFFFFF</color>
 
     <color name="material_listAccentColor">#CBE5FF</color>
 
@@ -51,6 +66,9 @@
     <color name="material_listItemBackgroundColor">#ffffff</color>
     <color name="material_listItemHeaderBackgroundColor">#ffffff</color>
     <color name="material_listItemHeaderForegroundColor">#336998</color>
+
+    <color name="material_listItem_editMode_button_backgroundColor">#CBE5FF</color>
+    <color name="material_listItem_delete_button_backgroundColor">#FAA1AB</color>
 
     <color name="material_planningStateButton_stateEmpty_borderColor">#DDDDDD</color>
     <color name="material_planningStateButton_stateEmpty_foregroundColor">#DDDDDD</color>
@@ -75,4 +93,11 @@
     <color name="material_dailyProgress_dialog_header_textColor">#4F1AAC</color>
     <color name="material_dailyProgress_dialog_description_textColor">#3A0E85</color>
 
+    <!-- bottom sheet -->
+    <color name="material_summarySheet_background">#326B9C</color>
+    <color name="material_summarySheet_textColor">#CBE5FF</color>
+    <color name="material_summarySheet_selectedItem_description_textColor">#FFFFFF</color>
+    <color name="material_summarySheet_selectedItem_plannedTasks_textColor">#FBD59B</color>
+    <color name="material_summarySheet_selectedItem_failedTasks_textColor">#FAA1AB</color>
+    <color name="material_summarySheet_selectedItem_successTasks_textColor">#B5EEA6</color>
 </resources>
