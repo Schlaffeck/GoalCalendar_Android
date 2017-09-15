@@ -31,6 +31,7 @@ import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 import com.slamcode.goalcalendar.viewmodels.DailyPlansViewModel;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class CategoryPlansRecyclerViewAdapter extends BindableRecyclerViewDataAdapter<CategoryPlansViewModel, CategoryPlansRecyclerViewAdapter.CategoryPlansViewHolder>
         implements ItemDragCallback.ItemDragMoveListener{
@@ -38,6 +39,8 @@ public class CategoryPlansRecyclerViewAdapter extends BindableRecyclerViewDataAd
     private final DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry;
     private YearMonthPair yearMonthPair;
     private ItemDragCallback itemDragCallback;
+    private CategoryListChangedCallback listChangedCallback = new CategoryListChangedCallback();
+    private RecyclerView attachedRecyclerView;
 
     public CategoryPlansRecyclerViewAdapter(DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry,
                                             YearMonthPair yearMonthPair,
@@ -46,10 +49,18 @@ public class CategoryPlansRecyclerViewAdapter extends BindableRecyclerViewDataAd
         super(items);
         this.dateTimeChangeListenersRegistry = dateTimeChangeListenersRegistry;
         this.yearMonthPair = yearMonthPair;
+        this.getSourceList().addOnListChangedCallback(this.listChangedCallback);
     }
 
     public void setYearMonthPair(YearMonthPair yearMonthPair) {
         this.yearMonthPair = yearMonthPair;
+    }
+
+    @Override
+    public void updateSourceCollection(Collection<CategoryPlansViewModel> newSourceCollection) {
+        this.getSourceList().removeOnListChangedCallback(this.listChangedCallback);
+        super.updateSourceCollection(newSourceCollection);
+        this.getSourceList().addOnListChangedCallback(this.listChangedCallback);
     }
 
     @Override
@@ -78,13 +89,16 @@ public class CategoryPlansRecyclerViewAdapter extends BindableRecyclerViewDataAd
 
     @Override
     public void onItemDragMoved(int fromPosition, int toPosition) {
+        this.listChangedCallback.setEnabled(false);
         notifyItemMoved(fromPosition, toPosition);
         ObservableListUtils.moveItem(this.getSourceList(), fromPosition, toPosition);
+        this.listChangedCallback.setEnabled(true);
     }
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
+        this.attachedRecyclerView = recyclerView;
         if(this.itemDragCallback != null)
         {
             ItemTouchHelper itemTouchHelper = new ItemTouchHelper(this.itemDragCallback);
@@ -132,6 +146,51 @@ public class CategoryPlansRecyclerViewAdapter extends BindableRecyclerViewDataAd
 
             this.daysListListRecyclerView.setAdapter(adapter);
             adapter.updateSourceCollection(modelObject.getDailyPlansList());
+        }
+    }
+
+    private class CategoryListChangedCallback extends ObservableList.OnListChangedCallback<ObservableList<CategoryPlansViewModel>> {
+
+        private boolean enabled = true;
+
+        @Override
+        public void onChanged(ObservableList<CategoryPlansViewModel> sender) {
+            if(!this.enabled)
+                return;
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public void onItemRangeChanged(ObservableList<CategoryPlansViewModel> sender, int positionStart, int itemCount) {
+            if(!this.enabled)
+                return;
+            notifyItemRangeChanged(positionStart, itemCount);
+        }
+
+        @Override
+        public void onItemRangeInserted(ObservableList<CategoryPlansViewModel> sender, int positionStart, int itemCount) {
+            if(!this.enabled)
+                return;
+            notifyItemRangeInserted(positionStart, itemCount);
+            if(attachedRecyclerView != null)
+                attachedRecyclerView.smoothScrollToPosition(positionStart);
+        }
+
+        @Override
+        public void onItemRangeMoved(ObservableList<CategoryPlansViewModel> sender, int fromPosition, int toPosition, int itemCount) {
+            if(!this.enabled)
+                return;
+        }
+
+        @Override
+        public void onItemRangeRemoved(ObservableList<CategoryPlansViewModel> sender, int positionStart, int itemCount) {
+            if(!this.enabled)
+                return;
+            notifyItemRangeRemoved(positionStart, itemCount);
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
         }
     }
 }
