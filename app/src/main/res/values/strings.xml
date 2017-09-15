@@ -151,6 +151,18 @@
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
+    <string name="pref_themeList_title">Style</string>
+    <string name="pref_themeList_description">Select application style, it will get applied after app restarts</string>
+    <string-array name="pref_themeList_entries">
+        <item>Material design</item>
+        <item>Flat pastel theme</item>
+    </string-array>
+    <string-array name="pref_themeList_entryValues">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    <string name="pref_themeList_defaultValue">0</string>
+
     <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Notifications</string>
 

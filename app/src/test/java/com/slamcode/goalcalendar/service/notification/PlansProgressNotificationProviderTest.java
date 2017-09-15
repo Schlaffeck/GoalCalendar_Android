@@ -9,7 +9,6 @@ import android.content.Intent;
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.MonthlyGoalsActivity;
 import com.slamcode.goalcalendar.R;
-import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.diagniostics.Logger;
 import com.slamcode.goalcalendar.planning.DateTime;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
@@ -111,7 +110,7 @@ public class PlansProgressNotificationProviderTest {
         PendingIntent pendingIntentMock = mock(PendingIntent.class);
         when(contextMock.createPendingIntent(0, intentMock, PendingIntent.FLAG_UPDATE_CURRENT)).thenReturn(pendingIntentMock);
 
-        when(contextMock.getColorArgbFromResources(R.color.planningStateButton_statePlanned_backgroundColor)).thenReturn(2323);
+        when(contextMock.getColorArgbFromResources(R.color.flat_planningStateButton_statePlanned_backgroundColor)).thenReturn(2323);
 
         Notification notificationMock = mock(Notification.class);
         when(contextMock.buildNotification(R.drawable.ic_calendar_range_white_24dp, "Title", "Details", 2323, pendingIntentMock)).thenReturn(notificationMock);
@@ -134,7 +133,7 @@ public class PlansProgressNotificationProviderTest {
         verify(contextMock, times(1)).createPendingIntent(0, intentMock, PendingIntent.FLAG_UPDATE_CURRENT);
         verify(contextMock, times(1)).buildNotification(R.drawable.ic_calendar_range_white_24dp, "Title", "Details", 2323, pendingIntentMock);
         verify(intentMock, times(1)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        verify(contextMock, times(1)).getColorArgbFromResources(R.color.planningStateButton_statePlanned_backgroundColor);
+        verify(contextMock, times(1)).getColorArgbFromResources(R.color.flat_planningStateButton_statePlanned_backgroundColor);
         verify(intentMock, times(1)).putExtra(NotificationScheduler.NOTIFICATION_ORIGINATED_FROM_FLAG, true);
     }
 

@@ -61,9 +61,7 @@ public class Bindings {
 
             Log.d(LOG_TAG, "Binding category summary source - creating new adapter");
             adapter = injectData.itemsCollectionAdapterProvider
-                    .providePlansSummaryForCategoriesRecyclerViewAdapter(
-                            injectData.applicationContext.getDefaultContext(),
-                            (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE));
+                    .providePlansSummaryForCategoriesRecyclerViewAdapter();
             recyclerView.setAdapter(adapter);
         }
 
@@ -99,8 +97,6 @@ public class Bindings {
             Log.d(LOG_TAG, "Binding category plans source - creating new adapter");
             adapter = injectData.itemsCollectionAdapterProvider
                     .provideCategoryPlansRecyclerViewAdapter(
-                            injectData.applicationContext.getDefaultContext(),
-                            (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE),
                             injectData.dateTimeChangeListenersRegistry,
                             new YearMonthPair(monthlyPlanningCategoryListViewModel.getMonthData().getYear(), monthlyPlanningCategoryListViewModel.getMonthData().getMonth()),
                             new ObservableArrayList<CategoryPlansViewModel>());
@@ -147,9 +143,7 @@ public class Bindings {
             injectData.recyclerViewSimultaneousScrollingController.addForSimultaneousScrolling(recyclerView);
             adapter = injectData.itemsCollectionAdapterProvider
                     .provideDailyPlanHeaderRecyclerViewAdapter(
-                            injectData.applicationContext.getDefaultContext(),
                             new YearMonthPair(monthViewModel.getYear(), monthViewModel.getMonth()),
-                            (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE),
                             injectData.dateTimeChangeListenersRegistry);
             recyclerView.setAdapter(adapter);
         }

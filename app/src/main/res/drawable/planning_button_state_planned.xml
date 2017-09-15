@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/planningStateButton_statePlanned_backgroundColor"/>
-    <stroke android:color="@color/planningStateButton_statePlanned_borderColor"
-        android:width="2dp"/>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?attr/planningStateButton_shape_style">
+    <solid android:color="?attr/planningStateButton_statePlanned_backgroundColor"/>
+    <stroke android:color="?attr/planningStateButton_statePlanned_borderColor"
+        style="?attr/planningStateButton_stroke_style"/>
     <padding android:bottom="@dimen/planning_state_button_padding"
         android:top="@dimen/planning_state_button_padding"
         android:left="@dimen/planning_state_button_padding"

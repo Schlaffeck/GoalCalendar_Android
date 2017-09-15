@@ -2,6 +2,8 @@ package com.slamcode.goalcalendar.view.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.TypedValue;
+import android.view.View;
 
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
@@ -112,5 +114,12 @@ public class ResourcesHelper {
         }
 
         return result;
+    }
+
+    public static int getResourceIdFromThemeAttribute(View view, int attributeId)
+    {
+        TypedValue typedValue = new TypedValue();
+        view.getContext().getTheme().resolveAttribute(attributeId, typedValue, true);
+        return typedValue.resourceId;
     }
 }

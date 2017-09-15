@@ -15,20 +15,18 @@ import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 public class AppContextBasedViewAdapterProvider implements ItemsCollectionAdapterProvider {
 
     @Override
-    public CategoryPlansSummaryRecyclerViewAdapter providePlansSummaryForCategoriesRecyclerViewAdapter(Context context, LayoutInflater layoutInflater) {
-        return new CategoryPlansSummaryRecyclerViewAdapter(context, layoutInflater);
+    public CategoryPlansSummaryRecyclerViewAdapter providePlansSummaryForCategoriesRecyclerViewAdapter() {
+        return new CategoryPlansSummaryRecyclerViewAdapter();
     }
 
     @Override
-    public DailyPlanHeaderRecyclerViewAdapter provideDailyPlanHeaderRecyclerViewAdapter(Context context,
-                                                                                        YearMonthPair yearMonthPair,
-                                                                                        LayoutInflater layoutInflater,
+    public DailyPlanHeaderRecyclerViewAdapter provideDailyPlanHeaderRecyclerViewAdapter(YearMonthPair yearMonthPair,
                                                                                         DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry) {
-        return new DailyPlanHeaderRecyclerViewAdapter(context, yearMonthPair, layoutInflater, dateTimeChangeListenersRegistry);
+        return new DailyPlanHeaderRecyclerViewAdapter( yearMonthPair,  dateTimeChangeListenersRegistry);
     }
 
     @Override
-    public CategoryPlansRecyclerViewAdapter provideCategoryPlansRecyclerViewAdapter(Context context, LayoutInflater layoutInflater, DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry, YearMonthPair yearMonthPair, ObservableList<CategoryPlansViewModel> itemsSource) {
-        return new CategoryPlansRecyclerViewAdapter(context, layoutInflater, dateTimeChangeListenersRegistry, yearMonthPair, itemsSource);
+    public CategoryPlansRecyclerViewAdapter provideCategoryPlansRecyclerViewAdapter(DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry, YearMonthPair yearMonthPair, ObservableList<CategoryPlansViewModel> itemsSource) {
+        return new CategoryPlansRecyclerViewAdapter(dateTimeChangeListenersRegistry, yearMonthPair, itemsSource);
     }
 }

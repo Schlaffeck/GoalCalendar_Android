@@ -32,4 +32,19 @@ public interface AppSettingsManager {
     DateTime getLastLaunchDateTime();
 
     void setLastLaunchDateTimeMillis(DateTime lastLaunchTime);
+
+    int getThemeId();
+
+    void setThemeId(int themeId);
+
+    void addSettingsChangedListener(SettingsChangedListener listener);
+
+    void removeSettingsChangedListener(SettingsChangedListener listener);
+
+    void clearSettingsChangedListeners();
+
+    interface SettingsChangedListener{
+
+        void settingChanged(String settingId);
+    }
 }

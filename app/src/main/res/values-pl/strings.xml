@@ -148,6 +148,13 @@
     <!-- Example General settings -->
     <string name="pref_header_general">Ogólne</string>
 
+    <string name="pref_themeList_title">Styl aplikacji</string>
+    <string name="pref_themeList_description">Wybierz styl aplikacji, który zadziała po ponownym uruchomieniu</string>
+    <string-array name="pref_themeList_entries">
+        <item>Material design</item>
+        <item>Spokojne pastele</item>
+    </string-array>
+
     <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Powiadomienia</string>
 

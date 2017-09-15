@@ -73,7 +73,7 @@ public final class EndOfDayNotificationProvider implements NotificationProvider 
                 R.drawable.ic_calendar_check_white_24dp,
                 this.context.getStringFromResources(R.string.notification_endOfDay_title),
                 this.context.getStringFromResources(R.string.notification_endOfDay_content),
-                this.context.getColorArgbFromResources(R.color.planningStateButton_stateSuccess_backgroundColor),
+                this.context.getColorArgbFromResources(R.color.flat_planningStateButton_stateSuccess_backgroundColor),
                 this.context.createPendingIntent(0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
         return result;
