@@ -152,7 +152,7 @@
     <string name="pref_header_general">General</string>
 
     <string name="pref_themeList_title">Style</string>
-    <string name="pref_themeList_description">Select application style, it will get applied after app restarts</string>
+    <string name="pref_themeList_description">Select application style, which will get applied after few seconds on previous screen</string>
     <string-array name="pref_themeList_entries">
         <item>Material design</item>
         <item>Flat pastel theme</item>
@@ -162,6 +162,7 @@
         <item>1</item>
     </string-array>
     <string name="pref_themeList_defaultValue">0</string>
+    <string name="pref_themeList_applyTheme_dialog_message">Applying new style</string>
 
     <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Notifications</string>
