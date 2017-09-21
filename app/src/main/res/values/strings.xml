@@ -9,12 +9,12 @@
     <string name="button_more">More</string>
 
     <!-- onboarding view -->
-    <string name="onboarding_page_1_title">PLAN YOUR GOALS</string>
-    <string name="onboarding_page_1_description">Create categories, and mark progress each day</string>
-    <string name="onboarding_page_2_title">TRACK PROGRESS</string>
-    <string name="onboarding_page_2_description">Check how you do in each category</string>
-    <string name="onboarding_page_3_title">GET NOTIFIED</string>
-    <string name="onboarding_page_3_description">Get to know when you need to catch up with some activities</string>
+    <string name="onboarding_page_1_title">DECIDE WHAT IS IMPORTANT</string>
+    <string name="onboarding_page_1_description">Set priorities and goals to work on</string>
+    <string name="onboarding_page_2_title">SET UP PLANS</string>
+    <string name="onboarding_page_2_description">Plan, how often you want to fulfill your tasks</string>
+    <string name="onboarding_page_3_title">CONTROL YOUR PROGRESS</string>
+    <string name="onboarding_page_3_description">Mark and watch tasks you do</string>
 
     <!-- monthly goals view -->
     <string name="add_category_dialog_header">Add category</string>

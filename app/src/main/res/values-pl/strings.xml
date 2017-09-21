@@ -10,12 +10,12 @@
     <string name="button_more">Więcej</string>
 
     <!-- onboarding view -->
-    <string name="onboarding_page_1_title">PLANUJ CELE</string>
-    <string name="onboarding_page_1_description">Twórz  kategorie i oznaczaj swoje codzienne postępy</string>
-    <string name="onboarding_page_2_title">ŚLEDŹ POSTĘP</string>
-    <string name="onboarding_page_2_description">Sprawdzaj jak ci idzie w każdej z kategorii</string>
-    <string name="onboarding_page_3_title">KONTROLUJ</string>
-    <string name="onboarding_page_3_description">Reaguj na przypomnienia i ciesz się swoim sukcesem</string>
+    <string name="onboarding_page_1_title">ZDECYDUJ CO JEST WAŻNE</string>
+    <string name="onboarding_page_1_description">Ustal priorytety i cele nad którymi chcesz pracować</string>
+    <string name="onboarding_page_2_title">USTAL PLAN REALIZACJI CELU</string>
+    <string name="onboarding_page_2_description">Zaplanuj, jak często chcesz wykonywać poszczególne działania</string>
+    <string name="onboarding_page_3_title">MONITORUJ SWOJE POSTĘPY</string>
+    <string name="onboarding_page_3_description">Oznaczaj i monitoruj wykonane działania</string>
 
     <!-- monthly goals view -->
     <string name="add_category_dialog_header">Dodaj kategorię</string>
