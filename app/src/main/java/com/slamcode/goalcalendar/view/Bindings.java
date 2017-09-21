@@ -109,19 +109,10 @@ public class Bindings {
         if(adapter instanceof CategoryPlansRecyclerViewAdapter)
         {
             final RecyclerView.Adapter finalAdapter = adapter;
-
-            recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-                @Override
-                public void onGlobalLayout()
-                {
-                    recyclerView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                    Log.d(LOG_TAG, "Binding category plans source - updating adapter source");
-                    CategoryPlansRecyclerViewAdapter dataAdapter = (CategoryPlansRecyclerViewAdapter) finalAdapter;
-                    dataAdapter.setYearMonthPair(new YearMonthPair(year, month));
-                    dataAdapter.updateSourceCollection(itemsSource);
-                }
-            });
+            Log.d(LOG_TAG, "Binding category plans source - updating adapter source");
+            CategoryPlansRecyclerViewAdapter dataAdapter = (CategoryPlansRecyclerViewAdapter) finalAdapter;
+            dataAdapter.setYearMonthPair(new YearMonthPair(year, month));
+            dataAdapter.updateSourceCollection(itemsSource);
         }
         Log.d(LOG_TAG, "Binding category plans source - END");
     }
