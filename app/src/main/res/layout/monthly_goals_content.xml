@@ -58,16 +58,6 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/monthly_goals_emptyContent_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:layout_below="@id/monthly_goals_yearValue_layout"
-        android:visibility="@{vm.monthlyPlans.empty ? View.VISIBLE : View.GONE}">
-    <include layout="@layout/monthly_goals_empty_list_content"/>
-    </LinearLayout>
-
-    <LinearLayout
         android:layout_below="@id/monthly_goals_yearValue_layout"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -138,5 +128,14 @@
             android:paddingBottom="@dimen/monthly_goals_category_listView_lastItem_paddingBottom"/>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/monthly_goals_emptyContent_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_below="@id/monthly_goals_yearValue_layout"
+        android:visibility="@{vm.monthlyPlans.empty ? View.VISIBLE : View.GONE}">
+        <include layout="@layout/monthly_goals_empty_list_content"/>
+    </LinearLayout>
 </RelativeLayout>
 </layout>

@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -77,6 +78,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity
 
     @ViewReference(R.id.monthly_goals_summary_content_layout)
     LinearLayout summaryContentLayout;
+
+    private LinearLayout emptyContentLayout;
 
     private NestedScrollView bottomSheetScrollView;
 
@@ -228,7 +231,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity
         monthlyPlansSummaryContentBinding.setVariable(BR.presenter, this.presenter);
         monthlyPlansSummaryContentBinding.setVariable(BR.vm, data);
 
-        ViewDataBinding emptyContentBinding = DataBindingUtil.findBinding(this.emptyContentHorizontalScrollView);
+        ViewDataBinding emptyContentBinding = DataBindingUtil.bind(this.emptyContentHorizontalScrollView);
 
         emptyContentBinding.setVariable(BR.presenter, this.presenter);
         emptyContentBinding.setVariable(BR.vm, data);
@@ -276,6 +279,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity
         this.monthlyGoalsActivityLayout = ViewBinder.findView(this, R.id.monthly_goals_activity_main_coordinator_layout);
         this.categoryNamesRecyclerView = ViewBinder.findView(this, R.id.monthly_goals_listview);
         this.monthlyPlansGridContentLayout = ViewBinder.findView(this, R.id.content_monthly_goals);
+        this.emptyContentLayout = ViewBinder.findView(this, R.id.monthly_goals_emptyContent_layout);
         this.emptyContentHorizontalScrollView = ViewBinder.findView(this, R.id.monthly_goals_emptyContent_horizontallScrollView);
         this.summaryContentLayout = ViewBinder.findView(this, R.id.monthly_goals_summary_content_layout);
         this.bottomSheetScrollView = ViewBinder.findView(this, R.id.monthly_goals_activity_bottom_sheet);

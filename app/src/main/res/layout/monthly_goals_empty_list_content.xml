@@ -40,15 +40,13 @@
     <Button
         android:layout_gravity="right"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:background="@drawable/planning_button_state_empty"
-        android:textColor="?attr/planningStateButton_stateEmpty_foregroundColor"
         android:gravity="center"
         android:id="@+id/monthly_plans_empty_view_copyLastUsedCategories_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/monthly_plans_empty_view_copyLastUsedCategories_button_text"
         android:visibility="@{vm.previousMonthWithCategoriesAvailable?View.VISIBLE:View.GONE}"
-        android:onClick="@{presenter::copyCategoriesFromPreviousMonth}">
+        android:onClick="@{(view) -> presenter.copyCategoriesFromPreviousMonth(view)}">
 
     </Button>
 </LinearLayout>
