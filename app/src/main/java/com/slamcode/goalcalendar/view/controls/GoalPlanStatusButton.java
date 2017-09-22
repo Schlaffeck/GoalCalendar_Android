@@ -24,7 +24,7 @@ import java.util.Map;
  * Created by moriasla on 10.01.2017.
  */
 
-public class GoalPlanStatusButton extends ImageButton implements View.OnClickListener {
+public class GoalPlanStatusButton extends android.support.v7.widget.AppCompatImageButton implements View.OnClickListener {
 
     private PlanStatus currentPlanStatus;
     private static Map<PlanStatus, ButtonStatusData> STATUS_TO_DATA_MAP;
@@ -40,22 +40,22 @@ public class GoalPlanStatusButton extends ImageButton implements View.OnClickLis
         STATUS_TO_DATA_MAP = new HashMap<>();
 
         STATUS_TO_DATA_MAP.put(PlanStatus.Empty, new ButtonStatusData(
-                R.drawable.planning_button_state_empty,
+                R.attr.planningStateButton_stateEmpty_background,
                 R.attr.planningStateButton_stateEmpty_foregroundColor,
                 -1));
 
         STATUS_TO_DATA_MAP.put(PlanStatus.Failure, new ButtonStatusData(
-                R.drawable.planning_button_state_failed,
+                R.attr.planningStateButton_stateFailed_background,
                 R.attr.planningStateButton_stateFailed_foregroundColor,
                 R.drawable.ic_clear_white_24dp));
 
         STATUS_TO_DATA_MAP.put(PlanStatus.Success, new ButtonStatusData(
-                R.drawable.planning_button_state_success,
+                R.attr.planningStateButton_stateSuccess_background,
                 R.attr.planningStateButton_stateSuccess_foregroundColor,
                 R.drawable.ic_done_white_24dp));
 
         STATUS_TO_DATA_MAP.put(PlanStatus.Planned, new ButtonStatusData(
-                R.drawable.planning_button_state_planned,
+                R.attr.planningStateButton_statePlanned_background,
                 R.attr.planningStateButton_statePlanned_foregroundColor,
                 R.drawable.ic_date_range_white_24dp));
     }
@@ -151,14 +151,14 @@ public class GoalPlanStatusButton extends ImageButton implements View.OnClickLis
             outAnimation.setStartOffset(android.R.integer.config_shortAnimTime);
             outAnimation.setDuration(android.R.integer.config_mediumAnimTime);
 
-            this.setBackgroundResource(STATUS_TO_DATA_MAP.get(status).backgroundId);
+            this.setBackgroundResource(ResourcesHelper.getResourceIdFromThemeAttribute(this, STATUS_TO_DATA_MAP.get(status).backgroundId));
 
             //scale in
             this.startAnimation(inAnimation);
         }
         else
         {
-            this.setBackgroundResource(STATUS_TO_DATA_MAP.get(status).backgroundId);
+            this.setBackgroundResource(ResourcesHelper.getResourceIdFromThemeAttribute(this, STATUS_TO_DATA_MAP.get(status).backgroundId));
             this.initialized = true;
         }
 
