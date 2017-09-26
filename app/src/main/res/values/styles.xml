@@ -11,24 +11,18 @@
     <attr name="listItem_delete_button_backgroundColor" format="reference|color"/>
 
     <attr name="planningStateButton_style" format="reference"/>
-    <attr name="planningStateButton_shape_style" format="reference"/>
-    <attr name="planningStateButton_stroke_style" format="reference"/>
 
-    <attr name="planningStateButton_stateEmpty_borderColor" format="reference"/>
     <attr name="planningStateButton_stateEmpty_foregroundColor" format="reference"/>
-    <attr name="planningStateButton_stateEmpty_backgroundColor" format="reference"/>
+    <attr name="planningStateButton_stateEmpty_background" format="reference"/>
 
-    <attr name="planningStateButton_statePlanned_borderColor" format="reference"/>
     <attr name="planningStateButton_statePlanned_foregroundColor" format="reference"/>
-    <attr name="planningStateButton_statePlanned_backgroundColor" format="reference"/>
+    <attr name="planningStateButton_statePlanned_background" format="reference"/>
 
-    <attr name="planningStateButton_stateFailed_borderColor" format="reference"/>
     <attr name="planningStateButton_stateFailed_foregroundColor" format="reference"/>
-    <attr name="planningStateButton_stateFailed_backgroundColor" format="reference"/>
+    <attr name="planningStateButton_stateFailed_background" format="reference"/>
 
-    <attr name="planningStateButton_stateSuccess_borderColor" format="reference"/>
     <attr name="planningStateButton_stateSuccess_foregroundColor" format="reference"/>
-    <attr name="planningStateButton_stateSuccess_backgroundColor" format="reference"/>
+    <attr name="planningStateButton_stateSuccess_background" format="reference"/>
 
     <attr name="dailyProgress_dialog_header_textColor" format="reference"/>
     <attr name="dailyProgress_dialog_description_textColor" format="reference"/>
@@ -60,24 +54,17 @@
 
         <!-- state button -->
         <item name="planningStateButton_style">@style/FlatBrandTheme.GoalStatusButton</item>
-        <item name="planningStateButton_shape_style">@style/FlatBrandTheme.GoalStatusButtonShape</item>
-        <item name="planningStateButton_stroke_style">@style/FlatBrandTheme.GoalStatusButtonStroke</item>
-
-        <item name="planningStateButton_stateEmpty_borderColor">@color/flat_planningStateButton_stateEmpty_borderColor</item>
         <item name="planningStateButton_stateEmpty_foregroundColor">@color/flat_planningStateButton_stateEmpty_foregroundColor</item>
-        <item name="planningStateButton_stateEmpty_backgroundColor">@color/flat_planningStateButton_stateEmpty_backgroundColor</item>
+        <item name="planningStateButton_stateEmpty_background">@drawable/flat_planning_button_state_empty</item>
 
-        <item name="planningStateButton_statePlanned_borderColor">@color/flat_planningStateButton_statePlanned_borderColor</item>
         <item name="planningStateButton_statePlanned_foregroundColor">@color/flat_planningStateButton_statePlanned_foregroundColor</item>
-        <item name="planningStateButton_statePlanned_backgroundColor">@color/flat_planningStateButton_statePlanned_backgroundColor</item>
+        <item name="planningStateButton_statePlanned_background">@drawable/flat_planning_button_state_planned</item>
 
-        <item name="planningStateButton_stateFailed_borderColor">@color/flat_planningStateButton_stateFailed_borderColor</item>
         <item name="planningStateButton_stateFailed_foregroundColor">@color/flat_planningStateButton_stateFailed_foregroundColor</item>
-        <item name="planningStateButton_stateFailed_backgroundColor">@color/flat_planningStateButton_stateFailed_backgroundColor</item>
+        <item name="planningStateButton_stateFailed_background">@drawable/flat_planning_button_state_failed</item>
 
-        <item name="planningStateButton_stateSuccess_borderColor">@color/flat_planningStateButton_stateSuccess_borderColor</item>
         <item name="planningStateButton_stateSuccess_foregroundColor">@color/flat_planningStateButton_stateSuccess_foregroundColor</item>
-        <item name="planningStateButton_stateSuccess_backgroundColor">@color/flat_planningStateButton_stateSuccess_backgroundColor</item>
+        <item name="planningStateButton_stateSuccess_background">@drawable/flat_planning_button_state_success</item>
 
         <!-- dialog -->
         <item name="dailyProgress_dialog_header_textColor">@color/flat_dailyProgress_dialog_header_textColor</item>
@@ -104,14 +91,8 @@
         <item name="android:layout_margin">@dimen/planning_state_button_margin</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:padding">@dimen/default_padding</item>
-    </style>
-
-    <style name="FlatBrandTheme.GoalStatusButtonShape">
-        <item name="android:shape">rectangle</item>
-    </style>
-
-    <style name="FlatBrandTheme.GoalStatusButtonStroke">
-        <item name="android:width">2dp</item>
+        <item name="android:background">@drawable/flat_planning_button_state_empty</item>
+        <item name="android:foreground">@color/flat_planningStateButton_stateEmpty_foregroundColor</item>
     </style>
 
     <!--  Material ui modern style -->
@@ -132,24 +113,18 @@
 
         <!-- state button -->
         <item name="planningStateButton_style">@style/MaterialTheme.GoalStatusButton</item>
-        <item name="planningStateButton_shape_style">@style/MaterialTheme.GoalStatusButtonShape</item>
-        <item name="planningStateButton_stroke_style">@style/MaterialTheme.GoalStatusButtonStroke</item>
 
-        <item name="planningStateButton_stateEmpty_borderColor">@color/material_planningStateButton_stateEmpty_borderColor</item>
         <item name="planningStateButton_stateEmpty_foregroundColor">@color/material_planningStateButton_stateEmpty_foregroundColor</item>
-        <item name="planningStateButton_stateEmpty_backgroundColor">@color/material_planningStateButton_stateEmpty_backgroundColor</item>
+        <item name="planningStateButton_stateEmpty_background">@drawable/material_planning_button_state_empty</item>
 
-        <item name="planningStateButton_statePlanned_borderColor">@color/material_planningStateButton_statePlanned_borderColor</item>
         <item name="planningStateButton_statePlanned_foregroundColor">@color/material_planningStateButton_statePlanned_foregroundColor</item>
-        <item name="planningStateButton_statePlanned_backgroundColor">@color/material_planningStateButton_statePlanned_backgroundColor</item>
+        <item name="planningStateButton_statePlanned_background">@drawable/material_planning_button_state_planned</item>
 
-        <item name="planningStateButton_stateFailed_borderColor">@color/material_planningStateButton_stateFailed_borderColor</item>
         <item name="planningStateButton_stateFailed_foregroundColor">@color/material_planningStateButton_stateFailed_foregroundColor</item>
-        <item name="planningStateButton_stateFailed_backgroundColor">@color/material_planningStateButton_stateFailed_backgroundColor</item>
+        <item name="planningStateButton_stateFailed_background">@drawable/material_planning_button_state_failed</item>
 
-        <item name="planningStateButton_stateSuccess_borderColor">@color/material_planningStateButton_stateSuccess_borderColor</item>
         <item name="planningStateButton_stateSuccess_foregroundColor">@color/material_planningStateButton_stateSuccess_foregroundColor</item>
-        <item name="planningStateButton_stateSuccess_backgroundColor">@color/material_planningStateButton_stateSuccess_backgroundColor</item>
+        <item name="planningStateButton_stateSuccess_background">@drawable/material_planning_button_state_success</item>
 
         <!--  dialog -->
         <item name="dailyProgress_dialog_header_textColor">@color/material_dailyProgress_dialog_header_textColor</item>
@@ -168,14 +143,6 @@
         <!-- activity styles -->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="MaterialTheme.GoalStatusButtonShape">
-        <item name="android:shape">oval</item>
-    </style>
-
-    <style name="MaterialTheme.GoalStatusButtonStroke">
-        <item name="android:width">2dp</item>
     </style>
 
     <style name="MaterialTheme.GoalStatusButton" parent="Base.Widget.AppCompat.ImageButton">
