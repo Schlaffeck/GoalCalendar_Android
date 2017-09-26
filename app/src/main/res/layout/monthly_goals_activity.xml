@@ -45,6 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToPadding="true"
+            android:fillViewport="false"
             android:background="?attr/summarySheet_background"
             app:layout_behavior="com.slamcode.goalcalendar.view.bottomsheet.StatusControlledBottomSheetBehavior">
 
