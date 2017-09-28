@@ -83,8 +83,8 @@ public abstract class RecyclerViewDataAdapter<Item, ViewHolder extends ViewHolde
         {
             this.list.clear();
             this.list.addAll(newSourceCollection);
-            this.notifyDataSetChanged();
         }
+        this.notifyDataSetChanged();
     }
 
     public void updateSourceCollectionOneByOne(Collection<Item> newSourceCollection) {
