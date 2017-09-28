@@ -1,8 +1,10 @@
 package com.slamcode.goalcalendar.view.bottomsheet;
 
+import android.content.Context;
 import android.os.Parcelable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
+import android.util.AttributeSet;
 import android.view.View;
 
 /**
@@ -13,6 +15,10 @@ public class StatusControlledBottomSheetBehavior<V extends View> extends BottomS
 
     @State
     private int permanentRestoreState = STATE_COLLAPSED;
+
+    public StatusControlledBottomSheetBehavior(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
 
     @Override
     public void onRestoreInstanceState(CoordinatorLayout parent, V child, Parcelable state) {
