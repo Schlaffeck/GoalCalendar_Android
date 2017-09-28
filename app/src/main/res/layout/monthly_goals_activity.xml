@@ -13,7 +13,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:id="@+id/monthly_goals_activity_main_coordinator_layout"
     tools:context=".MonthlyGoalsActivity">
 
@@ -37,17 +36,20 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/monthly_goals_content" />
-    </LinearLayout>
+            <include layout="@layout/monthly_goals_content" />
+        </LinearLayout>
 
         <android.support.v4.widget.NestedScrollView
             android:id="@+id/monthly_goals_activity_bottom_sheet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clipToPadding="true"
             android:fillViewport="false"
+            android:clipToPadding="true"
             android:background="?attr/summarySheet_background"
-            app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+            android:layout_gravity="bottom"
+            app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
+            app:behavior_peekHeight="@dimen/monthly_goals_summary_bottomSheet_peekHeight"
+            app:behavior_hideable="false">
 
             <include layout="@layout/plans_monthly_summary_content_view" />
         </android.support.v4.widget.NestedScrollView>

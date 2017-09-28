@@ -48,5 +48,7 @@ public interface MonthlyGoalsActivityContract {
         void showDialog(DialogFragment dialogFragment);
 
         void scrollToCurrentDate();
+
+        void updateSummarySheetView();
     }
 }

@@ -11,7 +11,7 @@
     </data>
 <LinearLayout android:layout_width="match_parent"
     android:id="@+id/monthly_goals_summary_content_layout"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_margin="@dimen/activity_horizontal_margin">
 
@@ -64,6 +64,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/monthly_goals_table_category_name_height"
+            android:minHeight="350dp"
+            android:visibility="@{vm.monthlyPlans.categoryPlansList.empty ? View.GONE : View.VISIBLE}"
             bind:categorySummarySource="@{vm.monthlyPlans.categoryPlansList}">
 
         </android.support.v7.widget.RecyclerView>

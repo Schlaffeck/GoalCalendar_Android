@@ -4,6 +4,7 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
+import android.databinding.Observable;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,7 +19,6 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -79,8 +79,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity
     @ViewReference(R.id.monthly_goals_summary_content_layout)
     LinearLayout summaryContentLayout;
 
-    private LinearLayout emptyContentLayout;
-
     private NestedScrollView bottomSheetScrollView;
 
     // dependencies
@@ -123,6 +121,15 @@ public class MonthlyGoalsActivity extends AppCompatActivity
     private boolean dataBindingsSetUp;
     private boolean needToRecreate;
     private int currentThemeId;
+
+    private Observable.OnPropertyChangedCallback monthPropertyChangedListener = new Observable.OnPropertyChangedCallback()
+    {
+        @Override
+        public void onPropertyChanged(Observable sender, int propertyId) {
+            if(propertyId == BR.plansSummaryPercentage || propertyId == BR.categoryPlansList)
+                setBottomSheetStatus();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -236,7 +243,27 @@ public class MonthlyGoalsActivity extends AppCompatActivity
         emptyContentBinding.setVariable(BR.presenter, this.presenter);
         emptyContentBinding.setVariable(BR.vm, data);
 
+        data.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                if(propertyId == BR.monthlyPlans)
+                {
+                    activityViewModel.getMonthlyPlans().addOnPropertyChangedCallback(monthPropertyChangedListener);
+                    setBottomSheetStatus();
+                }
+            }
+        });
+
         this.dataBindingsSetUp = true;
+    }
+
+    private void setBottomSheetStatus()
+    {
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        bottomSheetScrollView.setVisibility(
+                activityViewModel.getMonthlyPlans() == null
+                || activityViewModel.getMonthlyPlans().getCategoryPlansList() == null
+                        || activityViewModel.getMonthlyPlans().getCategoryPlansList().isEmpty() ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -279,7 +306,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity
         this.monthlyGoalsActivityLayout = ViewBinder.findView(this, R.id.monthly_goals_activity_main_coordinator_layout);
         this.categoryNamesRecyclerView = ViewBinder.findView(this, R.id.monthly_goals_listview);
         this.monthlyPlansGridContentLayout = ViewBinder.findView(this, R.id.content_monthly_goals);
-        this.emptyContentLayout = ViewBinder.findView(this, R.id.monthly_goals_emptyContent_layout);
         this.emptyContentHorizontalScrollView = ViewBinder.findView(this, R.id.monthly_goals_emptyContent_horizontallScrollView);
         this.summaryContentLayout = ViewBinder.findView(this, R.id.monthly_goals_summary_content_layout);
         this.bottomSheetScrollView = ViewBinder.findView(this, R.id.monthly_goals_activity_bottom_sheet);
@@ -383,8 +409,9 @@ public class MonthlyGoalsActivity extends AppCompatActivity
     private void setupBottomSheetBehavior() {
         this.bottomSheetScrollView = (NestedScrollView) this.findViewById(R.id.monthly_goals_activity_bottom_sheet);
         this.bottomSheetBehavior = BottomSheetBehavior.from(this.bottomSheetScrollView);
-        this.bottomSheetBehavior.setPeekHeight(this.getResources().getDimensionPixelSize(R.dimen.monthly_goals_summary_bottomSheet_peekHeight));
         this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        this.bottomSheetBehavior.setHideable(false);
+        this.bottomSheetBehavior.setPeekHeight(this.getResources().getDimensionPixelSize(R.dimen.monthly_goals_summary_bottomSheet_peekHeight));
     }
 
     private void runStartupCommands() {
@@ -412,6 +439,13 @@ public class MonthlyGoalsActivity extends AppCompatActivity
         dayToScrollTo = (dayToScrollTo > 0 ? dayToScrollTo : 0);
         int width = (int) this.getResources().getDimension(R.dimen.monthly_goals_table_day_plan_column_width);
         daysPlanScrollView.smoothScrollTo(dayToScrollTo * width, 0);
+    }
+
+    @Override
+    public void updateSummarySheetView() {
+        bottomSheetScrollView.requestLayout();
+        bottomSheetScrollView.invalidate();
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
     @Override
