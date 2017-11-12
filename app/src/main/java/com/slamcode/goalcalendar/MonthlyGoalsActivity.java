@@ -41,7 +41,6 @@ import com.slamcode.goalcalendar.dagger2.ComposableApplication;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.service.commands.AutoMarkTasksCommand;
 import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
-import com.slamcode.goalcalendar.view.bottomsheet.StatusControlledBottomSheetBehavior;
 import com.slamcode.goalcalendar.view.dialogs.DailyProgressDialog;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
 import com.slamcode.goalcalendar.view.presenters.PresentersSource;
@@ -109,7 +108,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity
     @Inject
     PlansSummaryDescriptionProvider descriptionProvider;
 
-    private StatusControlledBottomSheetBehavior bottomSheetBehavior;
+    private BottomSheetBehavior bottomSheetBehavior;
 
     private MonthlyGoalsActivityContract.Presenter presenter;
 
@@ -141,6 +140,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity
         if(this.isFirstLaunch()
                 && !this.originatedFromNotification())
             this.startOnBoardingActivity();
+
         this.startMainActivity();
         Log.d(LOG_TAG, "Monthly goals activity creating - END");
     }
@@ -373,7 +373,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity
         this.runStartupCommands();
         this.showDailyProgressDialog();
         this.setLaunchTime();
-        this.bottomSheetBehavior.setDisableLayoutChange(true);
     }
 
     private void setupPresenter() {
@@ -383,7 +382,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity
 
     private void setupBottomSheetBehavior() {
         this.bottomSheetScrollView = (NestedScrollView) this.findViewById(R.id.monthly_goals_activity_bottom_sheet);
-        this.bottomSheetBehavior = (StatusControlledBottomSheetBehavior)BottomSheetBehavior.from(this.bottomSheetScrollView);
+        this.bottomSheetBehavior = BottomSheetBehavior.from(this.bottomSheetScrollView);
         this.bottomSheetBehavior.setPeekHeight(this.getResources().getDimensionPixelSize(R.dimen.monthly_goals_summary_bottomSheet_peekHeight));
         this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
