@@ -16,15 +16,21 @@
         android:textColor="@android:color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:textAlignment="center"/>
     <TextView
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:id="@+id/onboarding_fragment_description_label"
         android:textColor="@android:color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:textAlignment="center"/>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
     <ImageView
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:id="@+id/onboarding_fragment_image"
@@ -33,5 +39,15 @@
         android:layout_gravity="center"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"/>
+
+    <ImageView
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:id="@+id/onboarding_fragment_second_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"/>
+    </LinearLayout>
 
 </LinearLayout>

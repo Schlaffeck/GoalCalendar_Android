@@ -136,19 +136,24 @@ public class OnBoardingActivity extends AppCompatActivity {
         this.pagesDataList.add(new PageFragmentData(getResources().getString(
                 R.string.onboarding_page_1_title),
                 getResources().getString(R.string.onboarding_page_1_description),
+                R.drawable.icons8_trust_96,
+                0,
                 R.drawable.icons8_innovation_128,
+                R.dimen.onboarding_first_screen_second_image_size,
                 ContextCompat.getColor(getApplicationContext(), R.color.flat_colorPrimary),
                 ContextCompat.getColor(getApplicationContext(), android.R.color.white)));
         this.pagesDataList.add(new PageFragmentData(getResources().getString(
                 R.string.onboarding_page_2_title),
                 getResources().getString(R.string.onboarding_page_2_description),
                 R.drawable.icons8_schedule_128,
+                0,
                 ContextCompat.getColor(getApplicationContext(), R.color.flat_listAccentColor),
                 ContextCompat.getColor(getApplicationContext(), android.R.color.holo_green_light)));
         this.pagesDataList.add(new PageFragmentData(getResources().getString(
                 R.string.onboarding_page_3_title),
                 getResources().getString(R.string.onboarding_page_3_description),
                 R.drawable.icons8_piechart_128,
+                0,
                 ContextCompat.getColor(getApplicationContext(), R.color.flat_planningStateButton_statePlanned_backgroundColor),
                 ContextCompat.getColor(getApplicationContext(), android.R.color.holo_orange_light)));
     }
@@ -161,6 +166,9 @@ public class OnBoardingActivity extends AppCompatActivity {
         private static final String ARG_PAGE_TITLE = "page_title";
         private static final String ARG_PAGE_DESCRIPTION = "page_description";
         private static final String ARG_PAGE_IMAGE_RESOURCE_ID = "page_image_res_id";
+        private static final String ARG_PAGE_IMAGE_SIZE_RESOURCE_ID = "page_image_size_res_id";
+        private static final String ARG_PAGE_SECOND_IMAGE_RESOURCE_ID = "page_second_image_res_id";
+        private static final String ARG_PAGE_SECOND_IMAGE_SIZE_RESOURCE_ID = "page_second_image_size_res_id";
         private static final String ARG_PAGE_TEXT_COLOR_VALUE_ID = "page_color_value_id";
 
         public PlaceholderFragment() {
@@ -176,6 +184,9 @@ public class OnBoardingActivity extends AppCompatActivity {
             args.putString(ARG_PAGE_DESCRIPTION, data.description);
             args.putString(ARG_PAGE_TITLE, data.title);
             args.putInt(ARG_PAGE_IMAGE_RESOURCE_ID, data.imageResourceId);
+            args.putInt(ARG_PAGE_IMAGE_SIZE_RESOURCE_ID, data.imageSizeResourceId);
+            args.putInt(ARG_PAGE_SECOND_IMAGE_RESOURCE_ID, data.secondImageResourceId);
+            args.putInt(ARG_PAGE_SECOND_IMAGE_SIZE_RESOURCE_ID, data.secondImageSizeResourceId);
             args.putInt(ARG_PAGE_TEXT_COLOR_VALUE_ID, data.textColorValue);
             fragment.setArguments(args);
             return fragment;
@@ -197,6 +208,25 @@ public class OnBoardingActivity extends AppCompatActivity {
 
             ImageView imageView = (ImageView) rootView.findViewById(R.id.onboarding_fragment_image);
             imageView.setImageDrawable(ContextCompat.getDrawable(getContext(), this.getArguments().getInt(ARG_PAGE_IMAGE_RESOURCE_ID)));
+
+            if(this.getArguments().getInt(ARG_PAGE_IMAGE_SIZE_RESOURCE_ID) != 0) {
+                ViewGroup.LayoutParams params = imageView.getLayoutParams();
+                params.height = (int)getResources().getDimension(this.getArguments().getInt(ARG_PAGE_IMAGE_SIZE_RESOURCE_ID));
+                params.width = (int)getResources().getDimension(this.getArguments().getInt(ARG_PAGE_IMAGE_SIZE_RESOURCE_ID));
+                imageView.setLayoutParams(params);
+            }
+
+            if(this.getArguments().getInt(ARG_PAGE_SECOND_IMAGE_RESOURCE_ID) != 0) {
+                ImageView secondImageView = (ImageView) rootView.findViewById(R.id.onboarding_fragment_second_image);
+                secondImageView.setImageDrawable(ContextCompat.getDrawable(getContext(), this.getArguments().getInt(ARG_PAGE_SECOND_IMAGE_RESOURCE_ID)));
+
+                if(this.getArguments().getInt(ARG_PAGE_SECOND_IMAGE_SIZE_RESOURCE_ID) != 0) {
+                    ViewGroup.LayoutParams params = secondImageView.getLayoutParams();
+                    params.height = (int)getResources().getDimension(this.getArguments().getInt(ARG_PAGE_SECOND_IMAGE_SIZE_RESOURCE_ID));
+                    params.width = (int)getResources().getDimension(this.getArguments().getInt(ARG_PAGE_SECOND_IMAGE_SIZE_RESOURCE_ID));
+                    secondImageView.setLayoutParams(params);
+                }
+            }
 
             return rootView;
         }
@@ -232,6 +262,12 @@ public class OnBoardingActivity extends AppCompatActivity {
 
         private int imageResourceId;
 
+        private int imageSizeResourceId;
+
+        private int secondImageResourceId;
+
+        private int secondImageSizeResourceId;
+
         private String title;
 
         private String description;
@@ -240,10 +276,22 @@ public class OnBoardingActivity extends AppCompatActivity {
 
         private final int textColorValue;
 
-        private PageFragmentData(String title, String description, int imageResourceId, int pageColorValue, int textColorValue) {
+        private PageFragmentData(String title, String description, int imageResourceId, int imageSizeResourceId, int secondImageResourceId, int secondImageSizeResourceId, int pageColorValue, int textColorValue) {
             this.title = title;
             this.description = description;
             this.imageResourceId = imageResourceId;
+            this.imageSizeResourceId = imageSizeResourceId;
+            this.secondImageResourceId = secondImageResourceId;
+            this.secondImageSizeResourceId = secondImageSizeResourceId;
+            this.pageColorValue = pageColorValue;
+            this.textColorValue = textColorValue;
+        }
+
+        private PageFragmentData(String title, String description, int imageResourceId, int imageSizeResourceId, int pageColorValue, int textColorValue) {
+            this.title = title;
+            this.description = description;
+            this.imageResourceId = imageResourceId;
+            this.imageSizeResourceId = imageSizeResourceId;
             this.pageColorValue = pageColorValue;
             this.textColorValue = textColorValue;
         }

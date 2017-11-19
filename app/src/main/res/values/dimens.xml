@@ -74,4 +74,5 @@
     <!-- general dimens -->
     <dimen name="monthly_goals_header_textSize">20sp</dimen>
 
+    <dimen name="onboarding_first_screen_second_image_size">96dp</dimen>
 </resources>
