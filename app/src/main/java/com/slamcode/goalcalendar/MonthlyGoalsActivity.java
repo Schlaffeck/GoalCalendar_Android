@@ -137,8 +137,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity
 
         this.findAllRelatedViews();
         Log.d(LOG_TAG, "Monthly goals dependencies injected");
-        if(this.isFirstLaunch()
-                && !this.originatedFromNotification())
+        if(this.doStartOnBoarding())
             this.startOnBoardingActivity();
 
         this.startMainActivity();
@@ -285,6 +284,15 @@ public class MonthlyGoalsActivity extends AppCompatActivity
         this.bottomSheetScrollView = ViewBinder.findView(this, R.id.monthly_goals_activity_bottom_sheet);
     }
 
+    private  boolean doStartOnBoarding()
+    {
+        if(BuildConfig.DEBUG)
+            return true;
+
+        return this.isFirstLaunch()
+                && !this.originatedFromNotification();
+    }
+
     private boolean originatedFromNotification()
     {
         return this.getIntent().getBooleanExtra(NotificationScheduler.NOTIFICATION_ORIGINATED_FROM_FLAG, false);
@@ -292,9 +300,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity
 
     private boolean isFirstLaunch()
     {
-        if(BuildConfig.DEBUG)
-            return true;
-
         return this.settingsManager.getLastLaunchDateTime() == null;
     }
 
