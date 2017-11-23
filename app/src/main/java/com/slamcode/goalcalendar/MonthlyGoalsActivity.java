@@ -332,13 +332,14 @@ public class MonthlyGoalsActivity extends AppCompatActivity
         });
     }
 
-    private void showDailyProgressDialog() {
+    private boolean showDailyProgressDialog() {
         DateTime lastLaunchDateTime = this.settingsManager.getLastLaunchDateTime();
 
         if(!this.launchTimeSet
                && !this.isFirstLaunch()
                 && DateTimeHelper.isDateBefore(lastLaunchDateTime, DateTimeHelper.getTodayDateTime()))
         {
+            this.setLaunchTime();
             int year = DateTimeHelper.getCurrentYear();
             Month month = DateTimeHelper.getCurrentMonth();
             PlansSummaryDescriptionProvider.PlansSummaryDescription description
@@ -357,7 +358,11 @@ public class MonthlyGoalsActivity extends AppCompatActivity
                 dialog.setModel(description);
                 this.showDialog(dialog);
             }
+
+            return true;
         }
+
+        return false;
     }
 
     private List<CategoryModel> getUnfinishedCategories(int year, Month month)
@@ -376,8 +381,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity
         this.setupPresenter();
         this.setupBottomSheetBehavior();
         this.runStartupCommands();
-        this.showDailyProgressDialog();
-        this.setLaunchTime();
+        if(!this.showDailyProgressDialog())
+            this.setLaunchTime();
     }
 
     private void setupPresenter() {
