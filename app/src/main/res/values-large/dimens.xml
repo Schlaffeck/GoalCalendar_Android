@@ -10,7 +10,6 @@
     <dimen name="default_vertical_spacing">10dp</dimen>
     <dimen name="list_item_text_size">20sp</dimen>
     <dimen name="list_item_text_small_size">16sp</dimen>
-    <dimen name="dialog_header_text_size">24sp</dimen>
 
     <!-- monthly goals view -->
     <!--  year bar -->
@@ -35,17 +34,20 @@
     <dimen name="monthly_goals_table_category_menu_button_width">60dp</dimen>
 
     <!-- state cell -->
-    <dimen name="planning_state_button_border_width">10dp</dimen>
+    <dimen name="flat_planning_state_button_border_width">4dp</dimen>
+    <dimen name="material_planning_state_button_border_width">1dp</dimen>
     <dimen name="planning_state_button_padding">10dp</dimen>
     <dimen name="planning_state_button_margin">10dp</dimen>
     <dimen name="planning_state_button_width">60dp</dimen>
     <dimen name="planning_state_button_height">60dp</dimen>
 
     <!-- empty view -->
-    <dimen name="monthly_goals_empty_view_header_textSize">24sp</dimen>
     <dimen name="monthly_goals_empty_view_layout_width">320dp</dimen>
-
 
     <!-- summary bottom -->
     <dimen name="monthly_goals_summary_pieChart_minHeight">400dp</dimen>
+    <dimen name="monthly_goals_summary_pieChart_landWidth">350dp</dimen>
+
+    <!-- general dimens -->
+    <dimen name="monthly_goals_header_textSize">24sp</dimen>
 </resources>

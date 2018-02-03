@@ -24,12 +24,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{vm.name}"
-            android:textColor="@color/colorPrimary"/>
+            style="@style/SummarySheetText"/>
         <ProgressBar
             android:layout_height="wrap_content"
             android:indeterminate="false"
             android:progress="@{vm.progressPercentageInteger}"
-            android:minWidth="200dp"
+            android:minWidth="@dimen/monthly_goals_summary_item_progressBar_minWidth"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="wrap_content"
             android:layout_marginRight="5dp" />
@@ -38,37 +38,36 @@
         android:id="@+id/plans_category_summary_item_percentage_textView"
         android:layout_alignParentRight="true"
         android:layout_toRightOf="@id/plans_category_summary_leftSide_layout"
-        android:textSize="@dimen/list_item_text_size"
-        android:gravity="right"
+        android:gravity="end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimaryDark"
+        style="@style/SummarySheetText"
         android:text="@{String.format(@string/plans_summary_percentageFormat, vm.exceeded ? '>' : ' ', vm.progressPercentage)}"/>
 
     <LinearLayout
         android:layout_alignParentRight="true"
         android:layout_below="@id/plans_category_summary_item_percentage_textView"
         android:id="@+id/plans_category_summary_item_percentage_tasksSummary_layout"
-        android:gravity="right"
+        android:gravity="end"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
        <TextView
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:textColor="@color/planningStateButton_stateSuccess_foregroundColor"
+           android:textColor="?attr/summarySheet_successTasks_textColor"
            android:textSize="@dimen/symbol_font_size"
            android:text='@{String.format("%d/%d ● ", vm.noOfSuccessfulTasks, vm.noOfExpectedTasks)}'/>
        <TextView
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:textColor="@color/planningStateButton_stateFailed_foregroundColor"
+           android:textColor="?attr/summarySheet_failedTasks_textColor"
            android:textSize="@dimen/symbol_font_size"
            android:text='@{String.format("%d ● ", vm.noOfFailedTasks)}'/>
        <TextView
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:textColor="@color/planningStateButton_statePlanned_foregroundColor"
+           android:textColor="?attr/summarySheet_plannedTasks_textColor"
            android:textSize="@dimen/symbol_font_size"
            android:text='@{String.format("%d ● ", vm.noOfPlannedTasks)}'/>
     </LinearLayout>

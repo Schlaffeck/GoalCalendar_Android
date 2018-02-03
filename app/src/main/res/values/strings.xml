@@ -8,6 +8,14 @@
     <string name="button_less">Less</string>
     <string name="button_more">More</string>
 
+    <!-- onboarding view -->
+    <string name="onboarding_page_1_title">DECIDE WHAT IS IMPORTANT</string>
+    <string name="onboarding_page_1_description">Set priorities and goals to work on</string>
+    <string name="onboarding_page_2_title">SET UP PLANS</string>
+    <string name="onboarding_page_2_description">Plan, how often you want to fulfill your tasks</string>
+    <string name="onboarding_page_3_title">CONTROL YOUR PROGRESS</string>
+    <string name="onboarding_page_3_description">Mark and watch tasks you do</string>
+
     <!-- monthly goals view -->
     <string name="add_category_dialog_header">Add category</string>
     <string name="edit_category_dialog_header">Edit category</string>
@@ -85,15 +93,18 @@
     <!-- category summary description -->
     <string name="monthly_plans_summary_category_description_progressMonth_eq_progressCategory_neq_zero">Everything goes as planned. Well done.</string>
     <string name="monthly_plans_summary_category_description_progressMonth_eq_progressCategory_eq_zero">New month just began, start making a use of it.</string>
+    <string name="monthly_plans_summary_category_description_progressMonth_eq_progressCategory_eq_zero_planned_gt_zero">Good you have planned some activities in this category, just do not forget to fulfill them.</string>
     <string name="monthly_plans_summary_category_description_progressMonth_lt_progressCategory_eq_zero">Jump start. Great, keep up the good work.</string>
     <string name="monthly_plans_summary_category_description_progressMonth_gt_progressCategory_neq_zero">You are a little bit behind the plans. Try use some spare time on this category.</string>
     <string name="monthly_plans_summary_category_description_progressMonth_gt_progressCategory_eq_zero">Month started some time ago, but you have not done anything yet. Be sure to plan some tasks in this category for next few days.</string>
+    <string name="monthly_plans_summary_category_description_progressMonth_gt_progressCategory_eq_zero_planned_gt_zero">Month started some time ago, you will soon need to start executing your plans in this category.</string>
     <string name="monthly_plans_summary_category_description_progressMonth_lt_progressCategory_neq_zero">You are ahead with your plans. Great, keep up the good work, but do not forget about other categories.</string>
     <string name="monthly_plans_summary_category_description_progressCategory_doneBeforeEndOfMonth">You have already finished, what you planned in this category. It might be good time to focus on other ones.</string>
     <string name="monthly_plans_summary_category_description_progressCategory_done">Great, everything was done as planned.</string>
     <string name="monthly_plans_summary_category_description_progressCategory_overDone">You have finished more that planned. Maybe for next month you could increase the frequency in this category.</string>
     <string name="monthly_plans_summary_category_description_progressCategory_overDoneBeforeEndOfMonth">You are doing more than planned, great. Just be sure not to neglect other categories.</string>
     <string name="monthly_plans_summary_category_description_progressCategory_notDone">Not everything planned was done. Check if you have not spent more time on other categories, or if and why your plans failed in this one.</string>
+    <string name="monthly_plans_summary_category_description_progressCategory_notDone_planned_gt_zero">You have last chance to fulfill your plans in this category before end of month.</string>
     <string name="monthly_plans_summary_category_description_progressCategory_notDoneBeforeEndOfMonth">Still some work to do here. There are couple of days left, so maybe focus on this category to keep up with plans.</string>
     <string name="monthly_plans_summary_category_description_monthNotStartedYet">Month not started yet</string>
     <string name="monthly_plans_summary_category_description_monthNotStartedYet_somethingDone">Month did not start yet. Have you maybe checked some fields by mistake?</string>
@@ -107,6 +118,9 @@
     <string name="monthly_plans_summary_progressMonth_nothingDone_description">Start realising your plans</string>
     <string name="monthly_plans_summary_progressMonth_oneCategoryNotStarted_description" formatted="false">Try to do something in category %s today</string>
     <string name="monthly_plans_summary_progressMonth_oneCategoryNotStarted_title">Category not started yet</string>
+    <string name="monthly_plans_summary_progressMonth_someCategoriesNotStarted_notPlanned_title">Categories not planned yet</string>
+    <string name="monthly_plans_summary_progressMonth_2To4CategoriesNotStarted_notPlanned_description">You still have %d categories without any progress nor plans to handle</string>
+    <string name="monthly_plans_summary_progressMonth_5AndMoreCategoriesNotStarted_notPlanned_description">You still have %d categories without any progress nor plans to handle</string>
     <string name="monthly_plans_summary_progressMonth_someCategoriesNotStarted_title">Do not forget those categories</string>
     <string name="monthly_plans_summary_progressMonth_2To4CategoriesNotStarted_description">You still have %d categories to progress in this month</string>
     <string name="monthly_plans_summary_progressMonth_5AndMoreCategoriesNotStarted_description">You still have %d categories to progress in this month</string>
@@ -137,6 +151,19 @@
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
+    <string name="pref_themeList_title">Style</string>
+    <string name="pref_themeList_description">Select application style, which will get applied after few seconds on previous screen</string>
+    <string-array name="pref_themeList_entries">
+        <item>Material design</item>
+        <item>Flat pastel theme</item>
+    </string-array>
+    <string-array name="pref_themeList_entryValues">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    <string name="pref_themeList_defaultValue">0</string>
+    <string name="pref_themeList_applyTheme_dialog_message">Applying new style</string>
+
     <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Notifications</string>
 
@@ -160,4 +187,8 @@
 
     <!-- dev -->
     <string name="category_list_scroll_group_name">category_list_scroll_group</string>
+    <string name="title_activity_onboarding">OnBoardingActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="skip">Skip</string>
+    <string name="finish">Finish</string>
 </resources>

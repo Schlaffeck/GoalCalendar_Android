@@ -1,20 +1,24 @@
 package com.slamcode.goalcalendar.settings;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.planning.DateTime;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.HourMinuteTime;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by moriasla on 23.01.2017.
  */
 
-public class SharedPreferencesSettingsManager implements AppSettingsManager {
+public class SharedPreferencesSettingsManager implements AppSettingsManager, SharedPreferences.OnSharedPreferenceChangeListener {
 
     // keep below values compatible with the preferences activity resources
     private final static int EOD_NOTIFICATION_HOUR_TIME_DEFAULT_VALUE = 20;
@@ -38,14 +42,21 @@ public class SharedPreferencesSettingsManager implements AppSettingsManager {
     private final static String LAST_LAUNCH_DATETIME_MILLIS_NAME = "LAST_LAUNCH_DATETIME_MILLIS";
     private final static long LAST_LAUNCH_DATETIME_MILLIS_VALUE = 0;
 
-    private final Context context;
+    private final static String THEME_ID_INDEX_VALUE = "0";
+    private final static int[] THEME_ID_ARRAY = new int[]
+            {
+                    R.style.MaterialTheme,
+                    R.style.FlatBrandTheme
+            };
 
     private SharedPreferences sharedPreferences;
 
+    private List<SettingsChangedListener> settingsChangedListeners = new ArrayList<>();
+
     public SharedPreferencesSettingsManager(Context context)
     {
-        this.context = context;
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        this.sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -57,7 +68,7 @@ public class SharedPreferencesSettingsManager implements AppSettingsManager {
     public void setShowEndOfDayNotification(boolean showEndOfDayNotification) {
         SharedPreferences.Editor editor = this.sharedPreferences.edit();
         editor.putBoolean(SHOW_EOD_NOTIFICATIONS_SETTING_NAME, showEndOfDayNotification);
-        editor.commit();
+        editor.apply();
     }
 
     @Override
@@ -72,7 +83,7 @@ public class SharedPreferencesSettingsManager implements AppSettingsManager {
         SharedPreferences.Editor editor = this.sharedPreferences.edit();
         editor.putInt(EOD_NOTIFICATION_TIME_HOUR_SETTING_NAME, newTime.getHour());
         editor.putInt(EOD_NOTIFICATION_TIME_MINUTE_SETTING_NAME, newTime.getMinute());
-        editor.commit();
+        editor.apply();
     }
 
     @Override
@@ -84,7 +95,7 @@ public class SharedPreferencesSettingsManager implements AppSettingsManager {
     public void setShowStartupNotification(boolean showStartupNotification) {
         SharedPreferences.Editor editor = this.sharedPreferences.edit();
         editor.putBoolean(SHOW_STARTUP_NOTIFICATIONS_SETTING_NAME, showStartupNotification);
-        editor.commit();
+        editor.apply();
     }
 
     @Override
@@ -101,7 +112,7 @@ public class SharedPreferencesSettingsManager implements AppSettingsManager {
     public void setShowPlansProgressNotification(boolean showPlansProgressNotification) {
         SharedPreferences.Editor editor = this.sharedPreferences.edit();
         editor.putBoolean(SHOW_PLANS_PROGRESS_NOTIFICATIONS_SETTING_NAME, showPlansProgressNotification);
-        editor.commit();
+        editor.apply();
     }
 
     @Override
@@ -119,6 +130,55 @@ public class SharedPreferencesSettingsManager implements AppSettingsManager {
     public void setLastLaunchDateTimeMillis(DateTime lastLaunchTime) {
         SharedPreferences.Editor editor = this.sharedPreferences.edit();
         editor.putLong(LAST_LAUNCH_DATETIME_MILLIS_NAME, lastLaunchTime.getTimeMillis());
-        editor.commit();
+        editor.apply();
+    }
+
+    @Override
+    public int getThemeId() {
+        int index = Integer.parseInt(this.sharedPreferences.getString(SettingsKeys.THEME_ID_NAME, THEME_ID_INDEX_VALUE));
+        if(THEME_ID_ARRAY.length <= index)
+            index = 0;
+
+        return THEME_ID_ARRAY[index];
+    }
+
+    @Override
+    public void setThemeId(int themeId) {
+        int foundIndex = -1;
+        for(int i =0 ; i < THEME_ID_ARRAY.length && foundIndex < 0; i++) {
+            if(THEME_ID_ARRAY[i] == themeId)
+                foundIndex = i;
+        }
+
+        if(foundIndex >= 0) {
+            SharedPreferences.Editor editor = this.sharedPreferences.edit();
+            editor.putString(SettingsKeys.THEME_ID_NAME, Integer.toString(foundIndex));
+        }
+    }
+
+    public void addSettingsChangedListener(SettingsChangedListener listener)
+    {
+        this.settingsChangedListeners.add(listener);
+    }
+
+    public void removeSettingsChangedListener(SettingsChangedListener listener)
+    {
+        this.settingsChangedListeners.remove(listener);
+    }
+
+    public void clearSettingsChangedListeners()
+    {
+        this.settingsChangedListeners.clear();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        notifyPreferenceChanged(key);
+    }
+
+    private void notifyPreferenceChanged(String preferenceKey)
+    {
+        for (SettingsChangedListener listener : this.settingsChangedListeners)
+            listener.settingChanged(preferenceKey);
     }
 }

@@ -18,11 +18,13 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.slamcode.goalcalendar.onboarding.OnBoardingActivity;
 import com.slamcode.goalcalendar.data.UnitOfWork;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.data.query.NumericalComparisonOperator;
@@ -33,6 +35,7 @@ import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryDescriptionProvider;
 import com.slamcode.goalcalendar.service.notification.NotificationScheduler;
 import com.slamcode.goalcalendar.settings.AppSettingsManager;
+import com.slamcode.goalcalendar.settings.SettingsKeys;
 import com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract;
 import com.slamcode.goalcalendar.dagger2.ComposableApplication;
 import com.slamcode.goalcalendar.data.PersistenceContext;
@@ -50,7 +53,10 @@ import java.util.Random;
 
 import javax.inject.Inject;
 
-public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGoalsActivityContract.ActivityView{
+public class MonthlyGoalsActivity extends AppCompatActivity
+        implements MonthlyGoalsActivityContract.ActivityView, AppSettingsManager.SettingsChangedListener{
+
+    public final static String STARTED_FROM_PARENT_INTENT_PARAM = "STARTED_FROM_PARENT";
 
     final String ACTIVITY_ID = MonthlyGoalsActivity.class.getName();
 
@@ -73,6 +79,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
     @ViewReference(R.id.monthly_goals_summary_content_layout)
     LinearLayout summaryContentLayout;
 
+    private LinearLayout emptyContentLayout;
+
     private NestedScrollView bottomSheetScrollView;
 
     // dependencies
@@ -84,7 +92,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
     @Inject
     ItemsCollectionAdapterProvider adapterProvider;
-    
+
     @Inject
     AutoMarkTasksCommand autoMarkTasksCommand;
 
@@ -108,32 +116,31 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
     private MonthlyGoalsViewModel activityViewModel;
 
+    private boolean launchTimeSet;
+
     private boolean exitApplication;
 
     private boolean dataBindingsSetUp;
+    private boolean needToRecreate;
+    private int currentThemeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(LOG_TAG, "Monthly goals activity creating - START");
         super.onCreate(savedInstanceState);
+        this.injectDependencies();
+        this.setTheme(this.settingsManager.getThemeId());
+        this.currentThemeId = this.settingsManager.getThemeId();
+        this.settingsManager.addSettingsChangedListener(this);
         setContentView(com.slamcode.goalcalendar.R.layout.monthly_goals_activity);
         Log.d(LOG_TAG, "Monthly goals activity view set");
 
-        this.mainLayout = this.findViewById(android.R.id.content);
         this.findAllRelatedViews();
-        this.injectDependencies();
         Log.d(LOG_TAG, "Monthly goals dependencies injected");
+        if(this.doStartOnBoarding())
+            this.startOnBoardingActivity();
 
-        this.mainLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-            @Override
-            public void onGlobalLayout() {
-                View v = mainLayout;
-                v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                onCreateGlobalLayoutAvailable();
-                Log.d(LOG_TAG, "Monthly goals activity view rendered");
-            }
-        });
+        this.startMainActivity();
         Log.d(LOG_TAG, "Monthly goals activity creating - END");
     }
 
@@ -165,7 +172,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_DATE_CHANGED);
         this.registerReceiver(this.dateTimeChangedService, intentFilter);
-
     }
 
     @Override
@@ -175,6 +181,13 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         this.unregisterReceiver(this.dateTimeChangedService);
         //this.unregisterReceiver(this.notificationServiceStarterReceiver);
         super.onStop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(this.needToRecreate)
+            this.recreate();
     }
 
     @Override
@@ -217,7 +230,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         monthlyPlansSummaryContentBinding.setVariable(BR.presenter, this.presenter);
         monthlyPlansSummaryContentBinding.setVariable(BR.vm, data);
 
-        ViewDataBinding emptyContentBinding = DataBindingUtil.findBinding(this.emptyContentHorizontalScrollView);
+        ViewDataBinding emptyContentBinding = DataBindingUtil.bind(this.emptyContentHorizontalScrollView);
 
         emptyContentBinding.setVariable(BR.presenter, this.presenter);
         emptyContentBinding.setVariable(BR.vm, data);
@@ -261,20 +274,72 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
 
     private void findAllRelatedViews()
     {
+        this.mainLayout = this.findViewById(android.R.id.content);
         this.monthlyGoalsActivityLayout = ViewBinder.findView(this, R.id.monthly_goals_activity_main_coordinator_layout);
         this.categoryNamesRecyclerView = ViewBinder.findView(this, R.id.monthly_goals_listview);
         this.monthlyPlansGridContentLayout = ViewBinder.findView(this, R.id.content_monthly_goals);
+        this.emptyContentLayout = ViewBinder.findView(this, R.id.monthly_goals_emptyContent_layout);
         this.emptyContentHorizontalScrollView = ViewBinder.findView(this, R.id.monthly_goals_emptyContent_horizontallScrollView);
         this.summaryContentLayout = ViewBinder.findView(this, R.id.monthly_goals_summary_content_layout);
         this.bottomSheetScrollView = ViewBinder.findView(this, R.id.monthly_goals_activity_bottom_sheet);
     }
 
-    private void showDailyProgressDialog() {
-        DateTime lastlaunchDateTime = this.settingsManager.getLastLaunchDateTime();
+    private  boolean doStartOnBoarding()
+    {
+        if(BuildConfig.DEBUG)
+            return true;
 
-        if(lastlaunchDateTime == null
-                || DateTimeHelper.isDateBefore(lastlaunchDateTime, DateTimeHelper.getTodayDateTime()))
+        return this.isFirstLaunch()
+                && !this.originatedFromNotification();
+    }
+
+    private boolean originatedFromNotification()
+    {
+        return this.getIntent().getBooleanExtra(NotificationScheduler.NOTIFICATION_ORIGINATED_FROM_FLAG, false);
+    }
+
+    private boolean isFirstLaunch()
+    {
+        return this.settingsManager.getLastLaunchDateTime() == null;
+    }
+
+    private void setLaunchTime()
+    {
+        if(!this.launchTimeSet) {
+            this.settingsManager.setLastLaunchDateTimeMillis(DateTimeHelper.getNowDateTime());
+            this.launchTimeSet = true;
+        }
+    }
+
+    private void startOnBoardingActivity()
+    {
+        Intent intent = new Intent(this, OnBoardingActivity.class);
+        intent.putExtra(STARTED_FROM_PARENT_INTENT_PARAM, true);
+        this.startActivity(intent);
+    }
+
+    private void startMainActivity()
+    {
+        this.mainLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                View v = mainLayout;
+                v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                onCreateGlobalLayoutAvailable();
+                Log.d(LOG_TAG, "Monthly goals activity view rendered");
+            }
+        });
+    }
+
+    private boolean showDailyProgressDialog() {
+        DateTime lastLaunchDateTime = this.settingsManager.getLastLaunchDateTime();
+
+        if(!this.launchTimeSet
+               && !this.isFirstLaunch()
+                && DateTimeHelper.isDateBefore(lastLaunchDateTime, DateTimeHelper.getTodayDateTime()))
         {
+            this.setLaunchTime();
             int year = DateTimeHelper.getCurrentYear();
             Month month = DateTimeHelper.getCurrentMonth();
             PlansSummaryDescriptionProvider.PlansSummaryDescription description
@@ -293,9 +358,11 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
                 dialog.setModel(description);
                 this.showDialog(dialog);
             }
+
+            return true;
         }
 
-        this.settingsManager.setLastLaunchDateTimeMillis(DateTimeHelper.getNowDateTime());
+        return false;
     }
 
     private List<CategoryModel> getUnfinishedCategories(int year, Month month)
@@ -314,7 +381,8 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         this.setupPresenter();
         this.setupBottomSheetBehavior();
         this.runStartupCommands();
-        this.showDailyProgressDialog();
+        if(!this.showDailyProgressDialog())
+            this.setLaunchTime();
     }
 
     private void setupPresenter() {
@@ -354,5 +422,13 @@ public class MonthlyGoalsActivity extends AppCompatActivity implements MonthlyGo
         dayToScrollTo = (dayToScrollTo > 0 ? dayToScrollTo : 0);
         int width = (int) this.getResources().getDimension(R.dimen.monthly_goals_table_day_plan_column_width);
         daysPlanScrollView.smoothScrollTo(dayToScrollTo * width, 0);
+    }
+
+    @Override
+    public void settingChanged(String settingId) {
+        if(settingId.equals(SettingsKeys.THEME_ID_NAME))
+        {
+            this.needToRecreate = this.currentThemeId != this.settingsManager.getThemeId();
+        }
     }
 }

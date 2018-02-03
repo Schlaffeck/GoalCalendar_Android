@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.slamcode.goalcalendar"
         minSdkVersion 15
@@ -44,6 +44,7 @@ dependencies {
     compile "com.android.support:design:$ANDROID_SUPPORT_VERSION"
     compile "com.android.support:support-v4:$ANDROID_SUPPORT_VERSION"
     compile "com.android.support:support-vector-drawable:$ANDROID_SUPPORT_VERSION"
+    compile "com.android.support:design:$ANDROID_SUPPORT_VERSION"
     compile 'com.android.support:multidex:1.0.1'
     compile 'org.apache.commons:commons-collections4:4.1'
     compile 'com.google.code.gson:gson:2.8.0'
@@ -51,7 +52,7 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.5'
     compile 'javax.inject:javax.inject:1'
     compile 'com.github.lecho:hellocharts-library:1.5.8@aar'
-    compile 'com.google.dagger:dagger-compiler:2.4'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.4'
     compile 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.0'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -60,6 +61,6 @@ dependencies {
     testCompile "org.mockito:mockito-core:2.0.57-beta"
     testCompile "junit:junit:$JUNIT_VERSION"
     testCompile 'com.google.dagger:dagger-compiler:2.4'
-    provided 'com.android.databinding:compiler:1.0-rc1'
+    annotationProcessor 'com.android.databinding:compiler:1.0-rc1'
     provided 'javax.annotation:jsr250-api:1.0'
 }

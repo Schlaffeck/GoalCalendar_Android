@@ -4,6 +4,7 @@
     <data>
         <variable android:id="@+id/binding_view_model_variable_id" name="vm"
             type="com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel"/>
+        <import type="android.view.View"/>
     </data>
 <LinearLayout android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -11,23 +12,23 @@
 
         <TextView
             android:id="@+id/plans_category_summary_item_name_textView"
-            android:textSize="@dimen/list_item_text_size"
+            style="@style/SummarySheetText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{vm.name}"
             android:layout_margin="@dimen/default_margin"
-            android:textColor="@color/colorPrimary"
             tools:text="Category name"/>
 
     <LinearLayout
         android:id="@+id/plans_category_summary_item_percentage_tasksSummary_layout"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="@{vm != null ? View.VISIBLE : View.GONE}">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/planningStateButton_stateSuccess_foregroundColor"
+            android:textColor="?attr/summarySheet_successTasks_textColor"
             android:textSize="@dimen/symbol_font_size"
             android:layout_margin="@dimen/default_margin"
             android:text='@{String.format(@string/monthly_plans_summary_selectedCategory_done_tasks, vm.noOfSuccessfulTasks, vm.noOfExpectedTasks)}'
@@ -35,7 +36,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/planningStateButton_stateFailed_foregroundColor"
+            android:textColor="?attr/summarySheet_failedTasks_textColor"
             android:textSize="@dimen/symbol_font_size"
             android:layout_margin="@dimen/default_margin"
             android:text='@{String.format(@string/monthly_plans_summary_selectedCategory_failed_tasks, vm.noOfFailedTasks)}'
@@ -43,7 +44,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/planningStateButton_statePlanned_foregroundColor"
+            android:textColor="?attr/summarySheet_plannedTasks_textColor"
             android:textSize="@dimen/symbol_font_size"
             android:layout_margin="@dimen/default_margin"
             android:text='@{String.format(@string/monthly_plans_summary_selectedCategory_planned_tasks, vm.noOfPlannedTasks)}'
@@ -53,6 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_margin"
+        android:textColor="?attr/summarySheet_selectedItem_description_textColor"
         android:text="@{vm.summaryDescription}"
         tools:text="This can be some very long description of progress in given category. It should wrap to new lines."/>
 </LinearLayout>

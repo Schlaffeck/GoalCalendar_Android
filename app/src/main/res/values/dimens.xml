@@ -15,12 +15,11 @@
     <dimen name="default_vertical_spacing">5dp</dimen>
     <dimen name="list_item_text_size">16sp</dimen>
     <dimen name="list_item_text_small_size">12sp</dimen>
-    <dimen name="dialog_header_text_size">20sp</dimen>
 
     <!-- monthly goals view -->
     <!--  year bar -->
-    <dimen name="monthly_goals_yearTextView_textSize" >16sp</dimen>
-    <dimen name="monthly_goals_yearTextView_buttonSize" >24dp</dimen>
+    <dimen name="monthly_goals_yearTextView_textSize">16sp</dimen>
+    <dimen name="monthly_goals_yearTextView_buttonSize">24dp</dimen>
 
     <!--  list view -->
     <dimen name="monthly_goals_table_day_plan_column_width">55dp</dimen>
@@ -48,14 +47,14 @@
     <dimen name="monthly_goals_category_listView_lastItem_paddingBottom">57dp</dimen>
 
     <!-- state cell -->
-    <dimen name="planning_state_button_border_width">5dp</dimen>
+    <dimen name="flat_planning_state_button_border_width">2dp</dimen>
+    <dimen name="material_planning_state_button_border_width">0dp</dimen>
     <dimen name="planning_state_button_padding">5dp</dimen>
     <dimen name="planning_state_button_margin">5dp</dimen>
     <dimen name="planning_state_button_width">45dp</dimen>
     <dimen name="planning_state_button_height">45dp</dimen>
 
     <!-- empty view -->
-    <dimen name="monthly_goals_empty_view_header_textSize">20sp</dimen>
     <dimen name="monthly_goals_empty_view_layout_width">300dp</dimen>
 
     <!-- symbol font -->
@@ -66,6 +65,14 @@
 
     <!-- summary bottom -->
     <dimen name="monthly_goals_summary_pieChart_minHeight">300dp</dimen>
-    <dimen name="monthly_goals_summary_bottomSheet_peekHeight">50dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
+    <dimen name="monthly_goals_summary_bottomSheet_minHeight">150dp</dimen>
+    <dimen name="monthly_goals_summary_bottomSheet_peekHeight">55dp</dimen>
+    <dimen name="monthly_goals_summary_pieChart_landWidth">250dp</dimen>
+    <dimen name="monthly_goals_summary_item_progressBar_minWidth">200dp</dimen>
 
+    <!-- general dimens -->
+    <dimen name="monthly_goals_header_textSize">20sp</dimen>
+
+    <dimen name="onboarding_first_screen_second_image_size">96dp</dimen>
 </resources>

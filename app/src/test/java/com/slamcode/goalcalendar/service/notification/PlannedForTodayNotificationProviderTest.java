@@ -97,7 +97,7 @@ public class PlannedForTodayNotificationProviderTest {
 
         Intent intentMock = mock(Intent.class);
         when(contextMock.createIntent(MonthlyGoalsActivity.class)).thenReturn(intentMock);
-        when(contextMock.getColorArgbFromResources(R.color.planningStateButton_statePlanned_foregroundColor)).thenReturn(44);
+        when(contextMock.getColorArgbFromResources(R.color.flat_planningStateButton_statePlanned_foregroundColor)).thenReturn(44);
         when(contextMock.getStringFromResources(R.string.notification_plannedForToday_noPlans_title)).thenReturn("Title 1");
         when(contextMock.getStringFromResources(R.string.notification_plannedForToday_noPlans_content)).thenReturn("Content 1");
 
@@ -138,7 +138,7 @@ public class PlannedForTodayNotificationProviderTest {
 
         verify(contextMock, times(1)).getStringFromResources(R.string.notification_plannedForToday_noPlans_title);
         verify(contextMock, times(1)).getStringFromResources(R.string.notification_plannedForToday_noPlans_content);
-        verify(contextMock, times(1)).getColorArgbFromResources(R.color.planningStateButton_statePlanned_foregroundColor);
+        verify(contextMock, times(1)).getColorArgbFromResources(R.color.flat_planningStateButton_statePlanned_foregroundColor);
         verify(contextMock, times(1)).createPendingIntent(0, intentMock, PendingIntent.FLAG_UPDATE_CURRENT);
         verify(contextMock, times(1)).buildNotification(R.drawable.ic_date_range_white_24dp, "Title 1", "Content 1", 44, pendingIntentMock);
     }
@@ -161,7 +161,7 @@ public class PlannedForTodayNotificationProviderTest {
 
         Intent intentMock = mock(Intent.class);
         when(contextMock.createIntent(MonthlyGoalsActivity.class)).thenReturn(intentMock);
-        when(contextMock.getColorArgbFromResources(R.color.planningStateButton_statePlanned_foregroundColor)).thenReturn(55);
+        when(contextMock.getColorArgbFromResources(R.color.flat_planningStateButton_statePlanned_foregroundColor)).thenReturn(55);
         when(contextMock.getStringFromResources(R.string.notification_plannedForToday_title)).thenReturn("Title");
         when(contextMock.getStringFromResources(R.string.notification_plannedForToday_single_content)).thenReturn("Content");
 
@@ -202,7 +202,7 @@ public class PlannedForTodayNotificationProviderTest {
 
         verify(contextMock, times(1)).getStringFromResources(R.string.notification_plannedForToday_title);
         verify(contextMock, times(1)).getStringFromResources(R.string.notification_plannedForToday_single_content);
-        verify(contextMock, times(1)).getColorArgbFromResources(R.color.planningStateButton_statePlanned_foregroundColor);
+        verify(contextMock, times(1)).getColorArgbFromResources(R.color.flat_planningStateButton_statePlanned_foregroundColor);
         verify(contextMock, times(1)).createPendingIntent(0, intentMock, PendingIntent.FLAG_UPDATE_CURRENT);
         verify(contextMock, times(1)).buildNotification(R.drawable.ic_date_range_white_24dp, "Title", "Content", 55, pendingIntentMock);
     }
@@ -225,7 +225,7 @@ public class PlannedForTodayNotificationProviderTest {
 
         Intent intentMock = mock(Intent.class);
         when(contextMock.createIntent(MonthlyGoalsActivity.class)).thenReturn(intentMock);
-        when(contextMock.getColorArgbFromResources(R.color.planningStateButton_statePlanned_foregroundColor)).thenReturn(66);
+        when(contextMock.getColorArgbFromResources(R.color.flat_planningStateButton_statePlanned_foregroundColor)).thenReturn(66);
         when(contextMock.getStringFromResources(R.string.notification_plannedForToday_title)).thenReturn("Title 2");
         when(contextMock.getStringFromResources(R.string.notification_plannedForToday_content)).thenReturn("Content 2");
 
@@ -269,7 +269,7 @@ public class PlannedForTodayNotificationProviderTest {
 
         verify(contextMock, times(1)).getStringFromResources(R.string.notification_plannedForToday_title);
         verify(contextMock, times(1)).getStringFromResources(R.string.notification_plannedForToday_content);
-        verify(contextMock, times(1)).getColorArgbFromResources(R.color.planningStateButton_statePlanned_foregroundColor);
+        verify(contextMock, times(1)).getColorArgbFromResources(R.color.flat_planningStateButton_statePlanned_foregroundColor);
         verify(contextMock, times(1)).createPendingIntent(0, intentMock, PendingIntent.FLAG_UPDATE_CURRENT);
         verify(contextMock, times(1)).buildNotification(R.drawable.ic_date_range_white_24dp, "Title 2", "Content 2", 66, pendingIntentMock);
     }

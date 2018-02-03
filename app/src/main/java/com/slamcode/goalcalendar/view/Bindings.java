@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.android.databinding.library.baseAdapters.BR;
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.dagger2.Dagger2ComponentContainer;
@@ -61,9 +62,7 @@ public class Bindings {
 
             Log.d(LOG_TAG, "Binding category summary source - creating new adapter");
             adapter = injectData.itemsCollectionAdapterProvider
-                    .providePlansSummaryForCategoriesRecyclerViewAdapter(
-                            injectData.applicationContext.getDefaultContext(),
-                            (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE));
+                    .providePlansSummaryForCategoriesRecyclerViewAdapter();
             recyclerView.setAdapter(adapter);
         }
 
@@ -99,36 +98,22 @@ public class Bindings {
             Log.d(LOG_TAG, "Binding category plans source - creating new adapter");
             adapter = injectData.itemsCollectionAdapterProvider
                     .provideCategoryPlansRecyclerViewAdapter(
-                            injectData.applicationContext.getDefaultContext(),
-                            (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE),
                             injectData.dateTimeChangeListenersRegistry,
                             new YearMonthPair(monthlyPlanningCategoryListViewModel.getMonthData().getYear(), monthlyPlanningCategoryListViewModel.getMonthData().getMonth()),
                             new ObservableArrayList<CategoryPlansViewModel>());
+
+            ((CategoryPlansRecyclerViewAdapter)adapter).setUpItemDragging(injectData.categoryListItemDragCallback);
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
-
-            ItemDragCallback callback = injectData.categoryListItemDragCallback;
-            callback.addOnItemGestureListener((CategoryPlansRecyclerViewAdapter)adapter);
-            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
-            itemTouchHelper.attachToRecyclerView(recyclerView);
         }
 
         if(adapter instanceof CategoryPlansRecyclerViewAdapter)
         {
-            final RecyclerView.Adapter finalAdapter = adapter;
+            Log.d(LOG_TAG, "Binding category plans source - updating adapter source");
+            CategoryPlansRecyclerViewAdapter dataAdapter = (CategoryPlansRecyclerViewAdapter) adapter;
+            dataAdapter.setYearMonthPair(new YearMonthPair(year, month));
+            dataAdapter.updateSourceCollection(itemsSource);
 
-            recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-                @Override
-                public void onGlobalLayout()
-                {
-                    recyclerView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                    Log.d(LOG_TAG, "Binding category plans source - updating adapter source");
-                    CategoryPlansRecyclerViewAdapter dataAdapter = (CategoryPlansRecyclerViewAdapter) finalAdapter;
-                    dataAdapter.setYearMonthPair(new YearMonthPair(year, month));
-                    dataAdapter.updateSourceCollection(itemsSource);
-                }
-            });
         }
         Log.d(LOG_TAG, "Binding category plans source - END");
     }
@@ -150,9 +135,7 @@ public class Bindings {
             injectData.recyclerViewSimultaneousScrollingController.addForSimultaneousScrolling(recyclerView);
             adapter = injectData.itemsCollectionAdapterProvider
                     .provideDailyPlanHeaderRecyclerViewAdapter(
-                            injectData.applicationContext.getDefaultContext(),
                             new YearMonthPair(monthViewModel.getYear(), monthViewModel.getMonth()),
-                            (LayoutInflater)injectData.applicationContext.getDefaultContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE),
                             injectData.dateTimeChangeListenersRegistry);
             recyclerView.setAdapter(adapter);
         }

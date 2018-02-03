@@ -11,28 +11,35 @@
     </data>
 <LinearLayout android:layout_width="match_parent"
     android:id="@+id/monthly_goals_summary_content_layout"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="@dimen/activity_horizontal_margin">
+    android:layout_margin="@dimen/activity_horizontal_margin"
+    android:gravity="top">
 
     <TextView
         android:id="@+id/monthly_goals_summary_generalProgress_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@{String.format(@string/monthly_plans_summary_generalPercentage, vm.monthlyPlans.plansSummaryPercentage)}"
-        android:textSize="16sp"
         android:textAllCaps="false"
-        android:padding="@dimen/default_padding"/>
+        android:padding="@dimen/default_padding"
+        android:layout_gravity="start"
+        android:gravity="top"
+        style="@style/SummarySheetText"/>
     <TextView
         android:id="@+id/monthly_goals_summary_daysLeft_textView"
-        android:layout_below="@id/monthly_goals_summary_generalProgress_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@{String.format(@string/monthly_plans_summary_noOfDaysLeft, vm.monthlyPlans.noOfDaysLeft)}"
-        android:textSize="16sp"
         android:textAllCaps="false"
-        android:padding="@dimen/default_padding"/>
+        android:padding="@dimen/default_padding"
+        style="@style/SummarySheetText"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical">
     <com.slamcode.goalcalendar.view.charts.data.hellocharts.PieChartViewWithProgress
         android:id="@+id/monthly_goals_summary_general_pieChart"
         android:minHeight="@dimen/monthly_goals_summary_pieChart_minHeight"
@@ -47,19 +54,21 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            bind:animatedVisibility="@{vm.monthlyPlans.hasSelectedCategory?View.VISIBLE:View.GONE}">
+            android:visibility="@{vm.monthlyPlans.hasSelectedCategory?View.VISIBLE:View.GONE}">
                 <include layout="@layout/monthly_goals_summary_selected_item_details_layout"
                     app:vm="@{vm.monthlyPlans.selectedCategory}"/>
         </LinearLayout>
+    </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/monthly_goals_summary_categories_recyclerView"
-            android:layout_below="@id/monthly_goals_summary_daysLeft_textView"
             android:orientation="vertical"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/monthly_goals_table_category_name_height"
+            android:minHeight="350dp"
+            android:visibility="@{vm.monthlyPlans.categoryPlansList.empty ? View.GONE : View.VISIBLE}"
             bind:categorySummarySource="@{vm.monthlyPlans.categoryPlansList}">
 
         </android.support.v7.widget.RecyclerView>

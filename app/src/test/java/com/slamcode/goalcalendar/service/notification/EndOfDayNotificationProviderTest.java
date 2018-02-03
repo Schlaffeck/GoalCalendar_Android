@@ -15,7 +15,6 @@ import com.slamcode.goalcalendar.planning.HourMinuteTime;
 import com.slamcode.goalcalendar.settings.AppSettingsManager;
 
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.Calendar;
@@ -108,9 +107,10 @@ public class EndOfDayNotificationProviderTest {
 
         Intent intentMock = mock(Intent.class);
         when(contextMock.createIntent(MonthlyGoalsActivity.class)).thenReturn(intentMock);
-        when(contextMock.getColorArgbFromResources(R.color.planningStateButton_stateSuccess_backgroundColor)).thenReturn(55);
+        when(contextMock.getColorArgbFromResources(R.color.flat_planningStateButton_stateSuccess_backgroundColor)).thenReturn(55);
         when(contextMock.getStringFromResources(R.string.notification_endOfDay_title)).thenReturn("Title");
         when(contextMock.getStringFromResources(R.string.notification_endOfDay_content)).thenReturn("Content");
+        when(appSettingsManagerMock.getEndOfDayNotificationTime()).thenReturn(new HourMinuteTime(DateTimeHelper.getNowDateTime().getHour(), 0));
 
         PendingIntent pendingIntentMock = mock(PendingIntent.class);
         when(contextMock.createPendingIntent(0, intentMock, PendingIntent.FLAG_UPDATE_CURRENT)).thenReturn(pendingIntentMock);
@@ -133,7 +133,7 @@ public class EndOfDayNotificationProviderTest {
 
         verify(contextMock, times(1)).getStringFromResources(R.string.notification_endOfDay_title);
         verify(contextMock, times(1)).getStringFromResources(R.string.notification_endOfDay_content);
-        verify(contextMock, times(1)).getColorArgbFromResources(R.color.planningStateButton_stateSuccess_backgroundColor);
+        verify(contextMock, times(1)).getColorArgbFromResources(R.color.flat_planningStateButton_stateSuccess_backgroundColor);
         verify(contextMock, times(1)).createPendingIntent(0, intentMock, PendingIntent.FLAG_UPDATE_CURRENT);
         verify(contextMock, times(1)).buildNotification(R.drawable.ic_calendar_check_white_24dp, "Title", "Content", 55, pendingIntentMock);
     }

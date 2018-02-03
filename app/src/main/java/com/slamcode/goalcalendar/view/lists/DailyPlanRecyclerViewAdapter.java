@@ -39,12 +39,10 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
     private final YearMonthPair yearMonthPair;
     private final DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry;
 
-    protected DailyPlanRecyclerViewAdapter(Context context,
-                                           LayoutInflater layoutInflater,
-                                           DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry,
+    protected DailyPlanRecyclerViewAdapter(DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry,
                                            YearMonthPair yearMonthPair,
                                            Collection<DailyPlansViewModel> sourceCollection) {
-        super(context, layoutInflater, ObservableListUtils.createObservableList(sourceCollection));
+        super(ObservableListUtils.createObservableList(sourceCollection));
         this.yearMonthPair = yearMonthPair;
         this.dateTimeChangeListenersRegistry = dateTimeChangeListenersRegistry;
         this.updateSourceCollection(sourceCollection);
@@ -52,7 +50,7 @@ public class DailyPlanRecyclerViewAdapter extends RecyclerViewDataAdapter<DailyP
 
     @Override
     public DailyPlanViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = this.getLayoutInflater().inflate(R.layout.monthly_goals_plan_status_cell, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.monthly_goals_plan_status_cell, null);
         return new DailyPlanViewHolder(view);
     }
 
