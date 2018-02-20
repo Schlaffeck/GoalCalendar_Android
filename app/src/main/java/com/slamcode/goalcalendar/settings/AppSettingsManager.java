@@ -37,6 +37,10 @@ public interface AppSettingsManager {
 
     void setThemeId(int themeId);
 
+    DateTime getOnboardingShownDate();
+
+    void setOnboardingShownDate(DateTime onboardingShownDate);
+
     void addSettingsChangedListener(SettingsChangedListener listener);
 
     void removeSettingsChangedListener(SettingsChangedListener listener);

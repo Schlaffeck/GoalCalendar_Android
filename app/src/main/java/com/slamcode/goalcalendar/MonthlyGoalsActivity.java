@@ -286,7 +286,9 @@ public class MonthlyGoalsActivity extends AppCompatActivity
 
     private  boolean doStartOnBoarding()
     {
-        if(BuildConfig.DEBUG)
+        if(BuildConfig.DEBUG &&
+                (this.settingsManager.getOnboardingShownDate() == null
+                    || DateTimeHelper.isDateBefore(this.settingsManager.getOnboardingShownDate(), DateTimeHelper.getTodayDateTime())))
             return true;
 
         return this.isFirstLaunch()
@@ -315,6 +317,7 @@ public class MonthlyGoalsActivity extends AppCompatActivity
     {
         Intent intent = new Intent(this, OnBoardingActivity.class);
         intent.putExtra(STARTED_FROM_PARENT_INTENT_PARAM, true);
+        this.settingsManager.setOnboardingShownDate(DateTimeHelper.getNowDateTime());
         this.startActivity(intent);
     }
 

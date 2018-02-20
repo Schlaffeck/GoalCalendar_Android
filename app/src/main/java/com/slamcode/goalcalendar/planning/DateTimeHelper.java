@@ -78,6 +78,10 @@ public final class DateTimeHelper {
         return isTodayDate(calendar);
     }
 
+    public static boolean isTodayDate(DateTime dateTime) {
+        return isTodayDate(dateTime.getYear(), dateTime.getMonth(), dateTime.getDay());
+    }
+
     public static boolean isTodayDate(Calendar calendar) {
         return isTodayDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
     }
