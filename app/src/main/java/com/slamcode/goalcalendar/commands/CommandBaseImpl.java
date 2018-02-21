@@ -1,6 +1,8 @@
 package com.slamcode.goalcalendar.commands;
 
 import java.security.Policy;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by moriasla on 14.02.2017.
@@ -13,6 +15,8 @@ public abstract class CommandBaseImpl<Parameter, Result> implements Command<Para
     private Exception executionException;
 
     private Exception revertingException;
+
+    private List<CommandStateChangedListener> commandStateChangedListeners = new ArrayList<>();
 
     @Override
     public CommandStatus getExecutionStatus() {
@@ -39,16 +43,16 @@ public abstract class CommandBaseImpl<Parameter, Result> implements Command<Para
         Result result = null;
         if(canExecute(parameter))
         {
-            this.executionStatus = CommandStatus.Executing;
+            this.setCommandStatus(CommandStatus.Executing);
             try
             {
                 result = this.executeCore(parameter);
-                this.executionStatus = CommandStatus.Executed;
+                this.setCommandStatus(CommandStatus.Executed);
             }
             catch(Exception ex)
             {
                 this.executionException = ex;
-                this.executionStatus = CommandStatus.ExecutionFailed;
+                this.setCommandStatus(CommandStatus.ExecutionFailed);
                 ex.printStackTrace();
             }
         }
@@ -66,22 +70,61 @@ public abstract class CommandBaseImpl<Parameter, Result> implements Command<Para
     public void revert() {
         if(canRevert())
         {
-            this.executionStatus = CommandStatus.Reverting;
+            this.setCommandStatus(CommandStatus.Reverting);
             try
             {
                 this.revertCore();
-                this.executionStatus = CommandStatus.Reverted;
+                this.setCommandStatus(CommandStatus.Reverted);
             }
             catch(Exception ex)
             {
                 this.revertingException = ex;
-                this.executionStatus = CommandStatus.RevertingFailed;
+                this.setCommandStatus(CommandStatus.RevertingFailed);
                 ex.printStackTrace();
             }
         }
     }
 
+    @Override
+    public void addCommandStateChangedListener(CommandStateChangedListener listener)
+    {
+        if(listener == null)
+                return;
+
+        if(this.commandStateChangedListeners.contains(listener))
+            return;;
+
+            this.commandStateChangedListeners.add(listener);
+    }
+
+    @Override
+    public void removeCommandStateChangedListener(CommandStateChangedListener listener)
+    {
+        if(listener == null)
+            return;
+
+        this.commandStateChangedListeners.remove(listener);
+    }
+
+    @Override
+    public void clearCommandStateChangedListeners() {
+        this.commandStateChangedListeners.clear();
+    }
+
+    protected void onCommandStatusChanged(CommandStatus oldStatus, CommandStatus newStatus)
+    {
+        for(CommandStateChangedListener listener : this.commandStateChangedListeners)
+            listener.onStateChanged(oldStatus, newStatus);
+    }
+
     protected abstract Result executeCore(Parameter parameter);
 
     protected abstract void revertCore();
+
+    private void setCommandStatus(CommandStatus status)
+    {
+        CommandStatus old = this.executionStatus;
+        this.executionStatus = status;
+        this.onCommandStatusChanged(old, status);
+    }
 }
