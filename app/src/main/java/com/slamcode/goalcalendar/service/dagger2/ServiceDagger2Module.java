@@ -5,6 +5,8 @@ import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.diagniostics.Logger;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryDescriptionProvider;
 import com.slamcode.goalcalendar.service.commands.AutoMarkTasksCommand;
+import com.slamcode.goalcalendar.service.commands.DailyProgressInfoCommand;
+import com.slamcode.goalcalendar.service.commands.ShowDialogDailyProgressInfoCommand;
 import com.slamcode.goalcalendar.service.commands.SnackbarShowUpAutoMarkTasksCommand;
 import com.slamcode.goalcalendar.service.notification.NotificationHistory;
 import com.slamcode.goalcalendar.service.notification.NotificationScheduler;
@@ -68,6 +70,15 @@ public class ServiceDagger2Module {
                                                             AppSettingsManager settingsManager)
     {
         return new SnackbarShowUpAutoMarkTasksCommand(applicationContext, persistenceContext, settingsManager);
+    }
+
+    @Provides
+    @Singleton
+    public DailyProgressInfoCommand provideDailyProgressInfoCommand(AppSettingsManager settingsManager,
+                                                                    PlansSummaryDescriptionProvider plansSummaryDescriptionProvider,
+                                                                    PersistenceContext persistenceContext)
+    {
+        return new ShowDialogDailyProgressInfoCommand(settingsManager, plansSummaryDescriptionProvider, persistenceContext);
     }
 
     @Provides

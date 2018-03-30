@@ -19,4 +19,15 @@ public interface Command<Parameter, Result> {
     boolean canRevert();
 
     void revert();
+
+    void addCommandStateChangedListener(CommandStateChangedListener listener);
+
+    void removeCommandStateChangedListener(CommandStateChangedListener listener);
+
+    void clearCommandStateChangedListeners();
+
+    interface CommandStateChangedListener
+    {
+        void onStateChanged(CommandStatus oldStatus, CommandStatus newStatus);
+    }
 }

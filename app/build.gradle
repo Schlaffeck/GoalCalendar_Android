@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 26
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.slamcode.goalcalendar"
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -32,7 +32,7 @@ android {
 
 ext {
     JUNIT_VERSION = '4.12'
-    ANDROID_SUPPORT_VERSION = '25.3.1'
+    ANDROID_SUPPORT_VERSION = '26.1.0'
 }
 
 dependencies {
@@ -45,7 +45,7 @@ dependencies {
     compile "com.android.support:support-v4:$ANDROID_SUPPORT_VERSION"
     compile "com.android.support:support-vector-drawable:$ANDROID_SUPPORT_VERSION"
     compile "com.android.support:design:$ANDROID_SUPPORT_VERSION"
-    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.android.support:multidex:1.0.3'
     compile 'org.apache.commons:commons-collections4:4.1'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.google.dagger:dagger:2.4'
@@ -61,6 +61,6 @@ dependencies {
     testCompile "org.mockito:mockito-core:2.0.57-beta"
     testCompile "junit:junit:$JUNIT_VERSION"
     testCompile 'com.google.dagger:dagger-compiler:2.4'
-    annotationProcessor 'com.android.databinding:compiler:1.0-rc1'
+    annotationProcessor 'com.android.databinding:compiler:1.0-rcl'
     provided 'javax.annotation:jsr250-api:1.0'
 }

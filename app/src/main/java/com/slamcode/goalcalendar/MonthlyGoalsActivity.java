@@ -24,6 +24,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.slamcode.goalcalendar.commands.Command;
+import com.slamcode.goalcalendar.commands.CommandStatus;
 import com.slamcode.goalcalendar.onboarding.OnBoardingActivity;
 import com.slamcode.goalcalendar.data.UnitOfWork;
 import com.slamcode.goalcalendar.data.model.CategoryModel;
@@ -33,6 +35,7 @@ import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.schedule.DateTimeChangedService;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryDescriptionProvider;
+import com.slamcode.goalcalendar.service.commands.DailyProgressInfoCommand;
 import com.slamcode.goalcalendar.service.notification.NotificationScheduler;
 import com.slamcode.goalcalendar.settings.AppSettingsManager;
 import com.slamcode.goalcalendar.settings.SettingsKeys;
@@ -97,6 +100,9 @@ public class MonthlyGoalsActivity extends AppCompatActivity
     AutoMarkTasksCommand autoMarkTasksCommand;
 
     @Inject
+    DailyProgressInfoCommand dailyProgressInfoCommand;
+
+    @Inject
     PresentersSource presentersSource;
 
     @Inject
@@ -115,8 +121,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity
     private ViewDataBinding mainActivityContentBinding;
 
     private MonthlyGoalsViewModel activityViewModel;
-
-    private boolean launchTimeSet;
 
     private boolean exitApplication;
 
@@ -168,7 +172,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
         this.setupDataBindings();
-        this.showDailyProgressDialog();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_DATE_CHANGED);
         this.registerReceiver(this.dateTimeChangedService, intentFilter);
@@ -286,10 +289,12 @@ public class MonthlyGoalsActivity extends AppCompatActivity
 
     private  boolean doStartOnBoarding()
     {
-        if(BuildConfig.DEBUG)
+        if(BuildConfig.DEBUG &&
+                (this.settingsManager.getOnboardingShownDate() == null
+                    || DateTimeHelper.isDateBefore(this.settingsManager.getOnboardingShownDate(), DateTimeHelper.getTodayDateTime())))
             return true;
 
-        return this.isFirstLaunch()
+        return this.settingsManager.getLastLaunchDateTime() == null
                 && !this.originatedFromNotification();
     }
 
@@ -298,23 +303,11 @@ public class MonthlyGoalsActivity extends AppCompatActivity
         return this.getIntent().getBooleanExtra(NotificationScheduler.NOTIFICATION_ORIGINATED_FROM_FLAG, false);
     }
 
-    private boolean isFirstLaunch()
-    {
-        return this.settingsManager.getLastLaunchDateTime() == null;
-    }
-
-    private void setLaunchTime()
-    {
-        if(!this.launchTimeSet) {
-            this.settingsManager.setLastLaunchDateTimeMillis(DateTimeHelper.getNowDateTime());
-            this.launchTimeSet = true;
-        }
-    }
-
     private void startOnBoardingActivity()
     {
         Intent intent = new Intent(this, OnBoardingActivity.class);
         intent.putExtra(STARTED_FROM_PARENT_INTENT_PARAM, true);
+        this.settingsManager.setOnboardingShownDate(DateTimeHelper.getNowDateTime());
         this.startActivity(intent);
     }
 
@@ -332,48 +325,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity
         });
     }
 
-    private boolean showDailyProgressDialog() {
-        DateTime lastLaunchDateTime = this.settingsManager.getLastLaunchDateTime();
-
-        if(!this.launchTimeSet
-               && !this.isFirstLaunch()
-                && DateTimeHelper.isDateBefore(lastLaunchDateTime, DateTimeHelper.getTodayDateTime()))
-        {
-            this.setLaunchTime();
-            int year = DateTimeHelper.getCurrentYear();
-            Month month = DateTimeHelper.getCurrentMonth();
-            PlansSummaryDescriptionProvider.PlansSummaryDescription description
-                    = this.descriptionProvider.provideDescriptionForMonth(year, month);
-            List<CategoryModel> unfinishedCategories = this.getUnfinishedCategories(year, month);
-            if(unfinishedCategories.size() > 0) {
-                CategoryModel randomCat = unfinishedCategories.get((new Random()).nextInt(unfinishedCategories.size()));
-                String randomUnfinishedCatDescription = this.descriptionProvider.provideDescriptionMonthInCategory(year, month, randomCat.getName());
-
-                if(randomUnfinishedCatDescription != null)
-                    description.setDetails(String.format("%s %n%n%s - %s",  description.getDetails(), randomCat.getName(), randomUnfinishedCatDescription));
-            }
-
-            if(description != null) {
-                DailyProgressDialog dialog = new DailyProgressDialog();
-                dialog.setModel(description);
-                this.showDialog(dialog);
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    private List<CategoryModel> getUnfinishedCategories(int year, Month month)
-    {
-        UnitOfWork uow = this.persistenceContext.createUnitOfWork();
-
-        List<CategoryModel> categoryModelList =  uow.getCategoriesRepository().findWithProgressInMonth(year, month, NumericalComparisonOperator.LESS_THAN, 1.0f);
-        uow.complete(true);
-        return categoryModelList;
-    }
-
     private void onCreateGlobalLayoutAvailable()
     {
         this.setSupportActionBar((Toolbar)this.findViewById(R.id.toolbar));
@@ -381,8 +332,6 @@ public class MonthlyGoalsActivity extends AppCompatActivity
         this.setupPresenter();
         this.setupBottomSheetBehavior();
         this.runStartupCommands();
-        if(!this.showDailyProgressDialog())
-            this.setLaunchTime();
     }
 
     private void setupPresenter() {
@@ -398,7 +347,16 @@ public class MonthlyGoalsActivity extends AppCompatActivity
     }
 
     private void runStartupCommands() {
-        this.autoMarkTasksCommand.execute(this.findViewById(R.id.monthly_goals_activity_main_coordinator_layout));
+
+        this.dailyProgressInfoCommand.addCommandStateChangedListener(new Command.CommandStateChangedListener() {
+            @Override
+            public void onStateChanged(CommandStatus oldStatus, CommandStatus newStatus) {
+                if(newStatus == CommandStatus.Executed)
+                    autoMarkTasksCommand.execute(findViewById(R.id.monthly_goals_activity_main_coordinator_layout));
+            }
+        });
+
+        this.dailyProgressInfoCommand.execute(this);
     }
 
     private void startServices()

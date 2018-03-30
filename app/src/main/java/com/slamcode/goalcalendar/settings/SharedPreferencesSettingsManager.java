@@ -49,6 +49,9 @@ public class SharedPreferencesSettingsManager implements AppSettingsManager, Sha
                     R.style.FlatBrandTheme
             };
 
+    private final static String ONBOARDING_SHOWN_DATETIME_MILLIS_NAME = "ONBOARDING_SHOWN_DATETIME_MILLIS";
+    private final static long ONBOARDING_SHOWN_DATETIME_MILLIS_VALUE = 0;
+
     private SharedPreferences sharedPreferences;
 
     private List<SettingsChangedListener> settingsChangedListeners = new ArrayList<>();
@@ -154,6 +157,23 @@ public class SharedPreferencesSettingsManager implements AppSettingsManager, Sha
             SharedPreferences.Editor editor = this.sharedPreferences.edit();
             editor.putString(SettingsKeys.THEME_ID_NAME, Integer.toString(foundIndex));
         }
+    }
+
+    @Override
+    public DateTime getOnboardingShownDate() {
+        long timeMillis = this.sharedPreferences.getLong(ONBOARDING_SHOWN_DATETIME_MILLIS_NAME, ONBOARDING_SHOWN_DATETIME_MILLIS_VALUE);
+
+        if(timeMillis == 0)
+            return null;
+
+        return DateTimeHelper.getDateTime(timeMillis);
+    }
+
+    @Override
+    public void setOnboardingShownDate(DateTime onboardingShownDate) {
+        SharedPreferences.Editor editor = this.sharedPreferences.edit();
+        editor.putLong(ONBOARDING_SHOWN_DATETIME_MILLIS_NAME, onboardingShownDate.getTimeMillis());
+        editor.apply();
     }
 
     public void addSettingsChangedListener(SettingsChangedListener listener)
