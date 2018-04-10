@@ -10,6 +10,8 @@ import com.slamcode.goalcalendar.view.lists.base.bindable.BindableViewHolderBase
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
 import android.databinding.ViewDataBinding;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.view.View;
 
 public class SelectableBindableViewHolderBase<Item extends Observable> extends BindableViewHolderBase<Item> implements SelectableViewHolder, View.OnLongClickListener {
@@ -17,6 +19,7 @@ public class SelectableBindableViewHolderBase<Item extends Observable> extends B
     private final MultiSelector multiSelector;
     private final View selectedModeView;
     private ViewDataBinding selectedModeViewBinding;
+    private ActionMode.Callback actionModeCallbacks;
 
     public SelectableBindableViewHolderBase(View view, MultiSelector multiSelector) {
         this(view, null, multiSelector, null);
@@ -47,7 +50,8 @@ public class SelectableBindableViewHolderBase<Item extends Observable> extends B
 
         if(this.multiSelector.toggleSelection(this))
         {
-
+            ((AppCompatActivity)v.getContext()).startSupportActionMode(this.actionModeCallbacks);
+            return true;
         }
         return false;
     }
