@@ -6,5 +6,5 @@ public interface MultiSelector {
 
     ArrayList<Integer> getSelectedItemIds();
 
-    void toggleSelection(SelectableViewHolder selectableViewHolder);
+    boolean toggleSelection(SelectableViewHolder selectableViewHolder);
 }

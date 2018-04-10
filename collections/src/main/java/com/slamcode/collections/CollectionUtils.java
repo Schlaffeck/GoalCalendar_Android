@@ -84,4 +84,21 @@ public class CollectionUtils {
 
         return result;
     }
+
+    public static <ParentType> boolean any(Iterable<ParentType> iterable, ElementSelector<ParentType, Boolean> elementPredicate)
+    {
+        ParentType result = null;
+        for(ParentType item : iterable)
+        {
+            if(elementPredicate.select(item))
+            {
+                if(result != null)
+                    return true;
+
+                result = item;
+            }
+        }
+
+        return result != null;
+    }
 }
