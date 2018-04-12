@@ -1,4 +1,4 @@
-package com.slamcode.goalcalendar.view.lists.base.bindable.multimode;
+package com.slamcode.goalcalendar.view.lists.base.bindable.actionmode;
 
 import com.android.databinding.library.baseAdapters.BR;
 import com.slamcode.collections.CollectionUtils;
@@ -14,22 +14,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.view.View;
 
-public class SelectableBindableViewHolderBase<Item extends Observable> extends BindableViewHolderBase<Item> implements SelectableViewHolder, View.OnLongClickListener {
+public class ActionModeBindableViewHolderBase<Item extends Observable> extends BindableViewHolderBase<Item> implements SelectableViewHolder, View.OnLongClickListener {
 
     private final MultiSelector multiSelector;
     private final View selectedModeView;
     private ViewDataBinding selectedModeViewBinding;
     private ActionMode.Callback actionModeCallbacks;
 
-    public SelectableBindableViewHolderBase(View view, MultiSelector multiSelector) {
+    public ActionModeBindableViewHolderBase(View view, MultiSelector multiSelector) {
         this(view, null, multiSelector, null);
     }
 
-    public SelectableBindableViewHolderBase(View view, Item modelObject, MultiSelector multiSelector) {
+    public ActionModeBindableViewHolderBase(View view, Item modelObject, MultiSelector multiSelector) {
         this(view, modelObject, multiSelector, null);
     }
 
-    public SelectableBindableViewHolderBase(View view, Item modelObject, MultiSelector multiSelector, View selectedModeView) {
+    public ActionModeBindableViewHolderBase(View view, Item modelObject, MultiSelector multiSelector, View selectedModeView) {
         super(view, modelObject);
         this.multiSelector = multiSelector;
         this.selectedModeView = selectedModeView;
@@ -61,7 +61,7 @@ public class SelectableBindableViewHolderBase<Item extends Observable> extends B
         return CollectionUtils.any(this.multiSelector.getSelectedItemIds(), new ElementSelector<Integer, Boolean>() {
             @Override
             public Boolean select(Integer parent) {
-                return parent != null && parent.equals(SelectableBindableViewHolderBase.this.getItemId());
+                return parent != null && parent.equals(ActionModeBindableViewHolderBase.this.getItemId());
             }
         });
     }
