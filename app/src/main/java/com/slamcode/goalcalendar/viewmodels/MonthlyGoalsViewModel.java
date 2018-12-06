@@ -3,13 +3,15 @@ package com.slamcode.goalcalendar.viewmodels;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
-import com.android.internal.util.Predicate;
+import com.google.common.base.Predicate;
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.BR;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.data.UnitOfWork;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
-import com.slamcode.goalcalendar.planning.*;
+import com.slamcode.goalcalendar.planning.DateTimeHelper;
+import com.slamcode.goalcalendar.planning.Month;
+import com.slamcode.goalcalendar.planning.YearMonthPair;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 import com.slamcode.goalcalendar.view.SourceChangeRequestNotifier;
 import com.slamcode.goalcalendar.view.utils.ResourcesHelper;

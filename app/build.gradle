@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "com.slamcode.goalcalendar"
         minSdkVersion 15
-        targetSdkVersion 26
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -32,35 +32,35 @@ android {
 
 ext {
     JUNIT_VERSION = '4.12'
-    ANDROID_SUPPORT_VERSION = '26.1.0'
+    ANDROID_SUPPORT_VERSION = '28.0.0'
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile(project(':collections')) {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation(project(':collections')) {
         exclude group: 'org.apache.commons:commons-collections4:4.1'
     }
-    compile "com.android.support:appcompat-v7:$ANDROID_SUPPORT_VERSION"
-    compile "com.android.support:design:$ANDROID_SUPPORT_VERSION"
-    compile "com.android.support:support-v4:$ANDROID_SUPPORT_VERSION"
-    compile "com.android.support:support-vector-drawable:$ANDROID_SUPPORT_VERSION"
-    compile "com.android.support:design:$ANDROID_SUPPORT_VERSION"
-    compile 'com.android.support:multidex:1.0.3'
-    compile 'org.apache.commons:commons-collections4:4.1'
-    compile 'com.google.code.gson:gson:2.8.0'
-    compile 'com.google.dagger:dagger:2.4'
-    compile 'org.apache.commons:commons-lang3:3.5'
-    compile 'javax.inject:javax.inject:1'
-    compile 'com.github.lecho:hellocharts-library:1.5.8@aar'
+    implementation "com.android.support:appcompat-v7:$ANDROID_SUPPORT_VERSION"
+    implementation "com.android.support:design:$ANDROID_SUPPORT_VERSION"
+    implementation "com.android.support:support-v4:$ANDROID_SUPPORT_VERSION"
+    implementation "com.android.support:support-vector-drawable:$ANDROID_SUPPORT_VERSION"
+    implementation "com.android.support:design:$ANDROID_SUPPORT_VERSION"
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'org.apache.commons:commons-collections4:4.1'
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.google.dagger:dagger:2.4'
+    implementation 'org.apache.commons:commons-lang3:3.5'
+    implementation 'javax.inject:javax.inject:1'
+    implementation 'com.github.lecho:hellocharts-library:1.5.8@aar'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.4'
-    compile 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.0'
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.0'
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testCompile 'junit:junit:4.12'
     testCompile "org.mockito:mockito-core:2.0.57-beta"
     testCompile "junit:junit:$JUNIT_VERSION"
     testCompile 'com.google.dagger:dagger-compiler:2.4'
-    annotationProcessor 'com.android.databinding:compiler:1.0-rcl'
-    provided 'javax.annotation:jsr250-api:1.0'
+    annotationProcessor 'com.android.databinding:compiler:3.2.0-alpha10'
+    compileOnly 'javax.annotation:jsr250-api:1.0'
 }

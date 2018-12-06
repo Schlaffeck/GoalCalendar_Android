@@ -1,8 +1,7 @@
 package com.slamcode.goalcalendar.data;
 
-import com.android.internal.util.Predicate;
+import com.android.util.Predicate;
 
-import java.util.Enumeration;
 import java.util.List;
 
 /**
