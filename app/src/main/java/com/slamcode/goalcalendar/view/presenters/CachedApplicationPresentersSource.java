@@ -3,6 +3,7 @@ package com.slamcode.goalcalendar.view.presenters;
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
+import com.slamcode.goalcalendar.view.activity.BackupActivityContract;
 import com.slamcode.goalcalendar.view.activity.MonthlyGoalsActivityContract;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
 
@@ -13,6 +14,7 @@ import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
 public class CachedApplicationPresentersSource implements PresentersSource {
 
     private MonthlyGoalsPresenter monthlyGoalsPresenter;
+    private BackupPresenter backupPresenter;
 
     private PersistenceContext persistenceContext;
 
@@ -43,5 +45,14 @@ public class CachedApplicationPresentersSource implements PresentersSource {
                     this.plansSummaryCalculator);
         }
         return this.monthlyGoalsPresenter;
+    }
+
+    @Override
+    public BackupPresenter getBackupPresenter(BackupActivityContract.ActivityView activityView) {
+        if(this.backupPresenter == null)
+        {
+            this.backupPresenter = new DefaultBackupPresenter(this.persistenceContext);
+        }
+        return this.backupPresenter;
     }
 }

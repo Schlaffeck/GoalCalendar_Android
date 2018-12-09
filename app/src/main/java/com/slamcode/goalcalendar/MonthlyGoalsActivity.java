@@ -165,6 +165,12 @@ public class MonthlyGoalsActivity extends AppCompatActivity
             return true;
         }
 
+        if (id == R.id.action_backups) {
+            Intent goToSettings = new Intent(this, BackupActivity.class);
+            this.startActivity(goToSettings);
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

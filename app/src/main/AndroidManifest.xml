@@ -7,11 +7,11 @@
     <application
         android:name=".dagger2.ComposableApplication"
         android:allowBackup="true"
+        android:enabled="true"
         android:icon="@drawable/planner_96"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/MaterialTheme"
-        android:enabled="true">
+        android:theme="@style/MaterialTheme">
         <service
             android:name=".service.notification.NotificationScheduler"
             android:label="Notification Scheduler">
@@ -21,9 +21,9 @@
         </service>
 
         <receiver
-            android:name="com.slamcode.goalcalendar.service.notification.NotificationServiceStarterReceiver"
-            android:label="NotificationServiceStarterReceiver"
-            android:enabled="true">
+            android:name=".service.notification.NotificationServiceStarterReceiver"
+            android:enabled="true"
+            android:label="NotificationServiceStarterReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.SCREEN_ON" />
@@ -34,29 +34,27 @@
         </receiver>
         <receiver
             android:name=".service.notification.NotificationPublisher"
-            android:label="NotificationPublisher"
-            android:enabled="true"/>
+            android:enabled="true"
+            android:label="NotificationPublisher" />
+
         <activity
             android:name=".SplashActivity"
-            android:theme="@style/SplashTheme"
-            android:noHistory="true">
+            android:noHistory="true"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".onboarding.OnBoardingActivity"
             android:label="@string/title_activity_onboarding"
-            android:noHistory="true">
-        </activity>
+            android:noHistory="true"></activity>
         <activity
             android:name=".MonthlyGoalsActivity"
             android:label="@string/app_name"
-            android:windowSoftInputMode="adjustNothing">
-        </activity>
+            android:windowSoftInputMode="adjustNothing"></activity>
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings">
@@ -64,6 +62,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MonthlyGoalsActivity" />
         </activity>
+        <activity android:name=".BackupActivity"></activity>
     </application>
 
 </manifest>
