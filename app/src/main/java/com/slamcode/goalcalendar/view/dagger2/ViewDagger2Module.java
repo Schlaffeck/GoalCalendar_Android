@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.view.dagger2;
 
 import com.slamcode.goalcalendar.ApplicationContext;
+import com.slamcode.goalcalendar.data.MainPersistenceContext;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;

@@ -33,11 +33,11 @@ public class JsonFilePersistenceContextInstrumentedTest {
 
     private static final String BUNDLE_FILE_NAME = "test_json.data";
     private Context appContext;
-    private JsonDataBundle bundle;
+    private JsonMonthlyPlansDataBundle bundle;
 
     @Before
     public void setUp() throws Exception {
-        this.bundle = new JsonDataBundle();
+        this.bundle = new JsonMonthlyPlansDataBundle();
         this.bundle.monthlyPlans
             = CollectionUtils.createList(
                 createPlansModel(1, Month.JANUARY, 3),

@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.planning.dagger2;
 
 import com.slamcode.goalcalendar.ApplicationContext;
+import com.slamcode.goalcalendar.data.MainPersistenceContext;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.planning.schedule.DateTimeChangeListenersRegistry;
 import com.slamcode.goalcalendar.planning.schedule.DateTimeChangedService;

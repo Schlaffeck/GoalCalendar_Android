@@ -2,8 +2,12 @@ package com.slamcode.goalcalendar.data.dagger2;
 
 import android.content.Context;
 
+import com.slamcode.goalcalendar.data.BackupPersistenceContext;
+import com.slamcode.goalcalendar.data.MainPersistenceContext;
 import com.slamcode.goalcalendar.data.PersistenceContext;
+import com.slamcode.goalcalendar.data.json.BackupJsonFilePersistenceContext;
 import com.slamcode.goalcalendar.data.json.JsonFilePersistenceContext;
+import com.slamcode.goalcalendar.data.json.MainJsonFilePersistenceContext;
 
 import javax.inject.Singleton;
 
@@ -15,6 +19,9 @@ import dagger.Provides;
  */
 @Module
 public final class DataDagger2Module {
+
+    private final static String DEFAULT_MAIN_DATA_FILE = "data.json";
+    private final static String DEFAULT_BACKUP_DATA_FILE = "backup.json";
 
     private final Context context;
 
@@ -28,6 +35,14 @@ public final class DataDagger2Module {
     public PersistenceContext providePersistenceContext()
     {
         // create and return proper persistence context used in app
-        return new JsonFilePersistenceContext(this.context);
+        return new MainJsonFilePersistenceContext(this.context, DEFAULT_MAIN_DATA_FILE);
+    }
+
+    @Provides
+    @Singleton
+    public BackupPersistenceContext provideBackupPersistenceContext()
+    {
+        // create and return proper persistence context used in app
+        return new BackupJsonFilePersistenceContext(this.context, DEFAULT_BACKUP_DATA_FILE);
     }
 }
