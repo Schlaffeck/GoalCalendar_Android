@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Kalendarz celów</string>
     <string name="action_settings">Ustawienia</string>
+    <string name="action_backups">Kopie zapasowe</string>
     <string name="context_menu_edit_item">Zmień</string>
     <string name="context_menu_delete_item">Usuń</string>
     <string name="button_yes">Tak</string>
