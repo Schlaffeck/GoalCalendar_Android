@@ -1,13 +1,10 @@
 package com.slamcode.goalcalendar.data.inmemory;
 
-import com.android.internal.util.Predicate;
+import com.slamcode.collections.Predicate;
 import com.slamcode.goalcalendar.data.Identifiable;
 import com.slamcode.goalcalendar.data.Repository;
-import com.slamcode.goalcalendar.data.model.CategoryModel;
-import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**

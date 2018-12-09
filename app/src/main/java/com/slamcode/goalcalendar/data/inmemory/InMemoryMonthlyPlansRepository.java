@@ -1,11 +1,6 @@
 package com.slamcode.goalcalendar.data.inmemory;
 
-import com.android.internal.util.Predicate;
-import com.slamcode.collections.CollectionUtils;
-import com.slamcode.collections.ElementCreator;
 import com.slamcode.goalcalendar.data.MonthlyPlansRepository;
-import com.slamcode.goalcalendar.data.Repository;
-import com.slamcode.goalcalendar.data.model.DailyPlanModel;
 import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.Month;

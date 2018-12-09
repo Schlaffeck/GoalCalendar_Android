@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.android.databinding.library.baseAdapters.BR;
-import com.android.internal.util.Predicate;
+import com.slamcode.collections.Predicate;
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.data.PersistenceContext;

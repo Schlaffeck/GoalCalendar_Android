@@ -1,20 +1,15 @@
 package com.slamcode.goalcalendar;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.NotificationCompat;
 import android.view.View;
 
 import com.slamcode.goalcalendar.planning.DateTime;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
-
-import static android.R.attr.id;
 
 /**
  * Created by moriasla on 07.02.2017.

@@ -3,7 +3,7 @@ package com.slamcode.goalcalendar.viewmodels;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
-import com.google.common.base.Predicate;
+import com.slamcode.collections.Predicate;
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.BR;
 import com.slamcode.goalcalendar.data.PersistenceContext;
@@ -33,7 +33,7 @@ public class MonthlyGoalsViewModel extends BaseObservable {
     private final SourceChangeRequestNotifier.SourceChangeRequestListener<DailyPlansViewModel> dailyPlansChangeRequestListener;
     private MonthlyPlanningCategoryListViewModel monthlyPlansViewModel;
 
-    Map<YearMonthPair, MonthlyPlanningCategoryListViewModel> viewModelMap = new HashMap<>();
+    private Map<YearMonthPair, MonthlyPlanningCategoryListViewModel> viewModelMap = new HashMap<>();
 
     public MonthlyGoalsViewModel(ApplicationContext applicationContext,
                                  PersistenceContext persistenceContext,

@@ -16,13 +16,11 @@ public class CollectionUtils {
         return result;
     }
 
+    @SafeVarargs
     public static <T> List<T> createList(T... elements)
     {
         List<T> result = new ArrayList<T>();
-        for(T element : elements)
-        {
-            result.add(element);
-        }
+        Collections.addAll(result, elements);
 
         return result;
     }

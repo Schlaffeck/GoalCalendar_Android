@@ -58,9 +58,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testCompile 'junit:junit:4.12'
-    testCompile "org.mockito:mockito-core:2.0.57-beta"
+    testCompile 'org.mockito:mockito-core:2.0.57-beta'
     testCompile "junit:junit:$JUNIT_VERSION"
     testCompile 'com.google.dagger:dagger-compiler:2.4'
-    annotationProcessor 'com.android.databinding:compiler:3.2.0-alpha10'
     compileOnly 'javax.annotation:jsr250-api:1.0'
 }
