@@ -2,12 +2,12 @@ package com.slamcode.goalcalendar.data.inmemory;
 
 import com.google.common.base.Predicate;
 import com.slamcode.goalcalendar.data.CategoriesRepository;
-import com.slamcode.goalcalendar.data.model.CategoryModel;
+import com.slamcode.goalcalendar.data.model.plans.CategoryModel;
 
 import com.slamcode.collections.*;
-import com.slamcode.goalcalendar.data.model.DailyPlanModel;
+import com.slamcode.goalcalendar.data.model.plans.DailyPlanModel;
 import com.slamcode.goalcalendar.data.model.ModelHelper;
-import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
+import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansModel;
 import com.slamcode.goalcalendar.data.query.NumericalComparisonOperator;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.planning.Month;

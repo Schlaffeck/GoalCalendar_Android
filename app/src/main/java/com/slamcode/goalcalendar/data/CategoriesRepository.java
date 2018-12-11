@@ -1,6 +1,6 @@
 package com.slamcode.goalcalendar.data;
 
-import com.slamcode.goalcalendar.data.model.CategoryModel;
+import com.slamcode.goalcalendar.data.model.plans.CategoryModel;
 import com.slamcode.goalcalendar.data.query.NumericalComparisonOperator;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.PlanStatus;

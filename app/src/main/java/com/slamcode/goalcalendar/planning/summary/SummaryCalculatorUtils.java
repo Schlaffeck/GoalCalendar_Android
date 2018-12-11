@@ -1,8 +1,7 @@
 package com.slamcode.goalcalendar.planning.summary;
 
-import com.slamcode.goalcalendar.data.model.CategoryModel;
+import com.slamcode.goalcalendar.data.model.plans.CategoryModel;
 import com.slamcode.goalcalendar.data.model.ModelHelper;
-import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.DateTime;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.Month;

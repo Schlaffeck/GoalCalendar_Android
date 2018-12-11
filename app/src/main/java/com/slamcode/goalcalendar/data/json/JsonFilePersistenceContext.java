@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.slamcode.goalcalendar.data.CategoriesRepository;
+import com.slamcode.goalcalendar.data.DataFormatter;
 import com.slamcode.goalcalendar.data.MonthlyPlansRepository;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.data.UnitOfWork;
@@ -23,13 +24,15 @@ public class JsonFilePersistenceContext implements PersistenceContext {
     private static final String LOG_TAG = "GOAL_JsonPerCtx";
     private JsonMonthlyPlansDataBundle monthlyPlansDataBundle;
     private final Context appContext;
+    private final DataFormatter<JsonMonthlyPlansDataBundle> dataFormatter;
     private final String fileName;
 
     private Collection<PersistenceContextChangedListener> contextChangedListeners;
 
-    public JsonFilePersistenceContext(Context appContext, String fileName)
+    public JsonFilePersistenceContext(Context appContext, DataFormatter<JsonMonthlyPlansDataBundle> dataFormatter, String fileName)
     {
         this.appContext = appContext;
+        this.dataFormatter = dataFormatter;
         this.fileName = fileName;
         this.contextChangedListeners =  new HashSet<>();
     }
@@ -45,10 +48,8 @@ public class JsonFilePersistenceContext implements PersistenceContext {
         FileOutputStream fileStream;
         try{
             Log.d(LOG_TAG, "Persisting json data file - START");
-            Gson gson = new GsonBuilder()
-                    .create();
             fileStream = this.appContext.openFileOutput(this.fileName, Context.MODE_PRIVATE);
-            fileStream.write(gson.toJson(this.monthlyPlansDataBundle, JsonMonthlyPlansDataBundle.class).getBytes());
+            fileStream.write(this.dataFormatter.formatDataBundle(this.monthlyPlansDataBundle).getBytes());
             fileStream.close();
 
             this.onContextDataPersisted();

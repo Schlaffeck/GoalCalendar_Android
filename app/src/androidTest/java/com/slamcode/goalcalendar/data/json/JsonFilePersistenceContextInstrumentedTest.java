@@ -7,8 +7,8 @@ import android.support.test.runner.AndroidJUnit4;
 import com.google.gson.Gson;
 import com.slamcode.collections.CollectionUtils;
 import com.slamcode.goalcalendar.data.UnitOfWork;
-import com.slamcode.goalcalendar.data.model.CategoryModel;
-import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
+import com.slamcode.goalcalendar.data.model.plans.CategoryModel;
+import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.planning.Month;
 

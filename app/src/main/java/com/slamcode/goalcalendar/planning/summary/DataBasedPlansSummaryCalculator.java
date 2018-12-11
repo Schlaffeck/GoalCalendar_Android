@@ -1,12 +1,10 @@
 package com.slamcode.goalcalendar.planning.summary;
 
 import com.slamcode.goalcalendar.data.CategoriesRepository;
-import com.slamcode.goalcalendar.data.model.CategoryModel;
-import com.slamcode.goalcalendar.data.model.DailyPlanModel;
+import com.slamcode.goalcalendar.data.model.plans.CategoryModel;
+import com.slamcode.goalcalendar.data.model.plans.DailyPlanModel;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.planning.Month;
-
-import java.util.List;
 
 /**
  * Summary calculator based on persisted model data

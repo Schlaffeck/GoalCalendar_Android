@@ -4,10 +4,9 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.Observable;
 import android.support.annotation.NonNull;
-import android.view.View;
 
 import com.slamcode.goalcalendar.BR;
-import com.slamcode.goalcalendar.data.model.DailyPlanModel;
+import com.slamcode.goalcalendar.data.model.plans.DailyPlanModel;
 import com.slamcode.goalcalendar.planning.PlanStatus;
 import com.slamcode.goalcalendar.view.SourceChangeRequestNotifier;
 

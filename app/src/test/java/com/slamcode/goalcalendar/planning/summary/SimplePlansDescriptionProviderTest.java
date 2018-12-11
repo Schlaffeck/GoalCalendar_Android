@@ -4,7 +4,7 @@ import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.TestUtils;
 import com.slamcode.goalcalendar.data.CategoriesRepository;
-import com.slamcode.goalcalendar.data.model.CategoryModel;
+import com.slamcode.goalcalendar.data.model.plans.CategoryModel;
 import com.slamcode.goalcalendar.data.model.ModelHelper;
 import com.slamcode.goalcalendar.planning.DateTime;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;

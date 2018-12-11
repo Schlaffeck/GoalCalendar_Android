@@ -8,7 +8,7 @@ import android.util.DisplayMetrics;
 
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.R;
-import com.slamcode.goalcalendar.data.model.CategoryModel;
+import com.slamcode.goalcalendar.data.model.plans.CategoryModel;
 import com.slamcode.goalcalendar.data.model.ModelHelper;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.planning.Month;
@@ -20,16 +20,12 @@ import com.slamcode.goalcalendar.viewmodels.MonthViewModel;
 
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Matchers;
-import org.mockito.MockSettings;
-import org.mockito.internal.creation.MockSettingsImpl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import lecho.lib.hellocharts.model.PieChartData;
-import lecho.lib.hellocharts.view.PieChartView;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

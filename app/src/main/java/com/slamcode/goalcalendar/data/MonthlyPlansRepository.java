@@ -1,6 +1,6 @@
 package com.slamcode.goalcalendar.data;
 
-import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
+import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.Month;
 
 /**

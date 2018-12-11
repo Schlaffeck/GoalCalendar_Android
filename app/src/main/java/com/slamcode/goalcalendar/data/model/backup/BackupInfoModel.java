@@ -36,4 +36,20 @@ public class BackupInfoModel implements Identifiable<UUID> {
     public void setVersion(int version) {
         this.version = version;
     }
+
+    public Date getBackupDateUtc() {
+        return backupDateUtc;
+    }
+
+    public void setBackupDateUtc(Date backupDateUtc) {
+        this.backupDateUtc = backupDateUtc;
+    }
+
+    public String getSourceType() {
+        return sourceType;
+    }
+
+    public void setSourceType(String sourceType) {
+        this.sourceType = sourceType;
+    }
 }

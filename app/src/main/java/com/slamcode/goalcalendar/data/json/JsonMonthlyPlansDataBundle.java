@@ -1,6 +1,6 @@
 package com.slamcode.goalcalendar.data.json;
 
-import com.slamcode.goalcalendar.data.model.MonthlyPlansDataBundle;
+import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansDataBundle;
 
 /**
  * Created by moriasla on 03.01.2017.

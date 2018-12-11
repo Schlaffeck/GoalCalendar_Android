@@ -1,4 +1,4 @@
-package com.slamcode.goalcalendar.data.model;
+package com.slamcode.goalcalendar.data.model.plans;
 
 import com.slamcode.goalcalendar.data.Identifiable;
 import com.slamcode.goalcalendar.planning.Month;

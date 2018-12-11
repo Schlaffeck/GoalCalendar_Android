@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -27,11 +26,6 @@ import android.widget.Toast;
 import com.slamcode.goalcalendar.commands.Command;
 import com.slamcode.goalcalendar.commands.CommandStatus;
 import com.slamcode.goalcalendar.onboarding.OnBoardingActivity;
-import com.slamcode.goalcalendar.data.UnitOfWork;
-import com.slamcode.goalcalendar.data.model.CategoryModel;
-import com.slamcode.goalcalendar.data.query.NumericalComparisonOperator;
-import com.slamcode.goalcalendar.planning.DateTime;
-import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.schedule.DateTimeChangedService;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryDescriptionProvider;
@@ -44,15 +38,11 @@ import com.slamcode.goalcalendar.dagger2.ComposableApplication;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.service.commands.AutoMarkTasksCommand;
 import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
-import com.slamcode.goalcalendar.view.dialogs.DailyProgressDialog;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
 import com.slamcode.goalcalendar.view.presenters.PresentersSource;
 import com.slamcode.goalcalendar.view.utils.ViewReference;
 import com.slamcode.goalcalendar.view.utils.ViewBinder;
 import com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel;
-
-import java.util.List;
-import java.util.Random;
 
 import javax.inject.Inject;
 

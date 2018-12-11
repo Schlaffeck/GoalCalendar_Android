@@ -1,6 +1,5 @@
 package com.slamcode.goalcalendar.planning.summary;
 
-import com.slamcode.goalcalendar.data.model.CategoryModel;
 import com.slamcode.goalcalendar.planning.Month;
 
 import java.util.ArrayList;

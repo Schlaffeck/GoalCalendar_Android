@@ -1,4 +1,4 @@
-package com.slamcode.goalcalendar.data.model;
+package com.slamcode.goalcalendar.data.model.plans;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;

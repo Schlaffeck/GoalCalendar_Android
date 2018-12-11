@@ -1,7 +1,7 @@
 package com.slamcode.goalcalendar.data.inmemory;
 
 import com.slamcode.goalcalendar.data.MonthlyPlansRepository;
-import com.slamcode.goalcalendar.data.model.MonthlyPlansModel;
+import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.Month;
 

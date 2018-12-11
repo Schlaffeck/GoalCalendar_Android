@@ -7,8 +7,8 @@ import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
 
 import com.slamcode.goalcalendar.BR;
-import com.slamcode.goalcalendar.data.model.CategoryModel;
-import com.slamcode.goalcalendar.data.model.DailyPlanModel;
+import com.slamcode.goalcalendar.data.model.plans.CategoryModel;
+import com.slamcode.goalcalendar.data.model.plans.DailyPlanModel;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 import com.slamcode.goalcalendar.view.SourceChangeRequestNotifier;

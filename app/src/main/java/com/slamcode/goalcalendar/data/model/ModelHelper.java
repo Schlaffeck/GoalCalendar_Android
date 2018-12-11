@@ -2,13 +2,13 @@ package com.slamcode.goalcalendar.data.model;
 
 import com.slamcode.collections.ElementCreator;
 import com.slamcode.collections.ElementSelector;
+import com.slamcode.goalcalendar.data.model.plans.CategoryModel;
+import com.slamcode.goalcalendar.data.model.plans.DailyPlanModel;
 import com.slamcode.goalcalendar.data.query.NumericalComparisonOperator;
-import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.PlanStatus;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.collections4.Predicate;
 
