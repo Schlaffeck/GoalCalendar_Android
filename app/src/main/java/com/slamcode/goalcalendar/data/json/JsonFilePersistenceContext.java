@@ -29,7 +29,7 @@ public class JsonFilePersistenceContext implements PersistenceContext {
 
     private Collection<PersistenceContextChangedListener> contextChangedListeners;
 
-    public JsonFilePersistenceContext(Context appContext, DataFormatter<JsonMonthlyPlansDataBundle> dataFormatter, String fileName)
+    JsonFilePersistenceContext(Context appContext, DataFormatter<JsonMonthlyPlansDataBundle> dataFormatter, String fileName)
     {
         this.appContext = appContext;
         this.dataFormatter = dataFormatter;
@@ -40,6 +40,14 @@ public class JsonFilePersistenceContext implements PersistenceContext {
     public JsonMonthlyPlansDataBundle getDataBundle()
     {
         return this.monthlyPlansDataBundle;
+    }
+
+    public void setDataBundle(JsonMonthlyPlansDataBundle dataBundle)
+    {
+        if(dataBundle == null)
+            throw new IllegalArgumentException("Data bundle can not be set to null");
+
+        this.monthlyPlansDataBundle = dataBundle;
     }
 
     @Override

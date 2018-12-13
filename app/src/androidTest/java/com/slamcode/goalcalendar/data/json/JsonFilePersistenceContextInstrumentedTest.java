@@ -7,6 +7,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.google.gson.Gson;
 import com.slamcode.collections.CollectionUtils;
 import com.slamcode.goalcalendar.data.UnitOfWork;
+import com.slamcode.goalcalendar.data.json.formatter.JsonDataFormatter;
 import com.slamcode.goalcalendar.data.model.plans.CategoryModel;
 import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
@@ -69,7 +70,7 @@ public class JsonFilePersistenceContextInstrumentedTest {
         bundleFile.delete();
         assertFalse(bundleFile.exists());
 
-        JsonFilePersistenceContext context = new JsonFilePersistenceContext(this.appContext, BUNDLE_FILE_NAME);
+        JsonFilePersistenceContext context = this.CreateTarget();
         assertNull(context.getDataBundle());
 
         context.initializePersistedData();
@@ -85,7 +86,7 @@ public class JsonFilePersistenceContextInstrumentedTest {
         writer.write(new char[0]);
         writer.close();
 
-        JsonFilePersistenceContext context = new JsonFilePersistenceContext(this.appContext, BUNDLE_FILE_NAME);
+        JsonFilePersistenceContext context = this.CreateTarget();
         assertNull(context.getDataBundle());
 
         context.initializePersistedData();
@@ -97,7 +98,7 @@ public class JsonFilePersistenceContextInstrumentedTest {
     @Test
     public void jsonFilePersistenceContext_initialize_test()
     {
-        JsonFilePersistenceContext context = new JsonFilePersistenceContext(this.appContext, BUNDLE_FILE_NAME);
+        JsonFilePersistenceContext context = this.CreateTarget();
         assertNull(context.getDataBundle());
 
         context.initializePersistedData();
@@ -107,7 +108,7 @@ public class JsonFilePersistenceContextInstrumentedTest {
     @Test
     public void jsonFilePersistenceContext_changePersistRead_test()
     {
-        JsonFilePersistenceContext primalContext = new JsonFilePersistenceContext(this.appContext, BUNDLE_FILE_NAME);
+        JsonFilePersistenceContext primalContext = this.CreateTarget();
         assertNull(primalContext.getDataBundle());
 
         primalContext.initializePersistedData();
@@ -122,7 +123,7 @@ public class JsonFilePersistenceContextInstrumentedTest {
         primalContext.persistData();
 
         // read in new context
-        JsonFilePersistenceContext newContext = new JsonFilePersistenceContext(this.appContext, BUNDLE_FILE_NAME);
+        JsonFilePersistenceContext newContext = this.CreateTarget();
         assertNull(newContext.getDataBundle());
 
         newContext.initializePersistedData();
@@ -137,7 +138,7 @@ public class JsonFilePersistenceContextInstrumentedTest {
     @Test
     public void jsonFilePersistenceContext_createUnitOfWork_test()
     {
-        JsonFilePersistenceContext context = new JsonFilePersistenceContext(this.appContext, BUNDLE_FILE_NAME);
+        JsonFilePersistenceContext context = this.CreateTarget();
         assertNull(context.getDataBundle());
 
         UnitOfWork uow = context.createUnitOfWork();
@@ -170,5 +171,10 @@ public class JsonFilePersistenceContextInstrumentedTest {
     {
         CategoryModel model = new CategoryModel(id, name, frequencyPeriod, frequencyValue);
         return model;
+    }
+    
+    private JsonFilePersistenceContext CreateTarget()
+    {
+        return new JsonFilePersistenceContext(this.appContext, new JsonDataFormatter(), BUNDLE_FILE_NAME);
     }
 }
