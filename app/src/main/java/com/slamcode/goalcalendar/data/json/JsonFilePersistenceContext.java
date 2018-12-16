@@ -12,6 +12,7 @@ import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.data.UnitOfWork;
 import com.slamcode.goalcalendar.data.inmemory.InMemoryCategoriesRepository;
 import com.slamcode.goalcalendar.data.inmemory.InMemoryMonthlyPlansRepository;
+import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansDataBundle;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,14 +23,14 @@ import java.util.HashSet;
 public class JsonFilePersistenceContext implements PersistenceContext {
 
     private static final String LOG_TAG = "GOAL_JsonPerCtx";
-    private JsonMonthlyPlansDataBundle monthlyPlansDataBundle;
+    private MonthlyPlansDataBundle monthlyPlansDataBundle;
     private final Context appContext;
-    private final DataFormatter<JsonMonthlyPlansDataBundle> dataFormatter;
+    private final DataFormatter<MonthlyPlansDataBundle> dataFormatter;
     private final String fileName;
 
     private Collection<PersistenceContextChangedListener> contextChangedListeners;
 
-    JsonFilePersistenceContext(Context appContext, DataFormatter<JsonMonthlyPlansDataBundle> dataFormatter, String fileName)
+    JsonFilePersistenceContext(Context appContext, DataFormatter<MonthlyPlansDataBundle> dataFormatter, String fileName)
     {
         this.appContext = appContext;
         this.dataFormatter = dataFormatter;
@@ -37,12 +38,12 @@ public class JsonFilePersistenceContext implements PersistenceContext {
         this.contextChangedListeners =  new HashSet<>();
     }
 
-    public JsonMonthlyPlansDataBundle getDataBundle()
+    public MonthlyPlansDataBundle getDataBundle()
     {
         return this.monthlyPlansDataBundle;
     }
 
-    public void setDataBundle(JsonMonthlyPlansDataBundle dataBundle)
+    public void setDataBundle(MonthlyPlansDataBundle dataBundle)
     {
         if(dataBundle == null)
             throw new IllegalArgumentException("Data bundle can not be set to null");
@@ -84,12 +85,12 @@ public class JsonFilePersistenceContext implements PersistenceContext {
 
                 Gson gson = new GsonBuilder()
                         .create();
-                this.monthlyPlansDataBundle = gson.fromJson(fileReader, JsonMonthlyPlansDataBundle.class);
+                this.monthlyPlansDataBundle = gson.fromJson(fileReader, MonthlyPlansDataBundle.class);
             }
 
             if(this.monthlyPlansDataBundle == null)
             {
-                this.monthlyPlansDataBundle = new JsonMonthlyPlansDataBundle();
+                this.monthlyPlansDataBundle = new MonthlyPlansDataBundle();
             }
             Log.d(LOG_TAG, "Reading json data file - END");
         }
@@ -135,7 +136,7 @@ public class JsonFilePersistenceContext implements PersistenceContext {
         private final InMemoryMonthlyPlansRepository monthlyPlansRepository;
         private final CategoriesRepository categoriesRepository;
 
-        JsonUnitOfWork(JsonMonthlyPlansDataBundle dataBundle)
+        JsonUnitOfWork(MonthlyPlansDataBundle dataBundle)
         {
             this.categoriesRepository = new InMemoryCategoriesRepository(dataBundle.monthlyPlans);
 

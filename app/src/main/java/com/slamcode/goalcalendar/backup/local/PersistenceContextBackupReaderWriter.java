@@ -3,7 +3,7 @@ package com.slamcode.goalcalendar.backup.local;
 import com.slamcode.goalcalendar.backup.BackupWriter;
 import com.slamcode.goalcalendar.data.BackupPersistenceContext;
 import com.slamcode.goalcalendar.data.MainPersistenceContext;
-import com.slamcode.goalcalendar.data.json.JsonMonthlyPlansDataBundle;
+import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansDataBundle;
 import com.slamcode.goalcalendar.data.model.ModelInfoProvider;
 import com.slamcode.goalcalendar.data.model.backup.BackupInfoModel;
 
@@ -26,7 +26,7 @@ public final class PersistenceContextBackupReaderWriter implements BackupWriter 
     @Override
     public BackupInfoModel writeBackup() {
 
-        JsonMonthlyPlansDataBundle mainData = this.mainPersistenceContext.getDataBundle();
+        MonthlyPlansDataBundle mainData = this.mainPersistenceContext.getDataBundle();
         if(mainData == null)
             return null;
 

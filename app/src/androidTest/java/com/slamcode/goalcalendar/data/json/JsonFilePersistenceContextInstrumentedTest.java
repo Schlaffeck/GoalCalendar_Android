@@ -9,6 +9,7 @@ import com.slamcode.collections.CollectionUtils;
 import com.slamcode.goalcalendar.data.UnitOfWork;
 import com.slamcode.goalcalendar.data.json.formatter.JsonDataFormatter;
 import com.slamcode.goalcalendar.data.model.plans.CategoryModel;
+import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansDataBundle;
 import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansModel;
 import com.slamcode.goalcalendar.planning.FrequencyPeriod;
 import com.slamcode.goalcalendar.planning.Month;
@@ -34,11 +35,11 @@ public class JsonFilePersistenceContextInstrumentedTest {
 
     private static final String BUNDLE_FILE_NAME = "test_json.data";
     private Context appContext;
-    private JsonMonthlyPlansDataBundle bundle;
+    private MonthlyPlansDataBundle bundle;
 
     @Before
     public void setUp() throws Exception {
-        this.bundle = new JsonMonthlyPlansDataBundle();
+        this.bundle = new MonthlyPlansDataBundle();
         this.bundle.monthlyPlans
             = CollectionUtils.createList(
                 createPlansModel(1, Month.JANUARY, 3),

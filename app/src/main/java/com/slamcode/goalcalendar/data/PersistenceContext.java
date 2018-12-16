@@ -1,6 +1,6 @@
 package com.slamcode.goalcalendar.data;
 
-import com.slamcode.goalcalendar.data.json.JsonMonthlyPlansDataBundle;
+import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansDataBundle;
 
 /**
  * Created by moriasla on 03.01.2017.
@@ -13,10 +13,10 @@ public interface PersistenceContext {
     void initializePersistedData();
 
     // TODO: Refactor method to not be public somehow
-    JsonMonthlyPlansDataBundle getDataBundle();
+    MonthlyPlansDataBundle getDataBundle();
 
     // TODO: Refactor method to not be public somehow
-    void setDataBundle(JsonMonthlyPlansDataBundle dataBundle);
+    void setDataBundle(MonthlyPlansDataBundle dataBundle);
 
     UnitOfWork createUnitOfWork();
 

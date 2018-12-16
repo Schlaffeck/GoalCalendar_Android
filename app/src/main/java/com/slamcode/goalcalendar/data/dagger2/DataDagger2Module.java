@@ -4,12 +4,10 @@ import android.content.Context;
 
 import com.slamcode.goalcalendar.data.BackupPersistenceContext;
 import com.slamcode.goalcalendar.data.DataFormatter;
-import com.slamcode.goalcalendar.data.MainPersistenceContext;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.data.inmemory.DefaultModelInfoProvider;
 import com.slamcode.goalcalendar.data.json.BackupJsonFilePersistenceContext;
-import com.slamcode.goalcalendar.data.json.JsonFilePersistenceContext;
-import com.slamcode.goalcalendar.data.json.JsonMonthlyPlansDataBundle;
+import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansDataBundle;
 import com.slamcode.goalcalendar.data.json.MainJsonFilePersistenceContext;
 import com.slamcode.goalcalendar.data.json.formatter.JsonDataFormatter;
 import com.slamcode.goalcalendar.data.model.ModelInfoProvider;
@@ -37,7 +35,7 @@ public final class DataDagger2Module {
 
     @Provides
     @Singleton
-    public DataFormatter<JsonMonthlyPlansDataBundle> provideJsonDataFormatter()
+    public DataFormatter<MonthlyPlansDataBundle> provideJsonDataFormatter()
     {
         return new JsonDataFormatter();
     }
@@ -51,7 +49,7 @@ public final class DataDagger2Module {
 
     @Provides
     @Singleton
-    public PersistenceContext providePersistenceContext(DataFormatter<JsonMonthlyPlansDataBundle> dataFormatter)
+    public PersistenceContext providePersistenceContext(DataFormatter<MonthlyPlansDataBundle> dataFormatter)
     {
         // create and return proper persistence context used in app
         return new MainJsonFilePersistenceContext(this.context, dataFormatter, DEFAULT_MAIN_DATA_FILE);
@@ -59,7 +57,7 @@ public final class DataDagger2Module {
 
     @Provides
     @Singleton
-    public BackupPersistenceContext provideBackupPersistenceContext(DataFormatter<JsonMonthlyPlansDataBundle> dataFormatter)
+    public BackupPersistenceContext provideBackupPersistenceContext(DataFormatter<MonthlyPlansDataBundle> dataFormatter)
     {
         // create and return proper persistence context used in app
         return new BackupJsonFilePersistenceContext(this.context, dataFormatter, DEFAULT_BACKUP_DATA_FILE);
