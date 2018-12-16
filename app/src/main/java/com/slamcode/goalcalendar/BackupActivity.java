@@ -3,6 +3,7 @@ package com.slamcode.goalcalendar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.slamcode.goalcalendar.dagger2.ComposableApplication;
 import com.slamcode.goalcalendar.view.activity.BackupActivityContract;
 import com.slamcode.goalcalendar.viewmodels.BackupViewModel;
 
@@ -18,6 +19,7 @@ public class BackupActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.injectDependencies();
         setContentView(R.layout.activity_backup);
     }
 
@@ -33,5 +35,10 @@ public class BackupActivity extends AppCompatActivity
 
     private void setupDataBindings() {
         // TODO; setup bindings to views
+    }
+
+    private void injectDependencies() {
+        ComposableApplication capp = (ComposableApplication)this.getApplication();
+        capp.getApplicationComponent().inject(this);
     }
 }

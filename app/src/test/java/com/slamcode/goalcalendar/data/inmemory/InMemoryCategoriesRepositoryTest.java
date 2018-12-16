@@ -1,6 +1,5 @@
 package com.slamcode.goalcalendar.data.inmemory;
 
-import com.google.common.base.Predicate;
 import com.slamcode.goalcalendar.data.CategoriesRepository;
 import com.slamcode.goalcalendar.data.model.plans.CategoryModel;
 
