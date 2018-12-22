@@ -6,7 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.google.gson.Gson;
 import com.slamcode.collections.CollectionUtils;
-import com.slamcode.goalcalendar.data.UnitOfWork;
+import com.slamcode.goalcalendar.data.unitofwork.UnitOfWork;
 import com.slamcode.goalcalendar.data.json.formatter.JsonDataFormatter;
 import com.slamcode.goalcalendar.data.model.plans.CategoryModel;
 import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansDataBundle;
@@ -34,6 +34,8 @@ import static org.junit.Assert.*;
 public class JsonFilePersistenceContextInstrumentedTest {
 
     private static final String BUNDLE_FILE_NAME = "test_json.data";
+    private static final String BACKUP_BUNDLE_FILE_NAME = "b_test_json.data";
+
     private Context appContext;
     private MonthlyPlansDataBundle bundle;
 
@@ -176,6 +178,6 @@ public class JsonFilePersistenceContextInstrumentedTest {
     
     private JsonFilePersistenceContext CreateTarget()
     {
-        return new JsonFilePersistenceContext(this.appContext, new JsonDataFormatter(), BUNDLE_FILE_NAME);
+        return new JsonFilePersistenceContext(this.appContext, new JsonDataFormatter(), new JsonPersistenceContextConfiguration(BUNDLE_FILE_NAME, BACKUP_BUNDLE_FILE_NAME));
     }
 }

@@ -1,6 +1,11 @@
 package com.slamcode.goalcalendar.data;
 
-public interface DataFormatter<DataBundle extends DataBundleAbstract> {
+import com.slamcode.goalcalendar.data.model.backup.BackupDataBundle;
+import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansDataBundle;
 
-    String formatDataBundle(DataBundle dataBundle);
+public interface DataFormatter {
+
+    String formatDataBundle(MonthlyPlansDataBundle dataBundle);
+
+    String formatDataBundle(BackupDataBundle dataBundle);
 }

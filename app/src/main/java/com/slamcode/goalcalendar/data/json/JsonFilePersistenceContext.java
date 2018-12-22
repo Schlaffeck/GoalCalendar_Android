@@ -6,17 +6,22 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.slamcode.goalcalendar.data.CategoriesRepository;
+import com.slamcode.goalcalendar.data.DataBundleAbstract;
 import com.slamcode.goalcalendar.data.DataFormatter;
 import com.slamcode.goalcalendar.data.MonthlyPlansRepository;
 import com.slamcode.goalcalendar.data.PersistenceContext;
-import com.slamcode.goalcalendar.data.UnitOfWork;
 import com.slamcode.goalcalendar.data.inmemory.InMemoryCategoriesRepository;
 import com.slamcode.goalcalendar.data.inmemory.InMemoryMonthlyPlansRepository;
+import com.slamcode.goalcalendar.data.model.backup.BackupDataBundle;
 import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansDataBundle;
+import com.slamcode.goalcalendar.data.unitofwork.UnitOfWork;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.InvalidClassException;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -24,17 +29,18 @@ public class JsonFilePersistenceContext implements PersistenceContext {
 
     private static final String LOG_TAG = "GOAL_JsonPerCtx";
     private MonthlyPlansDataBundle monthlyPlansDataBundle;
+    private BackupDataBundle backupDataBundle;
     private final Context appContext;
-    private final DataFormatter<MonthlyPlansDataBundle> dataFormatter;
-    private final String fileName;
+    private final DataFormatter dataFormatter;
+    private final JsonPersistenceContextConfiguration contextConfiguration;
 
     private Collection<PersistenceContextChangedListener> contextChangedListeners;
 
-    JsonFilePersistenceContext(Context appContext, DataFormatter<MonthlyPlansDataBundle> dataFormatter, String fileName)
+    JsonFilePersistenceContext(Context appContext, DataFormatter dataFormatter, JsonPersistenceContextConfiguration contextConfiguration)
     {
         this.appContext = appContext;
         this.dataFormatter = dataFormatter;
-        this.fileName = fileName;
+        this.contextConfiguration = contextConfiguration;
         this.contextChangedListeners =  new HashSet<>();
     }
 
@@ -54,20 +60,15 @@ public class JsonFilePersistenceContext implements PersistenceContext {
     @Override
     public void persistData() {
 
-        FileOutputStream fileStream;
         try{
-            Log.d(LOG_TAG, "Persisting json data file - START");
-            fileStream = this.appContext.openFileOutput(this.fileName, Context.MODE_PRIVATE);
-            fileStream.write(this.dataFormatter.formatDataBundle(this.monthlyPlansDataBundle).getBytes());
-            fileStream.close();
-
-            this.onContextDataPersisted();
-            Log.d(LOG_TAG, "Persisting json data file - END");
+            this.persistDataBundle(this.monthlyPlansDataBundle, this.monthlyPlansDataBundle.getClass(), this.contextConfiguration.getPlansDataFileName());
+            this.persistDataBundle(this.backupDataBundle, this.backupDataBundle.getClass(), this.contextConfiguration.getBackupInfoDataFileName());
         }
         catch(Exception exception)
         {
             Log.e(LOG_TAG, "Persisting json data file - FAILURE", exception);
         }
+
     }
 
     private void onContextDataPersisted() {
@@ -77,22 +78,19 @@ public class JsonFilePersistenceContext implements PersistenceContext {
 
     @Override
     public void initializePersistedData() {
+
         try {
-            Log.d(LOG_TAG, "Reading json data file - START");
-            File bundleFile = new File(this.getFilePath());
-            if(bundleFile.exists()) {
-                FileReader fileReader = new FileReader(this.getFilePath());
-
-                Gson gson = new GsonBuilder()
-                        .create();
-                this.monthlyPlansDataBundle = gson.fromJson(fileReader, MonthlyPlansDataBundle.class);
-            }
-
+            this.monthlyPlansDataBundle = this.initializePersistedDataBundle(MonthlyPlansDataBundle.class, this.contextConfiguration.getPlansDataFileName());
             if(this.monthlyPlansDataBundle == null)
             {
                 this.monthlyPlansDataBundle = new MonthlyPlansDataBundle();
             }
-            Log.d(LOG_TAG, "Reading json data file - END");
+
+            this.backupDataBundle= this.initializePersistedDataBundle(BackupDataBundle.class, this.contextConfiguration.getBackupInfoDataFileName());
+            if(this.backupDataBundle == null)
+            {
+                this.backupDataBundle = new BackupDataBundle();
+            }
         }
         catch(Exception exception)
         {
@@ -125,9 +123,52 @@ public class JsonFilePersistenceContext implements PersistenceContext {
         this.contextChangedListeners.clear();
     }
 
-    private String getFilePath()
+    private boolean persistDataBundle(DataBundleAbstract dataBundle, Class bundleType, String fileName) throws IOException {
+        FileOutputStream fileStream;
+            String formatted =  this.formatDataBundle(dataBundle, bundleType);
+            Log.d(LOG_TAG, "Persisting json data file - START");
+            fileStream = this.appContext.openFileOutput(fileName, Context.MODE_PRIVATE);
+            fileStream.write(formatted.getBytes());
+            fileStream.close();
+
+            this.onContextDataPersisted();
+            Log.d(LOG_TAG, "Persisting json data file - END");
+        return true;
+    }
+
+    private <DataBundle extends DataBundleAbstract> DataBundle initializePersistedDataBundle(Class<DataBundle> bundleType, String fileName) throws FileNotFoundException {
+        DataBundle bundle = null;
+            Log.d(LOG_TAG, "Reading json data file - START");
+            File bundleFile = new File(this.getFilePath(fileName));
+            if(bundleFile.exists()) {
+                FileReader fileReader = new FileReader(this.getFilePath(fileName));
+
+                Gson gson = new GsonBuilder()
+                        .create();
+                bundle = gson.fromJson(fileReader, bundleType);
+            }
+
+            Log.d(LOG_TAG, "Reading json data file - END");
+            return bundle;
+    }
+
+    private String formatDataBundle(DataBundleAbstract dataBundle, Class bundleType) {
+        if(bundleType == MonthlyPlansDataBundle.class)
+        {
+            return this.dataFormatter.formatDataBundle((MonthlyPlansDataBundle)dataBundle);
+        }
+
+        if(bundleType == BackupDataBundle.class)
+        {
+            return this.dataFormatter.formatDataBundle((BackupDataBundle) dataBundle);
+        }
+
+        throw new IllegalArgumentException("Formatting of type '" + bundleType.getName() +"' is not supported");
+    }
+
+    private String getFilePath(String fileName)
     {
-        return this.appContext.getFilesDir() +"/" + this.fileName;
+        return this.appContext.getFilesDir() +"/" + fileName;
     }
 
     private class JsonUnitOfWork implements UnitOfWork{

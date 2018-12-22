@@ -1,4 +1,7 @@
-package com.slamcode.goalcalendar.data;
+package com.slamcode.goalcalendar.data.unitofwork;
+
+import com.slamcode.goalcalendar.data.CategoriesRepository;
+import com.slamcode.goalcalendar.data.MonthlyPlansRepository;
 
 /**
  * Created by moriasla on 03.01.2017.

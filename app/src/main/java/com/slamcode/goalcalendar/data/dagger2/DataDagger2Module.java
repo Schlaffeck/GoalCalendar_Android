@@ -7,11 +7,13 @@ import com.slamcode.goalcalendar.data.DataFormatter;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.data.inmemory.DefaultModelInfoProvider;
 import com.slamcode.goalcalendar.data.json.BackupJsonFilePersistenceContext;
+import com.slamcode.goalcalendar.data.json.JsonPersistenceContextConfiguration;
 import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansDataBundle;
 import com.slamcode.goalcalendar.data.json.MainJsonFilePersistenceContext;
 import com.slamcode.goalcalendar.data.json.formatter.JsonDataFormatter;
 import com.slamcode.goalcalendar.data.model.ModelInfoProvider;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -22,10 +24,6 @@ import dagger.Provides;
  */
 @Module
 public final class DataDagger2Module {
-
-    private final static String DEFAULT_MAIN_DATA_FILE = "data.json";
-    private final static String DEFAULT_BACKUP_DATA_FILE = "backup.json";
-
     private final Context context;
 
     public DataDagger2Module(Context context)
@@ -35,7 +33,7 @@ public final class DataDagger2Module {
 
     @Provides
     @Singleton
-    public DataFormatter<MonthlyPlansDataBundle> provideJsonDataFormatter()
+    public DataFormatter provideJsonDataFormatter()
     {
         return new JsonDataFormatter();
     }
@@ -49,17 +47,33 @@ public final class DataDagger2Module {
 
     @Provides
     @Singleton
-    public PersistenceContext providePersistenceContext(DataFormatter<MonthlyPlansDataBundle> dataFormatter)
+    @Named(BackupJsonFilePersistenceContext.CONFIGURATION_NAME)
+    public JsonPersistenceContextConfiguration getBackupJsonContextConfiguration()
     {
-        // create and return proper persistence context used in app
-        return new MainJsonFilePersistenceContext(this.context, dataFormatter, DEFAULT_MAIN_DATA_FILE);
+        return new JsonPersistenceContextConfiguration("b_data.json", "b_backup.json");
     }
 
     @Provides
     @Singleton
-    public BackupPersistenceContext provideBackupPersistenceContext(DataFormatter<MonthlyPlansDataBundle> dataFormatter)
+    @Named(MainJsonFilePersistenceContext.CONFIGURATION_NAME)
+    public JsonPersistenceContextConfiguration getMainJsonContextConfiguration()
+    {
+        return new JsonPersistenceContextConfiguration("data.json", "backup.json");
+    }
+
+    @Provides
+    @Singleton
+    public PersistenceContext providePersistenceContext(DataFormatter dataFormatter, @Named(MainJsonFilePersistenceContext.CONFIGURATION_NAME) JsonPersistenceContextConfiguration configuration)
     {
         // create and return proper persistence context used in app
-        return new BackupJsonFilePersistenceContext(this.context, dataFormatter, DEFAULT_BACKUP_DATA_FILE);
+        return new MainJsonFilePersistenceContext(this.context, dataFormatter, configuration);
+    }
+
+    @Provides
+    @Singleton
+    public BackupPersistenceContext provideBackupPersistenceContext(DataFormatter dataFormatter, @Named(BackupJsonFilePersistenceContext.CONFIGURATION_NAME) JsonPersistenceContextConfiguration configuration)
+    {
+        // create and return proper persistence context used in app
+        return new BackupJsonFilePersistenceContext(this.context, dataFormatter, configuration);
     }
 }

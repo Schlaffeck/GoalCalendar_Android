@@ -4,7 +4,7 @@ import android.app.Activity;
 
 import com.slamcode.goalcalendar.commands.CommandBaseImpl;
 import com.slamcode.goalcalendar.data.PersistenceContext;
-import com.slamcode.goalcalendar.data.UnitOfWork;
+import com.slamcode.goalcalendar.data.unitofwork.UnitOfWork;
 import com.slamcode.goalcalendar.data.model.plans.CategoryModel;
 import com.slamcode.goalcalendar.data.query.NumericalComparisonOperator;
 import com.slamcode.goalcalendar.planning.DateTime;

@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.data;
 
 import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansDataBundle;
+import com.slamcode.goalcalendar.data.unitofwork.UnitOfWork;
 
 /**
  * Created by moriasla on 03.01.2017.

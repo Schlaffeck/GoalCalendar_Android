@@ -11,7 +11,7 @@ import com.slamcode.collections.Predicate;
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.data.PersistenceContext;
-import com.slamcode.goalcalendar.data.UnitOfWork;
+import com.slamcode.goalcalendar.data.unitofwork.UnitOfWork;
 import com.slamcode.goalcalendar.data.model.plans.CategoryModel;
 import com.slamcode.goalcalendar.data.model.ModelHelper;
 import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansModel;

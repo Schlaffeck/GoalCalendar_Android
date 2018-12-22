@@ -1,7 +1,6 @@
 package com.slamcode.goalcalendar.service.dagger2;
 
 import com.slamcode.goalcalendar.ApplicationContext;
-import com.slamcode.goalcalendar.data.MainPersistenceContext;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.diagniostics.Logger;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryDescriptionProvider;
