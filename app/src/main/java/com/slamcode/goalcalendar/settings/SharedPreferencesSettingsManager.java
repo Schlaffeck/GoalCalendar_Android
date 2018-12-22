@@ -13,6 +13,7 @@ import com.slamcode.goalcalendar.planning.HourMinuteTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by moriasla on 23.01.2017.
@@ -173,6 +174,18 @@ public class SharedPreferencesSettingsManager implements AppSettingsManager, Sha
     public void setOnboardingShownDate(DateTime onboardingShownDate) {
         SharedPreferences.Editor editor = this.sharedPreferences.edit();
         editor.putLong(ONBOARDING_SHOWN_DATETIME_MILLIS_NAME, onboardingShownDate.getTimeMillis());
+        editor.apply();
+    }
+
+    @Override
+    public String getUserLocalIdentifier() {
+        return this.sharedPreferences.getString(SettingsKeys.LOCAL_USER_IDENTIFIER, null);
+    }
+
+    @Override
+    public void setUserLocalIdentifier(String userLocalIdentifier) {
+        SharedPreferences.Editor editor = this.sharedPreferences.edit();
+        editor.putString(SettingsKeys.LOCAL_USER_IDENTIFIER, userLocalIdentifier);
         editor.apply();
     }
 

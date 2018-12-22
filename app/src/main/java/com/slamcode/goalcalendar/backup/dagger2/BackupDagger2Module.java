@@ -2,18 +2,20 @@ package com.slamcode.goalcalendar.backup.dagger2;
 
 import android.content.Context;
 
-import com.slamcode.goalcalendar.ApplicationContext;
-import com.slamcode.goalcalendar.DefaultApplicationContext;
+import com.slamcode.goalcalendar.backup.BackupSourceDataProvider;
 import com.slamcode.goalcalendar.backup.BackupWriter;
-import com.slamcode.goalcalendar.backup.local.PersistenceContextBackupReaderWriter;
+import com.slamcode.goalcalendar.backup.local.PersistenceContextBackupReaderRestorer;
+import com.slamcode.goalcalendar.backup.local.PersistenceContextBackupSourceDataProvider;
 import com.slamcode.goalcalendar.data.BackupPersistenceContext;
 import com.slamcode.goalcalendar.data.MainPersistenceContext;
 import com.slamcode.goalcalendar.data.model.ModelInfoProvider;
+import com.slamcode.goalcalendar.settings.AppSettingsManager;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import dagger.multibindings.StringKey;
 
 /**
  * Created by moriasla on 01.03.2017.
@@ -30,8 +32,16 @@ public class BackupDagger2Module {
 
     @Singleton
     @Provides
-    BackupWriter provideBackupWriter(ModelInfoProvider modelInfoProvider, MainPersistenceContext mainPersistenceContext, BackupPersistenceContext backupPersistenceContext)
+    BackupWriter provideLocalBackupWriter(ModelInfoProvider modelInfoProvider, MainPersistenceContext mainPersistenceContext, BackupPersistenceContext backupPersistenceContext)
     {
-        return new PersistenceContextBackupReaderWriter(modelInfoProvider, mainPersistenceContext, backupPersistenceContext);
+        return new PersistenceContextBackupReaderRestorer(modelInfoProvider, mainPersistenceContext, backupPersistenceContext);
+    }
+
+    @Singleton
+    @Provides(type = Provides.Type.MAP)
+    @StringKey(PersistenceContextBackupSourceDataProvider.SOURCE_TYPE)
+    BackupSourceDataProvider provideLocalBackupSource(AppSettingsManager appSettingsManager, PersistenceContextBackupReaderRestorer readerWriter)
+    {
+        return new PersistenceContextBackupSourceDataProvider(appSettingsManager, readerWriter);
     }
 }

@@ -41,6 +41,10 @@ public interface AppSettingsManager {
 
     void setOnboardingShownDate(DateTime onboardingShownDate);
 
+    String getUserLocalIdentifier();
+
+    void setUserLocalIdentifier(String userLocalIdentifier);
+
     void addSettingsChangedListener(SettingsChangedListener listener);
 
     void removeSettingsChangedListener(SettingsChangedListener listener);

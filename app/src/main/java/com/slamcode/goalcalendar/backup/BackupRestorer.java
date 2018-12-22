@@ -4,15 +4,13 @@ import com.slamcode.goalcalendar.data.model.backup.BackupInfoModel;
 
 import java.util.Locale;
 
-public interface BackupWriter {
+public interface BackupRestorer {
 
-    WriteResult writeBackup();
+    RestoreResult restoreBackup(BackupInfoModel backupInfo);
 
-    interface WriteResult
-    {
-        boolean isSuccess();
+    interface RestoreResult{
 
-        BackupInfoModel getInfoModel();
+        boolean getIsSuccess();
 
         String getDetailedMessage(Locale locale);
     }
