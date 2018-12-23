@@ -3,9 +3,12 @@ package com.slamcode.goalcalendar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.slamcode.goalcalendar.backup.BackupSourceDataProvidersRegistry;
 import com.slamcode.goalcalendar.dagger2.ComposableApplication;
 import com.slamcode.goalcalendar.view.activity.BackupActivityContract;
 import com.slamcode.goalcalendar.viewmodels.BackupViewModel;
+
+import javax.inject.Inject;
 
 public class BackupActivity extends AppCompatActivity
     implements BackupActivityContract.ActivityView
@@ -13,6 +16,9 @@ public class BackupActivity extends AppCompatActivity
     final String ACTIVITY_ID = BackupActivity.class.getName();
 
     private final static String LOG_TAG = "GOAL_BackupAct";
+
+    @Inject
+    BackupSourceDataProvidersRegistry backupSourceDataProvidersRegistry;
 
     private BackupViewModel activityViewModel;
 
