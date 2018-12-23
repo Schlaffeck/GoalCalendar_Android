@@ -22,12 +22,14 @@ import com.slamcode.goalcalendar.dagger2.Dagger2ComponentContainer;
 import com.slamcode.goalcalendar.planning.Month;
 import com.slamcode.goalcalendar.planning.YearMonthPair;
 import com.slamcode.goalcalendar.planning.schedule.DateTimeChangeListenersRegistry;
+import com.slamcode.goalcalendar.view.lists.BackupSourcesRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.CategoryPlansRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.CategoryPlansSummaryRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.DailyPlanHeaderRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
 import com.slamcode.goalcalendar.view.lists.gestures.ItemDragCallback;
 import com.slamcode.goalcalendar.view.lists.scrolling.RecyclerViewSimultaneousScrollingController;
+import com.slamcode.goalcalendar.viewmodels.BackupSourceViewModel;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 import com.slamcode.goalcalendar.viewmodels.DayInMonthViewModel;
 import com.slamcode.goalcalendar.viewmodels.MonthViewModel;
@@ -255,6 +257,36 @@ public class Bindings {
                 }
             }
         });
+    }
+
+    @BindingAdapter("bind:backupSourcesSource")
+    public static void setBackupSourcesItemsSource(RecyclerView recyclerView, ObservableList<BackupSourceViewModel> itemsSource)
+    {
+        Log.d(LOG_TAG, "Binding backup providers source - START");
+        if(recyclerView == null)
+            return;
+
+        RecyclerView.Adapter adapter = recyclerView.getAdapter();
+
+        if(adapter == null)
+        {
+            Dagger2InjectData injectData = new Dagger2InjectData();
+            Dagger2ComponentContainer.getApplicationDagger2Component().inject(injectData);
+
+            Log.d(LOG_TAG, "Binding backup providers source - creating new adapter");
+            adapter = injectData.itemsCollectionAdapterProvider
+                        .provideBackusSourcesRecyclerViewAdapter();
+            recyclerView.setAdapter(adapter);
+        }
+
+        if((adapter instanceof BackupSourcesRecyclerViewAdapter))
+        {
+            Log.d(LOG_TAG, "Binding backup providers source - updating adapter source");
+            BackupSourcesRecyclerViewAdapter dataAdapter = (BackupSourcesRecyclerViewAdapter) adapter;
+            dataAdapter.updateSourceCollection(itemsSource);
+        }
+
+        Log.d(LOG_TAG, "Binding backup providers source - END");
     }
 
     public static class Dagger2InjectData{

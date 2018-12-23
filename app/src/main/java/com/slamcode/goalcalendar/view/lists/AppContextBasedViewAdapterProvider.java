@@ -29,4 +29,9 @@ public class AppContextBasedViewAdapterProvider implements ItemsCollectionAdapte
     public CategoryPlansRecyclerViewAdapter provideCategoryPlansRecyclerViewAdapter(DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry, YearMonthPair yearMonthPair, ObservableList<CategoryPlansViewModel> itemsSource) {
         return new CategoryPlansRecyclerViewAdapter(dateTimeChangeListenersRegistry, yearMonthPair, itemsSource);
     }
+
+    @Override
+    public BackupSourcesRecyclerViewAdapter provideBackusSourcesRecyclerViewAdapter() {
+        return new BackupSourcesRecyclerViewAdapter();
+    }
 }

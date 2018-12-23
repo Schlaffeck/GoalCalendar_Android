@@ -1,11 +1,13 @@
 package com.slamcode.goalcalendar.viewmodels;
 
+import android.databinding.BaseObservable;
+
 import com.slamcode.goalcalendar.backup.BackupSourceDataProvider;
 import com.slamcode.goalcalendar.planning.DateTime;
 
 import java.util.Locale;
 
-public class BackupSourceViewModel {
+public class BackupSourceViewModel extends BaseObservable {
 
     private final BackupSourceDataProvider dataProvider;
     private final DateTime lastBackupDateTime;
