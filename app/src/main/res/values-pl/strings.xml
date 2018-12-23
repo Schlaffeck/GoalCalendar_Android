@@ -177,4 +177,5 @@
     <!-- backup -->
     <string name="backup_createBackup_button_text" >Zapisz</string>
     <string name="backup_restoreBackup_button_text" >Odtwórz</string>
+    <string name="backup_noBackup_text">Nie zapisano</string>
 </resources>

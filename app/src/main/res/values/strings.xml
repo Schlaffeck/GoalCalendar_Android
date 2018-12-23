@@ -198,4 +198,5 @@
     <!-- backup -->
     <string name="backup_createBackup_button_text" >Save backup</string>
     <string name="backup_restoreBackup_button_text" >Restore</string>
+    <string name="backup_noBackup_text">Not saved</string>
 </resources>

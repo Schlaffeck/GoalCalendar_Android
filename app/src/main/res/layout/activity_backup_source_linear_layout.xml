@@ -28,8 +28,7 @@
                 android:id="@+id/backup_source_listElement_lastDate_textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility='@{vm.hasBackup ? View.VISIBLE : View.GONE}'
-                android:text='@{vm.lastBackupDateTime.toString()}'/>
+                android:text='@{vm.hasBackup ? vm.lastBackupDateTime.toString() : @string/backup_noBackup_text}'/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
