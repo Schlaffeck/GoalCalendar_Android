@@ -31,6 +31,11 @@ public class DefaultBackupPresenter implements BackupPresenter {
         else this.resetData();
     }
 
+    @Override
+    public void createBackup(String sourceType) {
+        return;
+    }
+
     private void resetData() {
         this.activityView.onDataSet(this.data);
     }

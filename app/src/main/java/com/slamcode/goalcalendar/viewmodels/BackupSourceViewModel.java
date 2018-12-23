@@ -28,4 +28,9 @@ public class BackupSourceViewModel {
     {
         return this.lastBackupDateTime;
     }
+
+    public String getSourceType()
+    {
+        return this.dataProvider.getSourceType();
+    }
 }

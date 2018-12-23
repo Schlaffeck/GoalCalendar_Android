@@ -9,6 +9,8 @@ public interface BackupActivityContract {
         void setData(BackupViewModel data);
 
         void initializeWithView(ActivityView activityView);
+
+        void createBackup(String sourceType);
     }
 
     interface ActivityView

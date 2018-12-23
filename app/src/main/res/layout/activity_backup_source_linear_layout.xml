@@ -6,6 +6,9 @@
         <variable
             name="vm"
             type="com.slamcode.goalcalendar.viewmodels.BackupSourceViewModel"/>
+        <variable
+            name="presenter"
+            type="com.slamcode.goalcalendar.view.presenters.BackupPresenter"/>
     </data>
     <LinearLayout
         android:id="@+id/backup_source_listElement_linearLayout"
@@ -37,7 +40,8 @@
                 android:id="@+id/backup_source_listElement_createBackup_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/backup_createBackup_button_text"/>
+                android:text="@string/backup_createBackup_button_text"
+                android:onClick='@{(view) -> presenter.createBackup(vm.sourceType)}'/>
             <Button
                 style="?android:attr/buttonBarButtonStyle"
                 android:id="@+id/backup_source_listElement_restoreBackup_button"
