@@ -1,5 +1,6 @@
 package com.slamcode.goalcalendar.view.presenters;
 
+import com.slamcode.goalcalendar.backup.BackupSourceDataProvidersRegistry;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.view.activity.BackupActivityContract;
 import com.slamcode.goalcalendar.viewmodels.BackupViewModel;
@@ -10,9 +11,11 @@ public class DefaultBackupPresenter implements BackupPresenter {
     private BackupActivityContract.ActivityView activityView;
 
     private PersistenceContext persistenceContext;
+    private final BackupSourceDataProvidersRegistry backupSourceDataProvidersRegistry;
 
-    public DefaultBackupPresenter(PersistenceContext persistenceContext) {
+    public DefaultBackupPresenter(PersistenceContext persistenceContext, BackupSourceDataProvidersRegistry backupSourceDataProvidersRegistry) {
         this.persistenceContext = persistenceContext;
+        this.backupSourceDataProvidersRegistry = backupSourceDataProvidersRegistry;
     }
 
     @Override

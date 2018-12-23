@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.view.dagger2;
 
 import com.slamcode.goalcalendar.ApplicationContext;
+import com.slamcode.goalcalendar.backup.BackupSourceDataProvidersRegistry;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
@@ -44,9 +45,10 @@ public final class ViewDagger2Module {
             ApplicationContext applicationContext,
             PersistenceContext persistenceContext,
             ItemsCollectionAdapterProvider listAdapterProvider,
-            PlansSummaryCalculator plansSummaryCalculator)
+            PlansSummaryCalculator plansSummaryCalculator,
+            BackupSourceDataProvidersRegistry backupSourceDataProvidersRegistry)
     {
-        return new CachedApplicationPresentersSource(applicationContext, persistenceContext, listAdapterProvider, plansSummaryCalculator);
+        return new CachedApplicationPresentersSource(applicationContext, persistenceContext, listAdapterProvider, plansSummaryCalculator, backupSourceDataProvidersRegistry);
     }
 
     @Provides

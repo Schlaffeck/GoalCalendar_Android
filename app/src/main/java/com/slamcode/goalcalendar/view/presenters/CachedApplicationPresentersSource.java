@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.view.presenters;
 
 import com.slamcode.goalcalendar.ApplicationContext;
+import com.slamcode.goalcalendar.backup.BackupSourceDataProvidersRegistry;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
 import com.slamcode.goalcalendar.view.activity.BackupActivityContract;
@@ -23,16 +24,19 @@ public class CachedApplicationPresentersSource implements PresentersSource {
     private ItemsCollectionAdapterProvider listAdapterProvider;
 
     private PlansSummaryCalculator plansSummaryCalculator;
+    private final BackupSourceDataProvidersRegistry backupSourceDataProvidersRegistry;
 
     public CachedApplicationPresentersSource(ApplicationContext applicationContext,
-                                            PersistenceContext persistenceContext,
-                                            ItemsCollectionAdapterProvider listAdapterProvider,
-                                            PlansSummaryCalculator plansSummaryCalculator)
+                                             PersistenceContext persistenceContext,
+                                             ItemsCollectionAdapterProvider listAdapterProvider,
+                                             PlansSummaryCalculator plansSummaryCalculator,
+                                             BackupSourceDataProvidersRegistry backupSourceDataProvidersRegistry)
     {
         this.applicationContext = applicationContext;
         this.persistenceContext = persistenceContext;
         this.listAdapterProvider = listAdapterProvider;
         this.plansSummaryCalculator = plansSummaryCalculator;
+        this.backupSourceDataProvidersRegistry = backupSourceDataProvidersRegistry;
     }
 
     @Override
@@ -51,7 +55,7 @@ public class CachedApplicationPresentersSource implements PresentersSource {
     public BackupPresenter getBackupPresenter(BackupActivityContract.ActivityView activityView) {
         if(this.backupPresenter == null)
         {
-            this.backupPresenter = new DefaultBackupPresenter(this.persistenceContext);
+            this.backupPresenter = new DefaultBackupPresenter(this.persistenceContext, this.backupSourceDataProvidersRegistry);
         }
         return this.backupPresenter;
     }
