@@ -13,6 +13,8 @@ import com.slamcode.goalcalendar.data.MainPersistenceContext;
 import com.slamcode.goalcalendar.data.model.ModelInfoProvider;
 import com.slamcode.goalcalendar.settings.AppSettingsManager;
 
+import java.util.Map;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -34,7 +36,7 @@ public class BackupDagger2Module {
 
     @Singleton
     @Provides
-    BackupWriter provideLocalBackupWriter(ModelInfoProvider modelInfoProvider, MainPersistenceContext mainPersistenceContext, BackupPersistenceContext backupPersistenceContext)
+    PersistenceContextBackupReaderRestorer provideLocalBackupWriter(ModelInfoProvider modelInfoProvider, MainPersistenceContext mainPersistenceContext, BackupPersistenceContext backupPersistenceContext)
     {
         return new PersistenceContextBackupReaderRestorer(modelInfoProvider, mainPersistenceContext, backupPersistenceContext);
     }
@@ -49,8 +51,8 @@ public class BackupDagger2Module {
 
     @Singleton
     @Provides
-    BackupSourceDataProvidersRegistry provideBackupSourceProvidersRegistry()
+    BackupSourceDataProvidersRegistry provideBackupSourceProvidersRegistry(Map<String, BackupSourceDataProvider> providerMap)
     {
-        return new DefaultBackupSourceDataProvidersRegistry();
+        return new DefaultBackupSourceDataProvidersRegistry(providerMap);
     }
 }

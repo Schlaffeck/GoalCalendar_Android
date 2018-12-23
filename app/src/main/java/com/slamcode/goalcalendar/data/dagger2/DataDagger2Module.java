@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.slamcode.goalcalendar.data.BackupPersistenceContext;
 import com.slamcode.goalcalendar.data.DataFormatter;
+import com.slamcode.goalcalendar.data.MainPersistenceContext;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.data.inmemory.DefaultModelInfoProvider;
 import com.slamcode.goalcalendar.data.json.BackupJsonFilePersistenceContext;
@@ -63,7 +64,14 @@ public final class DataDagger2Module {
 
     @Provides
     @Singleton
-    public PersistenceContext providePersistenceContext(DataFormatter dataFormatter, @Named(MainJsonFilePersistenceContext.CONFIGURATION_NAME) JsonPersistenceContextConfiguration configuration)
+    public PersistenceContext providePersistenceContext(MainPersistenceContext mainPersistenceContext)
+    {
+        return mainPersistenceContext;
+    }
+
+    @Provides
+    @Singleton
+    public MainPersistenceContext provideMainPersistenceContext(DataFormatter dataFormatter, @Named(MainJsonFilePersistenceContext.CONFIGURATION_NAME) JsonPersistenceContextConfiguration configuration)
     {
         // create and return proper persistence context used in app
         return new MainJsonFilePersistenceContext(this.context, dataFormatter, configuration);
