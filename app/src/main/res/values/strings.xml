@@ -194,4 +194,8 @@
     <string name="skip">Skip</string>
     <string name="finish">Finish</string>
     <string name='finalVisibility'>125232</string>
+
+    <!-- backup -->
+    <string name="backup_createBackup_button_text" >Save backup</string>
+    <string name="backup_restoreBackup_button_text" >Restore</string>
 </resources>
