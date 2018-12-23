@@ -30,7 +30,7 @@ public class DefaultBackupPresenter implements BackupPresenter {
     public void initializeWithView(BackupActivityContract.ActivityView activityView) {
         this.activityView = activityView;
         if(this.data == null)
-            this.setData(new BackupViewModel());
+            this.setData(new BackupViewModel(this.persistenceContext, this.backupSourceDataProvidersRegistry));
         else this.resetData();
     }
 

@@ -1,5 +1,6 @@
 package com.slamcode.goalcalendar.data.inmemory;
 
+import com.slamcode.collections.CollectionUtils;
 import com.slamcode.collections.Predicate;
 import com.slamcode.goalcalendar.data.Identifiable;
 import com.slamcode.goalcalendar.data.Repository;
@@ -90,15 +91,6 @@ public class InMemoryRepositoryBase<ModelType extends Identifiable<IdentityType>
 
     @Override
     public List<ModelType> findMany(Predicate<ModelType> predicate) {
-
-        List<ModelType> resultList = new ArrayList<ModelType>();
-
-        for (ModelType cm : this.inMemoryEntityList) {
-            if (predicate.apply(cm))
-            {
-                resultList.add(cm);
-            }
-        }
-        return resultList;
+        return CollectionUtils.createList(CollectionUtils.filter(this.inMemoryEntityList, predicate));
     }
 }

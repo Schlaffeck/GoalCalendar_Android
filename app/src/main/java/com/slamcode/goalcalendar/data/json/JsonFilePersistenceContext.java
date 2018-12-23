@@ -5,11 +5,13 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.slamcode.goalcalendar.data.BackupInfoRepository;
 import com.slamcode.goalcalendar.data.CategoriesRepository;
 import com.slamcode.goalcalendar.data.DataBundleAbstract;
 import com.slamcode.goalcalendar.data.DataFormatter;
 import com.slamcode.goalcalendar.data.MonthlyPlansRepository;
 import com.slamcode.goalcalendar.data.PersistenceContext;
+import com.slamcode.goalcalendar.data.inmemory.InMemoryBackupInfoRepository;
 import com.slamcode.goalcalendar.data.inmemory.InMemoryCategoriesRepository;
 import com.slamcode.goalcalendar.data.inmemory.InMemoryMonthlyPlansRepository;
 import com.slamcode.goalcalendar.data.model.backup.BackupDataBundle;
@@ -100,12 +102,18 @@ public class JsonFilePersistenceContext implements PersistenceContext {
 
     @Override
     public UnitOfWork createUnitOfWork() {
-        if(this.monthlyPlansDataBundle == null)
+        return this.createUnitOfWork(false);
+    }
+
+    @Override
+    public UnitOfWork createUnitOfWork(boolean readonly) {
+
+        if(this.monthlyPlansDataBundle == null || this.backupDataBundle == null)
         {
             this.initializePersistedData();
         }
 
-        return new JsonUnitOfWork(this.monthlyPlansDataBundle);
+        return new JsonUnitOfWork(readonly, this.monthlyPlansDataBundle, this.backupDataBundle);
     }
 
     @Override
@@ -172,16 +180,23 @@ public class JsonFilePersistenceContext implements PersistenceContext {
     }
 
     private class JsonUnitOfWork implements UnitOfWork{
-
+;
         private boolean working = false;
         private final InMemoryMonthlyPlansRepository monthlyPlansRepository;
+        private final BackupDataBundle backupInfoDataBundle;
+        private final boolean readonly;
         private final CategoriesRepository categoriesRepository;
+        private final InMemoryBackupInfoRepository backupInfoRepository;
 
-        JsonUnitOfWork(MonthlyPlansDataBundle dataBundle)
+        JsonUnitOfWork(boolean readonly, MonthlyPlansDataBundle dataBundle, BackupDataBundle backupInfoDataBundle)
         {
+            this.readonly = readonly;
             this.categoriesRepository = new InMemoryCategoriesRepository(dataBundle.monthlyPlans);
 
             this.monthlyPlansRepository = new InMemoryMonthlyPlansRepository(dataBundle.monthlyPlans);
+            this.backupInfoDataBundle = backupInfoDataBundle;
+
+            this.backupInfoRepository = new InMemoryBackupInfoRepository(this.backupInfoDataBundle.getBackupInfos());
         }
 
         public CategoriesRepository getCategoriesRepository() {
@@ -194,13 +209,26 @@ public class JsonFilePersistenceContext implements PersistenceContext {
         }
 
         @Override
+        public BackupInfoRepository getBackupInfoRepository() {
+            return this.backupInfoRepository;
+        }
+
+        @Override
+        public boolean isReadonly() {
+            return this.readonly;
+        }
+
+        @Override
         public void complete() {
-            this.complete(true);
+            this.complete(!this.readonly);
         }
 
         @Override
         public void complete(boolean persistData) {
             this.working = false;
+            if(this.readonly && persistData)
+                throw new IllegalArgumentException("Can not persist data on readonly unit of work");
+
             if(persistData)
                 persistData();
         }

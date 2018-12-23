@@ -2,6 +2,8 @@ package com.slamcode.collections;
 
 import java.util.*;
 
+import javax.xml.bind.Element;
+
 public class CollectionUtils {
 
     public static <T> List<T> createList(int size, ElementCreator<T> creator)
@@ -21,6 +23,17 @@ public class CollectionUtils {
     {
         List<T> result = new ArrayList<T>();
         Collections.addAll(result, elements);
+
+        return result;
+    }
+
+    public static <T> List<T> createList(Iterable<T> elements)
+    {
+        List<T> result = new ArrayList<T>();
+        for(T elem : elements)
+        {
+            result.add(elem);
+        }
 
         return result;
     }
@@ -81,5 +94,52 @@ public class CollectionUtils {
         }
 
         return result;
+    }
+
+    public static <ParentType, Comparable extends java.lang.Comparable<Comparable>> ParentType firstMax(Iterable<ParentType> iterable, ElementSelector<ParentType, Comparable> comparableSelector)
+    {
+        ParentType result = null;
+        Comparable comparableResult = null;
+        for(ParentType item : iterable)
+        {
+            Comparable itemComparable =  comparableSelector.select(item);
+            if(itemComparable != null && (comparableResult == null || comparableResult.compareTo(itemComparable) > 0))
+            {
+                result = item;
+                comparableResult = itemComparable;
+            }
+        }
+
+        return result;
+    }
+
+    public static <ParentType, Comparable extends java.lang.Comparable<Comparable>> ParentType firstMin(Iterable<ParentType> iterable, ElementSelector<ParentType, Comparable> comparableSelector)
+    {
+        ParentType result = null;
+        Comparable comparableResult = null;
+        for(ParentType item : iterable)
+        {
+            Comparable itemComparable =  comparableSelector.select(item);
+            if(itemComparable != null && (comparableResult == null || comparableResult.compareTo(itemComparable) < 0))
+            {
+                result = item;
+                comparableResult = itemComparable;
+            }
+        }
+
+        return result;
+    }
+
+    public static <Element> Iterable<Element> filter(Iterable<Element> iterable, Predicate<Element> predicate)
+    {
+        List<Element> resultList = new ArrayList<Element>();
+
+        for (Element cm : iterable) {
+            if (predicate.apply(cm))
+            {
+                resultList.add(cm);
+            }
+        }
+        return resultList;
     }
 }

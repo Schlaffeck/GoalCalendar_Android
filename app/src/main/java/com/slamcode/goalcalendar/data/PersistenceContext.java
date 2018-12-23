@@ -19,7 +19,18 @@ public interface PersistenceContext {
     // TODO: Refactor method to not be public somehow
     void setDataBundle(MonthlyPlansDataBundle dataBundle);
 
+    /**
+     * Creates unit of work persistable by default
+     * @return Persistable non-readonly unit of work
+     */
     UnitOfWork createUnitOfWork();
+
+    /**
+     * Creates new unit of work wither readonly or not
+     * @param readonly Flag indicating whether unit of work should be readonly non-persistable
+     * @return Unot of work
+     */
+    UnitOfWork createUnitOfWork(boolean readonly);
 
     void addContextChangedListener(PersistenceContextChangedListener listener);
 
