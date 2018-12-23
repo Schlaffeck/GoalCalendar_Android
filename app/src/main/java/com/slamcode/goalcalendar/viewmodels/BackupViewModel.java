@@ -53,6 +53,6 @@ public class BackupViewModel extends BaseObservable {
         BackupInfoModel lastInfo = uow.getBackupInfoRepository().getLatestBackupInfo(provider.getSourceType());
         uow.complete();
 
-        return DateTimeHelper.getDateTime(lastInfo.getBackupDateUtc().getTime());
+        return lastInfo != null ? DateTimeHelper.getDateTime(lastInfo.getBackupDateUtc().getTime()) : null;
     }
 }
