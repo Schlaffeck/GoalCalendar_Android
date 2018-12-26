@@ -2,7 +2,6 @@
     <integer name="add_data_version">1</integer>
     <string name="app_name">Goal calendar</string>
     <string name="action_settings">Settings</string>
-    <string name="action_backups">Backups</string>
     <string name="context_menu_edit_item">Edit</string>
     <string name="context_menu_delete_item">Delete</string>
     <string name="button_yes">Yes</string>
@@ -134,6 +133,8 @@
     <string name="monthly_plans_summary_progressMonth_progressFaster_description">You are progressing faster than planned</string>
 
     <!-- notification -->
+    <string name="notification_snackbar_okAction">OK</string>
+
     <string name="notification_plannedForToday_title">Planned for today</string>
     <string name="notification_plannedForToday_content">You have %d things planned for today</string>
     <string name="notification_plannedForToday_single_content">You have %d thing planned for today</string>
@@ -196,7 +197,13 @@
     <string name='finalVisibility'>125232</string>
 
     <!-- backup -->
+    <string name="action_backups">Backups</string>
     <string name="backup_createBackup_button_text" >Save backup</string>
     <string name="backup_restoreBackup_button_text" >Restore</string>
     <string name="backup_noBackup_text">Not saved</string>
+    <string name="backup_create_no_source_snackbar_message">Backup source not found</string>
+    <string name="backup_create_error_snackbar_message">Could not save backup, try later</string>
+    <string name="backup_create_info_persistence_error_snackbar_message">Backup saved, data info not persisted</string>
+    <string name="backup_create_success_snackbar_message">Backup created</string>
+    <string name="backup_progress_overlay_message">Saving backup</string>
 </resources>

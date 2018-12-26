@@ -55,7 +55,7 @@ public class CachedApplicationPresentersSource implements PresentersSource {
     public BackupPresenter getBackupPresenter(BackupActivityContract.ActivityView activityView) {
         if(this.backupPresenter == null)
         {
-            this.backupPresenter = new DefaultBackupPresenter(this.persistenceContext, this.backupSourceDataProvidersRegistry);
+            this.backupPresenter = new PersistentBackupPresenter(this.applicationContext, this.persistenceContext, this.backupSourceDataProvidersRegistry);
         }
         return this.backupPresenter;
     }

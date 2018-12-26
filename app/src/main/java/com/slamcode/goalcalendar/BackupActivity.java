@@ -67,6 +67,11 @@ public class BackupActivity extends AppCompatActivity
         this.setupDataBindings();
     }
 
+    @Override
+    public View getMainView() {
+        return this.mainLayout;
+    }
+
     private void startMainActivity()
     {
         this.mainLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

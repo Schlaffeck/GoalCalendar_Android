@@ -59,6 +59,19 @@ public class JsonFilePersistenceContext implements PersistenceContext {
         this.monthlyPlansDataBundle = dataBundle;
     }
 
+    public BackupDataBundle getBackupDataBundle()
+    {
+        return this.backupDataBundle;
+    }
+
+    public void setBackupDataBundle(BackupDataBundle dataBundle)
+    {
+        if(dataBundle == null)
+            throw new IllegalArgumentException("Data bundle can not be set to null");
+
+        this.backupDataBundle = dataBundle;
+    }
+
     @Override
     public void persistData() {
 

@@ -1,5 +1,6 @@
 package com.slamcode.goalcalendar.data;
 
+import com.slamcode.goalcalendar.data.model.backup.BackupDataBundle;
 import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansDataBundle;
 import com.slamcode.goalcalendar.data.unitofwork.UnitOfWork;
 
@@ -18,6 +19,12 @@ public interface PersistenceContext {
 
     // TODO: Refactor method to not be public somehow
     void setDataBundle(MonthlyPlansDataBundle dataBundle);
+
+    // TODO: Refactor method to not be public somehow
+    BackupDataBundle getBackupDataBundle();
+
+    // TODO: Refactor method to not be public somehow
+    void setBackupDataBundle(BackupDataBundle dataBundle);
 
     /**
      * Creates unit of work persistable by default

@@ -1,5 +1,7 @@
 package com.slamcode.goalcalendar.view.activity;
 
+import android.view.View;
+
 import com.slamcode.goalcalendar.viewmodels.BackupViewModel;
 
 public interface BackupActivityContract {
@@ -16,5 +18,7 @@ public interface BackupActivityContract {
     interface ActivityView
     {
         void onDataSet(BackupViewModel data);
+
+        View getMainView();
     }
 }

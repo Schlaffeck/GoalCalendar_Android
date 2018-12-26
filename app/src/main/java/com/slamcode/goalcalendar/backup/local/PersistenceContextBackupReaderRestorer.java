@@ -4,6 +4,7 @@ import com.slamcode.goalcalendar.backup.BackupRestorer;
 import com.slamcode.goalcalendar.backup.BackupWriter;
 import com.slamcode.goalcalendar.data.BackupPersistenceContext;
 import com.slamcode.goalcalendar.data.MainPersistenceContext;
+import com.slamcode.goalcalendar.data.model.backup.BackupDataBundle;
 import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansDataBundle;
 import com.slamcode.goalcalendar.data.model.ModelInfoProvider;
 import com.slamcode.goalcalendar.data.model.backup.BackupInfoModel;
@@ -29,16 +30,18 @@ public final class PersistenceContextBackupReaderRestorer implements BackupWrite
     public WriteResult writeBackup() {
 
         MonthlyPlansDataBundle mainData = this.mainPersistenceContext.getDataBundle();
-        if(mainData == null)
+        BackupDataBundle backupData = this.mainPersistenceContext.getBackupDataBundle();
+        if(mainData == null || backupData == null)
             return new LocalBackupWriteResult(false, null, null);
 
         this.backupPersistenceContext.setDataBundle(mainData);
+        this.backupPersistenceContext.setBackupDataBundle(backupData);
         this.backupPersistenceContext.persistData();
 
         BackupInfoModel result = new BackupInfoModel();
         result.setBackupDateUtc(new Date());
         result.setVersion(this.modelInfoProvider.getModelVersion());
-        result.setSourceType("LOCAL");
+        result.setSourceType(PersistenceContextBackupSourceDataProvider.SOURCE_TYPE);
         result.setId(UUID.randomUUID());
         return new LocalBackupWriteResult(true, result, null);
     }

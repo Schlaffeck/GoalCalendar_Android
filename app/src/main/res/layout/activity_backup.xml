@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
     <data>
+        <import type="android.view.View"/>
         <variable
             name="vm"
             type="com.slamcode.goalcalendar.viewmodels.BackupViewModel"/>
@@ -34,12 +35,38 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_vertical_margin"
-        app:layout_constraintTop_toBottomOf="@id/appbar"
+        app:layout_constraintTop_toBottomOf="@id/appbar">
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         bind:backupSourcesSource='@{vm.backupSources}'/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/material_listItemHeaderBackgroundColor"
+            android:alpha="0.7"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility='@{vm.processingList ? View.VISIBLE : View.GONE}'>
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:layout_gravity="center"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/backup_progress_overlay_message"/>
+        </LinearLayout>
+    </FrameLayout>
+
 </android.support.constraint.ConstraintLayout>
 </layout>

@@ -2,7 +2,6 @@
 <resources>
     <string name="app_name">Kalendarz celów</string>
     <string name="action_settings">Ustawienia</string>
-    <string name="action_backups">Kopie zapasowe</string>
     <string name="context_menu_edit_item">Zmień</string>
     <string name="context_menu_delete_item">Usuń</string>
     <string name="button_yes">Tak</string>
@@ -130,6 +129,8 @@
     <string name="monthly_plans_summary_progressMonth_progressFaster_description">Wypełniasz kategorie szybciej niż zaplanowano</string>
 
     <!-- notification -->
+    <string name="notification_snackbar_okAction">OK</string>
+
     <string name="notification_plannedForToday_title">Na dziś</string>
     <string name="notification_plannedForToday_content">Masz %d rzeczy zaplanowane na dzisiaj</string>
     <string name="notification_plannedForToday_single_content">Masz %d rzecz zaplanowaną na dzisiaj</string>
@@ -175,7 +176,13 @@
     <string name="finish">Zakończ</string>
 
     <!-- backup -->
+    <string name="action_backups">Kopie zapasowe</string>
     <string name="backup_createBackup_button_text" >Zapisz</string>
     <string name="backup_restoreBackup_button_text" >Odtwórz</string>
     <string name="backup_noBackup_text">Nie zapisano</string>
+    <string name="backup_create_no_source_snackbar_message">Nie znaleziono źródła kopii</string>
+    <string name="backup_create_error_snackbar_message">Błąd zapisu kopii spróbuj później</string>
+    <string name="backup_create_info_persistence_error_snackbar_message">Kopia zapisana, zapis informacji niedany</string>
+    <string name="backup_create_success_snackbar_message">Zapisano kopię danych</string>
+    <string name="backup_progress_overlay_message">Zapisywanie kopiip</string>
 </resources>

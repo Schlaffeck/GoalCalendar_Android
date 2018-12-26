@@ -1,8 +1,10 @@
 package com.slamcode.goalcalendar.viewmodels;
 
 import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.databinding.ObservableArrayList;
 
+import com.android.databinding.library.baseAdapters.BR;
 import com.slamcode.goalcalendar.backup.BackupSourceDataProvider;
 import com.slamcode.goalcalendar.backup.BackupSourceDataProvidersRegistry;
 import com.slamcode.goalcalendar.data.PersistenceContext;
@@ -11,16 +13,13 @@ import com.slamcode.goalcalendar.data.unitofwork.UnitOfWork;
 import com.slamcode.goalcalendar.planning.DateTime;
 import com.slamcode.goalcalendar.planning.DateTimeHelper;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-
 public class BackupViewModel extends BaseObservable {
 
     private final PersistenceContext mainPersistenceContext;
     private final BackupSourceDataProvidersRegistry backupSourceDataProvidersRegistry;
 
     private ObservableArrayList<BackupSourceViewModel> backupSources;
+    private boolean processingList;
 
     public BackupViewModel(PersistenceContext mainPersistenceContext, BackupSourceDataProvidersRegistry backupSourceDataProvidersRegistry)
     {
@@ -39,11 +38,26 @@ public class BackupViewModel extends BaseObservable {
         return this.backupSources;
     }
 
+    @Bindable
+    public boolean isProcessingList()
+    {
+        return this.processingList;
+    }
+
+    public void setProcessingList(boolean newValue)
+    {
+        if(this.processingList != newValue) {
+            this.processingList = newValue;
+            this.notifyPropertyChanged(BR.processingList);
+        }
+    }
+
     private void prepareBackupSourcesData() {
         this.backupSources.clear();
         for (BackupSourceDataProvider provider : this.backupSourceDataProvidersRegistry.getProviders())
         {
-            this.backupSources.add(new BackupSourceViewModel(provider, this.readLastBackupDate(provider)));
+            BackupSourceViewModel viewModel = new BackupSourceViewModel(provider, this.readLastBackupDate(provider));
+            this.backupSources.add(viewModel);
         }
     }
 

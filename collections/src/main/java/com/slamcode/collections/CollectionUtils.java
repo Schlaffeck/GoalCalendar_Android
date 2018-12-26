@@ -96,6 +96,19 @@ public class CollectionUtils {
         return result;
     }
 
+    public static <ParentType> ParentType first(Iterable<ParentType> iterable, Predicate<ParentType> predicate)
+    {
+        for(ParentType item : iterable)
+        {
+            if(predicate.apply(item))
+            {
+                return item;
+            }
+        }
+
+        return null;
+    }
+
     public static <ParentType, Comparable extends java.lang.Comparable<Comparable>> ParentType firstMax(Iterable<ParentType> iterable, ElementSelector<ParentType, Comparable> comparableSelector)
     {
         ParentType result = null;

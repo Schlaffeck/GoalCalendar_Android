@@ -13,15 +13,13 @@ import java.util.UUID;
 
 public class InMemoryBackupInfoRepository extends InMemoryRepositoryBase<BackupInfoModel, UUID> implements BackupInfoRepository {
 
-    private final List<BackupInfoModel> backupInfos;
-
     public InMemoryBackupInfoRepository(List<BackupInfoModel> backupInfos) {
-        this.backupInfos = backupInfos;
+        super(backupInfos);
     }
 
     @Override
     public BackupInfoModel getLatestBackupInfo() {
-        return CollectionUtils.firstMax(this.backupInfos, new ElementSelector<BackupInfoModel, Date>() {
+        return CollectionUtils.firstMax(this.getInMemoryEntityList(), new ElementSelector<BackupInfoModel, Date>() {
             @Override
             public Date select(BackupInfoModel parent) {
                 return parent.getBackupDateUtc();
@@ -32,7 +30,7 @@ public class InMemoryBackupInfoRepository extends InMemoryRepositoryBase<BackupI
     @Override
     public BackupInfoModel getLatestBackupInfo(final String sourceType) {
         return CollectionUtils.firstMax(
-                CollectionUtils.filter(this.backupInfos, new Predicate<BackupInfoModel>() {
+                CollectionUtils.filter(this.getInMemoryEntityList(), new Predicate<BackupInfoModel>() {
                     @Override
                     public boolean apply(BackupInfoModel item) {
                         return item != null && sourceType.equals(item.getSourceType());

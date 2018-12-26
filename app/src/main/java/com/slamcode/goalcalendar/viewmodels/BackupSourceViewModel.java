@@ -3,7 +3,9 @@ package com.slamcode.goalcalendar.viewmodels;
 import android.databinding.BaseObservable;
 
 import com.slamcode.goalcalendar.backup.BackupSourceDataProvider;
+import com.slamcode.goalcalendar.data.model.backup.BackupInfoModel;
 import com.slamcode.goalcalendar.planning.DateTime;
+import com.slamcode.goalcalendar.planning.DateTimeHelper;
 import com.slamcode.goalcalendar.view.SourceChangeRequestNotifier;
 
 import java.util.ArrayList;
@@ -16,7 +18,7 @@ public class BackupSourceViewModel extends BaseObservable implements SourceChang
     public static final int BACKUP_SOURCE_RESTORE_BACKUP_REQUEST = 6724;
 
     private final BackupSourceDataProvider dataProvider;
-    private final DateTime lastBackupDateTime;
+    private DateTime lastBackupDateTime;
 
     private List<SourceChangeRequestListener<BackupSourceViewModel>> sourceChangeRequestListeners;
 
@@ -43,6 +45,11 @@ public class BackupSourceViewModel extends BaseObservable implements SourceChang
     public String getSourceType()
     {
         return this.dataProvider.getSourceType();
+    }
+
+    public void updateData(BackupInfoModel infoModel) {
+        this.lastBackupDateTime = DateTimeHelper.getDateTime(infoModel.getBackupDateUtc().getTime());
+        this.notifyChange();
     }
 
     @Override

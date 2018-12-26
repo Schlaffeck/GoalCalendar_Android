@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.slamcode.goalcalendar.R;
+import com.slamcode.goalcalendar.BR;
 import com.slamcode.goalcalendar.view.BaseSourceChangeRequest;
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableRecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableViewHolderBase;
@@ -34,6 +35,7 @@ public class BackupSourcesRecyclerViewAdapter extends BindableRecyclerViewDataAd
         @Override
         public void bindToModel(BackupSourceViewModel modelObject) {
             super.bindToModel(modelObject);
+            this.getBinding().setVariable(BR.presenter, this);
         }
 
         public void requestBackupCreation()
