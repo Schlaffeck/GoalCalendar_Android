@@ -1,13 +1,13 @@
 package com.slamcode.goalcalendar.view.lists;
 
 import android.databinding.ObservableArrayList;
-import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.slamcode.goalcalendar.R;
+import com.slamcode.goalcalendar.view.BaseSourceChangeRequest;
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableRecyclerViewDataAdapter;
 import com.slamcode.goalcalendar.view.lists.base.bindable.BindableViewHolderBase;
 import com.slamcode.goalcalendar.viewmodels.BackupSourceViewModel;
@@ -29,6 +29,21 @@ public class BackupSourcesRecyclerViewAdapter extends BindableRecyclerViewDataAd
 
         public BackupSourceViewHolder(View view) {
             super(view);
+        }
+
+        @Override
+        public void bindToModel(BackupSourceViewModel modelObject) {
+            super.bindToModel(modelObject);
+        }
+
+        public void requestBackupCreation()
+        {
+            this.getModelObject().notifySourceChangeRequested(new BaseSourceChangeRequest(BackupSourceViewModel.BACKUP_SOURCE_CREATE_BACKUP_REQUEST));
+        }
+
+        public void requestBackupRestoration()
+        {
+            this.getModelObject().notifySourceChangeRequested(new BaseSourceChangeRequest(BackupSourceViewModel.BACKUP_SOURCE_RESTORE_BACKUP_REQUEST));
         }
     }
 }

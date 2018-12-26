@@ -20,5 +20,5 @@ public interface ItemsCollectionAdapterProvider {
     CategoryPlansRecyclerViewAdapter provideCategoryPlansRecyclerViewAdapter(DateTimeChangeListenersRegistry dateTimeChangeListenersRegistry,
                                                                                    YearMonthPair yearMonthPair,
                                                                                    ObservableList<CategoryPlansViewModel> itemsSource);
-    BackupSourcesRecyclerViewAdapter provideBackusSourcesRecyclerViewAdapter();
+    BackupSourcesRecyclerViewAdapter provideBackupSourcesRecyclerViewAdapter();
 }

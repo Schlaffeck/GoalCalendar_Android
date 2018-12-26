@@ -275,7 +275,7 @@ public class Bindings {
 
             Log.d(LOG_TAG, "Binding backup providers source - creating new adapter");
             adapter = injectData.itemsCollectionAdapterProvider
-                        .provideBackusSourcesRecyclerViewAdapter();
+                        .provideBackupSourcesRecyclerViewAdapter();
             recyclerView.setAdapter(adapter);
         }
 

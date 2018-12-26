@@ -1,5 +1,6 @@
 package com.slamcode.goalcalendar.view.presenters;
 
+import com.slamcode.goalcalendar.backup.BackupSourceDataProvider;
 import com.slamcode.goalcalendar.backup.BackupSourceDataProvidersRegistry;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.view.activity.BackupActivityContract;
@@ -36,7 +37,11 @@ public class DefaultBackupPresenter implements BackupPresenter {
 
     @Override
     public void createBackup(String sourceType) {
-        return;
+        BackupSourceDataProvider provider = this.backupSourceDataProvidersRegistry.getProviderByType(sourceType);
+        if(provider == null)
+            return;
+
+        provider.getBackupWriter().writeBackup();
     }
 
     private void resetData() {

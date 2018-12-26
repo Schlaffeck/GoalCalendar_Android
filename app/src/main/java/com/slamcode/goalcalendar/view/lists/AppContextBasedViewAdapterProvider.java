@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 
 import com.slamcode.goalcalendar.planning.schedule.DateTimeChangeListenersRegistry;
 import com.slamcode.goalcalendar.planning.YearMonthPair;
+import com.slamcode.goalcalendar.view.presenters.BackupPresenter;
+import com.slamcode.goalcalendar.view.presenters.PresentersSource;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 
 /**
@@ -31,7 +33,7 @@ public class AppContextBasedViewAdapterProvider implements ItemsCollectionAdapte
     }
 
     @Override
-    public BackupSourcesRecyclerViewAdapter provideBackusSourcesRecyclerViewAdapter() {
+    public BackupSourcesRecyclerViewAdapter provideBackupSourcesRecyclerViewAdapter() {
         return new BackupSourcesRecyclerViewAdapter();
     }
 }

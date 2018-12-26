@@ -8,7 +8,7 @@
             type="com.slamcode.goalcalendar.viewmodels.BackupSourceViewModel"/>
         <variable
             name="presenter"
-            type="com.slamcode.goalcalendar.view.presenters.BackupPresenter"/>
+            type="com.slamcode.goalcalendar.view.lists.BackupSourcesRecyclerViewAdapter.BackupSourceViewHolder"/>
     </data>
     <LinearLayout
         android:id="@+id/backup_source_listElement_linearLayout"
@@ -40,14 +40,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/backup_createBackup_button_text"
-                android:onClick='@{(view) -> presenter.createBackup(vm.sourceType)}'/>
+                android:onClick='@{(view) -> presenter.requestBackupCreation()}'/>
             <Button
                 style="?android:attr/buttonBarButtonStyle"
                 android:id="@+id/backup_source_listElement_restoreBackup_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/backup_restoreBackup_button_text"
-                android:enabled='@{vm.hasBackup}' />
+                android:enabled='@{vm.hasBackup}'
+                android:onClick='@{(view) -> presenter.requestBackupRestoration()}'/>
         </LinearLayout>
     </LinearLayout>
 </layout>
