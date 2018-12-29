@@ -15,40 +15,53 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/backup_source_listElement_name_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text='@{vm.name}'/>
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:text='@{vm.name}'
+                android:layout_alignParentStart="true"
+                android:gravity="center_vertical"/>
             <TextView
                 android:id="@+id/backup_source_listElement_lastDate_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text='@{vm.hasBackup ? vm.lastBackupDateTime.toString() : @string/backup_noBackup_text}'/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <Button
-                style="?android:attr/buttonBarButtonStyle"
-                android:id="@+id/backup_source_listElement_createBackup_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text='@{vm.hasBackup ? vm.lastBackupDateTime.toDateString() : @string/backup_noBackup_text}'
+                android:layout_toStartOf="@id/backup_source_listElem_buttons_linearLayout"
+                android:layout_toLeftOf="@id/backup_source_listElem_buttons_linearLayout"/>
+
+            <LinearLayout
+                android:id="@+id/backup_source_listElem_buttons_linearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/backup_createBackup_button_text"
-                android:onClick='@{(view) -> presenter.requestBackupCreation()}'/>
-            <Button
-                style="?android:attr/buttonBarButtonStyle"
-                android:id="@+id/backup_source_listElement_restoreBackup_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/backup_restoreBackup_button_text"
-                android:enabled='@{vm.hasBackup}'
-                android:onClick='@{(view) -> presenter.requestBackupRestoration()}'/>
-        </LinearLayout>
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true">
+                <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:id="@+id/backup_source_listElement_createBackup_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/backup_createBackup_button_text"
+                    android:gravity="center_vertical"
+                    android:onClick='@{(view) -> presenter.requestBackupCreation()}'/>
+                <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:id="@+id/backup_source_listElement_restoreBackup_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/backup_restoreBackup_button_text"
+                    android:gravity="center_vertical"
+                    android:enabled='@{vm.hasBackup}'
+                    android:onClick='@{(view) -> presenter.requestBackupRestoration()}'/>
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 </layout>

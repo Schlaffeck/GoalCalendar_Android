@@ -1,5 +1,7 @@
 package com.slamcode.goalcalendar.planning;
 
+import android.support.annotation.NonNull;
+
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -64,9 +66,16 @@ public class DateTime {
         return this.calendar.getTimeInMillis();
     }
 
+    @NonNull
     @Override
     public String toString() {
 
         return String.format("%d-%d-%d %d:%d:%d", this.day, this.month.getNumValue(), this.year, this.hour, this.minute, this.second);
+    }
+
+    @NonNull
+    public String toDateString() {
+
+        return String.format("%d-%d-%d", this.day, this.month.getNumValue(), this.year);
     }
 }
