@@ -180,9 +180,14 @@
     <string name="backup_createBackup_button_text" >Zapisz</string>
     <string name="backup_restoreBackup_button_text" >Odtwórz</string>
     <string name="backup_noBackup_text">Nie zapisano</string>
-    <string name="backup_create_no_source_snackbar_message">Nie znaleziono źródła kopii</string>
+    <string name="backup_no_source_snackbar_message">Nie znaleziono źródła kopii</string>
     <string name="backup_create_error_snackbar_message">Błąd zapisu kopii spróbuj później</string>
     <string name="backup_create_info_persistence_error_snackbar_message">Kopia zapisana, zapis informacji niedany</string>
     <string name="backup_create_success_snackbar_message">Zapisano kopię danych</string>
     <string name="backup_progress_overlay_message">Zapisywanie kopiip</string>
+
+    <string name="backup_restore_confirmDialog_title">Przywracanie kopii</string>
+    <string name="backup_restore_error_snackbar_message">Nie udało się przywrócić kopii, spróbuj później</string>
+    <string name="backup_restore_confirmDialog_message">Czy chcesz nadpisac obecne dane kopią z %1$s ?</string>
+    <string name="backup_restore_success_snackbar_message">Przywrócono kopię zapasową</string>
 </resources>

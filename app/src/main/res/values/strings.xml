@@ -201,9 +201,14 @@
     <string name="backup_createBackup_button_text" >Backup</string>
     <string name="backup_restoreBackup_button_text" >Restore</string>
     <string name="backup_noBackup_text">Not saved</string>
-    <string name="backup_create_no_source_snackbar_message">Backup source not found</string>
+    <string name="backup_no_source_snackbar_message">Backup source not found</string>
     <string name="backup_create_error_snackbar_message">Could not save backup, try later</string>
     <string name="backup_create_info_persistence_error_snackbar_message">Backup saved, data info not persisted</string>
     <string name="backup_create_success_snackbar_message">Backup created</string>
     <string name="backup_progress_overlay_message">Saving backup</string>
+
+    <string name="backup_restore_confirmDialog_title">Confirm backup restore</string>
+    <string name="backup_restore_confirmDialog_message">Do you want to overwrite current data with backup from %1$s ?</string>
+    <string name="backup_restore_error_snackbar_message">Could not restore backup, try later</string>
+    <string name="backup_restore_success_snackbar_message">Backup restored</string>
 </resources>

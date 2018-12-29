@@ -1,16 +1,15 @@
 package com.slamcode.goalcalendar.view.presenters;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 
-import com.android.databinding.library.baseAdapters.BR;
 import com.slamcode.collections.CollectionUtils;
 import com.slamcode.collections.Predicate;
 import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.R;
+import com.slamcode.goalcalendar.backup.BackupRestorer;
 import com.slamcode.goalcalendar.backup.BackupSourceDataProvider;
 import com.slamcode.goalcalendar.backup.BackupSourceDataProvidersRegistry;
 import com.slamcode.goalcalendar.backup.BackupWriter;
@@ -21,8 +20,6 @@ import com.slamcode.goalcalendar.view.SourceChangeRequestNotifier;
 import com.slamcode.goalcalendar.view.activity.BackupActivityContract;
 import com.slamcode.goalcalendar.viewmodels.BackupSourceViewModel;
 import com.slamcode.goalcalendar.viewmodels.BackupViewModel;
-
-import java.util.Locale;
 
 public class PersistentBackupPresenter implements BackupPresenter {
 
@@ -37,7 +34,7 @@ public class PersistentBackupPresenter implements BackupPresenter {
 
     private final BackupSourceChangeRequestListener backupSourceChangeRequestListener;
 
-    public PersistentBackupPresenter(ApplicationContext applicationContext, PersistenceContext persistenceContext, BackupSourceDataProvidersRegistry backupSourceDataProvidersRegistry) {
+    PersistentBackupPresenter(ApplicationContext applicationContext, PersistenceContext persistenceContext, BackupSourceDataProvidersRegistry backupSourceDataProvidersRegistry) {
         this.applicationContext = applicationContext;
         this.persistenceContext = persistenceContext;
         this.backupSourceDataProvidersRegistry = backupSourceDataProvidersRegistry;
@@ -65,12 +62,67 @@ public class PersistentBackupPresenter implements BackupPresenter {
     }
 
     @Override
+    public void restoreBackup(String sourceType)
+    {
+        final BackupSourceDataProvider provider = this.backupSourceDataProvidersRegistry.getProviderByType(sourceType);
+        final BackupSourceViewModel viewModel = this.getViewModel(sourceType);
+        if(provider == null || viewModel == null) {
+            this.applicationContext.showSnackbar(
+                    this.activityView.getMainView(),
+                    this.applicationContext.getStringFromResources(R.string.backup_no_source_snackbar_message),
+                    Snackbar.LENGTH_LONG,
+                    this.applicationContext.getStringFromResources(R.string.notification_snackbar_okAction),
+                    null);
+            return;
+        }
+
+        AlertDialog dialog = this.applicationContext.showConfirmDialog(
+                this.activityView.getRelatedActivity(),
+                this.applicationContext.getStringFromResources(R.string.backup_restore_confirmDialog_title),
+                String.format(this.applicationContext.getStringFromResources(R.string.backup_restore_confirmDialog_message), viewModel.getLastBackupDateTime().toString()),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        try
+                        {
+                            data.setProcessingList(true);
+                            BackupRestorer.RestoreResult restoreResult = provider.getBackupRestorer().restoreBackup(null);
+                            if(restoreResult.getIsSuccess())
+                            {
+                                applicationContext.showSnackbar(
+                                        activityView.getMainView(),
+                                        applicationContext.getStringFromResources(R.string.backup_restore_success_snackbar_message),
+                                        Snackbar.LENGTH_LONG,
+                                        applicationContext.getStringFromResources(R.string.notification_snackbar_okAction),
+                                        null);
+                                Log.d(LOG_TAG, "Backup restored");
+                            }
+                        }
+                        catch(Exception e)
+                        {
+                            applicationContext.showSnackbar(
+                                    activityView.getMainView(),
+                                    applicationContext.getStringFromResources(R.string.backup_create_error_snackbar_message),
+                                    Snackbar.LENGTH_LONG,
+                                    applicationContext.getStringFromResources(R.string.notification_snackbar_okAction),
+                                    null);
+                            Log.d(LOG_TAG, "Backup not restored: " + e.getMessage());
+                        }
+                        finally {
+                            data.setProcessingList(false);
+                        }
+                    }
+                },
+                null);
+    }
+
+    @Override
     public void createBackup(String sourceType) {
         final BackupSourceDataProvider provider = this.backupSourceDataProvidersRegistry.getProviderByType(sourceType);
         if(provider == null) {
             this.applicationContext.showSnackbar(
                     this.activityView.getMainView(),
-                    this.applicationContext.getStringFromResources(R.string.backup_create_no_source_snackbar_message),
+                    this.applicationContext.getStringFromResources(R.string.backup_no_source_snackbar_message),
                     Snackbar.LENGTH_LONG,
                     this.applicationContext.getStringFromResources(R.string.notification_snackbar_okAction),
                     null);
@@ -116,12 +168,7 @@ public class PersistentBackupPresenter implements BackupPresenter {
             uow.getBackupInfoRepository().add(infoModel);
         uow.complete();
 
-        BackupSourceViewModel viewModel = CollectionUtils.first(this.data.getBackupSources(), new Predicate<BackupSourceViewModel>() {
-            @Override
-            public boolean apply(BackupSourceViewModel item) {
-                return item.getSourceType().equals(infoModel.getSourceType());
-            }
-        });
+        BackupSourceViewModel viewModel = this.getViewModel(infoModel.getSourceType());
 
         if(viewModel == null)
             return false;
@@ -130,12 +177,24 @@ public class PersistentBackupPresenter implements BackupPresenter {
         return true;
     }
 
+    private BackupSourceViewModel getViewModel(final String sourceType)
+    {
+        return CollectionUtils.first(this.data.getBackupSources(), new Predicate<BackupSourceViewModel>() {
+            @Override
+            public boolean apply(BackupSourceViewModel item) {
+                return item.getSourceType().equals(sourceType);
+            }
+        });
+    }
+
     public class BackupSourceChangeRequestListener implements SourceChangeRequestNotifier.SourceChangeRequestListener<BackupSourceViewModel>
     {
         @Override
         public void sourceChangeRequested(BackupSourceViewModel sender, SourceChangeRequestNotifier.SourceChangeRequest request) {
             if(request.getId() == BackupSourceViewModel.BACKUP_SOURCE_CREATE_BACKUP_REQUEST)
                 createBackup(sender.getSourceType());
+            if(request.getId() == BackupSourceViewModel.BACKUP_SOURCE_RESTORE_BACKUP_REQUEST)
+                restoreBackup(sender.getSourceType());
         }
     }
 }

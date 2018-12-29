@@ -1,8 +1,11 @@
 package com.slamcode.goalcalendar;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -84,5 +87,35 @@ public final class DefaultApplicationContext implements ApplicationContext {
     @Override
     public DateTime getDateTimeNow() {
         return new DateTime(DateTimeHelper.getNowCalendar());
+    }
+
+    @Override
+    public AlertDialog showConfirmDialog(Activity activity, String title, String message, DialogInterface.OnClickListener yesAction, DialogInterface.OnClickListener noAction)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle(title);
+        builder.setMessage(message);
+
+        if(yesAction == null)
+            yesAction = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            };
+
+        if(noAction == null)
+            noAction = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.cancel();;
+                    dialogInterface.dismiss();
+                }
+            };
+
+        builder.setPositiveButton(R.string.button_yes, yesAction);
+        builder.setNegativeButton(R.string.button_no, noAction);
+        builder.create();
+        return builder.show();
     }
 }

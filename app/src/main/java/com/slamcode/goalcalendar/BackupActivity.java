@@ -1,5 +1,6 @@
 package com.slamcode.goalcalendar;
 
+import android.app.Activity;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.constraint.ConstraintLayout;
@@ -70,6 +71,11 @@ public class BackupActivity extends AppCompatActivity
     @Override
     public View getMainView() {
         return this.mainLayout;
+    }
+
+    @Override
+    public Activity getRelatedActivity() {
+        return this;
     }
 
     private void startMainActivity()
