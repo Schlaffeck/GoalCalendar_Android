@@ -13,13 +13,13 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
-public final class PersistenceContextBackupReaderRestorer implements BackupWriter, BackupRestorer {
+public final class PersistenceContextBackupWriterRestorer implements BackupWriter, BackupRestorer {
 
     private final ModelInfoProvider modelInfoProvider;
     private final MainPersistenceContext mainPersistenceContext;
     private final BackupPersistenceContext backupPersistenceContext;
 
-    public PersistenceContextBackupReaderRestorer(ModelInfoProvider modelInfoProvider, MainPersistenceContext mainPersistenceContext, BackupPersistenceContext backupPersistenceContext)
+    public PersistenceContextBackupWriterRestorer(ModelInfoProvider modelInfoProvider, MainPersistenceContext mainPersistenceContext, BackupPersistenceContext backupPersistenceContext)
     {
         this.modelInfoProvider = modelInfoProvider;
         this.mainPersistenceContext = mainPersistenceContext;

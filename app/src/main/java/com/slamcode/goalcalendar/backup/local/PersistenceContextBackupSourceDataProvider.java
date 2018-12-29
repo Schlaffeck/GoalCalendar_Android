@@ -12,9 +12,9 @@ public final class PersistenceContextBackupSourceDataProvider implements BackupS
 
     public static final String SOURCE_TYPE = "LOCAL_JSON";
     private final AppSettingsManager appSettingsManager;
-    private final PersistenceContextBackupReaderRestorer backupReaderRestorer;
+    private final PersistenceContextBackupWriterRestorer backupReaderRestorer;
 
-    public PersistenceContextBackupSourceDataProvider(AppSettingsManager appSettingsManager, PersistenceContextBackupReaderRestorer backupReaderRestorer)
+    public PersistenceContextBackupSourceDataProvider(AppSettingsManager appSettingsManager, PersistenceContextBackupWriterRestorer backupReaderRestorer)
     {
         this.appSettingsManager = appSettingsManager;
         this.backupReaderRestorer = backupReaderRestorer;

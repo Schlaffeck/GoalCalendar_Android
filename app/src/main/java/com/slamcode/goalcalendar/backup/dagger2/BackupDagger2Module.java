@@ -4,9 +4,8 @@ import android.content.Context;
 
 import com.slamcode.goalcalendar.backup.BackupSourceDataProvider;
 import com.slamcode.goalcalendar.backup.BackupSourceDataProvidersRegistry;
-import com.slamcode.goalcalendar.backup.BackupWriter;
 import com.slamcode.goalcalendar.backup.impl.DefaultBackupSourceDataProvidersRegistry;
-import com.slamcode.goalcalendar.backup.local.PersistenceContextBackupReaderRestorer;
+import com.slamcode.goalcalendar.backup.local.PersistenceContextBackupWriterRestorer;
 import com.slamcode.goalcalendar.backup.local.PersistenceContextBackupSourceDataProvider;
 import com.slamcode.goalcalendar.data.BackupPersistenceContext;
 import com.slamcode.goalcalendar.data.MainPersistenceContext;
@@ -36,15 +35,15 @@ public class BackupDagger2Module {
 
     @Singleton
     @Provides
-    PersistenceContextBackupReaderRestorer provideLocalBackupWriter(ModelInfoProvider modelInfoProvider, MainPersistenceContext mainPersistenceContext, BackupPersistenceContext backupPersistenceContext)
+    PersistenceContextBackupWriterRestorer provideLocalBackupWriter(ModelInfoProvider modelInfoProvider, MainPersistenceContext mainPersistenceContext, BackupPersistenceContext backupPersistenceContext)
     {
-        return new PersistenceContextBackupReaderRestorer(modelInfoProvider, mainPersistenceContext, backupPersistenceContext);
+        return new PersistenceContextBackupWriterRestorer(modelInfoProvider, mainPersistenceContext, backupPersistenceContext);
     }
 
     @Singleton
     @Provides(type = Provides.Type.MAP)
     @StringKey(PersistenceContextBackupSourceDataProvider.SOURCE_TYPE)
-    BackupSourceDataProvider provideLocalBackupSource(AppSettingsManager appSettingsManager, PersistenceContextBackupReaderRestorer readerWriter)
+    BackupSourceDataProvider provideLocalBackupSource(AppSettingsManager appSettingsManager, PersistenceContextBackupWriterRestorer readerWriter)
     {
         return new PersistenceContextBackupSourceDataProvider(appSettingsManager, readerWriter);
     }
