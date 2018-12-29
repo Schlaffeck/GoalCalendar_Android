@@ -73,17 +73,20 @@ public class JsonFilePersistenceContext implements PersistenceContext {
     }
 
     @Override
-    public void persistData() {
+    public boolean persistData() {
 
+        boolean result = false;
         try{
-            this.persistDataBundle(this.monthlyPlansDataBundle, this.monthlyPlansDataBundle.getClass(), this.contextConfiguration.getPlansDataFileName());
-            this.persistDataBundle(this.backupDataBundle, this.backupDataBundle.getClass(), this.contextConfiguration.getBackupInfoDataFileName());
+            result = this.persistDataBundle(this.monthlyPlansDataBundle, this.monthlyPlansDataBundle.getClass(), this.contextConfiguration.getPlansDataFileName());
+            if(result)
+                result = this.persistDataBundle(this.backupDataBundle, this.backupDataBundle.getClass(), this.contextConfiguration.getBackupInfoDataFileName());
         }
         catch(Exception exception)
         {
             Log.e(LOG_TAG, "Persisting json data file - FAILURE", exception);
         }
 
+        return result;
     }
 
     private void onContextDataPersisted() {

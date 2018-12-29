@@ -36,19 +36,28 @@ public final class PersistenceContextBackupWriterRestorer implements BackupWrite
 
         this.backupPersistenceContext.setDataBundle(mainData);
         this.backupPersistenceContext.setBackupDataBundle(backupData);
-        this.backupPersistenceContext.persistData();
+        if(this.backupPersistenceContext.persistData()) {
+            BackupInfoModel result = new BackupInfoModel();
+            result.setBackupDateUtc(new Date()); // TODO: use UTC date
+            result.setVersion(this.modelInfoProvider.getModelVersion());
+            result.setSourceType(PersistenceContextBackupSourceDataProvider.SOURCE_TYPE);
+            result.setId(UUID.randomUUID());
+            return new LocalBackupWriteResult(true, result, null);
+        }
 
-        BackupInfoModel result = new BackupInfoModel();
-        result.setBackupDateUtc(new Date());
-        result.setVersion(this.modelInfoProvider.getModelVersion());
-        result.setSourceType(PersistenceContextBackupSourceDataProvider.SOURCE_TYPE);
-        result.setId(UUID.randomUUID());
-        return new LocalBackupWriteResult(true, result, null);
+        return new LocalBackupWriteResult(false, null, null);
     }
 
     @Override
     public RestoreResult restoreBackup(BackupInfoModel backupInfo) {
-        return null;
+        MonthlyPlansDataBundle mainData = this.backupPersistenceContext.getDataBundle();
+        BackupDataBundle backupData = this.backupPersistenceContext.getBackupDataBundle();
+        if(mainData == null || backupData == null)
+            return new LocalBackupRestoreResult(false, null);
+
+        this.mainPersistenceContext.setDataBundle(mainData);
+        this.mainPersistenceContext.setBackupDataBundle(backupData);
+        return new LocalBackupRestoreResult(this.mainPersistenceContext.persistData(), null);
     }
 
     private class LocalBackupWriteResult implements BackupWriter.WriteResult{
@@ -71,6 +80,28 @@ public final class PersistenceContextBackupWriterRestorer implements BackupWrite
         @Override
         public BackupInfoModel getInfoModel() {
             return this.model;
+        }
+
+        @Override
+        public String getDetailedMessage(Locale locale) {
+            return this.message;
+        }
+    }
+
+    private class LocalBackupRestoreResult implements BackupRestorer.RestoreResult
+    {
+        private final boolean success;
+        private final String message;
+
+        private LocalBackupRestoreResult(boolean success, String message)
+        {
+            this.success = success;
+            this.message = message;
+        }
+
+        @Override
+        public boolean getIsSuccess() {
+            return this.success;
         }
 
         @Override

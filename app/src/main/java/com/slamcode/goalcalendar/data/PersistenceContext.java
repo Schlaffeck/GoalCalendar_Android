@@ -10,7 +10,7 @@ import com.slamcode.goalcalendar.data.unitofwork.UnitOfWork;
 
 public interface PersistenceContext {
 
-    void persistData();
+    boolean persistData();
 
     void initializePersistedData();
 
