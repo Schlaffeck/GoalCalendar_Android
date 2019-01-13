@@ -4,6 +4,11 @@
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:name=".dagger2.ComposableApplication"
         android:allowBackup="true"
@@ -50,11 +55,11 @@
         <activity
             android:name=".onboarding.OnBoardingActivity"
             android:label="@string/title_activity_onboarding"
-            android:noHistory="true"></activity>
+            android:noHistory="true" />
         <activity
             android:name=".MonthlyGoalsActivity"
             android:label="@string/app_name"
-            android:windowSoftInputMode="adjustNothing"></activity>
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings">
@@ -62,7 +67,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MonthlyGoalsActivity" />
         </activity>
-        <activity android:name=".BackupActivity"></activity>
+        <activity android:name=".BackupActivity" />
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login"></activity>
     </application>
 
 </manifest>

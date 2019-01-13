@@ -198,8 +198,8 @@
 
     <!-- backup -->
     <string name="action_backups">Backups</string>
-    <string name="backup_createBackup_button_text" >Backup</string>
-    <string name="backup_restoreBackup_button_text" >Restore</string>
+    <string name="backup_createBackup_button_text">Backup</string>
+    <string name="backup_restoreBackup_button_text">Restore</string>
     <string name="backup_noBackup_text">Not saved</string>
     <string name="backup_no_source_snackbar_message">Backup source not found</string>
     <string name="backup_create_error_snackbar_message">Could not save backup, try later</string>
@@ -211,4 +211,17 @@
     <string name="backup_restore_confirmDialog_message">Do you want to overwrite current data with backup from %1$s ?</string>
     <string name="backup_restore_error_snackbar_message">Could not restore backup, try later</string>
     <string name="backup_restore_success_snackbar_message">Backup restored</string>
+    <string name="title_activity_login">Sign in</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
 </resources>
