@@ -33,7 +33,7 @@ import com.slamcode.goalcalendar.viewmodels.MonthlyPlanningCategoryListViewModel
  * Created by moriasla on 16.01.2017.
  */
 
-public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
+public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter, PersistenceContext.PersistenceContextChangedListener {
 
     private static final String LOG_TAG = "GC_PerMGPres";
     private final ApplicationContext applicationContext;
@@ -63,6 +63,7 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
     {
         this.applicationContext = applicationContext;
         this.persistenceContext = persistenceContext;
+        this.persistenceContext.addContextChangedListener(this);
         this.summaryCalculator = summaryCalculator;
     }
 
@@ -84,13 +85,18 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
     public void initializeWithView(MonthlyGoalsActivityContract.ActivityView view) {
         this.activityView = view;
         if(this.data == null)
-            this.setData(new MonthlyGoalsViewModel(
-                    applicationContext,
-                    persistenceContext,
-                    summaryCalculator,
-                    categoryChangeRequestListener,
-                    dailyPlansChangeRequestListener));
+            this.setData(this.createData());
         else this.resetData();
+    }
+
+    private MonthlyGoalsViewModel createData()
+    {
+        return new MonthlyGoalsViewModel(
+                applicationContext,
+                persistenceContext,
+                summaryCalculator,
+                categoryChangeRequestListener,
+                dailyPlansChangeRequestListener);
     }
 
     private void resetData() {
@@ -253,6 +259,15 @@ public class PersistentMonthlyGoalsPresenter implements MonthlyGoalsPresenter {
         uow.complete(false);
 
         return previousMonthWithCategories;
+    }
+
+    @Override
+    public void onContextPersisted() {
+    }
+
+    @Override
+    public void onContextDataUpdated() {
+        this.setData(this.createData());
     }
 
     private class CategoryPlansViewModelChangeRequestListener implements SourceChangeRequestNotifier.SourceChangeRequestListener<CategoryPlansViewModel>

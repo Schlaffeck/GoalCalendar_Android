@@ -51,25 +51,22 @@ public class JsonFilePersistenceContext implements PersistenceContext {
         return this.monthlyPlansDataBundle;
     }
 
-    public void setDataBundle(MonthlyPlansDataBundle dataBundle)
+    public void setDataBundles(MonthlyPlansDataBundle plansDataBundle, BackupDataBundle backupDataBundle)
     {
-        if(dataBundle == null)
+        if(plansDataBundle == null || backupDataBundle == null)
             throw new IllegalArgumentException("Data bundle can not be set to null");
 
-        this.monthlyPlansDataBundle = dataBundle;
+        if(this.monthlyPlansDataBundle != plansDataBundle
+                || this.backupDataBundle != backupDataBundle) {
+            this.monthlyPlansDataBundle = plansDataBundle;
+            this.backupDataBundle = backupDataBundle;
+            this.onContextDataUpdated();
+        }
     }
 
     public BackupDataBundle getBackupDataBundle()
     {
         return this.backupDataBundle;
-    }
-
-    public void setBackupDataBundle(BackupDataBundle dataBundle)
-    {
-        if(dataBundle == null)
-            throw new IllegalArgumentException("Data bundle can not be set to null");
-
-        this.backupDataBundle = dataBundle;
     }
 
     @Override
@@ -92,6 +89,11 @@ public class JsonFilePersistenceContext implements PersistenceContext {
     private void onContextDataPersisted() {
         for(PersistenceContextChangedListener listener : this.contextChangedListeners)
             listener.onContextPersisted();
+    }
+
+    private void onContextDataUpdated() {
+        for(PersistenceContextChangedListener listener : this.contextChangedListeners)
+            listener.onContextDataUpdated();
     }
 
     @Override

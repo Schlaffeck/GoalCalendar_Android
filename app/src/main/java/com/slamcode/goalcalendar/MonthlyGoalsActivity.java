@@ -195,8 +195,10 @@ public class MonthlyGoalsActivity extends AppCompatActivity
         if(data == null)
             throw new IllegalArgumentException("Data is null");
 
-        this.activityViewModel = data;
+        if(this.activityViewModel != null)
+            this.needToRecreate = true;
 
+        this.activityViewModel = data;
         this.setupDataBindings();
     }
 

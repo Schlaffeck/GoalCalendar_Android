@@ -18,13 +18,10 @@ public interface PersistenceContext {
     MonthlyPlansDataBundle getDataBundle();
 
     // TODO: Refactor method to not be public somehow
-    void setDataBundle(MonthlyPlansDataBundle dataBundle);
+    void setDataBundles(MonthlyPlansDataBundle dataBundle, BackupDataBundle backupDataBundle);
 
     // TODO: Refactor method to not be public somehow
     BackupDataBundle getBackupDataBundle();
-
-    // TODO: Refactor method to not be public somehow
-    void setBackupDataBundle(BackupDataBundle dataBundle);
 
     /**
      * Creates unit of work persistable by default
@@ -48,5 +45,7 @@ public interface PersistenceContext {
     interface PersistenceContextChangedListener
     {
         void onContextPersisted();
+
+        void onContextDataUpdated();
     }
 }

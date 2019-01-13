@@ -34,8 +34,7 @@ public final class PersistenceContextBackupWriterRestorer implements BackupWrite
         if(mainData == null || backupData == null)
             return new LocalBackupWriteResult(false, null, null);
 
-        this.backupPersistenceContext.setDataBundle(mainData);
-        this.backupPersistenceContext.setBackupDataBundle(backupData);
+        this.backupPersistenceContext.setDataBundles(mainData, backupData);
         if(this.backupPersistenceContext.persistData()) {
             BackupInfoModel result = new BackupInfoModel();
             result.setBackupDateUtc(new Date()); // TODO: use UTC date
@@ -50,13 +49,13 @@ public final class PersistenceContextBackupWriterRestorer implements BackupWrite
 
     @Override
     public RestoreResult restoreBackup(BackupInfoModel backupInfo) {
+        this.backupPersistenceContext.initializePersistedData();
         MonthlyPlansDataBundle mainData = this.backupPersistenceContext.getDataBundle();
         BackupDataBundle backupData = this.backupPersistenceContext.getBackupDataBundle();
         if(mainData == null || backupData == null)
             return new LocalBackupRestoreResult(false, null);
 
-        this.mainPersistenceContext.setDataBundle(mainData);
-        this.mainPersistenceContext.setBackupDataBundle(backupData);
+        this.mainPersistenceContext.setDataBundles(mainData, backupData);
         return new LocalBackupRestoreResult(this.mainPersistenceContext.persistData(), null);
     }
 
