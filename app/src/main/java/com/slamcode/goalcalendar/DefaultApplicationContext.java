@@ -118,4 +118,9 @@ public final class DefaultApplicationContext implements ApplicationContext {
         builder.create();
         return builder.show();
     }
+
+    @Override
+    public void startLoginActivity(Activity baseActivity, int requestId) {
+        baseActivity.startActivityForResult(this.createIntent(LoginActivity.class), requestId);
+    }
 }

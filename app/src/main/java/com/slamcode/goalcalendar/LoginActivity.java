@@ -81,7 +81,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private GoogleSignInAccount googleSignInAccount = null;
 
     @ViewReference(R.id.login_google_sign_in_button)
-    private Button googleSignInButton;
+    private SignInButton googleSignInButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,11 +121,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     {
         GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
-                .requestId()
                 .build();
 
         this.googleSignInClient = GoogleSignIn.getClient(this, options);
         this.googleSignInButton = ViewBinder.findView(this, R.id.login_google_sign_in_button);
+        this.googleSignInButton.setOnClickListener(this);
     }
 
     private void populateAutoComplete() {
@@ -173,6 +173,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private void updateUi(GoogleSignInAccount googleSignInAccount) {
         // hide login button - return to previous activity
+        if(googleSignInAccount != null)
+            this.googleSignInButton.setVisibility(View.GONE);
+        this.finish();
     }
 
     /**

@@ -7,6 +7,8 @@ import com.slamcode.goalcalendar.viewmodels.BackupViewModel;
 
 public interface BackupActivityContract {
 
+    int SHOW_LOGIN_ACTIVITY_REQUEST = 23231;
+
     interface Presenter{
 
         void setData(BackupViewModel data);
@@ -16,6 +18,8 @@ public interface BackupActivityContract {
         void createBackup(String sourceType);
 
         void restoreBackup(String sourceType);
+
+        void doLogin();
     }
 
     interface ActivityView

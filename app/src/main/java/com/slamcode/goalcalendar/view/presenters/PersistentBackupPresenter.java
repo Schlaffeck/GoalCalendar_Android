@@ -117,6 +117,11 @@ public class PersistentBackupPresenter implements BackupPresenter {
     }
 
     @Override
+    public void doLogin() {
+        this.applicationContext.startLoginActivity(this.activityView.getRelatedActivity(), BackupActivityContract.SHOW_LOGIN_ACTIVITY_REQUEST);
+    }
+
+    @Override
     public void createBackup(String sourceType) {
         final BackupSourceDataProvider provider = this.backupSourceDataProvidersRegistry.getProviderByType(sourceType);
         if(provider == null) {

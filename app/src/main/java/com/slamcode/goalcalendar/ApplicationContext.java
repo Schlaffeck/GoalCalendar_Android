@@ -40,4 +40,6 @@ public interface ApplicationContext {
     DateTime getDateTimeNow();
 
     AlertDialog showConfirmDialog(Activity activity, String title, String message, DialogInterface.OnClickListener yesAction, DialogInterface.OnClickListener noAction);
+
+    void startLoginActivity(Activity baseActivity, int requestId);
 }

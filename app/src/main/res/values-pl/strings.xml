@@ -190,4 +190,5 @@
     <string name="backup_restore_error_snackbar_message">Nie udało się przywrócić kopii, spróbuj później</string>
     <string name="backup_restore_confirmDialog_message">Czy chcesz nadpisac obecne dane kopią z %1$s ?</string>
     <string name="backup_restore_success_snackbar_message">Przywrócono kopię zapasową</string>
+    <string name="backup_doLogin_button_text">Login, to see online backup info</string>
 </resources>
