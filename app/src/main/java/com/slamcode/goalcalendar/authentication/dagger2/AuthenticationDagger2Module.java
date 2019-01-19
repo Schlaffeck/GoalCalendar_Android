@@ -2,6 +2,7 @@ package com.slamcode.goalcalendar.authentication.dagger2;
 
 import android.content.Context;
 
+import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.authentication.AuthenticationProvider;
 import com.slamcode.goalcalendar.authentication.clients.AuthenticationClient;
 import com.slamcode.goalcalendar.authentication.clients.google.GoogleAuthenticationClient;
@@ -28,9 +29,9 @@ public class AuthenticationDagger2Module {
     @Provides(type = Provides.Type.MAP)
     @StringKey(GoogleAuthenticationClient.PROVIDER_ID)
     @Singleton
-    public AuthenticationClient provideGoogleAuthenticationClient()
+    public AuthenticationClient provideGoogleAuthenticationClient(ApplicationContext applicationContext)
     {
-        return new GoogleAuthenticationClient();
+        return new GoogleAuthenticationClient(applicationContext);
     }
 
     @Provides

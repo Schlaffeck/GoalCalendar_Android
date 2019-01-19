@@ -1,5 +1,6 @@
 package com.slamcode.goalcalendar;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -200,6 +201,16 @@ public class MonthlyGoalsActivity extends AppCompatActivity
 
         this.activityViewModel = data;
         this.setupDataBindings();
+    }
+
+    @Override
+    public View getMainView() {
+        return this.mainLayout;
+    }
+
+    @Override
+    public Activity getRelatedActivity() {
+        return this;
     }
 
     private void setupDataBindings()

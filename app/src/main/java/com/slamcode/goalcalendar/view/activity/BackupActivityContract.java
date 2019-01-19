@@ -1,20 +1,15 @@
 package com.slamcode.goalcalendar.view.activity;
 
-import android.app.Activity;
-import android.view.View;
-
+import com.slamcode.goalcalendar.view.activity.base.ActivityViewContract;
+import com.slamcode.goalcalendar.view.activity.base.PresenterContract;
 import com.slamcode.goalcalendar.viewmodels.BackupViewModel;
 
 public interface BackupActivityContract {
 
     int SHOW_LOGIN_ACTIVITY_REQUEST = 23231;
 
-    interface Presenter{
-
-        void setData(BackupViewModel data);
-
-        void initializeWithView(ActivityView activityView);
-
+    interface Presenter extends PresenterContract<BackupViewModel, ActivityView>
+    {
         void createBackup(String sourceType);
 
         void restoreBackup(String sourceType);
@@ -22,12 +17,6 @@ public interface BackupActivityContract {
         void doLogin();
     }
 
-    interface ActivityView
-    {
-        void onDataSet(BackupViewModel data);
-
-        View getMainView();
-
-        Activity getRelatedActivity();
+    interface ActivityView extends ActivityViewContract<BackupViewModel> {
     }
 }

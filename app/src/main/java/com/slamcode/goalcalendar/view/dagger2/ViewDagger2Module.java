@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.view.dagger2;
 
 import com.slamcode.goalcalendar.ApplicationContext;
+import com.slamcode.goalcalendar.authentication.clients.AuthenticationClient;
 import com.slamcode.goalcalendar.backup.BackupSourceDataProvidersRegistry;
 import com.slamcode.goalcalendar.data.PersistenceContext;
 import com.slamcode.goalcalendar.planning.summary.PlansSummaryCalculator;
@@ -11,7 +12,11 @@ import com.slamcode.goalcalendar.view.lists.AppContextBasedViewAdapterProvider;
 import com.slamcode.goalcalendar.view.lists.gestures.ItemDragCallback;
 import com.slamcode.goalcalendar.view.lists.scrolling.RecyclerViewSimultaneousScrollingController;
 import com.slamcode.goalcalendar.view.presenters.CachedApplicationPresentersSource;
+import com.slamcode.goalcalendar.view.presenters.LoginPresenter;
+import com.slamcode.goalcalendar.view.presenters.PersistentLoginPresenter;
 import com.slamcode.goalcalendar.view.presenters.PresentersSource;
+
+import java.util.Map;
 
 import javax.inject.Singleton;
 
@@ -46,9 +51,10 @@ public final class ViewDagger2Module {
             PersistenceContext persistenceContext,
             ItemsCollectionAdapterProvider listAdapterProvider,
             PlansSummaryCalculator plansSummaryCalculator,
-            BackupSourceDataProvidersRegistry backupSourceDataProvidersRegistry)
+            BackupSourceDataProvidersRegistry backupSourceDataProvidersRegistry,
+            Map<String, AuthenticationClient> authenticationClientMap)
     {
-        return new CachedApplicationPresentersSource(applicationContext, persistenceContext, listAdapterProvider, plansSummaryCalculator, backupSourceDataProvidersRegistry);
+        return new CachedApplicationPresentersSource(applicationContext, persistenceContext, listAdapterProvider, plansSummaryCalculator, backupSourceDataProvidersRegistry, authenticationClientMap);
     }
 
     @Provides
@@ -70,5 +76,12 @@ public final class ViewDagger2Module {
     public RecyclerViewSimultaneousScrollingController provideCategoryPlansScrollingController()
     {
         return new RecyclerViewSimultaneousScrollingController();
+    }
+
+    @Provides
+    @Singleton
+    public LoginPresenter provideLoginPresenter(Map<String, AuthenticationClient> authenticationClients)
+    {
+        return new PersistentLoginPresenter(authenticationClients);
     }
 }

@@ -4,6 +4,8 @@ import android.app.DialogFragment;
 import android.view.View;
 
 import com.slamcode.goalcalendar.view.OnLayoutReadyCallback;
+import com.slamcode.goalcalendar.view.activity.base.ActivityViewContract;
+import com.slamcode.goalcalendar.view.activity.base.PresenterContract;
 import com.slamcode.goalcalendar.viewmodels.MonthlyGoalsViewModel;
 
 /**
@@ -15,13 +17,9 @@ public interface MonthlyGoalsActivityContract {
     /**
      * Presenter contains actions for view elements, that can modify the data
      */
-    interface Presenter {
+    interface Presenter extends PresenterContract<MonthlyGoalsViewModel, ActivityView> {
 
         MonthlyGoalsViewModel getData();
-
-        void setData(MonthlyGoalsViewModel data);
-
-        void initializeWithView(ActivityView view);
 
         void copyCategoriesFromPreviousMonth(View view);
 
@@ -41,10 +39,8 @@ public interface MonthlyGoalsActivityContract {
     /**
      * View has simple logic of managing binding presenters actions and data to concrete controls
      */
-    interface ActivityView{
-
-        void onDataSet(MonthlyGoalsViewModel data);
-
+    interface ActivityView extends ActivityViewContract<MonthlyGoalsViewModel>
+    {
         void showDialog(DialogFragment dialogFragment);
 
         void scrollToCurrentDate();

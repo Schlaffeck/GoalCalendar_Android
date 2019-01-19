@@ -1,6 +1,9 @@
 package com.slamcode.goalcalendar;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,13 +17,19 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.slamcode.goalcalendar.dagger2.ComposableApplication;
+import com.slamcode.goalcalendar.view.activity.LoginActivityContract;
+import com.slamcode.goalcalendar.view.presenters.LoginPresenter;
 import com.slamcode.goalcalendar.view.utils.ViewBinder;
 import com.slamcode.goalcalendar.view.utils.ViewReference;
+import com.slamcode.goalcalendar.viewmodels.LoginViewModel;
+
+import javax.inject.Inject;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements OnClickListener {
+public class LoginActivity extends AppCompatActivity implements OnClickListener, LoginActivityContract.ActivityView {
 
     private static final int GOOGLE_SIGN_IN_REQUEST = 1221;
 
@@ -30,13 +39,20 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
     private GoogleSignInClient googleSignInClient = null;
     private GoogleSignInAccount googleSignInAccount = null;
 
+    @Inject
+    LoginPresenter presenter;
+
     @ViewReference(R.id.login_google_sign_in_button)
     private SignInButton googleSignInButton;
+    private View mainLayout;
+    private LoginViewModel activityViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.injectDependencies();
         setContentView(R.layout.activity_login);
+        this.findRelatedViews();
         this.setupGoogleSignInClient();
     }
 
@@ -110,6 +126,41 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
     private void signInWithGoogle() {
         Intent intent = this.googleSignInClient.getSignInIntent();
         startActivityForResult(intent, GOOGLE_SIGN_IN_REQUEST);
+    }
+
+    @Override
+    public void onDataSet(LoginViewModel data) {
+        if(data == null)
+            throw new IllegalArgumentException("Data is null");
+
+        this.activityViewModel = data;
+        this.setupDataBindings();
+    }
+
+    @Override
+    public View getMainView() {
+        return this.mainLayout;
+    }
+
+    @Override
+    public Activity getRelatedActivity() {
+        return this;
+    }
+
+    private void setupDataBindings() {
+        ViewDataBinding mainLayoutBinding = DataBindingUtil.bind(this.mainLayout);
+        mainLayoutBinding.setVariable(BR.vm, this.activityViewModel);
+    }
+
+    private void findRelatedViews()
+    {
+        this.mainLayout = this.findViewById(android.R.id.content);
+        this.googleSignInButton = this.findViewById(R.id.login_google_sign_in_button);
+    }
+
+    private void injectDependencies() {
+        ComposableApplication capp = (ComposableApplication)this.getApplication();
+        capp.getApplicationComponent().inject(this);
     }
 }
 
