@@ -2,6 +2,7 @@ package com.slamcode.goalcalendar.authentication.clients.google;
 
 import android.content.Intent;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -9,11 +10,18 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.slamcode.goalcalendar.ApplicationContext;
+import com.slamcode.goalcalendar.android.OnActivityResultListener;
+import com.slamcode.goalcalendar.android.StartForResult;
+import com.slamcode.goalcalendar.android.tasks.TaskAbstract;
 import com.slamcode.goalcalendar.authentication.clients.AuthenticationClient;
 import com.slamcode.goalcalendar.authentication.clients.AuthenticationResult;
+import com.slamcode.goalcalendar.authentication.clients.AuthenticationToken;
 import com.slamcode.goalcalendar.authentication.impl.AuthenticationTaskAbstract;
+import com.slamcode.goalcalendar.authentication.impl.DefaultAuthenticationResult;
 
 public class GoogleAuthenticationClient implements AuthenticationClient {
 
@@ -39,17 +47,33 @@ public class GoogleAuthenticationClient implements AuthenticationClient {
 
     @Override
     public Task<AuthenticationResult> silentSignIn() {
-        return null;
+        return new AuthenticationTask(this.applicationContext, this.googleSignInClient, true);
     }
 
     @Override
     public Task<AuthenticationResult> signIn() {
-        return new AuthenticationTask(this.applicationContext, this.googleSignInClient);
+        return new AuthenticationTask(this.applicationContext, this.googleSignInClient, false);
     }
 
     @Override
     public Task<Boolean> signOut() {
-        return null;
+        return this.googleSignInClient.signOut().continueWithTask(new Continuation<Void, Task<Boolean>>() {
+            @Override
+            public Task<Boolean> then(@NonNull final Task<Void> task) {
+                return new TaskAbstract<Boolean>()
+                {
+                    @Override
+                    protected void start() {
+                        if(task.isSuccessful())
+                            this.setSuccessStatus(true);
+                        else if(task.isCanceled())
+                            this.setCanceled();
+                        else
+                            this.setFailureStatus(task.getException());
+                    }
+                };
+            };
+        });
     }
 
     private void setup()
@@ -62,28 +86,39 @@ public class GoogleAuthenticationClient implements AuthenticationClient {
         this.googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this.applicationContext.getDefaultContext());
     }
 
-    private class AuthenticationTask extends AuthenticationTaskAbstract implements PreferenceManager.OnActivityResultListener
-    {
+    private class AuthenticationTask extends AuthenticationTaskAbstract implements OnCompleteListener<GoogleSignInAccount> {
         private final ApplicationContext applicationContext;
         private final GoogleSignInClient googleSignInClient;
+        private final boolean silent;
+        private Intent startedIntent;
 
-        AuthenticationTask(ApplicationContext applicationContext, GoogleSignInClient googleSignInClient) {
+        AuthenticationTask(ApplicationContext applicationContext, GoogleSignInClient googleSignInClient, boolean silent) {
             this.applicationContext = applicationContext;
             this.googleSignInClient = googleSignInClient;
+            this.silent = silent;
         }
 
         @Override
         protected void start()
         {
-            this.applicationContext.getDefaultContext().startActivity(this.googleSignInClient.getSignInIntent());
+            if(this.silent)
+                this.googleSignInClient.silentSignIn().addOnCompleteListener(this);
+            this.startedIntent = this.googleSignInClient.getSignInIntent();
+            this.applicationContext.getDefaultContext().startActivity(this.startedIntent);
+        }
 
+        @Override
+        protected void start(StartForResult startForResult) {
+            this.startedIntent = this.googleSignInClient.getSignInIntent();
+            startForResult.startActivityForResult(this.startedIntent, GOOGLE_SIGN_IN_REQUEST);
         }
 
         @Override
         public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
 
             // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-            if (requestCode == GOOGLE_SIGN_IN_REQUEST) {
+            if (requestCode == GOOGLE_SIGN_IN_REQUEST ||
+                    data.equals(this.startedIntent)) {
                 // The Task returned from this call is always completed, no need to attach
                 // a listener.
                 Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -96,11 +131,21 @@ public class GoogleAuthenticationClient implements AuthenticationClient {
         private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
             try {
                 googleSignInAccount = completedTask.getResult(ApiException.class);
+                if(googleSignInAccount != null)
+                    this.setSuccessStatus(new DefaultAuthenticationResult(PROVIDER_ID, googleSignInAccount.getId(), new AuthenticationToken(googleSignInAccount.getIdToken())));
+                else
+                    this.setSuccessStatus(new DefaultAuthenticationResult(PROVIDER_ID));
             } catch (ApiException e) {
                 // The ApiException status code indicates the detailed failure reason.
                 // Please refer to the GoogleSignInStatusCodes class reference for more information.
                 Log.w(LOG_TAG, "signInResult:failed code=" + e.getStatusCode());
+                this.setFailureStatus(e);
             }
+        }
+
+        @Override
+        public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
+            this.handleSignInResult(task);
         }
     }
 }
