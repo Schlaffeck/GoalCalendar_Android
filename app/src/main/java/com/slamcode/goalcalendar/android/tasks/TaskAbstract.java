@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -46,6 +47,8 @@ public abstract class TaskAbstract<Result> extends Task<Result> {
     private List<OnFailureListener> onFailureListeners = new ArrayList<>();
     private List<OnCanceledListener> onCanceledListeners = new ArrayList<>();
     private List<OnCompleteListener> onCompleteListeners = new ArrayList<>();
+
+    private List<Continuation<Result, ?>> continuations = new ArrayList<>();
 
     protected void setSuccessStatus(Result result)
     {
@@ -178,5 +181,12 @@ public abstract class TaskAbstract<Result> extends Task<Result> {
     @Override
     public Task<Result> addOnFailureListener(@NonNull Activity activity, @NonNull OnFailureListener onFailureListener) {
         throw new UnsupportedOperationException();
+    }
+
+    @NonNull
+    @Override
+    public Task<Result> addOnCompleteListener(@NonNull OnCompleteListener<Result> onCompleteListener) {
+        this.onCompleteListeners.add(onCompleteListener);
+        return this;
     }
 }

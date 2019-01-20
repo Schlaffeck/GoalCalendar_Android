@@ -42,7 +42,7 @@ public class LoginProvidersRecyclerViewAdapter extends BindableRecyclerViewDataA
 
         public void requestSignIn()
         {
-            this.getModelObject().notifySourceChangeRequested(new BaseSourceChangeRequest(BackupSourceViewModel.BACKUP_SOURCE_CREATE_BACKUP_REQUEST));
+            this.getModelObject().notifySourceChangeRequested(new BaseSourceChangeRequest(LoginProviderViewModel.DO_LOGIN_REQUEST_ID));
         }
     }
 }

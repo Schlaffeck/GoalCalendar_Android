@@ -2,18 +2,15 @@ package com.slamcode.goalcalendar.view.presenters;
 
 import android.support.annotation.NonNull;
 
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.slamcode.collections.CollectionUtils;
 import com.slamcode.collections.ElementSelector;
-import com.slamcode.goalcalendar.android.tasks.TaskAbstract;
 import com.slamcode.goalcalendar.authentication.clients.AuthenticationClient;
 import com.slamcode.goalcalendar.authentication.clients.AuthenticationResult;
-import com.slamcode.goalcalendar.authentication.impl.AuthenticationTaskAbstract;
+import com.slamcode.goalcalendar.authentication.impl.AuthenticationTask;
 import com.slamcode.goalcalendar.view.SourceChangeRequestNotifier;
 import com.slamcode.goalcalendar.view.activity.LoginActivityContract;
-import com.slamcode.goalcalendar.viewmodels.BackupViewModel;
 import com.slamcode.goalcalendar.viewmodels.LoginProviderViewModel;
 import com.slamcode.goalcalendar.viewmodels.LoginViewModel;
 
@@ -66,13 +63,13 @@ public class PersistentLoginPresenter implements LoginPresenter, SourceChangeReq
         if(client == null)
             return;
 
-        Task<AuthenticationResult> task = client.signIn();
-        task.continueWith(new Continuation<AuthenticationResult, AuthenticationResult>() {
+        AuthenticationTask task = client.signIn(this.activityView);
+        this.activityView.addOnActivityResultListener(task);
+        task.addOnCompleteListener(new OnCompleteListener<AuthenticationResult>() {
             @Override
-            public AuthenticationResult then(@NonNull Task<AuthenticationResult> task) throws Exception {
+            public void onComplete(@NonNull Task<AuthenticationResult> task) {
                 if(task.isSuccessful())
                     updateFlags(providerId, task.getResult());
-                return task.getResult();
             }
         });
     }

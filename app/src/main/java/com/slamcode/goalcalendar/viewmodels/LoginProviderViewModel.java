@@ -21,6 +21,7 @@ public class LoginProviderViewModel extends BaseObservable implements SourceChan
     public LoginProviderViewModel(String providerName)
     {
         this.providerName = providerName;
+        this.sourceChangeRequestListeners = new ArrayList<>();
     }
 
     public String getProviderName() {
@@ -34,6 +35,7 @@ public class LoginProviderViewModel extends BaseObservable implements SourceChan
 
     public void setSignedIn(boolean signedIn) {
         this.signedIn = signedIn;
+        this.notifyPropertyChanged(BR.signedIn);
     }
 
     @Bindable
@@ -43,6 +45,7 @@ public class LoginProviderViewModel extends BaseObservable implements SourceChan
 
     public void setUserId(String userId) {
         this.userId = userId;
+        this.notifyPropertyChanged(BR.userId);
     }
 
 

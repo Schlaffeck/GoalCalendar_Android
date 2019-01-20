@@ -1,7 +1,6 @@
 package com.slamcode.goalcalendar.authentication.clients.google;
 
 import android.content.Intent;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -14,19 +13,17 @@ import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.slamcode.goalcalendar.ApplicationContext;
-import com.slamcode.goalcalendar.android.OnActivityResultListener;
 import com.slamcode.goalcalendar.android.StartForResult;
 import com.slamcode.goalcalendar.android.tasks.TaskAbstract;
 import com.slamcode.goalcalendar.authentication.clients.AuthenticationClient;
-import com.slamcode.goalcalendar.authentication.clients.AuthenticationResult;
 import com.slamcode.goalcalendar.authentication.clients.AuthenticationToken;
-import com.slamcode.goalcalendar.authentication.impl.AuthenticationTaskAbstract;
+import com.slamcode.goalcalendar.authentication.impl.AuthenticationTask;
 import com.slamcode.goalcalendar.authentication.impl.DefaultAuthenticationResult;
 
 public class GoogleAuthenticationClient implements AuthenticationClient {
 
     public final static String PROVIDER_ID = "google";
-    private static final int GOOGLE_SIGN_IN_REQUEST = 2389238;
+    private static final int GOOGLE_SIGN_IN_REQUEST = 23233;
     private static final String LOG_TAG = "GOAL_googleAuthCli";
 
     private final ApplicationContext applicationContext;
@@ -45,16 +42,23 @@ public class GoogleAuthenticationClient implements AuthenticationClient {
         return PROVIDER_ID;
     }
 
+    @NonNull
     @Override
-    public Task<AuthenticationResult> silentSignIn() {
-        return new AuthenticationTask(this.applicationContext, this.googleSignInClient, true);
+    public AuthenticationTask silentSignIn() {
+        GoogleAuthenticationTask task = new GoogleAuthenticationTask(this.applicationContext, this.googleSignInClient, true);
+        task.start();
+        return task;
     }
 
+    @NonNull
     @Override
-    public Task<AuthenticationResult> signIn() {
-        return new AuthenticationTask(this.applicationContext, this.googleSignInClient, false);
+    public AuthenticationTask signIn(StartForResult startForResult) {
+        GoogleAuthenticationTask task = new GoogleAuthenticationTask(this.applicationContext, this.googleSignInClient, false);
+        task.start(startForResult);
+        return task;
     }
 
+    @NonNull
     @Override
     public Task<Boolean> signOut() {
         return this.googleSignInClient.signOut().continueWithTask(new Continuation<Void, Task<Boolean>>() {
@@ -86,13 +90,13 @@ public class GoogleAuthenticationClient implements AuthenticationClient {
         this.googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this.applicationContext.getDefaultContext());
     }
 
-    private class AuthenticationTask extends AuthenticationTaskAbstract implements OnCompleteListener<GoogleSignInAccount> {
+    private class GoogleAuthenticationTask extends com.slamcode.goalcalendar.authentication.impl.AuthenticationTask implements OnCompleteListener<GoogleSignInAccount> {
         private final ApplicationContext applicationContext;
         private final GoogleSignInClient googleSignInClient;
         private final boolean silent;
         private Intent startedIntent;
 
-        AuthenticationTask(ApplicationContext applicationContext, GoogleSignInClient googleSignInClient, boolean silent) {
+        GoogleAuthenticationTask(ApplicationContext applicationContext, GoogleSignInClient googleSignInClient, boolean silent) {
             this.applicationContext = applicationContext;
             this.googleSignInClient = googleSignInClient;
             this.silent = silent;

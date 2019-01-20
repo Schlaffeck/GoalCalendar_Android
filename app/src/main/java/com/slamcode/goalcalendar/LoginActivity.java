@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewTreeObserver;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -21,6 +22,7 @@ import com.slamcode.goalcalendar.android.OnActivityResultListener;
 import com.slamcode.goalcalendar.android.OnActivityResultProcessor;
 import com.slamcode.goalcalendar.android.StartForResult;
 import com.slamcode.goalcalendar.dagger2.ComposableApplication;
+import com.slamcode.goalcalendar.view.activity.ActivityViewStateProvider;
 import com.slamcode.goalcalendar.view.activity.LoginActivityContract;
 import com.slamcode.goalcalendar.view.presenters.LoginPresenter;
 import com.slamcode.goalcalendar.view.utils.ViewBinder;
@@ -32,28 +34,23 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import static com.slamcode.goalcalendar.view.utils.ViewBinder.findView;
+
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements OnClickListener, LoginActivityContract.ActivityView, StartForResult, OnActivityResultProcessor {
-
-    private static final int GOOGLE_SIGN_IN_REQUEST = 1221;
+public class LoginActivity extends AppCompatActivity implements LoginActivityContract.ActivityView, StartForResult, OnActivityResultProcessor {
 
     private static final String LOG_TAG = "GOAL_LoginAct";
-
-    // google sign in
-    private GoogleSignInClient googleSignInClient = null;
-    private GoogleSignInAccount googleSignInAccount = null;
 
     private List<OnActivityResultListener> onActivityResultListeners = new ArrayList<>();
 
     @Inject
     LoginPresenter presenter;
 
-    @ViewReference(R.id.login_google_sign_in_button)
-    private SignInButton googleSignInButton;
     private View mainLayout;
     private LoginViewModel activityViewModel;
+    private View mainActivityLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,40 +58,9 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener,
         this.injectDependencies();
         setContentView(R.layout.activity_login);
         this.findRelatedViews();
-        this.setupGoogleSignInClient();
+        this.startMainActivity();
     }
 
-    private void setupGoogleSignInClient()
-    {
-        GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-        this.googleSignInClient = GoogleSignIn.getClient(this, options);
-        this.googleSignInButton = ViewBinder.findView(this, R.id.login_google_sign_in_button);
-        this.googleSignInButton.setOnClickListener(this);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        this.checkLastGoogleSignInAccount();
-    }
-
-    private void checkLastGoogleSignInAccount() {
-
-        this.googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
-        if(this.googleSignInAccount != null)
-            this.updateUi(this.googleSignInAccount);
-    }
-
-    private void updateUi(GoogleSignInAccount googleSignInAccount) {
-        // hide login button - return to previous activity
-        if(googleSignInAccount != null)
-            this.googleSignInButton.setVisibility(View.GONE);
-        this.finish();
-    }
-    
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -118,34 +84,6 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener,
         this.onActivityResultListeners.clear();
     }
 
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-        try {
-            this.googleSignInAccount = completedTask.getResult(ApiException.class);
-
-            // Signed in successfully, show authenticated UI.
-            this.updateUi(this.googleSignInAccount);
-        } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w(LOG_TAG, "signInResult:failed code=" + e.getStatusCode());
-            this.updateUi(null);
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch(view.getId())
-        {
-            case R.id.login_google_sign_in_button:
-                this.signInWithGoogle();
-        }
-    }
-
-    private void signInWithGoogle() {
-        Intent intent = this.googleSignInClient.getSignInIntent();
-        startActivityForResult(intent, GOOGLE_SIGN_IN_REQUEST);
-    }
-
     @Override
     public void onDataSet(LoginViewModel data) {
         if(data == null)
@@ -166,19 +104,39 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener,
     }
 
     private void setupDataBindings() {
-        ViewDataBinding mainLayoutBinding = DataBindingUtil.bind(this.mainLayout);
+        if(this.mainActivityLayout == null)
+            this.findRelatedViews();
+        ViewDataBinding mainLayoutBinding = DataBindingUtil.bind(this.mainActivityLayout);
         mainLayoutBinding.setVariable(BR.vm, this.activityViewModel);
     }
 
     private void findRelatedViews()
     {
         this.mainLayout = this.findViewById(android.R.id.content);
-        this.googleSignInButton = this.findViewById(R.id.login_google_sign_in_button);
+        this.mainActivityLayout = findView(this, R.id.login_activity_main_layout);
     }
 
     private void injectDependencies() {
         ComposableApplication capp = (ComposableApplication)this.getApplication();
         capp.getApplicationComponent().inject(this);
+    }
+
+    private void startMainActivity()
+    {
+        this.mainLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                View v = mainLayout;
+                v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                onCreateGlobalLayoutAvailable();
+                Log.d(LOG_TAG, "Backup activity view rendered");
+            }
+        });
+    }
+
+    private void onCreateGlobalLayoutAvailable() {
+        this.presenter.initializeWithView(this);
     }
 }
 
