@@ -17,6 +17,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.slamcode.goalcalendar.android.OnActivityResultListener;
+import com.slamcode.goalcalendar.android.OnActivityResultProcessor;
+import com.slamcode.goalcalendar.android.StartForResult;
 import com.slamcode.goalcalendar.dagger2.ComposableApplication;
 import com.slamcode.goalcalendar.view.activity.LoginActivityContract;
 import com.slamcode.goalcalendar.view.presenters.LoginPresenter;
@@ -24,12 +27,15 @@ import com.slamcode.goalcalendar.view.utils.ViewBinder;
 import com.slamcode.goalcalendar.view.utils.ViewReference;
 import com.slamcode.goalcalendar.viewmodels.LoginViewModel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements OnClickListener, LoginActivityContract.ActivityView {
+public class LoginActivity extends AppCompatActivity implements OnClickListener, LoginActivityContract.ActivityView, StartForResult, OnActivityResultProcessor {
 
     private static final int GOOGLE_SIGN_IN_REQUEST = 1221;
 
@@ -38,6 +44,8 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener,
     // google sign in
     private GoogleSignInClient googleSignInClient = null;
     private GoogleSignInAccount googleSignInAccount = null;
+
+    private List<OnActivityResultListener> onActivityResultListeners = new ArrayList<>();
 
     @Inject
     LoginPresenter presenter;
@@ -91,13 +99,23 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener,
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == GOOGLE_SIGN_IN_REQUEST) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
-        }
+        for(OnActivityResultListener listener : this.onActivityResultListeners)
+            listener.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void addOnActivityResultListener(OnActivityResultListener listener) {
+        this.onActivityResultListeners.add(listener);
+    }
+
+    @Override
+    public void removeOnActivityResultListener(OnActivityResultListener listener) {
+        this.onActivityResultListeners.remove(listener);
+    }
+
+    @Override
+    public void clearOnActivityResultListeners() {
+        this.onActivityResultListeners.clear();
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {

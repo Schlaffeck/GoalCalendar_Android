@@ -27,11 +27,13 @@ import com.slamcode.goalcalendar.view.lists.CategoryPlansRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.CategoryPlansSummaryRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.DailyPlanHeaderRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.ItemsCollectionAdapterProvider;
+import com.slamcode.goalcalendar.view.lists.LoginProvidersRecyclerViewAdapter;
 import com.slamcode.goalcalendar.view.lists.gestures.ItemDragCallback;
 import com.slamcode.goalcalendar.view.lists.scrolling.RecyclerViewSimultaneousScrollingController;
 import com.slamcode.goalcalendar.viewmodels.BackupSourceViewModel;
 import com.slamcode.goalcalendar.viewmodels.CategoryPlansViewModel;
 import com.slamcode.goalcalendar.viewmodels.DayInMonthViewModel;
+import com.slamcode.goalcalendar.viewmodels.LoginProviderViewModel;
 import com.slamcode.goalcalendar.viewmodels.MonthViewModel;
 import com.slamcode.goalcalendar.viewmodels.MonthlyPlanningCategoryListViewModel;
 
@@ -287,6 +289,38 @@ public class Bindings {
         }
 
         Log.d(LOG_TAG, "Binding backup providers source - END");
+    }
+
+
+
+    @BindingAdapter("bind:loginProvidersSource")
+    public static void setLoginProvidersSource(RecyclerView recyclerView, ObservableList<LoginProviderViewModel> itemsSource)
+    {
+        Log.d(LOG_TAG, "Binding login providers source - START");
+        if(recyclerView == null)
+            return;
+
+        RecyclerView.Adapter adapter = recyclerView.getAdapter();
+
+        if(adapter == null)
+        {
+            Dagger2InjectData injectData = new Dagger2InjectData();
+            Dagger2ComponentContainer.getApplicationDagger2Component().inject(injectData);
+
+            Log.d(LOG_TAG, "Binding login providers source - creating new adapter");
+            adapter = injectData.itemsCollectionAdapterProvider
+                    .provideLoginProvidersRecyclerViewAdapter();
+            recyclerView.setAdapter(adapter);
+        }
+
+        if((adapter instanceof LoginProvidersRecyclerViewAdapter))
+        {
+            Log.d(LOG_TAG, "Binding login providers source - updating adapter source");
+            LoginProvidersRecyclerViewAdapter dataAdapter = (LoginProvidersRecyclerViewAdapter) adapter;
+            dataAdapter.updateSourceCollection(itemsSource);
+        }
+
+        Log.d(LOG_TAG, "Binding login providers source - END");
     }
 
     public static class Dagger2InjectData{

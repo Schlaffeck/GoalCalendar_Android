@@ -1,5 +1,6 @@
 package com.slamcode.goalcalendar.view.activity;
 
+import com.slamcode.goalcalendar.android.StartForResult;
 import com.slamcode.goalcalendar.view.activity.base.ActivityViewContract;
 import com.slamcode.goalcalendar.view.activity.base.PresenterContract;
 import com.slamcode.goalcalendar.viewmodels.BackupViewModel;
@@ -17,6 +18,6 @@ public interface BackupActivityContract {
         void doLogin();
     }
 
-    interface ActivityView extends ActivityViewContract<BackupViewModel> {
+    interface ActivityView extends ActivityViewContract<BackupViewModel>, StartForResult {
     }
 }

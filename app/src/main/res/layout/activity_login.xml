@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="vm"
+            type="com.slamcode.goalcalendar.viewmodels.LoginViewModel"/>
+        <variable
+            name="presenter"
+            type="com.slamcode.goalcalendar.view.presenters.LoginPresenter"/>
+    </data>
+<LinearLayout
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -34,6 +46,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/login_header_textView_text"/>
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                bind:loginProvidersSource='@{vm.providers}'/>
             <com.google.android.gms.common.SignInButton
                 android:id="@+id/login_google_sign_in_button"
                 android:layout_width="match_parent"
@@ -41,3 +57,4 @@
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
+</layout>

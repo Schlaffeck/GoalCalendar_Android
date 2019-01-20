@@ -36,4 +36,9 @@ public class AppContextBasedViewAdapterProvider implements ItemsCollectionAdapte
     public BackupSourcesRecyclerViewAdapter provideBackupSourcesRecyclerViewAdapter() {
         return new BackupSourcesRecyclerViewAdapter();
     }
+
+    @Override
+    public LoginProvidersRecyclerViewAdapter provideLoginProvidersRecyclerViewAdapter() {
+        return new LoginProvidersRecyclerViewAdapter();
+    }
 }

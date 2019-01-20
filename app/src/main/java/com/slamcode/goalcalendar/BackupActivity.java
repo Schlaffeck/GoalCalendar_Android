@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
+import com.slamcode.goalcalendar.android.StartForResult;
 import com.slamcode.goalcalendar.backup.BackupSourceDataProvidersRegistry;
 import com.slamcode.goalcalendar.dagger2.ComposableApplication;
 import com.slamcode.goalcalendar.view.activity.BackupActivityContract;
@@ -25,7 +26,7 @@ import javax.inject.Inject;
 import static com.slamcode.goalcalendar.view.utils.ViewBinder.*;
 
 public class BackupActivity extends AppCompatActivity
-    implements BackupActivityContract.ActivityView
+    implements BackupActivityContract.ActivityView, StartForResult
 {
     final String ACTIVITY_ID = BackupActivity.class.getName();
 
