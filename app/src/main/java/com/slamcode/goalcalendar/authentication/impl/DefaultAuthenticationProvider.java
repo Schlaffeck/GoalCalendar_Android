@@ -30,7 +30,28 @@ public class DefaultAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public AuthenticationResult getCurrentAuthenticationData() {
+        this.checkIfAlreadySignedIn();
         return this.currentAuthenticationData;
+    }
+
+    private void checkIfAlreadySignedIn()
+    {
+        if(this.currentAuthenticationData != null && this.currentAuthenticationData.isSignedIn())
+            return;
+
+        boolean signedIn = false;
+        for (AuthenticationClient client :
+                this.clientMap.values()) {
+            if(client.currentSignInData().isSignedIn())
+            {
+                this.currentAuthenticationData = client.currentSignInData();
+                signedIn = true;
+                break;
+            }
+        }
+
+        if(!signedIn)
+            this.currentAuthenticationData = new NotAuthenticatedResult();
     }
 
     private class NotAuthenticatedResult implements AuthenticationResult

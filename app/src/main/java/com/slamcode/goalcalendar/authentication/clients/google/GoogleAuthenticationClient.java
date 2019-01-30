@@ -16,6 +16,7 @@ import com.slamcode.goalcalendar.ApplicationContext;
 import com.slamcode.goalcalendar.android.StartForResult;
 import com.slamcode.goalcalendar.android.tasks.TaskAbstract;
 import com.slamcode.goalcalendar.authentication.clients.AuthenticationClient;
+import com.slamcode.goalcalendar.authentication.clients.AuthenticationResult;
 import com.slamcode.goalcalendar.authentication.clients.AuthenticationToken;
 import com.slamcode.goalcalendar.authentication.impl.AuthenticationTask;
 import com.slamcode.goalcalendar.authentication.impl.DefaultAuthenticationResult;
@@ -40,6 +41,16 @@ public class GoogleAuthenticationClient implements AuthenticationClient {
     @Override
     public String getAuthenticationProviderId() {
         return PROVIDER_ID;
+    }
+
+    @Override
+    public AuthenticationResult currentSignInData() {
+        if(this.googleSignInAccount != null)
+        {
+            new DefaultAuthenticationResult(PROVIDER_ID, googleSignInAccount.getId(), new AuthenticationToken(googleSignInAccount.getIdToken()));
+        }
+
+        return new DefaultAuthenticationResult(PROVIDER_ID);
     }
 
     @NonNull

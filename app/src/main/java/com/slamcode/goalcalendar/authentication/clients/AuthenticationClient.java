@@ -10,6 +10,8 @@ public interface AuthenticationClient {
 
     String getAuthenticationProviderId();
 
+    AuthenticationResult currentSignInData();
+
     @NonNull
     AuthenticationTask silentSignIn();
 
