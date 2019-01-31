@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.slamcode.goalcalendar.ApplicationContext;
+import com.slamcode.goalcalendar.R;
 import com.slamcode.goalcalendar.android.StartForResult;
 import com.slamcode.goalcalendar.android.tasks.TaskAbstract;
 import com.slamcode.goalcalendar.authentication.clients.AuthenticationClient;
@@ -95,6 +96,7 @@ public class GoogleAuthenticationClient implements AuthenticationClient {
     {
         GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
+                .requestIdToken(this.applicationContext.getStringFromResources(R.string.goal_calendar_web_client_id))
                 .build();
 
         this.googleSignInClient = GoogleSignIn.getClient(this.applicationContext.getDefaultContext(), options);

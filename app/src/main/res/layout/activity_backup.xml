@@ -59,7 +59,7 @@
                     android:text="@string/backup_doLogin_button_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick='@{(view) -> presenter.doLogin()}'/>
+                    android:onClick='@{(view) -> presenter.doSignIn()}'/>
             </LinearLayout>
         </LinearLayout>
         <LinearLayout

@@ -117,8 +117,8 @@ public class PersistentBackupPresenter implements BackupPresenter {
     }
 
     @Override
-    public void doLogin() {
-        this.applicationContext.startLoginActivity(this.activityView.getRelatedActivity(), BackupActivityContract.SHOW_LOGIN_ACTIVITY_REQUEST);
+    public void doSignIn() {
+        this.applicationContext.startLoginActivity(this.activityView.getRelatedActivity(), BackupActivityContract.SHOW_SIGN_IN_ACTIVITY_REQUEST);
     }
 
     @Override

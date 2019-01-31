@@ -10,6 +10,7 @@ public interface AuthenticationClient {
 
     String getAuthenticationProviderId();
 
+    @NonNull
     AuthenticationResult currentSignInData();
 
     @NonNull

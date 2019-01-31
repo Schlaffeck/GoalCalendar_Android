@@ -7,7 +7,7 @@ import com.slamcode.goalcalendar.viewmodels.BackupViewModel;
 
 public interface BackupActivityContract {
 
-    int SHOW_LOGIN_ACTIVITY_REQUEST = 23231;
+    int SHOW_SIGN_IN_ACTIVITY_REQUEST = 23231;
 
     interface Presenter extends PresenterContract<BackupViewModel, ActivityView>
     {
@@ -15,7 +15,7 @@ public interface BackupActivityContract {
 
         void restoreBackup(String sourceType);
 
-        void doLogin();
+        void doSignIn();
     }
 
     interface ActivityView extends ActivityViewContract<BackupViewModel>, StartForResult {

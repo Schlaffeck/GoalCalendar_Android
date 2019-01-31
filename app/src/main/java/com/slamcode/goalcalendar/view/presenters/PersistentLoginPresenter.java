@@ -81,6 +81,7 @@ public class PersistentLoginPresenter implements LoginPresenter, SourceChangeReq
             @Override
             public LoginProviderViewModel select(AuthenticationClient parent) {
                 final LoginProviderViewModel vm = new LoginProviderViewModel(parent.getAuthenticationProviderId());
+                vm.setSignedIn(parent.currentSignInData().isSignedIn());
                 vm.addSourceChangeRequestListener(sourceChangeRequestListener);
                 return vm;
             }
