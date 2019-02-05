@@ -226,4 +226,6 @@
     </string>
     <string name="backup_doLogin_button_text">Login, to see online backup info</string>
     <string name="login_header_textView_text">Select  account  to sign in with</string>
+    <string name="sign_out">Sign out</string>
+    <string name="login_signedIn_textView_text" formatted="false">Signed in as %s on %s</string>
 </resources>

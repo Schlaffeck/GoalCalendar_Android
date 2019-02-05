@@ -5,4 +5,6 @@ import com.slamcode.goalcalendar.view.activity.LoginActivityContract;
 public interface LoginPresenter extends LoginActivityContract.Presenter {
 
     void doLogin(String providerID);
+
+    void doLogout();
 }

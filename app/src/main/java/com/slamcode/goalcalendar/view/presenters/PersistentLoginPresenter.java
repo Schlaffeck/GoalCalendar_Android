@@ -2,10 +2,12 @@ package com.slamcode.goalcalendar.view.presenters;
 
 import android.support.annotation.NonNull;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.slamcode.collections.CollectionUtils;
 import com.slamcode.collections.ElementSelector;
+import com.slamcode.goalcalendar.authentication.AuthenticationProvider;
 import com.slamcode.goalcalendar.authentication.clients.AuthenticationClient;
 import com.slamcode.goalcalendar.authentication.clients.AuthenticationResult;
 import com.slamcode.goalcalendar.authentication.impl.AuthenticationTask;
@@ -14,15 +16,13 @@ import com.slamcode.goalcalendar.view.activity.LoginActivityContract;
 import com.slamcode.goalcalendar.viewmodels.LoginProviderViewModel;
 import com.slamcode.goalcalendar.viewmodels.LoginViewModel;
 
-import java.util.Map;
-
 public class PersistentLoginPresenter implements LoginPresenter, SourceChangeRequestNotifier.SourceChangeRequestListener<LoginProviderViewModel> {
 
-    private final Map<String, AuthenticationClient> authenticationClients;
+    private final AuthenticationProvider authenticationClients;
     private LoginViewModel data;
     private LoginActivityContract.ActivityView activityView;
 
-    public PersistentLoginPresenter(Map<String, AuthenticationClient> authenticationClients)
+    public PersistentLoginPresenter(AuthenticationProvider authenticationClients)
     {
         this.authenticationClients = authenticationClients;
     }
@@ -46,11 +46,11 @@ public class PersistentLoginPresenter implements LoginPresenter, SourceChangeReq
 
     public AuthenticationClient getAuthenticationClient(String name)
     {
-        return this.authenticationClients.get(name);
+        return this.authenticationClients.getClient(name);
     }
 
     public Iterable<AuthenticationClient> getAuthenticationClients() {
-        return authenticationClients.values();
+        return authenticationClients.getAllClients();
     }
 
     private void resetData() {
@@ -59,7 +59,7 @@ public class PersistentLoginPresenter implements LoginPresenter, SourceChangeReq
 
     @Override
     public void doLogin(final String providerId) {
-        AuthenticationClient client = this.authenticationClients.get(providerId);
+        AuthenticationClient client = this.authenticationClients.getClient(providerId);
         if(client == null)
             return;
 
@@ -74,10 +74,26 @@ public class PersistentLoginPresenter implements LoginPresenter, SourceChangeReq
         });
     }
 
+    @Override
+    public void doLogout() {
+        AuthenticationResult current = this.authenticationClients.getCurrentAuthenticationData();
+        if(!current.isSignedIn())
+            return;
+
+        final AuthenticationClient client = this.authenticationClients.getClient(current.getAuthenticationProviderId());
+        client.signOut().continueWith(new Continuation<Boolean, Task<Boolean>>() {
+            @Override
+            public Task<Boolean> then(@NonNull Task<Boolean> task) throws Exception {
+                updateFlags(client.getAuthenticationProviderId(), authenticationClients.getCurrentAuthenticationData());
+                return task;
+            };
+        });
+    }
+
     private LoginViewModel provideData()
     {
         final SourceChangeRequestNotifier.SourceChangeRequestListener<LoginProviderViewModel> sourceChangeRequestListener = this;
-        return new LoginViewModel(CollectionUtils.select(this.authenticationClients.values(), new ElementSelector<AuthenticationClient, LoginProviderViewModel>() {
+        return new LoginViewModel(CollectionUtils.select(this.authenticationClients.getAllClients(), new ElementSelector<AuthenticationClient, LoginProviderViewModel>() {
             @Override
             public LoginProviderViewModel select(AuthenticationClient parent) {
                 final LoginProviderViewModel vm = new LoginProviderViewModel(parent.getAuthenticationProviderId());

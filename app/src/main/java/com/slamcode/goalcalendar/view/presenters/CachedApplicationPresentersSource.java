@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.view.presenters;
 
 import com.slamcode.goalcalendar.ApplicationContext;
+import com.slamcode.goalcalendar.authentication.AuthenticationProvider;
 import com.slamcode.goalcalendar.authentication.clients.AuthenticationClient;
 import com.slamcode.goalcalendar.backup.BackupSourceDataProvidersRegistry;
 import com.slamcode.goalcalendar.data.PersistenceContext;
@@ -30,14 +31,14 @@ public class CachedApplicationPresentersSource implements PresentersSource {
 
     private PlansSummaryCalculator plansSummaryCalculator;
     private final BackupSourceDataProvidersRegistry backupSourceDataProvidersRegistry;
-    private final Map<String, AuthenticationClient> authenticationClientMap;
+    private final AuthenticationProvider authenticationClientMap;
 
     public CachedApplicationPresentersSource(ApplicationContext applicationContext,
                                              PersistenceContext persistenceContext,
                                              ItemsCollectionAdapterProvider listAdapterProvider,
                                              PlansSummaryCalculator plansSummaryCalculator,
                                              BackupSourceDataProvidersRegistry backupSourceDataProvidersRegistry,
-                                             Map<String, AuthenticationClient> authenticationClientMap)
+                                             AuthenticationProvider authenticationClientMap)
     {
         this.applicationContext = applicationContext;
         this.persistenceContext = persistenceContext;

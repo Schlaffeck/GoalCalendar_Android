@@ -25,7 +25,7 @@ public class InMemoryCategoriesRepository extends InMemoryRepositoryBase<Categor
     private List<MonthlyPlansModel> monthlyPlansModels;
 
     public InMemoryCategoriesRepository(List<MonthlyPlansModel> monthlyPlansModels) {
-        super(CollectionUtils.merge(monthlyPlansModels, new ElementSelector<MonthlyPlansModel, Collection<CategoryModel>>() {
+        super(CollectionUtils.merge(monthlyPlansModels, new ElementSelector<MonthlyPlansModel, Iterable<CategoryModel>>() {
             @Override
             public Collection<CategoryModel> select(MonthlyPlansModel parent) {
                 return parent.getCategories();

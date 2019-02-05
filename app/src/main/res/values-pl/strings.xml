@@ -192,4 +192,6 @@
     <string name="backup_restore_success_snackbar_message">Przywrócono kopię zapasową</string>
     <string name="backup_doLogin_button_text">Zaloguj się, by sprawdzić kopie online</string>
     <string name="login_header_textView_text">Zaloguj się wybranym kontem</string>
+    <string name="sign_out">Wyloguj</string>
+    <string name="login_signedIn_textView_text" formatted="false">Zalogowano jako %s na %s</string>
 </resources>

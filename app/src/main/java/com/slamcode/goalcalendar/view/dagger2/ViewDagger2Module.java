@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.view.dagger2;
 
 import com.slamcode.goalcalendar.ApplicationContext;
+import com.slamcode.goalcalendar.authentication.AuthenticationProvider;
 import com.slamcode.goalcalendar.authentication.clients.AuthenticationClient;
 import com.slamcode.goalcalendar.backup.BackupSourceDataProvidersRegistry;
 import com.slamcode.goalcalendar.data.PersistenceContext;
@@ -52,7 +53,7 @@ public final class ViewDagger2Module {
             ItemsCollectionAdapterProvider listAdapterProvider,
             PlansSummaryCalculator plansSummaryCalculator,
             BackupSourceDataProvidersRegistry backupSourceDataProvidersRegistry,
-            Map<String, AuthenticationClient> authenticationClientMap)
+            AuthenticationProvider authenticationClientMap)
     {
         return new CachedApplicationPresentersSource(applicationContext, persistenceContext, listAdapterProvider, plansSummaryCalculator, backupSourceDataProvidersRegistry, authenticationClientMap);
     }
@@ -80,7 +81,7 @@ public final class ViewDagger2Module {
 
     @Provides
     @Singleton
-    public LoginPresenter provideLoginPresenter(Map<String, AuthenticationClient> authenticationClients)
+    public LoginPresenter provideLoginPresenter(AuthenticationProvider authenticationClients)
     {
         return new PersistentLoginPresenter(authenticationClients);
     }

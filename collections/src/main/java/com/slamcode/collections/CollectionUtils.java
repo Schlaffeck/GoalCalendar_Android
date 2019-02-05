@@ -43,19 +43,19 @@ public class CollectionUtils {
         return new ArrayList<T>();
     }
 
-    public static <ParentType,CollectionElementType> List<CollectionElementType> merge(Collection<ParentType> baseCollection,
-                                                                                       ElementSelector<ParentType, Collection<CollectionElementType>> collectionSelector)
+    public static <ParentType,CollectionElementType> List<CollectionElementType> merge(Iterable<ParentType> baseCollection,
+                                                                                       ElementSelector<ParentType, Iterable<CollectionElementType>> collectionSelector)
     {
         List<CollectionElementType> result = new ArrayList<>();
 
         for (ParentType baseObject : baseCollection) {
-            result.addAll(collectionSelector.select(baseObject));
+            result.addAll(createList(collectionSelector.select(baseObject)));
         }
 
         return result;
     }
 
-    public static <ParentType, SelectedElementType> List<SelectedElementType> select(Collection<ParentType> baseCollection,
+    public static <ParentType, SelectedElementType> List<SelectedElementType> select(Iterable<ParentType> baseCollection,
                                                                                      ElementSelector<ParentType, SelectedElementType> elementSelector)
     {
         List<SelectedElementType> result = new ArrayList<>();
