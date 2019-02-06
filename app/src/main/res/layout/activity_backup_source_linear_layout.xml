@@ -10,31 +10,45 @@
             name="presenter"
             type="com.slamcode.goalcalendar.view.lists.BackupSourcesRecyclerViewAdapter.BackupSourceViewHolder"/>
     </data>
-    <LinearLayout
-        android:id="@+id/backup_source_listElement_linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:minHeight="?android:listPreferredItemHeight"
+            android:id="@+id/backup_source_listElement_relativeLayout">
+            <LinearLayout
+                android:id="@+id/backup_source_listElem_text_linearLayout"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/backup_source_listElement_name_textView"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
+                android:layout_height="wrap_content"
                 android:text='@{vm.name}'
-                android:layout_alignParentStart="true"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:layout_margin="@dimen/default_margin"/>
             <TextView
                 android:id="@+id/backup_source_listElement_lastDate_textView"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:textSize="@dimen/list_item_text_small_size"
                 android:text='@{vm.hasBackup ? vm.lastBackupDateTime.toDateString() : @string/backup_noBackup_text}'
-                android:layout_toStartOf="@id/backup_source_listElem_buttons_linearLayout"
-                android:layout_toLeftOf="@id/backup_source_listElem_buttons_linearLayout"/>
+                android:layout_margin="@dimen/default_margin"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/backup_source_listElement_message_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text='@{vm.message}'
+                android:layout_margin="@dimen/default_margin"
+                android:layout_toEndOf="@id/backup_source_listElem_text_linearLayout"
+                android:layout_toRightOf="@id/backup_source_listElem_text_linearLayout"/>
 
             <LinearLayout
                 android:id="@+id/backup_source_listElem_buttons_linearLayout"
@@ -42,16 +56,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true">
-                <Button
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:id="@+id/backup_source_listElement_createBackup_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/backup_createBackup_button_text"
-                    android:gravity="center_vertical"
-                    android:onClick='@{(view) -> presenter.requestBackupCreation()}'/>
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true">
                 <Button
                     style="?android:attr/buttonBarButtonStyle"
                     android:id="@+id/backup_source_listElement_restoreBackup_button"
@@ -61,7 +67,15 @@
                     android:gravity="center_vertical"
                     android:enabled='@{vm.hasBackup}'
                     android:onClick='@{(view) -> presenter.requestBackupRestoration()}'/>
+                <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:id="@+id/backup_source_listElement_createBackup_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/backup_createBackup_button_text"
+                    android:gravity="center_vertical"
+                    android:onClick='@{(view) -> presenter.requestBackupCreation()}'
+                    android:enabled='@{vm.enabled}'/>
             </LinearLayout>
         </RelativeLayout>
-    </LinearLayout>
 </layout>

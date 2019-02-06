@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.viewmodels;
 
 import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 
 import com.slamcode.goalcalendar.backup.BackupSourceDataProvider;
 import com.slamcode.goalcalendar.data.model.backup.BackupInfoModel;
@@ -45,6 +46,18 @@ public class BackupSourceViewModel extends BaseObservable implements SourceChang
     public String getSourceType()
     {
         return this.dataProvider.getSourceType();
+    }
+
+    @Bindable
+    public boolean isEnabled()
+    {
+        return this.dataProvider.getDisplayData(Locale.getDefault()).isEnabled();
+    }
+
+    @Bindable
+    public String getMessage()
+    {
+        return this.dataProvider.getDisplayData(Locale.getDefault()).getMessage();
     }
 
     public void updateData(BackupInfoModel infoModel) {

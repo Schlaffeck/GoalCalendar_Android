@@ -48,7 +48,7 @@ public class GoogleAuthenticationClient implements AuthenticationClient {
     public AuthenticationResult currentSignInData() {
         if(this.googleSignInAccount != null)
         {
-            new DefaultAuthenticationResult(PROVIDER_ID, googleSignInAccount.getId(), new AuthenticationToken(googleSignInAccount.getIdToken()));
+            return new DefaultAuthenticationResult(PROVIDER_ID, googleSignInAccount.getId(), new AuthenticationToken(googleSignInAccount.getIdToken()));
         }
 
         return new DefaultAuthenticationResult(PROVIDER_ID);

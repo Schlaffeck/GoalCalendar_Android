@@ -2,8 +2,10 @@ package com.slamcode.goalcalendar.backup.dagger2;
 
 import android.content.Context;
 
+import com.slamcode.goalcalendar.authentication.AuthenticationProvider;
 import com.slamcode.goalcalendar.backup.BackupSourceDataProvider;
 import com.slamcode.goalcalendar.backup.BackupSourceDataProvidersRegistry;
+import com.slamcode.goalcalendar.backup.azure.AzureBackupSourceDataProvider;
 import com.slamcode.goalcalendar.backup.impl.DefaultBackupSourceDataProvidersRegistry;
 import com.slamcode.goalcalendar.backup.local.PersistenceContextBackupWriterRestorer;
 import com.slamcode.goalcalendar.backup.local.PersistenceContextBackupSourceDataProvider;
@@ -46,6 +48,14 @@ public class BackupDagger2Module {
     BackupSourceDataProvider provideLocalBackupSource(AppSettingsManager appSettingsManager, PersistenceContextBackupWriterRestorer readerWriter)
     {
         return new PersistenceContextBackupSourceDataProvider(appSettingsManager, readerWriter);
+    }
+
+    @Singleton
+    @Provides(type = Provides.Type.MAP)
+    @StringKey(AzureBackupSourceDataProvider.SOURCE_TYPE)
+    BackupSourceDataProvider provideAzureBackupSource(AuthenticationProvider authenticationProvider)
+    {
+        return new AzureBackupSourceDataProvider(authenticationProvider);
     }
 
     @Singleton

@@ -16,11 +16,20 @@ public interface BackupSourceDataProvider {
 
     class SourceDisplayData
     {
+        private String message;
         private String sourceName;
+        private boolean enabled;
 
         public SourceDisplayData(String sourceName)
         {
+            this(sourceName, true, "");
+        }
+
+        public SourceDisplayData(String sourceName, boolean enabled, String message)
+        {
             this.sourceName = sourceName;
+            this.enabled = enabled;
+            this.message = message;
         }
 
         public String getSourceName() {
@@ -29,6 +38,22 @@ public interface BackupSourceDataProvider {
 
         public void setSourceName(String sourceName) {
             this.sourceName = sourceName;
+        }
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
         }
     }
 }
