@@ -60,18 +60,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:visibility='@{vm.signedInProvider != null ? View.VISIBLE : View.GONE}'>
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@{String.format(@string/login_signedIn_textView_text, vm.signedInProvider.userId, vm.signedInProvider.providerName)}"
-            android:layout_gravity="start"/>
+            android:layout_gravity="center"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/sign_out"
-            android:layout_gravity="end"
+            android:layout_gravity="center"
             android:onClick='@{() -> presenter.doLogout()}'/>
     </LinearLayout>
 </LinearLayout>

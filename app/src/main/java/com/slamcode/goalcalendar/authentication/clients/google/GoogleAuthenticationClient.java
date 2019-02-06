@@ -149,7 +149,7 @@ public class GoogleAuthenticationClient implements AuthenticationClient {
             try {
                 googleSignInAccount = completedTask.getResult(ApiException.class);
                 if(googleSignInAccount != null)
-                    this.setSuccessStatus(new DefaultAuthenticationResult(PROVIDER_ID, googleSignInAccount.getId(), new AuthenticationToken(googleSignInAccount.getIdToken())));
+                    this.setSuccessStatus(new DefaultAuthenticationResult(PROVIDER_ID, googleSignInAccount.getEmail(), new AuthenticationToken(googleSignInAccount.getIdToken())));
                 else
                     this.setSuccessStatus(new DefaultAuthenticationResult(PROVIDER_ID));
             } catch (ApiException e) {
