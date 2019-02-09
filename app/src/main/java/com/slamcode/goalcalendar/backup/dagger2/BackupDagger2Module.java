@@ -6,6 +6,10 @@ import com.slamcode.goalcalendar.authentication.AuthenticationProvider;
 import com.slamcode.goalcalendar.backup.BackupSourceDataProvider;
 import com.slamcode.goalcalendar.backup.BackupSourceDataProvidersRegistry;
 import com.slamcode.goalcalendar.backup.azure.AzureBackupSourceDataProvider;
+import com.slamcode.goalcalendar.backup.azure.AzureBackupWriter;
+import com.slamcode.goalcalendar.backup.azure.service.AzureService;
+import com.slamcode.goalcalendar.backup.azure.service.AzureServiceConnection;
+import com.slamcode.goalcalendar.backup.azure.service.AzureWebService;
 import com.slamcode.goalcalendar.backup.impl.DefaultBackupSourceDataProvidersRegistry;
 import com.slamcode.goalcalendar.backup.local.PersistenceContextBackupWriterRestorer;
 import com.slamcode.goalcalendar.backup.local.PersistenceContextBackupSourceDataProvider;
@@ -51,11 +55,33 @@ public class BackupDagger2Module {
     }
 
     @Singleton
+    @Provides
+    AzureServiceConnection provideAzureApiServiceConnection()
+    {
+        // https://slamcodegoalcalendarfunctionapp.azurewebsites.net/api/backups/{version}/{id}?code=Z3i3yTOxNOGw/PenaP4Q4Pdl2DQSYnwYtui49zJfF0aCV1KdX9f9Pg==
+        return new AzureServiceConnection("https://slamcodegoalcalendarfunctionapp.azurewebsites.net/", "code=Z3i3yTOxNOGw/PenaP4Q4Pdl2DQSYnwYtui49zJfF0aCV1KdX9f9Pg==");
+    }
+
+    @Singleton
+    @Provides
+    AzureService provideAzureService(AzureServiceConnection connection)
+    {
+        return new AzureWebService(connection);
+    }
+
+    @Singleton
+    @Provides
+    AzureBackupWriter provideAzureBackupWriter(AzureService service, ModelInfoProvider modelInfoProvider, MainPersistenceContext mainPersistenceContext)
+    {
+        return new AzureBackupWriter(service, modelInfoProvider, mainPersistenceContext);
+    }
+
+    @Singleton
     @Provides(type = Provides.Type.MAP)
     @StringKey(AzureBackupSourceDataProvider.SOURCE_TYPE)
-    BackupSourceDataProvider provideAzureBackupSource(AuthenticationProvider authenticationProvider)
+    BackupSourceDataProvider provideAzureBackupSource(AuthenticationProvider authenticationProvider, AzureBackupWriter writer)
     {
-        return new AzureBackupSourceDataProvider(authenticationProvider);
+        return new AzureBackupSourceDataProvider(authenticationProvider, writer);
     }
 
     @Singleton

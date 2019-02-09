@@ -13,13 +13,16 @@ import java.util.Locale;
 public class AzureBackupSourceDataProvider implements BackupSourceDataProvider {
 
     public static final String SOURCE_TYPE = "AZURE_STORAGE";
+    public static final String SOURCE_DISPLAY_TYPE = "Web";
     // TODO: Move to resources or provide specific exception type
     private static final String SIGN_IN_REQUIRED_MESSAGE = "Requires sign in";
     private final AuthenticationProvider authenticationProvider;
+    private final AzureBackupWriter azureBackupWriter;
 
-    public AzureBackupSourceDataProvider(AuthenticationProvider authenticationProvider)
+    public AzureBackupSourceDataProvider(AuthenticationProvider authenticationProvider, AzureBackupWriter azureBackupWriter)
     {
         this.authenticationProvider = authenticationProvider;
+        this.azureBackupWriter = azureBackupWriter;
     }
 
     @Override
@@ -37,15 +40,15 @@ public class AzureBackupSourceDataProvider implements BackupSourceDataProvider {
     @Override
     public SourceDisplayData getDisplayData(Locale locale) {
         if(this.isAuthenticated())
-            return new SourceDisplayData(SOURCE_TYPE);
+            return new SourceDisplayData(SOURCE_DISPLAY_TYPE);
 
-        return new SourceDisplayData(SOURCE_TYPE, false, SIGN_IN_REQUIRED_MESSAGE);
+        return new SourceDisplayData(SOURCE_DISPLAY_TYPE, false, SIGN_IN_REQUIRED_MESSAGE);
     }
 
     @Override
     public BackupWriter getBackupWriter() {
         this.validateAuthentication();
-        return null;
+        return this.azureBackupWriter;
     }
 
     @Override
