@@ -4,6 +4,7 @@ public class AzureServiceConnection
 {
     private String connectionUrl;
     private String functionKey;
+    private String azureAuthToken;
 
     public AzureServiceConnection(String connectionUrl, String functionKey)
     {
@@ -25,5 +26,13 @@ public class AzureServiceConnection
 
     public void setFunctionKey(String functionKey) {
         this.functionKey = functionKey;
+    }
+
+    public String getAzureAuthToken() {
+        return azureAuthToken;
+    }
+
+    public void setAzureAuthToken(String azureAuthToken) {
+        this.azureAuthToken = azureAuthToken;
     }
 }

@@ -59,14 +59,14 @@ public class BackupDagger2Module {
     AzureServiceConnection provideAzureApiServiceConnection()
     {
         // https://slamcodegoalcalendarfunctionapp.azurewebsites.net/api/backups/{version}/{id}?code=Z3i3yTOxNOGw/PenaP4Q4Pdl2DQSYnwYtui49zJfF0aCV1KdX9f9Pg==
-        return new AzureServiceConnection("https://slamcodegoalcalendarfunctionapp.azurewebsites.net/", "code=Z3i3yTOxNOGw/PenaP4Q4Pdl2DQSYnwYtui49zJfF0aCV1KdX9f9Pg==");
+        return new AzureServiceConnection("https://slamcodegoalcalendarfunctionapp.azurewebsites.net/", "Z3i3yTOxNOGw/PenaP4Q4Pdl2DQSYnwYtui49zJfF0aCV1KdX9f9Pg==");
     }
 
     @Singleton
     @Provides
-    AzureService provideAzureService(AzureServiceConnection connection)
+    AzureService provideAzureService(AzureServiceConnection connection, AuthenticationProvider authenticationProvider)
     {
-        return new AzureWebService(connection);
+        return new AzureWebService(connection, authenticationProvider);
     }
 
     @Singleton

@@ -1,7 +1,9 @@
 package com.slamcode.goalcalendar.backup.azure.service;
 
+import com.slamcode.goalcalendar.data.model.backup.BackupDataBundle;
 import com.slamcode.goalcalendar.data.model.backup.BackupInfoModel;
 import com.slamcode.goalcalendar.data.model.plans.CategoryModel;
+import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansDataBundle;
 import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansModel;
 
 import java.util.Collection;
@@ -12,14 +14,12 @@ public interface AzureService {
 
     class BackupData
     {
-        int modelVersion;
+        public int modelVersion;
 
-        String userId;
+        public String userId;
 
-        public Collection<MonthlyPlansModel> monthlyPlans;
+        public MonthlyPlansDataBundle monthlyPlans;
 
-        public Collection<CategoryModel> categories;
-
-        public Collection<BackupInfoModel> backupInfos;
+        public BackupDataBundle backupInfos;
     }
 }
