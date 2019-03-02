@@ -87,7 +87,7 @@ public class PersistentBackupPresenter implements BackupPresenter {
                         {
                             data.setProcessingList(true);
                             BackupRestorer.RestoreResult restoreResult = provider.getBackupRestorer().restoreBackup(null);
-                            if(restoreResult.getIsSuccess())
+                            if(restoreResult.isSuccess())
                             {
                                 applicationContext.showSnackbar(
                                         activityView.getMainView(),

@@ -6,7 +6,7 @@ import com.slamcode.goalcalendar.authentication.AuthenticationProvider;
 import com.slamcode.goalcalendar.backup.BackupSourceDataProvider;
 import com.slamcode.goalcalendar.backup.BackupSourceDataProvidersRegistry;
 import com.slamcode.goalcalendar.backup.azure.AzureBackupSourceDataProvider;
-import com.slamcode.goalcalendar.backup.azure.AzureBackupWriter;
+import com.slamcode.goalcalendar.backup.azure.AzureBackupWriterRestorer;
 import com.slamcode.goalcalendar.backup.azure.service.AzureService;
 import com.slamcode.goalcalendar.backup.azure.service.AzureServiceConnection;
 import com.slamcode.goalcalendar.backup.azure.service.AzureWebService;
@@ -71,15 +71,15 @@ public class BackupDagger2Module {
 
     @Singleton
     @Provides
-    AzureBackupWriter provideAzureBackupWriter(AzureService service, ModelInfoProvider modelInfoProvider, MainPersistenceContext mainPersistenceContext)
+    AzureBackupWriterRestorer provideAzureBackupWriter(AzureService service, ModelInfoProvider modelInfoProvider, MainPersistenceContext mainPersistenceContext)
     {
-        return new AzureBackupWriter(service, modelInfoProvider, mainPersistenceContext);
+        return new AzureBackupWriterRestorer(service, modelInfoProvider, mainPersistenceContext);
     }
 
     @Singleton
     @Provides(type = Provides.Type.MAP)
     @StringKey(AzureBackupSourceDataProvider.SOURCE_TYPE)
-    BackupSourceDataProvider provideAzureBackupSource(AuthenticationProvider authenticationProvider, AzureBackupWriter writer)
+    BackupSourceDataProvider provideAzureBackupSource(AuthenticationProvider authenticationProvider, AzureBackupWriterRestorer writer)
     {
         return new AzureBackupSourceDataProvider(authenticationProvider, writer);
     }

@@ -1,7 +1,5 @@
 package com.slamcode.goalcalendar.backup.azure;
 
-import android.app.AuthenticationRequiredException;
-
 import com.slamcode.goalcalendar.authentication.AuthenticationProvider;
 import com.slamcode.goalcalendar.authentication.clients.AuthenticationResult;
 import com.slamcode.goalcalendar.backup.BackupRestorer;
@@ -17,12 +15,12 @@ public class AzureBackupSourceDataProvider implements BackupSourceDataProvider {
     // TODO: Move to resources or provide specific exception type
     private static final String SIGN_IN_REQUIRED_MESSAGE = "Requires sign in";
     private final AuthenticationProvider authenticationProvider;
-    private final AzureBackupWriter azureBackupWriter;
+    private final AzureBackupWriterRestorer azureBackupWriterRestorer;
 
-    public AzureBackupSourceDataProvider(AuthenticationProvider authenticationProvider, AzureBackupWriter azureBackupWriter)
+    public AzureBackupSourceDataProvider(AuthenticationProvider authenticationProvider, AzureBackupWriterRestorer azureBackupWriterRestorer)
     {
         this.authenticationProvider = authenticationProvider;
-        this.azureBackupWriter = azureBackupWriter;
+        this.azureBackupWriterRestorer = azureBackupWriterRestorer;
     }
 
     @Override
@@ -48,13 +46,13 @@ public class AzureBackupSourceDataProvider implements BackupSourceDataProvider {
     @Override
     public BackupWriter getBackupWriter() {
         this.validateAuthentication();
-        return this.azureBackupWriter;
+        return this.azureBackupWriterRestorer;
     }
 
     @Override
     public BackupRestorer getBackupRestorer() {
         this.validateAuthentication();
-        return null;
+        return this.azureBackupWriterRestorer;
     }
 
     private boolean isAuthenticated()

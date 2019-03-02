@@ -99,7 +99,7 @@ public final class PersistenceContextBackupWriterRestorer implements BackupWrite
         }
 
         @Override
-        public boolean getIsSuccess() {
+        public boolean isSuccess() {
             return this.success;
         }
 

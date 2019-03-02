@@ -10,7 +10,7 @@ public interface BackupRestorer {
 
     interface RestoreResult{
 
-        boolean getIsSuccess();
+        boolean isSuccess();
 
         String getDetailedMessage(Locale locale);
     }
