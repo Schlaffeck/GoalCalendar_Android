@@ -1,16 +1,17 @@
 package com.slamcode.goalcalendar.backup.azure.service;
 
 import com.slamcode.goalcalendar.data.model.backup.BackupDataBundle;
-import com.slamcode.goalcalendar.data.model.backup.BackupInfoModel;
-import com.slamcode.goalcalendar.data.model.plans.CategoryModel;
 import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansDataBundle;
-import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansModel;
-
-import java.util.Collection;
 
 public interface AzureService {
 
-    void postBackupData(BackupData data);
+    void postBackupData(PostBackupDataRequest request);
+
+    BackupData getBackupData(GetBackupDataRequest request);
+
+    class PostBackupDataRequest extends BackupData
+    {
+    }
 
     class BackupData
     {
@@ -21,5 +22,12 @@ public interface AzureService {
         public MonthlyPlansDataBundle monthlyPlans;
 
         public BackupDataBundle backupInfos;
+    }
+
+    class GetBackupDataRequest
+    {
+        public int modelVersion;
+
+        public String userId;
     }
 }

@@ -6,12 +6,9 @@ import com.slamcode.goalcalendar.data.MainPersistenceContext;
 import com.slamcode.goalcalendar.data.model.ModelInfoProvider;
 import com.slamcode.goalcalendar.data.model.backup.BackupDataBundle;
 import com.slamcode.goalcalendar.data.model.backup.BackupInfoModel;
-import com.slamcode.goalcalendar.data.model.plans.CategoryModel;
 import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansDataBundle;
-import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansModel;
 import com.slamcode.goalcalendar.data.unitofwork.UnitOfWork;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
@@ -35,7 +32,7 @@ public class AzureBackupWriter implements BackupWriter {
         try {
             UnitOfWork uow = this.mainPersistenceContext.createUnitOfWork();
 
-            AzureService.BackupData data = new AzureService.BackupData();
+            AzureService.PostBackupDataRequest data = new AzureService.PostBackupDataRequest();
             data.modelVersion = this.modelInfoProvider.getModelVersion();
             data.monthlyPlans = new MonthlyPlansDataBundle();
             data.monthlyPlans.monthlyPlans = uow.getMonthlyPlansRepository().findAll();
