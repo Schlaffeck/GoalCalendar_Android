@@ -6,8 +6,6 @@ import com.slamcode.goalcalendar.authentication.AuthenticationProvider;
 import com.slamcode.goalcalendar.authentication.clients.AuthenticationResult;
 import com.slamcode.goalcalendar.backup.azure.service.retrofit.RetrofitAzureService;
 
-import java.util.concurrent.CountDownLatch;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,7 +31,6 @@ public class AzureWebService implements AzureService {
     public void postBackupData(PostBackupDataRequest data) {
 
         try {
-            final CountDownLatch latch = new CountDownLatch(1);
             this.verifyConnection();
             this.verifyData(data);
 
@@ -46,22 +43,15 @@ public class AzureWebService implements AzureService {
             call.enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
-                    latch.countDown();
                     Log.d(LOG_TAG, "POST response received");
                 }
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
-                    latch.countDown();
                     Log.e(LOG_TAG, "POST response error");
                     t.printStackTrace();
                 }
             });
-            latch.await();
-        }
-        catch(InterruptedException iex)
-        {
-            iex.printStackTrace();
         }
         catch (Exception ex)
         {
@@ -71,12 +61,10 @@ public class AzureWebService implements AzureService {
     }
 
     @Override
-    public BackupData getBackupData(GetBackupDataRequest request) {
-        final BackupData[] result = {null};
+    public void getBackupData(GetBackupDataRequest request, final Callback<BackupData> callback) {
         try {
-            final CountDownLatch latch = new CountDownLatch(1);
-            this.verifyConnection();
             this.verifyData(request);
+
 
             Call<BackupData> call = this.service.getBackupData(
                     request.modelVersion,
@@ -86,27 +74,18 @@ public class AzureWebService implements AzureService {
             call.enqueue(new Callback<BackupData>() {
                 @Override
                 public void onResponse(Call<BackupData> call, Response<BackupData> response) {
-                    latch.countDown();
                     Log.d(LOG_TAG, "POST response received");
-                    if(response.isSuccessful())
-                        result[0] = response.body();
+                    callback.onResponse(call, response);
                 }
 
                 @Override
                 public void onFailure(Call<BackupData> call, Throwable t) {
-                    latch.countDown();
                     Log.e(LOG_TAG, "POST response error");
                     t.printStackTrace();
+                    callback.onFailure(call, t);
                 }
             });
 
-            latch.await();
-            return result[0];
-        }
-        catch(InterruptedException iex)
-        {
-            iex.printStackTrace();
-            return result[0];
         }
         catch (Exception ex)
         {

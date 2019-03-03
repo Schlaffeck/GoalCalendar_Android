@@ -3,11 +3,15 @@ package com.slamcode.goalcalendar.backup.azure.service;
 import com.slamcode.goalcalendar.data.model.backup.BackupDataBundle;
 import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansDataBundle;
 
+import java.util.concurrent.Future;
+
+import retrofit2.Callback;
+
 public interface AzureService {
 
     void postBackupData(PostBackupDataRequest request);
 
-    BackupData getBackupData(GetBackupDataRequest request);
+    void getBackupData(GetBackupDataRequest request, Callback<BackupData> callback);
 
     class PostBackupDataRequest extends BackupData
     {

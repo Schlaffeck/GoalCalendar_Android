@@ -71,7 +71,8 @@ public class AzureBackupWriterRestorer implements BackupWriter, BackupRestorer {
             AzureService.GetBackupDataRequest request = new AzureService.GetBackupDataRequest();
             request.modelVersion = this.modelInfoProvider.getModelVersion();
 
-            AzureService.BackupData getResult = this.service.getBackupData(request);
+            AzureService.BackupData getResult = null;
+            this.service.getBackupData(request, null);
             if(getResult == null)
                 return new AzureRestoreResult(false, "No backup data found");
 
