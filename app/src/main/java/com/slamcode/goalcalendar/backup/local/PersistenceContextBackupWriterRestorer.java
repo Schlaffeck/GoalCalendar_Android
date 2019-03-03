@@ -1,5 +1,7 @@
 package com.slamcode.goalcalendar.backup.local;
 
+import android.arch.core.util.Function;
+
 import com.slamcode.goalcalendar.backup.BackupRestorer;
 import com.slamcode.goalcalendar.backup.BackupWriter;
 import com.slamcode.goalcalendar.data.BackupPersistenceContext;
@@ -27,12 +29,12 @@ public final class PersistenceContextBackupWriterRestorer implements BackupWrite
     }
 
     @Override
-    public WriteResult writeBackup() {
+    public void writeBackup(Function<WriteResult, WriteResult> callback) {
 
         MonthlyPlansDataBundle mainData = this.mainPersistenceContext.getDataBundle();
         BackupDataBundle backupData = this.mainPersistenceContext.getBackupDataBundle();
         if(mainData == null || backupData == null)
-            return new LocalBackupWriteResult(false, null, null);
+            callback.apply(new LocalBackupWriteResult(false, null, null));
 
         this.backupPersistenceContext.setDataBundles(mainData, backupData);
         if(this.backupPersistenceContext.persistData()) {
@@ -41,22 +43,22 @@ public final class PersistenceContextBackupWriterRestorer implements BackupWrite
             result.setVersion(this.modelInfoProvider.getModelVersion());
             result.setSourceType(PersistenceContextBackupSourceDataProvider.SOURCE_TYPE);
             result.setId(UUID.randomUUID());
-            return new LocalBackupWriteResult(true, result, null);
+            callback.apply(new LocalBackupWriteResult(true, result, null));
         }
 
-        return new LocalBackupWriteResult(false, null, null);
+        callback.apply(new LocalBackupWriteResult(false, null, null));
     }
 
     @Override
-    public RestoreResult restoreBackup(BackupInfoModel backupInfo) {
+    public void restoreBackup(Function<RestoreResult, RestoreResult> callback) {
         this.backupPersistenceContext.initializePersistedData();
         MonthlyPlansDataBundle mainData = this.backupPersistenceContext.getDataBundle();
         BackupDataBundle backupData = this.backupPersistenceContext.getBackupDataBundle();
         if(mainData == null || backupData == null)
-            return new LocalBackupRestoreResult(false, null);
+            callback.apply(new LocalBackupRestoreResult(false, null));
 
         this.mainPersistenceContext.setDataBundles(mainData, backupData);
-        return new LocalBackupRestoreResult(this.mainPersistenceContext.persistData(), null);
+        callback.apply(new LocalBackupRestoreResult(this.mainPersistenceContext.persistData(), null));
     }
 
     private class LocalBackupWriteResult implements BackupWriter.WriteResult{

@@ -6,6 +6,9 @@ import com.slamcode.goalcalendar.authentication.AuthenticationProvider;
 import com.slamcode.goalcalendar.authentication.clients.AuthenticationResult;
 import com.slamcode.goalcalendar.backup.azure.service.retrofit.RetrofitAzureService;
 
+import org.jdeferred.Promise;
+import org.jdeferred.impl.DeferredObject;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,7 +31,7 @@ public class AzureWebService implements AzureService {
     }
 
     @Override
-    public void postBackupData(PostBackupDataRequest data) {
+    public Promise<Boolean, FailResult, ProgressResult> postBackupData(PostBackupDataRequest data) {
 
         try {
             this.verifyConnection();
@@ -40,18 +43,25 @@ public class AzureWebService implements AzureService {
                     this.connection.getFunctionKey(),
                     this.connection.getAzureAuthToken(),
                     data);
+
+            final DeferredObject<Boolean, FailResult, ProgressResult> def = new DeferredObject<>();
+
             call.enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     Log.d(LOG_TAG, "POST response received");
+                    def.resolve(response.isSuccessful());
                 }
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
                     Log.e(LOG_TAG, "POST response error");
                     t.printStackTrace();
+                    def.reject(new FailResult(t, "Could not save backup, try again later"));
                 }
             });
+
+            return def.promise();
         }
         catch (Exception ex)
         {
@@ -61,31 +71,34 @@ public class AzureWebService implements AzureService {
     }
 
     @Override
-    public void getBackupData(GetBackupDataRequest request, final Callback<BackupData> callback) {
+    public Promise<BackupData, FailResult, ProgressResult> getBackupData(final GetBackupDataRequest request) {
         try {
             this.verifyData(request);
 
+            final DeferredObject<BackupData, FailResult, ProgressResult> def = new DeferredObject<>();
 
             Call<BackupData> call = this.service.getBackupData(
                     request.modelVersion,
                     request.userId,
                     this.connection.getFunctionKey(),
                     this.connection.getAzureAuthToken());
+
             call.enqueue(new Callback<BackupData>() {
                 @Override
                 public void onResponse(Call<BackupData> call, Response<BackupData> response) {
                     Log.d(LOG_TAG, "POST response received");
-                    callback.onResponse(call, response);
+                    def.resolve(response.isSuccessful() ? response.body() : null);
                 }
 
                 @Override
                 public void onFailure(Call<BackupData> call, Throwable t) {
                     Log.e(LOG_TAG, "POST response error");
                     t.printStackTrace();
-                    callback.onFailure(call, t);
+                    def.reject(new FailResult(t, "Could nto save backup data, try again later"));
                 }
             });
 
+            return def.promise();
         }
         catch (Exception ex)
         {

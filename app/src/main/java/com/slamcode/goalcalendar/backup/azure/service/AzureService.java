@@ -3,15 +3,17 @@ package com.slamcode.goalcalendar.backup.azure.service;
 import com.slamcode.goalcalendar.data.model.backup.BackupDataBundle;
 import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansDataBundle;
 
+import org.jdeferred.Promise;
+
 import java.util.concurrent.Future;
 
 import retrofit2.Callback;
 
 public interface AzureService {
 
-    void postBackupData(PostBackupDataRequest request);
+    Promise<Boolean, FailResult, ProgressResult> postBackupData(PostBackupDataRequest request);
 
-    void getBackupData(GetBackupDataRequest request, Callback<BackupData> callback);
+    Promise<BackupData, FailResult, ProgressResult> getBackupData(GetBackupDataRequest request);
 
     class PostBackupDataRequest extends BackupData
     {
@@ -33,5 +35,25 @@ public interface AzureService {
         public int modelVersion;
 
         public String userId;
+    }
+
+    class FailResult
+    {
+        FailResult(Throwable exception, String detailedMessage)
+        {
+            this.exception = exception;
+            this.detailedMessage = detailedMessage;
+        }
+
+        public Throwable exception;
+
+        public String detailedMessage;
+    }
+
+    class ProgressResult
+    {
+        double progressPercent;
+
+        public String progressMessage;
     }
 }

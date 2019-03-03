@@ -1,5 +1,7 @@
 package com.slamcode.goalcalendar.backup.azure;
 
+import android.arch.core.util.Function;
+
 import com.slamcode.goalcalendar.backup.BackupRestorer;
 import com.slamcode.goalcalendar.backup.BackupWriter;
 import com.slamcode.goalcalendar.backup.azure.service.AzureService;
@@ -10,6 +12,9 @@ import com.slamcode.goalcalendar.data.model.backup.BackupInfoModel;
 import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansDataBundle;
 import com.slamcode.goalcalendar.data.model.plans.MonthlyPlansModel;
 import com.slamcode.goalcalendar.data.unitofwork.UnitOfWork;
+
+import org.jdeferred.DoneCallback;
+import org.jdeferred.FailCallback;
 
 import java.util.Date;
 import java.util.List;
@@ -30,73 +35,123 @@ public class AzureBackupWriterRestorer implements BackupWriter, BackupRestorer {
     }
 
     @Override
-    public WriteResult writeBackup() {
-        BackupInfoModel info = null;
+    public void writeBackup(final Function<WriteResult, WriteResult> callback) {
         try {
-            UnitOfWork uow = this.mainPersistenceContext.createUnitOfWork();
-
-            AzureService.PostBackupDataRequest data = new AzureService.PostBackupDataRequest();
-            data.modelVersion = this.modelInfoProvider.getModelVersion();
-            data.monthlyPlans = new MonthlyPlansDataBundle();
-            data.monthlyPlans.monthlyPlans = uow.getMonthlyPlansRepository().findAll();
-
-            data.backupInfos = new BackupDataBundle();
-            data.backupInfos.setBackupInfos(uow.getBackupInfoRepository().findAll());
-
-            this.service.postBackupData(data);
-
-            info = new BackupInfoModel();
-            info.setId(UUID.randomUUID());
-            info.setSourceType(AzureBackupSourceDataProvider.SOURCE_TYPE);
-            info.setVersion(this.modelInfoProvider.getModelVersion());
-            info.setBackupDateUtc(new Date()); // TODO: use UTC date
-
-            uow.getBackupInfoRepository().add(info);
-
-            uow.complete(true);
+            this.service.postBackupData(this.createPostBackupDataRequest())
+            .done(new DoneCallback<Boolean>() {
+                @Override
+                public void onDone(Boolean result) {
+                    if(result)
+                    {
+                        callback.apply(new AzureWriteResult(saveBackupInfoData()));
+                    }
+                    else
+                    {
+                        callback.apply(new AzureWriteResult("Can not save backup"));
+                    }
+                }
+            })
+            .fail(new FailCallback<AzureService.FailResult>() {
+                @Override
+                public void onFail(AzureService.FailResult result) {
+                    callback.apply(new AzureWriteResult(result.detailedMessage));
+                }
+            });
         }
         catch(Exception e)
         {
             new AzureWriteResult(e.getMessage());
         }
-
-        return new AzureWriteResult(info);
     }
 
     @Override
-    public AzureRestoreResult restoreBackup(BackupInfoModel backupInfo) {
-        BackupInfoModel info = null;
+    public void restoreBackup(final Function<RestoreResult, RestoreResult> callback) {
         try {
 
-            AzureService.GetBackupDataRequest request = new AzureService.GetBackupDataRequest();
+            final AzureService.GetBackupDataRequest request = new AzureService.GetBackupDataRequest();
             request.modelVersion = this.modelInfoProvider.getModelVersion();
 
-            AzureService.BackupData getResult = null;
-            this.service.getBackupData(request, null);
-            if(getResult == null)
-                return new AzureRestoreResult(false, "No backup data found");
+            this.service.getBackupData(request)
+            .done(new DoneCallback<AzureService.BackupData>() {
+                @Override
+                public void onDone(AzureService.BackupData result) {
 
-            UnitOfWork uow = this.mainPersistenceContext.createUnitOfWork();
-
-            List<MonthlyPlansModel> newList = getResult.monthlyPlans.monthlyPlans;
-            List<MonthlyPlansModel> list = uow.getMonthlyPlansRepository().findAll();
-
-            for (MonthlyPlansModel model : list) {
-                uow.getMonthlyPlansRepository().remove(model);
-            }
-
-            for (MonthlyPlansModel model : newList) {
-                uow.getMonthlyPlansRepository().add(model);
-            }
-
-            uow.complete(true);
+                    if(result == null)
+                        callback.apply(new AzureRestoreResult(false, "No backup data found"));
+                    else {
+                        try {
+                            restoreBackupData(result);
+                            callback.apply(new AzureRestoreResult(true));
+                        }
+                        catch (Exception e)
+                        {
+                            callback.apply(new AzureRestoreResult(false, e.getMessage()));
+                        }
+                    }
+                }
+            })
+            .fail(new FailCallback<AzureService.FailResult>() {
+                @Override
+                public void onFail(AzureService.FailResult result) {
+                    callback.apply(new AzureRestoreResult(false, result.detailedMessage));
+                }
+            });
         }
         catch(Exception e)
         {
             new AzureRestoreResult(false, e.getMessage());
         }
+    }
 
-        return new AzureRestoreResult(true);
+    private AzureService.PostBackupDataRequest createPostBackupDataRequest()
+    {
+        UnitOfWork uow = this.mainPersistenceContext.createUnitOfWork(true);
+
+        AzureService.PostBackupDataRequest data = new AzureService.PostBackupDataRequest();
+        data.modelVersion = this.modelInfoProvider.getModelVersion();
+        data.monthlyPlans = new MonthlyPlansDataBundle();
+        data.monthlyPlans.monthlyPlans = uow.getMonthlyPlansRepository().findAll();
+
+        data.backupInfos = new BackupDataBundle();
+        data.backupInfos.setBackupInfos(uow.getBackupInfoRepository().findAll());
+
+        uow.complete(false);
+
+        return data;
+    }
+
+    private BackupInfoModel saveBackupInfoData()
+    {
+        UnitOfWork uow = this.mainPersistenceContext.createUnitOfWork();
+
+        BackupInfoModel info = new BackupInfoModel();
+        info.setId(UUID.randomUUID());
+        info.setSourceType(AzureBackupSourceDataProvider.SOURCE_TYPE);
+        info.setVersion(this.modelInfoProvider.getModelVersion());
+        info.setBackupDateUtc(new Date()); // TODO: use UTC date
+
+        uow.getBackupInfoRepository().add(info);
+
+        uow.complete(true);
+        return info;
+    }
+
+    private void restoreBackupData(AzureService.BackupData result)
+    {
+        UnitOfWork uow = this.mainPersistenceContext.createUnitOfWork();
+
+        List<MonthlyPlansModel> newList = result.monthlyPlans.monthlyPlans;
+        List<MonthlyPlansModel> list = uow.getMonthlyPlansRepository().findAll();
+
+        for (MonthlyPlansModel model : list) {
+            uow.getMonthlyPlansRepository().remove(model);
+        }
+
+        for (MonthlyPlansModel model : newList) {
+            uow.getMonthlyPlansRepository().add(model);
+        }
+
+        uow.complete(true);
     }
 
     private class AzureRestoreResult implements RestoreResult

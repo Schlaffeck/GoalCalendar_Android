@@ -1,6 +1,7 @@
 package com.slamcode.goalcalendar.view.presenters;
 
 import android.app.AlertDialog;
+import android.arch.core.util.Function;
 import android.content.DialogInterface;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -85,18 +86,28 @@ public class PersistentBackupPresenter implements BackupPresenter {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         try
                         {
+                            Function<BackupRestorer.RestoreResult, BackupRestorer.RestoreResult> callback
+                                    = new Function<BackupRestorer.RestoreResult, BackupRestorer.RestoreResult>() {
+                                @Override
+                                public BackupRestorer.RestoreResult apply(BackupRestorer.RestoreResult restoreResult) {
+                                        applicationContext.showSnackbar(
+                                                activityView.getMainView(),
+                                                applicationContext.getStringFromResources(
+                                                        restoreResult.isSuccess() ?
+                                                                R.string.backup_restore_success_snackbar_message :
+                                                                R.string.backup_restore_error_snackbar_message),
+                                                Snackbar.LENGTH_LONG,
+                                                applicationContext.getStringFromResources(R.string.notification_snackbar_okAction),
+                                                null);
+                                        Log.d(LOG_TAG, restoreResult.isSuccess() ? "Backup restored" : "Backup restoration failed");
+
+                                    data.setProcessingList(false);
+                                    return restoreResult;
+                                }
+                            };
+
                             data.setProcessingList(true);
-                            BackupRestorer.RestoreResult restoreResult = provider.getBackupRestorer().restoreBackup(null);
-                            if(restoreResult.isSuccess())
-                            {
-                                applicationContext.showSnackbar(
-                                        activityView.getMainView(),
-                                        applicationContext.getStringFromResources(R.string.backup_restore_success_snackbar_message),
-                                        Snackbar.LENGTH_LONG,
-                                        applicationContext.getStringFromResources(R.string.notification_snackbar_okAction),
-                                        null);
-                                Log.d(LOG_TAG, "Backup restored");
-                            }
+                            provider.getBackupRestorer().restoreBackup(callback);
                         }
                         catch(Exception e)
                         {
@@ -107,8 +118,6 @@ public class PersistentBackupPresenter implements BackupPresenter {
                                     applicationContext.getStringFromResources(R.string.notification_snackbar_okAction),
                                     null);
                             Log.d(LOG_TAG, "Backup not restored: " + e.getMessage());
-                        }
-                        finally {
                             data.setProcessingList(false);
                         }
                     }
@@ -136,17 +145,24 @@ public class PersistentBackupPresenter implements BackupPresenter {
 
         try {
             this.data.setProcessingList(true);
-            BackupWriter.WriteResult writeResult = provider.getBackupWriter().writeBackup();
-            if(writeResult.isSuccess())
-            {
-                boolean save = addBackupInfoModel(writeResult.getInfoModel());
-                this.applicationContext.showSnackbar(
-                        this.activityView.getMainView(),
-                        this.applicationContext.getStringFromResources(save ? R.string.backup_create_success_snackbar_message : R.string.backup_create_info_persistence_error_snackbar_message),
-                        Snackbar.LENGTH_LONG,
-                        this.applicationContext.getStringFromResources(R.string.notification_snackbar_okAction),
-                        null);
-            }
+            provider.getBackupWriter()
+                    .writeBackup(new Function<BackupWriter.WriteResult, BackupWriter.WriteResult>() {
+                        @Override
+                        public BackupWriter.WriteResult apply(BackupWriter.WriteResult writeResult) {
+                            if(writeResult.isSuccess())
+                            {
+                                boolean save = addBackupInfoModel(writeResult.getInfoModel());
+                                applicationContext.showSnackbar(
+                                        activityView.getMainView(),
+                                        applicationContext.getStringFromResources(save ? R.string.backup_create_success_snackbar_message : R.string.backup_create_info_persistence_error_snackbar_message),
+                                        Snackbar.LENGTH_LONG,
+                                        applicationContext.getStringFromResources(R.string.notification_snackbar_okAction),
+                                        null);
+                            }
+                            data.setProcessingList(false);
+                            return writeResult;
+                        }
+                    });
         }
         catch(Exception e)
         {
@@ -157,8 +173,6 @@ public class PersistentBackupPresenter implements BackupPresenter {
                     this.applicationContext.getStringFromResources(R.string.notification_snackbar_okAction),
                     null);
             Log.d(LOG_TAG, "Backup not saved: " + e.getMessage());
-        }
-        finally {
             this.data.setProcessingList(false);
         }
     }
