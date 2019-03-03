@@ -16,6 +16,7 @@ import com.slamcode.goalcalendar.data.unitofwork.UnitOfWork;
 import org.jdeferred.DoneCallback;
 import org.jdeferred.FailCallback;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -141,7 +142,7 @@ public class AzureBackupWriterRestorer implements BackupWriter, BackupRestorer {
         UnitOfWork uow = this.mainPersistenceContext.createUnitOfWork();
 
         List<MonthlyPlansModel> newList = result.monthlyPlans.monthlyPlans;
-        List<MonthlyPlansModel> list = uow.getMonthlyPlansRepository().findAll();
+        List<MonthlyPlansModel> list = new ArrayList<>(uow.getMonthlyPlansRepository().findAll());
 
         for (MonthlyPlansModel model : list) {
             uow.getMonthlyPlansRepository().remove(model);
